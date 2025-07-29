@@ -433,8 +433,7 @@ async function handleMessage(userstate, message, channel) {
     messageElement.setAttribute("sender", username);
     messageElement.setAttribute("sender_id", userstate["user-id"] || "0");
 
-    if (finalUsername?.endsWith(":") && userstate?.["action"]) {
-        finalUsername = finalUsername.slice(0, -1);
+    if (userstate?.["action"]) {
         messageElement.style.color = userstate["color"];
     }
 
@@ -633,7 +632,7 @@ async function handleMessage(userstate, message, channel) {
 
     messageHTML = `${badges_html}
                     <span class="name-wrapper">
-                        <strong id="username-strong" style="color:${userstate["color"]};">${finalUsername}</strong>:
+                        <strong id="username-strong" style="color:${userstate["color"]};">${finalUsername}</strong>${userstate?.["action"] ? "" : ":"}
                     </span>
                     <div class="message-text">
                         ${rendererMessage}
@@ -645,14 +644,13 @@ async function handleMessage(userstate, message, channel) {
 
     let results = await replaceWithEmotes(message, TTVMessageEmoteData, userstate, userstate?.["source-room-id"] || channelTwitchID);
 
-    let finalMessageHTML = `
-                            ${badges_html}
+    let finalMessageHTML = `${badges_html}
                             <span class="name-wrapper">
-                                <strong id="username-strong" style="color:${userstate["color"]};">${finalUsername}</strong>:
+                                <strong id="username-strong" style="color:${userstate["color"]};">${finalUsername}</strong>${userstate?.["action"] ? "" : ":"}
                             </span>
-                        <div class="message-text">
-                            ${results}
-                        </div>`;
+                            <div class="message-text">
+                                ${results}
+                            </div>`;
 
     messageElement.innerHTML = finalMessageHTML;
 
