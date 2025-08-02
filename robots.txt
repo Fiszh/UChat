@@ -3,3 +3,5 @@ Allow: /
 
 User-agent: *
 Disallow: /
+
+Sitemap: https://chat.unii.dev/sitemap.xml
