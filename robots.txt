@@ -1,7 +1,5 @@
 User-agent: Googlebot
-Disallow: /files/
-Disallow: /*.js$
-Disallow: /*.css$
+Allow: /
 
 User-agent: *
 Disallow: /
