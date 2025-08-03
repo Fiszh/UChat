@@ -47,7 +47,7 @@ if (params.channel) {
     if (load !== "error") {
         load = "chat";
 
-        document.title = `YAUTO Chat • ${params.channel || "None"}`;
+        document.title = `UChat Chat • ${params.channel || "None"}`;
     }
 } else if (Object.keys(params).length) {
     alert("No channel specified in the URL. Defaulting to main page.");

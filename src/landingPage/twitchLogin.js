@@ -71,11 +71,11 @@ async function checkLoginStatus() {
                 accountName.textContent = data?.login;
                 accountName.style.display = "unset";
 
-                settings_text.style.display = "unset";
-
-                if (data?.["YAUTO_Tester"]) {
+                if (data?.["UChat_Tester"]) {
                     const settingsButtons = document.getElementById('settingsButtons');
                     if (settingsButtons) {
+                        settings_text.style.display = "unset";
+
                         settingsButtons.style.display = 'flex';
 
                         // GET SAVED SETTINGS

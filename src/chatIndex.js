@@ -1301,10 +1301,10 @@ async function loadCustomBadges() {
 
     let data = await response.json();
 
-    if (!data || !data["YAUTO"]) { return; };
+    if (!data || !data["UChat"]) { return; };
 
     customBadgeData = [
-        ...data["YAUTO"],
+        ...data["UChat"],
         ...data["YAUTC"]
     ].map(badge => ({
         ...badge,
