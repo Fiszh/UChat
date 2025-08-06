@@ -613,57 +613,63 @@ async function handleMessage(userstate, message, channel) {
         index === self.findIndex(b => b.badge_url === badge.badge_url)
     );
 
-    let badges_html = `<span class="badge-wrapper">
-                            ${badges.map(badge => `
-                            <img
-                                style="background-color: ${badge.background_color || 'transparent'};"
-                                src="${badge.badge_url}"
-                                alt="${badge.alt}"
-                                class="badge"
-                                loading="lazy"
-                            >
-                            `).join("")}
-                        </span>`;
-
-
     if (!getSetting("badges")) {
-        badges_html = '';
+        badges = [];
     }
 
-    messageHTML = `${badges_html}
-                    <span class="name-wrapper">
-                        <strong id="username-strong" style="color:${userstate["color"]};">${finalUsername}</strong>${userstate?.["action"] ? "" : ":"}
-                    </span>
-                    <div class="message-text">
-                        ${rendererMessage}
-                    </div>`;
+    const badges_wrapper = document.createElement("span");
+    badges_wrapper.classList.add("badge-wrapper");
+    badges_wrapper.innerHTML = `${badges.map(badge => `
+                                    <img
+                                        style="background-color: ${badge.background_color || 'transparent'};"
+                                        src="${badge.badge_url}"
+                                        alt="${badge.alt}"
+                                        class="badge"
+                                        loading="lazy"
+                                    >
+                                `).join("")}`;
 
-    messageElement.innerHTML = messageHTML;
+    const name_wrapper = document.createElement("span");
+    name_wrapper.classList.add("name-wrapper");
+    name_wrapper.classList.add("sender-name");
+
+    const name_display = document.createElement("strong");
+    name_display.id = "username-strong";
+    name_display.style.color = userstate["color"];
+    name_display.textContent = finalUsername;
+
+    name_wrapper.appendChild(name_display);
+
+    name_wrapper.appendChild(document.createTextNode(userstate?.["action"] ? "" : ":"));
+
+    const message_text = document.createElement("div");
+    message_text.classList.add("message-text");
+
+    message_text.innerHTML = rendererMessage;
+
+    // APPEND EVERYTHING
+
+    if (badges.length) { messageElement.appendChild(badges_wrapper); };
+    messageElement.appendChild(name_wrapper);
+    messageElement.appendChild(message_text);
 
     fadeOut(messageElement);
 
     let results = await replaceWithEmotes(message, TTVMessageEmoteData, userstate, userstate?.["source-room-id"] || channelTwitchID);
 
-    let finalMessageHTML = `${badges_html}
-                            <span class="name-wrapper">
-                                <strong id="username-strong" style="color:${userstate["color"]};">${finalUsername}</strong>${userstate?.["action"] ? "" : ":"}
-                            </span>
-                            <div class="message-text">
-                                ${results}
-                            </div>`;
+    message_text.innerHTML = results; // CHANGE MESSAGE TEXT TO EMOTES
 
-    messageElement.innerHTML = finalMessageHTML;
-
+    // DISPLAY PAINT FOR MENTIONS
     messageElement.querySelectorAll('.name-wrapper')?.forEach(async el => {
         const strong = el.querySelector('strong');
-        if (!strong) return;
+        if (!strong) { return; };
 
         const name = `@${strong.innerHTML.replace(/[@,:]|\s*\(.*\)/g, '')}`.toLowerCase();
         const user = TTVUsersData.find(u => u.name === name);
 
         if (user) {
             user.cosmetics
-                ? await displayCosmeticPaint(user.userId, user.color, strong)
+                ? displayCosmeticPaint(user.userId, user.color, strong)
                 : (strong.style.color = user.color || getRandomTwitchColor(user.name.slice(1)));
         } else {
             let color = getRandomTwitchColor(name.slice(1));

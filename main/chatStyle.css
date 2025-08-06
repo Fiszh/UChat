@@ -38,6 +38,7 @@ body::-webkit-scrollbar,
     line-height: normal;
 }
 
+.emote-wrapper,
 .badge-wrapper,
 .bits-wrapper {
     vertical-align: middle;
@@ -47,8 +48,23 @@ body::-webkit-scrollbar,
     flex-wrap: wrap;
 }
 
+.message,
 .message-text {
     display: inline-block;
+    gap: 5px;
+}
+
+.message>*:not(:empty) {
+    margin-right: 5px;
+}
+
+.badge-wrapper>* {
+    margin-right: 5.5px;
+}
+
+.badge-wrapper>*:last-child,
+.message>*:last-child {
+    margin-right: 0;
 }
 
 .bits-number {
@@ -58,14 +74,9 @@ body::-webkit-scrollbar,
     margin-left: 5px;
 }
 
-.emote-wrapper {
-    vertical-align: middle;
-}
-
 .badge {
     width: 1em;
     height: 1em;
-    margin: 2.5px;
     vertical-align: middle;
 }
 

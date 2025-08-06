@@ -4,6 +4,8 @@ const cosmetics = {
     user_info: []
 }
 
+//TODO - REPLACE THIS WITH BETTER CODE
+
 async function updateCosmetics(body) {
     if (!body) { return; }
 
@@ -109,6 +111,35 @@ async function updateCosmetics(body) {
                 }
 
                 cosmetics.paints.push(push);
+            } else { // CHANGE USER PAINT ON PREVIOUS MESSAGES
+                const user = object.user;
+
+                if (user?.connections?.length && cosmetics.paints.length) {
+                    const found_twitch_connection = user.connections.find(connection => connection.platform == "TWITCH");
+
+                    if (found_twitch_connection) {
+                        const found_messages = chatDisplay.querySelectorAll(`[sender="${found_twitch_connection?.username}"]`);
+                        const found_user = TTVUsersData.find(user => user.name == `@${found_twitch_connection.username}`);
+
+                        if (found_messages && found_user) {
+                            for (const index of Object.keys(found_messages)) {
+                                const message = found_messages[index];
+
+                                const found_name_wrapper = message.querySelector(".sender-name");
+
+                                if (found_name_wrapper) {
+                                    const name_strong = found_name_wrapper.querySelector("strong");
+
+                                    if (name_strong) {
+                                        found_user.cosmetics.paint_id = user?.style?.paint_id || undefined;
+
+                                        displayCosmeticPaint(found_twitch_connection?.id, (found_user?.color || getRandomTwitchColor(found_user.name.slice(1))), name_strong)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         } else if (body.object?.name === "Personal Emotes" || body.object?.name === "Personal Emotes Set" || body.object?.user || body.object?.id === "00000000000000000000000000" || (body.object?.flags && (body.object.flags === 11 || body.object.flags === 4))) {
             if (body.object?.id === "00000000000000000000000000" && body.object?.ref_id) {
@@ -311,8 +342,13 @@ async function displayCosmeticPaint(user_id, color, textElement) {
             textElement.style.cssText = style;
             textElement.style.backgroundColor = color;
         }
-        textElement.style.color = color;
+    } else {
+        textElement.classList.remove('paint');
+        textElement.style.cssText = "";
+        textElement.style.backgroundColor = "unset";
     }
+
+    textElement.style.color = color;
 }
 
 async function getPaintName(user_id) {
