@@ -2,7 +2,18 @@
 
 https://chat.unii.dev/
 
-> **Notice:** Your stored data, such as access tokens is only saved in your cookies when you log in. It will be deleted upon logging out, the token is only shared with the server to validate the user.
+> **Notice:**<br>
+Your stored data, like access tokens, is saved only in your browser cookies while logged in and deleted on logout. Tokens are sent to the server only for user validation and never stored.<br>
+Overlay settings are saved locally unless you explicitly choose to save them globally.<br>
+Your IP address is logged to prevent API abuse.
+
+## UChat Promotion
+
+### Wplace
+
+<a href="https://wplace.live/?lat=30.352930699258117&lng=-97.87895540947265&zoom=15.484219685743943">
+  <img src="https://cdn.unii.dev/uchat_wplace.png" alt="Preview" width="400">
+</a>
 
 ## Configuration
 
