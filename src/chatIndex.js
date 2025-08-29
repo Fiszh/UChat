@@ -1132,25 +1132,27 @@ async function loadTTV() {
 
         const response_data = await response.json();
 
-        if (!response_data?.channel || !Array.isArray(response_data.channel) || response_data.channel.length < 5) {
+        if (!response_data?.channel?.data || Object.keys(response_data?.channel?.data)?.length < 5) {
             console.error("Invalid or incomplete data structure:", response_data);
             return false;
         }
 
+        const channel_data = response_data.channel.data
+
         const data = {
-            channel_info: response_data.channel?.[0],
-            channel_badges: response_data.channel?.[1],
-            channel_bits: response_data.channel?.[2],
-            global_badges: response_data.channel?.[3],
-            global_bits: response_data.channel?.[4]
+            channel_info: channel_data?.["channel_info"],
+            channel_badges: channel_data?.["channel_badges"],
+            channel_bits: channel_data?.["channel_cheer_emotes"],
+            global_badges: channel_data?.["global_badges"],
+            global_bits: channel_data?.["global_cheer_emotes"]
         };
 
         // CHANNEL INFO LOGIN
-        channelTwitchID = data?.channel_info?.data?.user?.id || null;
-        const channel_color = data?.channel_info?.data?.color || "white";
+        channelTwitchID = data?.channel_info?.id || null;
+        const channel_color = data?.channel_info?.color || "white";
 
         // CHANNEL BADGES
-        const broadcastBadges = data?.channel_badges?.data?.user?.broadcastBadges || [];
+        const broadcastBadges = data?.channel_badges?.broadcastBadges || [];
         try {
             const channel_subscriber_badges = broadcastBadges.filter(badge => badge?.setID === "subscriber");
 
@@ -1180,7 +1182,7 @@ async function loadTTV() {
         // CHANNEL BITS
         let channel_bit_emotes = [];
         try {
-            const cheerGroups = data?.channel_bits?.data?.channel?.cheer?.cheerGroups || [];
+            const cheerGroups = data?.channel_bits?.cheer?.cheerGroups || [];
             channel_bit_emotes = cheerGroups.map(group => {
                 const node = group.nodes?.[0];
                 const prefix = node?.prefix?.toLowerCase() || "prefix";
@@ -1217,7 +1219,7 @@ async function loadTTV() {
 
         // GLOBAL BADGES
         try {
-            TTVGlobalBadgeData = (data?.global_badges?.data?.badges || []).map(badge => ({
+            TTVGlobalBadgeData = (data?.global_badges || []).map(badge => ({
                 id: badge.setID + "_" + badge.version,
                 url: badge.image4x || badge.image3x || badge.image2x || badge.image1x,
                 title: badge.title
@@ -1230,8 +1232,8 @@ async function loadTTV() {
         // GLOBAL BITS
         let global_bit_emotes = [];
         try {
-            const global_groups = data?.global_bits?.data?.cheerConfig?.groups || [];
-            const displayConfig = data?.global_bits?.data?.cheerConfig?.displayConfig?.colors || [];
+            const global_groups = data?.global_bits?.groups || [];
+            const displayConfig = data?.global_bits?.displayConfig?.colors || [];
 
             global_bit_emotes = global_groups[0]?.nodes?.map(group => {
                 const prefix = group?.prefix?.toLowerCase() || "prefix";
