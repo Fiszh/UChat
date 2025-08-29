@@ -12,7 +12,7 @@ const custom_bots = [
 /*
 If you want your bot added, open a PR on the repo.
 I’ll probably accept it, but no guarantees.
-Make sure your bot isn’t on the FFZ bots list before submitting.
+Make sure your bot isn’t on the FFZ bots list or doesn't have the Twitch Chat Bot badge before submitting
 */
 
 const manifest_path = 'manifest.json';
@@ -215,7 +215,7 @@ async function onMessage(channel, userstate, message, self) {
     // BLOCK BOTS
     const FFZBadge = FFZBadgeData.find(badge => badge.owner_username == userstate.username);
 
-    if (((FFZBadge?.id == "bot") && (FFZUserBadgeData?.user_badges?.[userstate["user-id"]] === "2")) || custom_bots.includes(userstate.username)) {
+    if (((FFZBadge?.id == "bot") && (FFZUserBadgeData?.user_badges?.[userstate["user-id"]] === "2")) || custom_bots.includes(userstate.username) || userstate?.badges?.["bot-badge"]) {
         if (!getSetting("bots")) {
             return;
         }
