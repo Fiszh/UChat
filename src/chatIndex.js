@@ -324,6 +324,10 @@ let BTTVBadgeData = [];
 
 const BTTVZeroWidth = ["SoSnowy", "IceCold", "SantaHat", "TopHat", "ReinDeer", "CandyCane", "cvMask", "cvHazmat"];
 
+//OTHER
+let ChatterinoBadgeData = [];
+let ChatterinoHomiesBadgeData = [];
+
 let allEmoteData = [];
 
 async function trimPart(text) {
@@ -388,6 +392,22 @@ async function getChannelEmotesViaTwitchID(twitchID) {
     processing_ids = processing_ids.filter(id => id !== twitchID);
 }
 
+function fixNameColor(name_color) {
+    if (tinycolor(name_color).getBrightness() <= 50) {
+        return tinycolor(name_color).lighten(30).toString();
+    } else {
+        return name_color;
+    }
+}
+
+function setNameColor(element, color) {
+    if (!twitchColors.includes(color)) {
+        color = fixNameColor(color);
+    }
+
+    element.style.color = color;
+}
+
 async function handleMessage(userstate, message, channel) {
     if (!message) { return; };
 
@@ -407,8 +427,7 @@ async function handleMessage(userstate, message, channel) {
 
     // PROCESS MESSAGE
 
-    message = String(message).trimStart();
-    message = sanitizeInput(message);
+    message = sanitizeInput(String(message).trimStart());
 
     const tagsReplaced = message;
     let rendererMessage = tagsReplaced;
@@ -434,15 +453,8 @@ async function handleMessage(userstate, message, channel) {
     messageElement.setAttribute("sender_id", userstate["user-id"] || "0");
 
     if (userstate?.["action"]) {
-        messageElement.style.color = userstate["color"];
+        messageElement.style.color = fixNameColor(userstate["color"]);
     }
-
-    let messageHTML = `<span class="name-wrapper">
-                            <strong id="username-strong">${finalUsername}</strong>
-                        </span>
-                        <div class="message-text">
-                            ${rendererMessage}
-                        </div>`;
 
     // Append the new message element
     chatDisplay.appendChild(messageElement);
@@ -555,6 +567,24 @@ async function handleMessage(userstate, message, channel) {
         }
     }
 
+    // Want badges from your app here?
+    // Send me a message via discord
+
+    // Chatterino & Chatterino Homies Badges
+
+    const foundChatterinoBadges = [...ChatterinoBadgeData, ...ChatterinoHomiesBadgeData].filter(badge => badge.owners.includes(String(userstate["user-id"])));
+
+    if (foundChatterinoBadges) {
+        foundChatterinoBadges.forEach(foundChatterinoBadge => {
+            badges.push({
+                tooltip_name: foundChatterinoBadge.title,
+                badge_url: foundChatterinoBadge.url,
+                alt: foundChatterinoBadge.title,
+                background_color: undefined,
+            });
+        })
+    }
+
     // FFZ Badges
 
     const foundFFZBadges = FFZBadgeData.filter(badge => badge.owner_username == userstate.username);
@@ -635,8 +665,9 @@ async function handleMessage(userstate, message, channel) {
 
     const name_display = document.createElement("strong");
     name_display.id = "username-strong";
-    name_display.style.color = userstate["color"];
     name_display.textContent = finalUsername;
+
+    setNameColor(name_display, userstate["color"]);
 
     name_wrapper.appendChild(name_display);
 
@@ -667,16 +698,14 @@ async function handleMessage(userstate, message, channel) {
         const name = `@${strong.innerHTML.replace(/[@,:]|\s*\(.*\)/g, '')}`.toLowerCase();
         const user = TTVUsersData.find(u => u.name === name);
 
-        if (user) {
-            user.cosmetics
-                ? displayCosmeticPaint(user.userId, user.color, strong)
-                : (strong.style.color = user.color || getRandomTwitchColor(user.name.slice(1)));
+        if (user?.cosmetics) {
+            displayCosmeticPaint(user.userId, user.color, strong);
         } else {
             let color = getRandomTwitchColor(name.slice(1));
             if (userstate?.username?.toLowerCase() === name.slice(1) && userstate.color) {
                 color = userstate.color;
             }
-            strong.style.color = color;
+            setNameColor(strong, color);
         }
     });
 }
@@ -730,7 +759,7 @@ async function updateAllEmoteData() {
 
 function splitTextWithTwemoji(text) {
     const parsedText = twemoji.parse(text, {
-        base: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/',
+        base: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/',
         folder: 'svg',
         ext: '.svg'
     });
@@ -1040,6 +1069,69 @@ async function loadFFZ() {
     }
 }
 
+async function loadOther() {
+    try {
+        getChatterinoBadges();
+        getChatterinoHomiesBadges();
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+async function getChatterinoBadges() {
+    const response = await fetch(`https://api.chatterino.com/badges`, {
+        method: 'GET'
+    });
+
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();
+
+    ChatterinoBadgeData = data.badges.map(badge => ({
+        id: badge.tooltip.replace(/\s+/g, '_').toLowerCase(),
+        url: badge["image3"] || badge["image2"] || badge["image1"] || undefined,
+        title: badge.tooltip,
+        owners: badge.users
+    }));
+}
+
+async function getChatterinoHomiesBadges() {
+    let badge_data = [];
+
+    const response0 = await fetch(`https://itzalex.github.io/badges`, {
+        method: 'GET'
+    });
+
+    if (response0.ok) {
+        const data = await response0.json();
+
+        if (data?.badges) {
+            badge_data = [...data.badges];
+        }
+    }
+
+    const response1 = await fetch(`https://itzalex.github.io/badges2`, {
+        method: 'GET'
+    });
+
+    if (response1.ok) {
+        const data = await response1.json();
+
+        if (data?.badges) {
+            badge_data = [...badge_data, ...data.badges];
+        }
+    }
+
+    ChatterinoHomiesBadgeData = badge_data.map(badge => ({
+        id: badge?.id || badge.tooltip.replace(/\s+/g, '_').toLowerCase(),
+        url: badge["image3"] || badge["image2"] || badge["image1"] || undefined,
+        title: badge.tooltip,
+        owners: badge.users
+    }));
+}
+
 async function loadChat() {
     try {
         const response = await fetch(config_path);
@@ -1103,6 +1195,10 @@ async function loadChat() {
     // FFZ
 
     loadFFZ();
+
+    // OTHER
+
+    loadOther();
 }
 
 async function LoadSavedSettings() {

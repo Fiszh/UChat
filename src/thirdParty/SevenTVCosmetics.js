@@ -320,7 +320,7 @@ async function displayCosmeticPaint(user_id, color, textElement) {
     const foundUser = cosmetics.user_info.find(user => user["ttv_user_id"] === user_id);
     const randomColor = getRandomTwitchColor();
 
-    color = color || randomColor || 'white';
+    color = color ? fixNameColor(color) : randomColor || 'white';
 
     const can_display_paints = getSetting("paints");
     const fontStroke = getSetting("fontStroke");

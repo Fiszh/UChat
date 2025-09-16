@@ -142,7 +142,7 @@ async function getFFZBadges() {
     data.badges.forEach(badge => {
         data.users[badge.id].forEach(username => {
             FFZBadgeData.push({
-                id: badge.title.replace(' ', '_').toLowerCase(),
+                id: badge.title.replace(/\s+/g, '_').toLowerCase(),
                 url: badge.urls["4"],
                 title: badge.title,
                 color: badge.color,
