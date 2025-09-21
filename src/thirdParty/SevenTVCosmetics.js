@@ -130,7 +130,7 @@ async function updateCosmetics(body) {
                                 if (found_name_wrapper) {
                                     const name_strong = found_name_wrapper.querySelector("strong");
 
-                                    if (name_strong) {
+                                    if (name_strong && found_user?.cosmetics) {
                                         found_user.cosmetics.paint_id = user?.style?.paint_id || undefined;
 
                                         displayCosmeticPaint(found_twitch_connection?.id, (found_user?.color || getRandomTwitchColor(found_user.name.slice(1))), name_strong)

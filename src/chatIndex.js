@@ -281,6 +281,7 @@ let TTVGlobalBadgeData = [];
 let TTVBitBadgeData = [];
 let TTVUsersData = [];
 let TTVBitsData = [];
+let channelBadges = {};
 let version;
 
 const twitchColors = [
@@ -370,26 +371,62 @@ function getSetting(setting_name, action) {
 
 let processing_ids = [];
 async function getChannelEmotesViaTwitchID(twitchID) {
-    if (!twitchID || twitchID == "preview" || processing_ids.includes(twitchID)) { return; };
-    processing_ids.push(twitchID); // PREVENT API SPAM IF THE ID IS ALREADY BEING PROCESSED
+    if (!twitchID || twitchID === "preview" || processing_ids.includes(twitchID)) return;
+    
+    processing_ids.push(twitchID); // prevent API spam
 
     // 7TV
-    if (!SevenTVEmoteData[twitchID]) {
-        SevenTVEmoteData[twitchID] = await fetch7TVEmoteSetDataViaTwitchID(twitchID);
+    try {
+        if (!SevenTVEmoteData[twitchID]) {
+            SevenTVEmoteData[twitchID] = await fetch7TVEmoteSetDataViaTwitchID(twitchID);
+        }
+    } catch (e) {
+        console.error(`7TV error for ${twitchID}:`, e);
     }
 
     // BTTV
-    if (!BTTVEmoteData[twitchID]) {
-        await fetchBTTVEmoteData(twitchID);
+    try {
+        if (!BTTVEmoteData[twitchID]) {
+            await fetchBTTVEmoteData(twitchID);
+        }
+    } catch (e) {
+        console.error(`BTTV error for ${twitchID}:`, e);
     }
 
     // FFZ
-    if (!FFZEmoteData[twitchID]) {
-        FFZEmoteData[twitchID] = await fetchFFZEmoteSetDataViaTwitchID(twitchID);
+    try {
+        if (!FFZEmoteData[twitchID]) {
+            FFZEmoteData[twitchID] = await fetchFFZEmoteSetDataViaTwitchID(twitchID);
+        }
+    } catch (e) {
+        console.error(`FFZ error for ${twitchID}:`, e);
     }
 
-    // REMOVE ID FROM PROCESSING IDS
+    // CHANNEL BADGE
+    try {
+        if (!channelBadges[twitchID]) {
+            const avatar = await getAvatarViaID(twitchID);
+            if (avatar) channelBadges[twitchID] = avatar;
+        }
+    } catch (e) {
+        console.error(`Badge error for ${twitchID}:`, e);
+    }
+
+    // remove from processing
     processing_ids = processing_ids.filter(id => id !== twitchID);
+}
+
+
+async function getAvatarViaID(user_id) {
+    const response = await fetch(`https://api.unii.dev/avatar?id=${user_id}`);
+
+    if (!response.ok) {
+        return false;
+    }
+
+    const data = await response.json();
+
+    return data?.avatar || false;
 }
 
 function fixNameColor(name_color) {
@@ -478,6 +515,16 @@ async function handleMessage(userstate, message, channel) {
     }
 
     let badges = [];
+
+    // SHARE CHAT BADGES
+
+    if (channelBadges[[userstate["source-room-id"]]]) {
+        badges.push({
+            badge_url: channelBadges[[userstate["source-room-id"]]],
+            alt: userstate["source-room-id"],
+            background_color: undefined,
+        });
+    }
 
     // CUSTOM BADGES
 
