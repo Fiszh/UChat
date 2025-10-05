@@ -1,6 +1,6 @@
 body {
     font-family: "Inter", Arial, sans-serif;
-    background: #0d0d0d;
+    background: linear-gradient(#0a0a0a, #050505);
     color: white;
     overflow: hidden;
     display: flex;
@@ -46,6 +46,11 @@ aside {
     padding: 0px 15px;
     box-sizing: border-box;
     border-bottom: 1px solid #333;
+    cursor: pointer;
+}
+
+#topbar:hover {
+    text-decoration: underline;
 }
 
 small {
@@ -280,6 +285,7 @@ main {
     text-align: center;
     padding: 5px;
     font-size: 1rem;
+    background-color: #ffffff0a;
 }
 
 #channel-input {
@@ -649,6 +655,62 @@ h5 svg {
 #site_blur.no-blur {
     display: none;
     backdrop-filter: blur(0px);
+}
+
+#version-patches {
+    display: none;
+    position: absolute;
+    background-color: #0a0a0a;
+    z-index: 100;
+    width: 80%;
+    height: 80%;
+    padding: 15px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+#patches {
+    all: unset;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    background: linear-gradient(#0f0f0f, #0c0c0c);
+    border-radius: 15px;
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    list-style: none;
+    padding: 0px 15px;
+    border: 2px dashed #252525;
+}
+
+#patches li {
+    padding: 15px 0px;
+  position: relative;
+}
+
+#patches li:not(:last-child) {
+    border-bottom: 2px dashed #252525;
+}
+
+#patches li a {
+  all: unset;
+  position: absolute;
+  inset: 0;
+  display: block;
+  cursor: pointer;
+}
+
+#patches li:hover {
+  text-decoration: underline;
+}
+
+#patches::-webkit-scrollbar-track {
+    background-color: rgba(255, 255, 255, 0);
 }
 
 /* COLOR PICKER DARK THEME */

@@ -615,7 +615,7 @@ async function handleMessage(userstate, message, channel) {
     }
 
     // Want badges from your app here?
-    // Send me a message via discord
+    // Send me a message via discord or twitch whisper
 
     // Chatterino & Chatterino Homies Badges
 
@@ -670,7 +670,7 @@ async function handleMessage(userstate, message, channel) {
         });
     }
 
-    // 7tv Badges
+    // 7TV Badges
 
     const foundUser = TTVUsersData.find(user => user.name === `@${userstate.username}`) || cosmetics?.user_info.find(user => user?.ttv_user_id == userstate?.['user-id']);
 

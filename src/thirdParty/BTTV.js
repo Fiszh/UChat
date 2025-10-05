@@ -52,7 +52,7 @@ async function fetchBTTVEmoteData(channelID = channelTwitchID) {
 
         BTTVEmoteData[channelID] = [...sharedEmotesData, ...channelEmotesData];
 
-        console.log(FgRed + 'Success in getting Channel BetterTTV emotes!' + FgWhite)
+        console.log(FgRed + 'Success in getting Channel BetterTTV emotes!' + FgWhite);
     } catch (error) {
         console.log('Error fetching emote data:', error);
         BTTVEmoteData[channelID] = [];
@@ -127,7 +127,7 @@ async function detectBTTVEmoteSetChange() {
                         action: 'add'
                     };
                 } else if (messageType === 'emote_delete') {
-                    const emoteFound = await BTTVEmoteData.find(emote => emote.url === `https://cdn.betterttv.net/emote/${messageData.emoteId}/3x`);
+                    const emoteFound = await BTTVEmoteData[channelTwitchID].find(emote => emote.url === `https://cdn.betterttv.net/emote/${messageData.emoteId}/3x`);
 
                     let emoteName = '';
                     if (emoteFound) {
@@ -194,7 +194,7 @@ async function updateBTTVEmoteSet(table) {
             console.log(FgRed + "BTTV" + FgWhite + `Emote was removed but we are unable to find it due to the BTTV API not providing the name of the emote.`);
         }
     } else if (table.action === 'update') {
-        const foundEmote = BTTVEmoteData.find(emote => emote.url === table.url);
+        const foundEmote = BTTVEmoteData[channelTwitchID].find(emote => emote.url === table.url);
 
         if (!foundEmote) {
             BTTVEmoteData[channelTwitchID].push({
