@@ -391,7 +391,7 @@ async function getChannelEmotesViaTwitchID(twitchID) {
     // 7TV
     try {
         if (!SevenTVEmoteData[twitchID]) {
-            SevenTVEmoteData[twitchID] = await fetch7TVEmoteSetDataViaTwitchID(twitchID);
+            SevenTVEmoteData[twitchID] = await services["7TV"].main.emoteSet.byTwitchID(twitchID);
         }
     } catch (e) {
         console.error(`7TV error for ${twitchID}:`, e);
@@ -400,7 +400,7 @@ async function getChannelEmotesViaTwitchID(twitchID) {
     // BTTV
     try {
         if (!BTTVEmoteData[twitchID]) {
-            await fetchBTTVEmoteData(twitchID);
+            BTTVEmoteData[twitchID] = await services["BTTV"].main.getEmoteData(twitchID);
         }
     } catch (e) {
         console.error(`BTTV error for ${twitchID}:`, e);
@@ -409,7 +409,8 @@ async function getChannelEmotesViaTwitchID(twitchID) {
     // FFZ
     try {
         if (!FFZEmoteData[twitchID]) {
-            FFZEmoteData[twitchID] = await fetchFFZEmoteSetDataViaTwitchID(twitchID);
+            const ffzData = await services["FFZ"].main.getUserData(twitchID);
+            FFZEmoteData[twitchID] = ffzData?.set || [];
         }
     } catch (e) {
         console.error(`FFZ error for ${twitchID}:`, e);
