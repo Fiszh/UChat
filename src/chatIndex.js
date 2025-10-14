@@ -15,11 +15,30 @@ I’ll probably accept it, but no guarantees.
 Make sure your bot isn’t on the FFZ bots list or doesn't have the Twitch Chat Bot badge before submitting
 */
 
+const services = {
+    "7TV": {
+        "main": window.seventv.main,
+        "ws": null
+    },
+    "BTTV": {
+        "main": null,
+        "ws": null
+    },
+    "FFZ": {
+        "ws": null
+    },
+};
+
 const manifest_path = 'manifest.json';
 let chat_version;
 
 if (window.location.href.includes("?channel=")) {
-    // DEFAULT ACTIONS
+    // PREPARE SERVICES
+    services["7TV"]["ws"] = new window.seventv.ws({ reconnect: true });
+    services["BTTV"]["ws"] = new window.bttv.ws({ reconnect: true });
+
+    services["BTTV"]["main"] = window.bttv.main;
+    services["FFZ"]["main"] = window.ffz.main
 
     // OPENING
     irc.events.addEventListener('opening', e => {
@@ -215,7 +234,7 @@ async function onMessage(channel, userstate, message, self) {
     // BLOCK BOTS
     const FFZBadge = FFZBadgeData.find(badge => badge.owner_username == userstate.username);
 
-    if (((FFZBadge?.id == "bot") && (FFZUserBadgeData?.user_badges?.[userstate["user-id"]] === "2")) || custom_bots.includes(userstate.username) || userstate?.badges?.["bot-badge"]) {
+    if (((FFZBadge?.id == "bot") || (FFZUserBadgeData?.user_badges?.[userstate["user-id"]] === "2")) || custom_bots.includes(userstate.username) || userstate?.badges?.["bot-badge"]) {
         if (!getSetting("bots")) {
             return;
         }
@@ -229,8 +248,6 @@ async function onMessage(channel, userstate, message, self) {
 
     const foundUser = TTVUsersData.find(user => user.name === `@${userstate.username}`);
 
-    foundUserCosmetics = cosmetics.user_info.find(user => user["ttv_user_id"] === userstate["user-id"]);
-
     if (!foundUser) {
         let userColor = userstate.color
 
@@ -241,7 +258,6 @@ async function onMessage(channel, userstate, message, self) {
         let user = {
             name: `@${userstate.username}`,
             color: userColor,
-            cosmetics: foundUserCosmetics,
             userId: userstate["user-id"]
         };
 
@@ -249,7 +265,6 @@ async function onMessage(channel, userstate, message, self) {
     } else {
         if (foundUser.color && userstate && userstate.color) {
             foundUser.color = userstate.color
-            foundUser.cosmetics = foundUserCosmetics
         }
     }
 
@@ -323,13 +338,11 @@ let BTTVGlobalEmoteData = [];
 let BTTVEmoteData = {};
 let BTTVBadgeData = [];
 
-const BTTVZeroWidth = ["SoSnowy", "IceCold", "SantaHat", "TopHat", "ReinDeer", "CandyCane", "cvMask", "cvHazmat"];
+//const BTTVZeroWidth = ["SoSnowy", "IceCold", "SantaHat", "TopHat", "ReinDeer", "CandyCane", "cvMask", "cvHazmat"];
 
 //OTHER
 let ChatterinoBadgeData = [];
 let ChatterinoHomiesBadgeData = [];
-
-let allEmoteData = [];
 
 async function trimPart(text) {
     if (text) {
@@ -372,7 +385,7 @@ function getSetting(setting_name, action) {
 let processing_ids = [];
 async function getChannelEmotesViaTwitchID(twitchID) {
     if (!twitchID || twitchID === "preview" || processing_ids.includes(twitchID)) return;
-    
+
     processing_ids.push(twitchID); // prevent API spam
 
     // 7TV
@@ -445,6 +458,7 @@ function setNameColor(element, color) {
     element.style.color = color;
 }
 
+// NOTE IN NEXT UPDATE LOOK INTO THIS FUNCTION TO OPTIMIZE IT MORE
 async function handleMessage(userstate, message, channel) {
     if (!message) { return; };
 
@@ -672,19 +686,17 @@ async function handleMessage(userstate, message, channel) {
 
     // 7TV Badges
 
-    const foundUser = TTVUsersData.find(user => user.name === `@${userstate.username}`) || cosmetics?.user_info.find(user => user?.ttv_user_id == userstate?.['user-id']);
+    const found7TVBadge = Object.values(sevenTV_cosmetics.badges).find(badge => badge.owner.find(o => o.id === String(userstate['user-id'])));
 
-    if (foundUser && (foundUser?.cosmetics?.["badge_id"] || foundUser?.["badge_id"])) {
-        const foundBadge = cosmetics.badges.find(badge => badge.id === foundUser?.cosmetics?.["badge_id"] || foundUser?.["badge_id"]);
-
-        if (foundBadge) {
-            badges.push({
-                badge_url: foundBadge.url,
-                alt: foundBadge.title,
-                background_color: undefined
-            });
-        }
+    if (found7TVBadge) {
+        badges.push({
+            badge_url: found7TVBadge.urls[found7TVBadge.urls.length - 1].url,
+            alt: found7TVBadge.name,
+            background_color: undefined
+        });
     }
+
+    // FINALIZE BADGES
 
     badges = badges.filter((badge, index, self) =>
         index === self.findIndex(b => b.badge_url === badge.badge_url)
@@ -745,9 +757,13 @@ async function handleMessage(userstate, message, channel) {
         const name = `@${strong.innerHTML.replace(/[@,:]|\s*\(.*\)/g, '')}`.toLowerCase();
         const user = TTVUsersData.find(u => u.name === name);
 
-        if (user?.cosmetics) {
-            displayCosmeticPaint(user.userId, user.color, strong);
-        } else {
+        let displayedPaint;
+
+        if (user) {
+            displayedPaint = await displayCosmeticPaint(user.userId, user.color, strong);
+        }
+
+        if (!displayedPaint) {
             let color = getRandomTwitchColor(name.slice(1));
             if (userstate?.username?.toLowerCase() === name.slice(1) && userstate.color) {
                 color = userstate.color;
@@ -793,17 +809,6 @@ function getRandomTwitchColor(name) {
     return twitchColors[colorIndex];
 }
 
-async function updateAllEmoteData() {
-    allEmoteData = [
-        ...SevenTVGlobalEmoteData,
-        ...SevenTVEmoteData,
-        ...BTTVGlobalEmoteData,
-        ...BTTVEmoteData,
-        ...FFZGlobalEmoteData,
-        ...FFZEmoteData,
-    ];
-}
-
 function splitTextWithTwemoji(text) {
     const parsedText = twemoji.parse(text, {
         base: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/',
@@ -844,16 +849,15 @@ function sanitizeInput(input) {
         .replace(/\//g, "&#x2F;");
 }
 
+// NOTE IN NEXT UPDATE LOOK INTO THIS FUNCTION TO OPTIMIZE IT MORE
 async function replaceWithEmotes(inputString, TTVMessageEmoteData, userstate, originChannelID) {
-    if (!inputString) { return inputString }
+    if (!inputString) { return inputString };
 
     //updateAllEmoteData();
 
     inputString = sanitizeInput(inputString);
 
     try {
-        const ttvEmoteData = TTVMessageEmoteData;
-
         const globalEmotesData = [
             ...SevenTVGlobalEmoteData,
             ...BTTVGlobalEmoteData,
@@ -866,8 +870,12 @@ async function replaceWithEmotes(inputString, TTVMessageEmoteData, userstate, or
             ...FFZEmoteData?.[originChannelID] || [],
         ];
 
+        const foundPersonalSets = Object.values(sevenTV_cosmetics.sets)
+            .filter(set => set.owner.some(o => o.id === String(userstate['user-id'])));
+
         const emoteData = [
-            ...ttvEmoteData,
+            ...TTVMessageEmoteData,
+            ...foundPersonalSets.flatMap(set => set.emotes || []),
             ...nonGlobalEmoteData,
             ...globalEmotesData,
             ...TTVBitsData
@@ -876,8 +884,6 @@ async function replaceWithEmotes(inputString, TTVMessageEmoteData, userstate, or
         if (emoteData.length === 0) return inputString;
 
         let EmoteSplit = await splitTextWithTwemoji(inputString);
-
-        let foundMessageSender = TTVUsersData.find(user => user.name === `@${userstate?.username}`);
 
         let foundParts = [];
         const replacedParts = [];
@@ -920,10 +926,7 @@ async function replaceWithEmotes(inputString, TTVMessageEmoteData, userstate, or
 
             // Other emotes
             if (!foundEmote) {
-                foundEmote = ttvEmoteData.find(emote => emote.name && part === sanitizeInput(emote.name)) ||
-                    foundMessageSender?.cosmetics?.personal_emotes?.find(emote => emote.name && part === emote.name) ||
-                    nonGlobalEmoteData.find(emote => emote.name && part === sanitizeInput(emote.name)) ||
-                    globalEmotesData.find(emote => emote.name && part === sanitizeInput(emote.name));
+                foundEmote = emoteData.find(emote => emote.name && part === sanitizeInput(emote.name));
             }
 
             // Search for user if no emote is found
@@ -1066,53 +1069,78 @@ function findEntryAndTier(prefix, bits) {
     return null;
 }
 
-const gqlQueries = {
-    url: 'https://gql.twitch.tv/gql',
-    headers: {
-        'Client-ID': 'ue6666qo983tsx6so1t0vnawi233wa',
-        'Client-Version': version,
-        'Referer': 'https://twitch.tv/',
-        'User-Agent': 'Mozilla/5.0 (Linux; Android 7.1; Smart Box C1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
-        'Content-Type': 'application/json'
-    }
-}
-
 async function load7TV() {
     try {
-        SevenTVID = await get7TVUserID(channelTwitchID);
-        await get7TVEmoteSetID(SevenTVID);
-        SevenTVGlobalEmoteData = await fetch7TVEmoteData('global');
+        await services["7TV"].ws.connect();
 
-        SevenTVEmoteData[channelTwitchID] = await fetch7TVEmoteData(SevenTVemoteSetId);
+        const SevenTV_user_data = await services["7TV"].main.getUserViaTwitchID(channelTwitchID);
 
-        // WEBSOCKET
-        detect7TVEmoteSetChange();
+        SevenTVGlobalEmoteData = await services["7TV"].main.emoteSet.bySetID("global");
+
+        SevenTVEmoteData[channelTwitchID] = SevenTV_user_data?.emote_data;
+
+        console.log(SevenTVEmoteData);
+
+        //WEBSOCKETS
+        services["7TV"].ws.subscribe(channelTwitchID, "entitlement.create"); // 7TV account not needed to recieve cosmetic info
+
+        if (SevenTV_user_data?.id) {
+            services["7TV"].ws.subscribe(SevenTV_user_data.id, "user.*");
+            if (SevenTV_user_data?.emote_set_id) { services["7TV"].ws.subscribe(SevenTV_user_data.emote_set_id, "emote_set.update"); };
+        }
     } catch (err) {
-        console.log(err)
+        console.log(err);
     }
 }
 
 async function loadBTTV() {
     try {
-        fetchBTTVGlobalEmoteData();
-        fetchBTTVEmoteData();
-        fetchBTTVBadgeData();
+        await services["BTTV"].ws.connect();
 
-        // WEBSOCKET
-        detectBTTVEmoteSetChange();
+        BTTVEmoteData[channelTwitchID] = await services["BTTV"].main.getEmoteData(channelTwitchID);
+
+        BTTVGlobalEmoteData = await services["BTTV"].main.getGlobalEmoteSet();
+
+        BTTVBadgeData = await services["BTTV"].main.getBadgeData();
+
+        if (BTTVEmoteData[channelTwitchID]?.length) {
+            services['BTTV'].ws.subscribe(channelTwitchID);
+        }
     } catch (err) {
-        console.log(err)
+        console.log(err);
     }
 }
 
 async function loadFFZ() {
     try {
-        fetchFFZGlobalEmotes();
-        fetchFFZUserData();
+        FFZGlobalEmoteData = await services["FFZ"].main.getGlobalEmotes();
 
-        getFFZBadges();
+        const ffzData = await services["FFZ"].main.getUserData(channelTwitchID);
+        FFZEmoteData[channelTwitchID] = ffzData?.set || [];
+
+        if (ffzData?.badges?.vip?.length) {
+            FFZUserBadgeData['vip_badge'] = ffzData.badges.vip[ffzData.badges.vip.length - 1];
+        }
+
+        if (ffzData?.badges?.mod?.length) {
+            FFZUserBadgeData['mod_badge'] = ffzData.badges.mod[ffzData.badges.mod.length - 1];
+        }
+
+        if (ffzData?.badges?.user_badge_ids) {
+            const transformedBadges = {};
+
+            Object.entries(ffzData?.badges?.user_badge_ids).forEach(([badge, users]) => {
+                users.forEach(user => {
+                    transformedBadges[user] = badge;
+                });
+            });
+
+            FFZUserBadgeData['user_badges'] = transformedBadges;
+        }
+
+        FFZBadgeData = await services["FFZ"].main.getBadges();
     } catch (err) {
-        console.log(err)
+        console.log(err);
     }
 }
 
@@ -1121,7 +1149,7 @@ async function loadOther() {
         getChatterinoBadges();
         getChatterinoHomiesBadges();
     } catch (err) {
-        console.log(err)
+        console.log(err);
     }
 }
 
@@ -1227,7 +1255,7 @@ async function loadChat() {
 
     // LOAD SAVED SETTINGS 
 
-    await LoadSavedSettings(); // why was this commented out? idk
+    await LoadSavedSettings();
 
     // THIRD PARTY
 
@@ -1505,3 +1533,167 @@ function handleImageRetries() {
 }
 
 setInterval(handleImageRetries, 10000);
+
+window.addEventListener('beforeunload', () => {
+    irc.events.removeEventListener('opening', createLoadingUI);
+    irc.events.removeEventListener('reconnect_limit_reached', createLoadingUI);
+    irc.events.removeEventListener('open', onOpenHandler);
+    irc.events.removeEventListener('PRIVMSG', onPrivMsgHandler);
+    irc.events.removeEventListener('USERNOTICE', onUserNoticeHandler);
+    irc.events.removeEventListener('CLEARMSG', onClearMsgHandler);
+    irc.events.removeEventListener('CLEARCHAT', onClearChatHandler);
+});
+
+// HANDLE 7TV & BTTV WEBSOCKET
+
+if (window.location.href.includes("?channel=")) {
+    // 7TV WEBSOCKET MESSAGES
+    services["7TV"].ws.on("add_emote", (id, actor, data) => {
+        if (sevenTV_cosmetics.sets[id]) { // PERSONAL SETS
+            data.set = "7TV Personal";
+
+            sevenTV_cosmetics.sets[id].emotes.push(data);
+        } else { // CHANNEL SET
+            SevenTVEmoteData[channelTwitchID].push(data);
+
+            console.log("7TV Emote added:", id, data);
+        }
+    });
+
+    services["7TV"].ws.on("remove_emote", (id, actor, data) => {
+        if (sevenTV_cosmetics.sets[id]) { // PERSONAL SETS
+            sevenTV_cosmetics.sets[id].emotes = sevenTV_cosmetics.sets[id].emotes.filter(emote => emote.url !== data.url);
+        } else { // CHANNEL SET
+            SevenTVEmoteData[channelTwitchID] = SevenTVEmoteData[channelTwitchID].filter(emote => emote.url !== data.url);
+
+            console.log("Emote removed:", id, data);
+        }
+    });
+
+    services["7TV"].ws.on("rename_emote", (id, actor, data) => {
+        let foundEmote = SevenTVEmoteData[channelTwitchID].find(emote => emote.emote_id === (data.old.id || data.new.id));
+
+        if (sevenTV_cosmetics.sets[id]) { // PERSONAL SETS
+            foundEmote = sevenTV_cosmetics.sets[id].emotes.find(emote => emote.emote_id === (data.old.id || data.new.id));
+        }
+
+        if (foundEmote) {
+            foundEmote.name = data.new.name;
+        }
+
+        console.log("Emote renamed:", id, data);
+    });
+
+    services["7TV"].ws.on("set_change", async (actor, data) => { // no need to resub to a new set id, already done via the websocket client
+        SevenTVEmoteData[channelTwitchID] = await services["7TV"].main.emoteSet.bySetID(data.new_set.id);
+
+        console.log("Emote set changed:", data);
+    });
+
+    services["7TV"].ws.on("create_badge", (data) => {
+        if (!sevenTV_cosmetics.badges[data.id]) {
+            sevenTV_cosmetics.badges[data.id] = data;
+        }
+    });
+
+    services["7TV"].ws.on("create_paint", (data) => {
+        if (!sevenTV_cosmetics.paints[data.id]) {
+            sevenTV_cosmetics.paints[data.id] = data;
+        }
+    });
+
+    services["7TV"].ws.on("create_personal_set", (data) => { // CREATE PERSONAL SET
+        if (!sevenTV_cosmetics.sets[data.id]) {
+            sevenTV_cosmetics.sets[data.id] = {
+                id: data.id,
+                name: data.name,
+                flags: data.flags,
+                owner: data?.flags == 4 ? [data.owner] : [],
+                emotes: []
+            };
+        }
+    });
+
+    // PERSONAL SETS SHOULD NOT REMOVE THE OWNER, RIGHT 7TV?
+    services["7TV"].ws.on("create_entitlement", (data) => { // BIND A BADGE, PAINT OR SET TO A USER
+        if (sevenTV_cosmetics.sets[data.id] && sevenTV_cosmetics.sets[data.id]?.flags != 4) { // SET
+            const alreadyOwner = sevenTV_cosmetics.sets[data.id].owner.find(owner => owner.id == data.owner.id);
+
+            if (!alreadyOwner) {
+                sevenTV_cosmetics.sets[data.id].owner.push(data.owner);
+            }
+        } else if (sevenTV_cosmetics.badges[data.id]) { // BADGE
+            for (const badge of Object.values(sevenTV_cosmetics.badges)) { // REMOVE BADGE OWNER
+                badge.owner = badge.owner.filter(o => o.id !== String(data?.owner.id));
+            }
+
+            sevenTV_cosmetics.badges[data.id].owner.push(data.owner);
+        } else if (sevenTV_cosmetics.paints[data.id]) { // PAINT
+            for (const paint of Object.values(sevenTV_cosmetics.paints)) { // REMOVE PAINT OWNER
+                paint.owner = paint.owner.filter(o => o.id !== String(data?.owner.id));
+            }
+
+            sevenTV_cosmetics.paints[data.id].owner.push(data.owner);
+
+            updatePaint(data.owner.id); // CHANGE USER PAINT ON PREVIOUS MESSAGES
+        }
+    });
+
+    services["7TV"].ws.on("delete_entitlement", (data) => {
+        let whatToDelete = {};
+
+        if (sevenTV_cosmetics.badges[data.id]) { // BADGE
+            whatToDelete = sevenTV_cosmetics.badges;
+        } else if (sevenTV_cosmetics.paints[data.id]) { // PAINT
+            whatToDelete = sevenTV_cosmetics.paints;
+        }
+
+        for (const entitlement of Object.values(whatToDelete)) {
+            entitlement.owner = entitlement.owner.filter(o => o.id !== String(data?.owner.id));
+        }
+
+        // CHANGE USER PAINT ON PREVIOUS MESSAGES
+        if (sevenTV_cosmetics.paints[data.id]) {
+            updatePaint(data.owner.id);
+        }
+    });
+
+    function updatePaint(id) {
+        const found_messages = chatDisplay.querySelectorAll(`[sender_id="${id}"]`);
+
+        if (found_messages) {
+            for (const index of Object.keys(found_messages)) {
+                const message = found_messages[index];
+
+                const found_name_wrapper = message.querySelector(".sender-name strong");
+
+                if (found_name_wrapper) {
+                    displayCosmeticPaint(id, (found_name_wrapper.style?.color || getRandomTwitchColor(message.getAttribute("sender"))), found_name_wrapper);
+                }
+            }
+        }
+    }
+
+    // BTTV WEBSOCKET MESSAGES
+    services["BTTV"].ws.on("add_emote", (id, data) => {
+        BTTVEmoteData[channelTwitchID].push(data);
+
+        console.log("BTTV Emote added:", id, data);
+    });
+
+    services["BTTV"].ws.on("remove_emote", (id, data) => {
+        BTTVEmoteData[channelTwitchID].emotes = BTTVEmoteData[channelTwitchID].filter(emote => emote.emote_id !== data);
+
+        console.log("BTTV Emote removed:", id, data);
+    });
+
+    services["BTTV"].ws.on("rename_emote", (id, data) => {
+        const foundEmote = BTTVEmoteData[channelTwitchID].find(emote => emote.emote_id === data.id);
+
+        if (foundEmote) {
+            foundEmote.name = table.newName;
+        }
+
+        console.log("BTTV Emote renamed:", id, data);
+    });
+}

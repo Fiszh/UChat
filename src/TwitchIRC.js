@@ -260,6 +260,12 @@ function parseIrcLine(line, parseTagCb) {
     return { raw, tags, prefix, command, channel, params, message };
 }
 
+window.addEventListener('beforeunload', () => {
+    clearInterval(heartbeatInterval);
+    clearTimeout(heartbeatTimeout);
+    disconnect();
+});
+
 irc = {
     connect,
     disconnect,

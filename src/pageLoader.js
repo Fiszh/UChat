@@ -55,6 +55,7 @@ if (params.channel) {
 
 (async () => {
     await appendScript('src/appendSettings.js');
+    
     if (load === "main") {
         const link = document.createElement('link');
         link.rel = 'stylesheet';
@@ -70,42 +71,37 @@ if (params.channel) {
 
         appendScript('src/landingPage/settingsV2.js');
         appendScript('src/landingPage/twitchLogin.js');
-        appendScript('src/landingPage/index.js');
         appendScript('src/landingPage/events.js');
 
         // NEEDED FOR CHAT PREVIEW
-        appendScript('src/thirdParty/SevenTVCosmetics.js');
+        appendScript('src/thirdParty/SevenTVCosmeticsV2.js')
+            .then(async () => {
+                await pushCosmeticUserUsingGQL("01GAK4CXN00002Z53DR6PAWQVE"); // uni
+                await pushCosmeticUserUsingGQL("01FDSMJ8MG0005Y8ZGBVC26NJ6"); // ftk
+            });
+
+        await appendScript('src/thirdParty/7TV/main.js');
 
         // CHAT INDEX
         appendScript('src/chatIndex.js')
-            .then(() => {
-                // NEEDEED FOR 7TV COSMETICS AND MENTION COLOR
+            .then(async () => {
+                await appendScript('src/landingPage/index.js');
+
                 TTVUsersData.push({
                     "name": "@uniidev",
                     "color": "#FFB3FF",
-                    "cosmetics": {},
                     "userId": "528761326"
                 });
 
                 TTVUsersData.push({
                     "name": "@ftk789",
                     "color": "#8A3DE2",
-                    "cosmetics": {},
                     "userId": "166427338"
                 });
 
-                appendScript('src/thirdParty/SevenTVHelperV2.js')
-                    .then(async () => {
-                        await pushCosmeticUserUsingGQL("01GAK4CXN00002Z53DR6PAWQVE"); // uni
-                        await pushCosmeticUserUsingGQL("01FDSMJ8MG0005Y8ZGBVC26NJ6"); // ftk
-
-                        setUpPreview();
-                    })
-                    .catch(console.error);
+                setUpPreview();
             })
             .catch(console.error);
-
-        appendScript('src/thirdParty/7TV.js');
 
         // SETTINGS 
         appendSettings(document.getElementById("ChatDisplay"));
@@ -144,15 +140,14 @@ if (params.channel) {
 
         document.head.appendChild(link);
 
-        appendScript('src/thirdParty/7TV.js');
-        appendScript('src/thirdParty/SevenTVCosmetics.js');
-        appendScript('src/thirdParty/SevenTVHelperV2.js');
-        appendScript('src/thirdParty/BTTV.js');
-        appendScript('src/thirdParty/FFZ.js');
-
-        appendScript('src/TwitchIRC.js')
-            .then(() => appendScript('src/chatIndex.js')) // MAIN INDEX
-            .catch(console.error);
+        await appendScript('src/thirdParty/7TV/main.js');
+        await appendScript('src/thirdParty/7TV/websocket.js');
+        await appendScript('src/thirdParty/SevenTVCosmeticsV2.js');
+        await appendScript('src/thirdParty/BTTV/main.js');
+        await appendScript('src/thirdParty/BTTV/websocket.js');
+        await appendScript('src/thirdParty/FFZ/main.js');
+        await appendScript('src/TwitchIRC.js');
+        await appendScript('src/chatIndex.js');
 
         // UPDATE DETECTOR - Removed because the chat is no longer hosted on GitHub, though still used on the outdated GitHub site.
         //appendScript('src/detectUpdate.js');

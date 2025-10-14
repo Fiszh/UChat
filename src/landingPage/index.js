@@ -188,12 +188,6 @@ async function displayPreview() {
     });
 }
 
-async function waitForFunction(funcName) {
-    while (typeof window[funcName] !== 'function') {
-        await new Promise(resolve => setTimeout(resolve, 100));
-    }
-}
-
 function checkUrlChange() {
     const currentUrl = urlDiv.textContent.trim();
     if (currentUrl !== lastUrl) {
@@ -204,13 +198,11 @@ function checkUrlChange() {
 }
 
 async function setUpPreview() {
-    await waitForFunction('fetch7TVEmoteData');
-
     if (!SevenTVEmoteData) {
         window.SevenTVEmoteData = {};
     }
 
-    SevenTVEmoteData["preview"] = await fetch7TVEmoteData('01JGAC1F503T2852YKXC8G9VN1');
+    SevenTVEmoteData["preview"] = await services["7TV"].main.emoteSet.bySetID('01JGAC1F503T2852YKXC8G9VN1');
 
     await getBadges();
 
