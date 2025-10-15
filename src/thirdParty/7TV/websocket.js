@@ -159,8 +159,9 @@ class SevenTVWebSocket {
                         case "BADGE":
                             const badge_data = message_body.object.data;
                             if (!badge_data) { return; };
-                            
+
                             this.emit("create_badge", await parseBadge(badge_data));
+
                             break;
                         case "PAINT":
                             let paint_data = message_body.object.data;
@@ -174,6 +175,8 @@ class SevenTVWebSocket {
 
                             break;
                     }
+                    
+                    break;
                 case "emote_set.create":
                     const set_object = message_body.object;
 

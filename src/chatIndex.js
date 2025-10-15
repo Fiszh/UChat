@@ -600,7 +600,7 @@ async function handleMessage(userstate, message, channel) {
             if (badge && badge.id) {
                 if (badge.id === "moderator_1" && FFZUserBadgeData["mod_badge"]) {
                     badges.push({
-                        badge_url: FFZUserBadgeData["mod_badge"],
+                        badge_url: FFZUserBadgeData["mod_badge"].url,
                         alt: "Moderator",
                         background_color: "#00ad03"
                     });
@@ -610,7 +610,7 @@ async function handleMessage(userstate, message, channel) {
 
                 if (badge.id === "vip_1" && FFZUserBadgeData["vip_badge"]) {
                     badges.push({
-                        badge_url: FFZUserBadgeData["vip_badge"],
+                        badge_url: FFZUserBadgeData["vip_badge"].url,
                         alt: "VIP",
                         background_color: "#e005b9"
                     });

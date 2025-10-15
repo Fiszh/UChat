@@ -46,7 +46,7 @@ class BTTVWebSocket {
 
             console.log(this.subscriptions);
             if (this.setting.resubscribeOnReconnect) {
-                for (const id in this.subscriptions) {
+                for (const id of this.subscriptions) {
                     this.subscribe(id, true);
                 }
             }
@@ -147,7 +147,7 @@ class BTTVWebSocket {
 
         this.ws.send(JSON.stringify(message));
 
-        if (!this.subscriptions[id]) {
+        if (!this.subscriptions.includes(id)) {
             this.subscriptions.push(id);
         }
 
