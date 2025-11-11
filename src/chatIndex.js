@@ -32,7 +32,7 @@ const services = {
 const manifest_path = 'manifest.json';
 let chat_version;
 
-if (window.location.href.includes("?channel=")) {
+if (window.location.href.includes("?channel=") || window.location.href.includes("?id=")) {
     // PREPARE SERVICES
     services["7TV"]["ws"] = new window.seventv.ws({ reconnect: true });
     services["BTTV"]["ws"] = new window.bttv.ws({ reconnect: true });
@@ -132,8 +132,6 @@ if (window.location.href.includes("?channel=")) {
             } catch (err) {
                 console.error(`Failed to load in manifest.json, please try reloading the page. Error: ${err.message}`);
             } finally {
-                irc.connect(settings.channel);
-
                 loadChat();
                 setInterval(removeInvisibleElements, 500);
                 setInterval(loadCustomBadges, 300000);
@@ -291,6 +289,7 @@ const FgWhite = "\x1b[37m";
 
 //TWITCH
 let channelTwitchID = "0";
+let channelTwitchName;
 let TTVSubBadgeData = [];
 let TTVGlobalBadgeData = [];
 let TTVBitBadgeData = [];
@@ -776,7 +775,7 @@ async function handleMessage(userstate, message, channel) {
 
 async function fadeOut(element) {
     if (!getSetting("fadeOut")) { return; }
-    if (!document.location.href.includes("?channel=")) { return; }
+    if (!document.location.href.includes("?channel=") && !window.location.href.includes("?id=")) { return; }
 
     const fadeOutTime = getSetting("fadeOut") * 1000
 
@@ -1252,7 +1251,11 @@ async function loadChat() {
 
     const data_loaded = await loadTTV();
 
-    if (!data_loaded && channelTwitchID == "0") { return; };
+    if (!data_loaded || channelTwitchID == "0" || !channelTwitchName) { return; };
+
+    if (settings.channel || channelTwitchName) {
+        irc.connect(settings.channel || channelTwitchName);
+    }
 
     // LOAD SAVED SETTINGS 
 
@@ -1295,7 +1298,7 @@ async function LoadSavedSettings() {
 
 async function loadTTV() {
     try {
-        const response = await fetch(`https://api.unii.dev/channel?name=${settings.channel}`);
+        const response = await fetch(`https://api.unii.dev/channel?${settings.channel ? `name=${settings.channel}` : `id=${settings.id}`}`);
 
         if (!response.ok) {
             console.error("Fetch error:", response.status, response.statusText);
@@ -1321,6 +1324,7 @@ async function loadTTV() {
 
         // CHANNEL INFO LOGIN
         channelTwitchID = data?.channel_info?.id || null;
+        channelTwitchName = data?.channel_info?.login || null;
         const channel_color = data?.channel_info?.color || "white";
 
         // CHANNEL BADGES
@@ -1547,7 +1551,7 @@ window.addEventListener('beforeunload', () => {
 
 // HANDLE 7TV & BTTV WEBSOCKET
 
-if (window.location.href.includes("?channel=")) {
+if (window.location.href.includes("?channel=") || window.location.href.includes("?id=")) {
     // 7TV WEBSOCKET MESSAGES
     services["7TV"].ws.on("add_emote", (id, actor, data) => {
         if (sevenTV_cosmetics.sets[id]) { // PERSONAL SETS

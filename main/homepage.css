@@ -290,18 +290,38 @@ main {
 
 #channel-input {
     width: 100%;
-    font-size: 2rem;
-    padding: 15px;
     box-sizing: border-box;
     user-select: none;
     border: none;
     outline: none;
     background-color: #161616;
+    font-weight: bolder;
+    color: white;
+    position: relative;
+}
+
+#channel-input > input {
+    all: unset;
+    font-size: 2rem;
+    width: 100%;
+    height: 100%;
     word-wrap: break-word;
     word-break: break-word;
     overflow-wrap: break-word;
-    font-weight: bolder;
-    color: white;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+#channel-input label {
+    font-size: 1rem;
+    top: 0;
+    right: 0;
+    position: absolute;
+    background-color: #0e0e0e;
+    padding: 0.3rem 0.1rem;
+    box-sizing: border-box;
+    border-bottom: 1px solid #333;
+    border-left: 1px solid #333;
 }
 
 #configuration {

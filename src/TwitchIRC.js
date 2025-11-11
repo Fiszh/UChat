@@ -121,6 +121,7 @@ function disconnect() {
     clearTimeout(heartbeatTimeout);
 }
 
+// THIS WILL BE REPLACED WITH THE ORIGINAL AND BETTER TO MANTAIN CODE
 function parseIrcLine(line, parseTagCb) {
     if (!line) return;
 

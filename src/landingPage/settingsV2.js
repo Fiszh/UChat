@@ -2,6 +2,8 @@ const settingsDiv = document.getElementById("configuration");
 const ChatDisplay = document.getElementById("ChatDisplay");
 const url_results = document.getElementById("url-results");
 const channel_input = document.getElementById("channel-input");
+const name_input = document.getElementById("name-input");
+const id_input = document.getElementById("id-input");
 const copyURLButton = document.getElementById("click_to_copy");
 const reset_settings = document.getElementById("reset-settings");
 
@@ -58,7 +60,17 @@ function displaySettings() {
     if (!Object.keys(settings)) { return; };
     settingsDiv.innerHTML = "";
 
-    channel_input.value = settings.channel || "";
+    //channel_input.value = settings.channel || "";
+    name_input.value = settings.channel || "";
+    id_input.value = settings.id || "";
+
+    if (settings.id) {
+        name_input.style.display = "none";
+        id_input.style.display = "block";
+    } else {
+        name_input.style.display = "block";
+        id_input.style.display = "none";
+    }
 
     for (const key in defaultConfig) {
         const setting = defaultConfig[key];
@@ -129,11 +141,11 @@ function displaySettings() {
     }
 }
 
-channel_input.addEventListener('input', () => {
-    let channel = channel_input.value.trim();
+name_input.addEventListener('input', () => {
+    let channel = name_input.value.trim();
     channel = channel.replace(/[^\w]/g, '');
 
-    channel_input.value = channel;
+    name_input.value = channel;
 
     if (channel) {
         settings.channel = channel;
@@ -141,12 +153,27 @@ channel_input.addEventListener('input', () => {
         delete settings.channel;
     }
 
-    updateUrl();
+    updateUrl(true, true);
+});
+
+id_input.addEventListener('input', () => {
+    let id = id_input.value.trim();
+    id = id.replace(/[^\d]/g, '');
+
+    id_input.value = id;
+
+    if (id) {
+        settings.id = id;
+    } else {
+        delete settings.id;
+    }
+
+    updateUrl(true, true);
 });
 
 copyURLButton.addEventListener('click', () => {
     if (url_results.textContent) {
-        if (settings.channel) {
+        if (settings.channel || settings.id) {
             navigator.clipboard.writeText(url_results.textContent)
                 .then(() => {
                     alert("Overlay URL has been copied!");
@@ -155,14 +182,16 @@ copyURLButton.addEventListener('click', () => {
                     console.error("Failed to copy URL: ", err);
                 });
         } else {
-            alert("Channel name not provided!.");
+            alert("Channel name or id not provided!.");
         }
     }
 });
 
-function updateUrl(save_local = true) {
+function updateUrl(save_local = true, silent = false) {
     if (updateUrl._timeout) { clearTimeout(updateUrl._timeout); }; // DEBOUNCE
     updateUrl._timeout = setTimeout(() => {
+        checkUrlChange(silent);
+
         let settings_to_save = {};
 
         const params = new URLSearchParams();
@@ -172,6 +201,14 @@ function updateUrl(save_local = true) {
 
             if (save_local) {
                 settings_to_save['channel'] = settings.channel;
+            }
+        }
+
+        if (settings.id) {
+            params.set('id', settings.id);
+
+            if (save_local) {
+                settings_to_save['id'] = settings.id;
             }
         }
 

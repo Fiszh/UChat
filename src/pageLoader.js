@@ -43,11 +43,11 @@ async function appendScript(src, script_type) {
 
 const params = Object.fromEntries(new URLSearchParams(window.location.search));
 
-if (params.channel) {
+if (params.channel || params.id) {
     if (load !== "error") {
         load = "chat";
 
-        document.title = `UChat Chat • ${params.channel || "None"}`;
+        document.title = `UChat Chat • ${params.channel || params.id || "None"}`;
     }
 } else if (Object.keys(params).length) {
     alert("No channel specified in the URL. Defaulting to main page.");

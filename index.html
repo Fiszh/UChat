@@ -111,8 +111,38 @@
             <section id="home" aria-label="Home section">
                 <section class="left_side">
                     <div id="configuration"></div>
-                    <div id="information">↓ Channel Name ↓</div>
-                    <input id="channel-input" type="text" autocomplete="off" placeholder="Channel Name" />
+                    <div id="information">↓ Channel Info ↓</div>
+                    <div id="channel-input">
+                        <label>
+                            <input type="checkbox" id="channel-id-check"> Use Channel ID
+                        </label>
+                        <input id="id-input" style="display: none;" type="text" autocomplete="off"
+                            placeholder="Channel ID" />
+                        <input id="name-input" type="text" autocomplete="off" placeholder="Channel Name" />
+
+                        <script>
+                            const checkbox = document.getElementById("channel-id-check");
+
+                            const nameInput = document.getElementById("name-input");
+                            const idInput = document.getElementById("id-input");
+
+                            checkbox.addEventListener("change", (e) => {
+                                delete settings.channel;
+                                delete settings.id;
+
+                                displaySettings();
+                                updateUrl(true, true);
+
+                                if (checkbox.checked) {
+                                    nameInput.style.display = "none";
+                                    idInput.style.display = "block";
+                                } else {
+                                    nameInput.style.display = "block";
+                                    idInput.style.display = "none";
+                                }
+                            })
+                        </script>
+                    </div>
                 </section>
 
                 <section class="right_side">

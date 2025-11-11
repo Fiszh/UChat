@@ -188,12 +188,14 @@ async function displayPreview() {
     });
 }
 
-function checkUrlChange() {
+function checkUrlChange(silent = false) {
     const currentUrl = urlDiv.textContent.trim();
     if (currentUrl !== lastUrl) {
         lastUrl = currentUrl;
-        displayPreview();
-        appendSettings(chatDisplay);
+        if (!silent) {
+            displayPreview();
+            appendSettings(chatDisplay);
+        }
     }
 }
 
@@ -208,7 +210,6 @@ async function setUpPreview() {
 
     displayPreview();
     appendSettings(chatDisplay);
-    setInterval(checkUrlChange, 100);
 }
 
 //NEEDED FOR PREVIEW
@@ -291,7 +292,7 @@ deleteButton.addEventListener("click", async () => {
     });
 
     if (!deleteSettings_response.ok) {
-        alert("There was a error saving your settings");
+        alert("There was a error deleting your settings");
     } else {
         const deleteSettings_data = await deleteSettings_response.json();
 
