@@ -23,9 +23,9 @@ jobs:
 
       - name: Update manifest.json
         run: |
-          echo "{\"version\":\"${{ steps.get_version.outputs.version }}\"}" > manifest.json
+          echo "{\"version\":\"${{ steps.get_version.outputs.version }}\"}" > app/static/manifest.json
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add manifest.json
-          git commit -m "Update version manifest to ${{ steps.get_version.outputs.version }}" || echo "No changes to commit"
+          git add app/static/manifest.json
+          git diff --cached --quiet || git commit -m "Update version manifest to ${{ steps.get_version.outputs.version }}"
           git push
