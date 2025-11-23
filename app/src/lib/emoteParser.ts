@@ -96,12 +96,32 @@ interface FoundOther {
     other: any;
 }
 
-export async function replaceWithEmotes(inputString: string, TTVMessageEmoteData: any[], userstate: Record<string, any>, originChannelID: string | number): Promise<string> {
+function parseTwitchEmotes(message: string, userstate: Record<string, any>): any[] {
+    if (userstate.emotes) {
+        return Object.entries(userstate.emotes).flatMap(([emoteId, positions]) => {
+            const posStr = positions as string;
+            const [start, end] = posStr.split('-').map(Number);
+            const name = Array.from(message).slice(start, end + 2).join('');
+
+            return {
+                name,
+                url: `https://static-cdn.jtvnw.net/emoticons/v2/${emoteId}/default/dark/3.0`,
+                set: 'Twitch'
+            };
+        });
+    } else {
+        return [];
+    }
+}
+
+export async function replaceWithEmotes(inputString: string, userstate: Record<string, any>, originChannelID: string | number): Promise<string> {
     if (!inputString) { return inputString };
 
     //updateAllEmoteData();
 
     inputString = sanitizeInput(inputString);
+
+    console.log(userstate);
 
     try {
         const globalEmotesData = [
@@ -118,7 +138,7 @@ export async function replaceWithEmotes(inputString: string, TTVMessageEmoteData
 
         const foundPersonalSets = getPersonalSets(userstate['user-id']);
 
-        console.log(foundPersonalSets);
+        const TTVMessageEmoteData = parseTwitchEmotes(inputString, userstate);
 
         const emoteData = [
             ...TTVMessageEmoteData,

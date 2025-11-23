@@ -1,6 +1,9 @@
 <script lang="ts">
   import { replaceWithEmotes } from "$lib/emoteParser";
+  import { parseBadges } from "$lib/badgeParser";
   import { getPaint } from "$lib/services/7TV/cosmetics";
+
+  import Badge from "./badge.svelte";
 
   export let message: {
     user: string;
@@ -20,12 +23,13 @@
   userPaint = getPaint(message.user) as Paint;
   console.log(userPaint);
 
+  let userBadges: parsedBadge[] = parseBadges(message.tags);
+
   let emoteText = message.text;
 
   (async () => {
     emoteText = await replaceWithEmotes(
       message.text,
-      [],
       message.tags,
       message.tags["room-id"],
     );
@@ -63,7 +67,22 @@
   </strong>
 {/snippet}
 
+{#snippet badges()}
+  <strong class="badge-wrapper">
+    {#each userBadges as badge, i (i)}
+      <Badge
+        badge={{
+          badge_url: badge.badge_url,
+          alt: badge.alt,
+          background_color: badge.background_color!,
+        }}
+      />
+    {/each}
+  </strong>
+{/snippet}
+
 <div class="chat-message">
+  {#if userBadges.length}{@render badges()}{/if}
   {@render paint()}:
   <span>{@html emoteText}</span>
 </div>
@@ -71,13 +90,20 @@
 <style lang="scss">
   .chat-message {
     padding: 0.1rem 0rem;
-    
-  }
-  .paint {
-    -webkit-text-fill-color: transparent;
-    background-clip: text !important;
-    -webkit-background-clip: text !important;
-    background-size: cover !important;
-    text-shadow: none !important;
+
+    .paint {
+      -webkit-text-fill-color: transparent;
+      background-clip: text !important;
+      -webkit-background-clip: text !important;
+      background-size: cover !important;
+      text-shadow: none !important;
+    }
+
+    .badge-wrapper {
+      display: inline-flex;
+      line-height: normal;
+      vertical-align: middle;
+      gap: 5px;
+    }
   }
 </style>

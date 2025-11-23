@@ -81,7 +81,7 @@ export function connect(channel_name: string) {
             break;
           default:
             if (parsed.tags.rawTags) { parsed.tags = parsed.tags.merged; };
-            
+
             messages.update((msgs: any[]) => [...msgs, parsed]);
 
             break;
@@ -196,7 +196,7 @@ function parseIrcLine(line: string): ParsedMessage {
           const match = part.match(arrayRegex);
           if (match) {
             const [, id, nums] = match;
-            tags[key] = {};
+            if (!tags[key]) { tags[key] = {} };
             tags[key][id] = nums;
           } else {
             tags[key] = part;

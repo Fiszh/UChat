@@ -15,7 +15,14 @@ declare global {
         name?: string;
         color?: string;
         urls: ScaleUrls[];
+        url: string;
         owner?: any[]
+    }
+
+    interface parsedBadge {
+        badge_url: string;
+        alt: string;
+        background_color?: string;
     }
 
     interface SevenTVBadge {
