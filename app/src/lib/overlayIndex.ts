@@ -1,5 +1,5 @@
 import { cosmetics } from "$stores/cosmetics";
-import { globals } from '$stores/global';
+import { globals, loadingInfo } from '$stores/global';
 
 import SevenTV_main from '$lib/services/7TV/main';
 import SevenTV_ws from '$lib//services/7TV/websocket';

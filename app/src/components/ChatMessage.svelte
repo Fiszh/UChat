@@ -3,7 +3,7 @@
   import { parseBadges } from "$lib/badgeParser";
   import { getPaint } from "$lib/services/7TV/cosmetics";
 
-  import Badge from "./badge.svelte";
+  import Badge from "./Badge.svelte";
 
   export let message: {
     user: string;
@@ -21,7 +21,6 @@
     : `color: ${message.tags.color || usernameColor(message.user)};`;
 
   userPaint = getPaint(message.user) as Paint;
-  console.log(userPaint);
 
   let userBadges: parsedBadge[] = parseBadges(message.tags);
 
@@ -90,6 +89,7 @@
 <style lang="scss">
   .chat-message {
     padding: 0.1rem 0rem;
+    font-weight: bold;
 
     .paint {
       -webkit-text-fill-color: transparent;

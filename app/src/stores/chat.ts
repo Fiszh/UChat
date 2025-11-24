@@ -79,7 +79,17 @@ export function connect(channel_name: string) {
             clearTimeout(heartbeatTimeout);
 
             break;
+          case "CLEARMSG":
+            messages.update(arr => arr.filter(item => item.tags["id"] !== parsed.tags.merged["target-msg-id"]));
+
+            break;
+          case "CLEARCHAT":
+            messages.update(arr => arr.filter(item => item.tags["user-id"] !== parsed.tags.merged["target-user-id"]));
+
+            break;
           default:
+            //console.log("UNKNOWN PARSED COMMAND", parsed.command, parsed);
+
             if (parsed.tags.rawTags) { parsed.tags = parsed.tags.merged; };
 
             messages.update((msgs: any[]) => [...msgs, parsed]);
@@ -127,10 +137,13 @@ function disconnect() {
   clearTimeout(heartbeatTimeout);
 }
 
-//FIXME PARSING DONT WORK
-function parseIrcLine(line: string): ParsedMessage {
+/*FIXME PARSING DONT WORK
+
+MIGHT BE WORKING NOW
+*/
+function parseIrcLine(raw: string): ParsedMessage {
   let parsed = {
-    "raw": line,
+    raw,
     "tags": {
       rawTags: {},
       tags: {},
@@ -145,16 +158,31 @@ function parseIrcLine(line: string): ParsedMessage {
   try {
     // SPLIT TAGS AND REST
     let lineTags = "";
-    let rest = line;
+    let rawPrefix = "";
+    let line = raw;
 
-    if (line.startsWith("@")) {
+    if (line.startsWith('@')) {
       const [tagsPart, ...restParts] = line.split(" ");
       lineTags = tagsPart.slice(1);
-      rest = restParts.join(" ");
+      line = restParts.join(" ");
+
+      rawPrefix = line.split(" ")[0];
+
+      const end = line.indexOf(' ');
+      line = line.slice(end + 1);
     }
 
+    if (line.startsWith(':')) {
+      const end = line.indexOf(' ');
+      line = line.slice(end + 1);
+    }
+
+    const space = line.indexOf(' ');
+    const command = space === -1 ? line : line.slice(0, space);
+    const trailing = space === -1 ? null : line.slice(space + 1).replace(/^:/, '');
+
     // GET PARTS OF REST
-    const [rawPrefix, command, channel, ...messageParts] = rest.split(" ");
+    const [channel, ...messageParts] = (trailing || "").split(" ");
 
     // GET AND CLEAN MESSAGE
     const message = messageParts.join(" ");
@@ -184,24 +212,39 @@ function parseIrcLine(line: string): ParsedMessage {
     const isNumber = (str: string) => !isNaN(Number(str));
 
     const tags: Record<string, any> = {};
-    const arrayRegex = /([^,\/:]+)[/:]([\d-]+)/;
+    const TAG_VALUE_REGEX = /([^,\/]+)\/([^,]+)/g;
+    const EMOTE_POSITIONS_REGEX = /([^\/:]+):([\d,-]+)/g;
 
     Object.entries(rawTags).forEach(([key, value]) => {
       if (isNumber(value) && value !== "") {
         const numberValue = Number(value);
         tags[key] = numberValue > 1 ? numberValue : Boolean(numberValue);
       } else {
-        const arraySplit = value.split(",");
-        arraySplit.forEach((part: string) => {
-          const match = part.match(arrayRegex);
-          if (match) {
+        let matches = [];
+        let matchesType = "TAG_VALUE_REGEX";
+        if (value.includes(':')) {
+          matches = [...value.matchAll(EMOTE_POSITIONS_REGEX)];
+
+          matchesType = "EMOTE_POSITIONS_REGEX";
+        } else {
+          matches = [...value.matchAll(TAG_VALUE_REGEX)];
+        }
+
+        if (matches.length) {
+          for (const match of matches) {
             const [, id, nums] = match;
-            if (!tags[key]) { tags[key] = {} };
-            tags[key][id] = nums;
-          } else {
-            tags[key] = part;
+
+            if (matchesType == "TAG_VALUE_REGEX") {
+              if (!tags[key]) { tags[key] = {} };
+              tags[key][id] = nums;
+            } else if (matchesType == "EMOTE_POSITIONS_REGEX") {
+              if (!tags[key]) { tags[key] = [] };
+              tags[key][id] = [...nums.split(",")];
+            }
           }
-        });
+        } else {
+          tags[key] = value;
+        }
       }
     });
 
@@ -248,8 +291,7 @@ function parseIrcLine(line: string): ParsedMessage {
       message: cleanMessage
     };
   } catch (err) {
-    console.log(line);
-    console.error(err);
+    console.error("Failed parsing:", raw, " With the error:", err);
   } finally {
     return parsed;
   }

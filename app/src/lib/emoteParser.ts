@@ -96,32 +96,40 @@ interface FoundOther {
     other: any;
 }
 
+interface EmoteInfo {
+    name: string;
+    url: string;
+    site: "TTV";
+}
+
 function parseTwitchEmotes(message: string, userstate: Record<string, any>): any[] {
     if (userstate.emotes) {
-        return Object.entries(userstate.emotes).flatMap(([emoteId, positions]) => {
-            const posStr = positions as string;
-            const [start, end] = posStr.split('-').map(Number);
-            const name = Array.from(message).slice(start, end + 2).join('');
+        const entries = Object.entries(userstate.emotes) as [string, string | string[]][];
 
-            return {
-                name,
-                url: `https://static-cdn.jtvnw.net/emoticons/v2/${emoteId}/default/dark/3.0`,
-                set: 'Twitch'
-            };
+        return entries.flatMap(([emoteId, raw]) => {
+            const positions = Array.isArray(raw) ? raw : [raw];
+
+            return positions.map((position) => {
+                const [start, end] = position.split("-").map(Number);
+                const name = Array.from(message).slice(start, end + 1).join("");
+
+                return {
+                    name,
+                    url: `https://static-cdn.jtvnw.net/emoticons/v2/${emoteId}/default/dark/3.0`,
+                    site: "TTV",
+                };
+            });
         });
     } else {
         return [];
     }
 }
 
+
 export async function replaceWithEmotes(inputString: string, userstate: Record<string, any>, originChannelID: string | number): Promise<string> {
     if (!inputString) { return inputString };
 
-    //updateAllEmoteData();
-
     inputString = sanitizeInput(inputString);
-
-    console.log(userstate);
 
     try {
         const globalEmotesData = [
@@ -150,7 +158,6 @@ export async function replaceWithEmotes(inputString: string, userstate: Record<s
         //if (!emoteData.length) { return inputString; }; MIGHT NOT BE USEFULL ANYMORE DUE TO TWEMOJIS NOT WORKING IF NO EMOTES
 
         let EmoteSplit = await splitTextWithTwemoji(inputString);
-        //console.log(EmoteSplit);
 
         let foundParts = [];
         const replacedParts = [];

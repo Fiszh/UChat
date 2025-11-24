@@ -1,12 +1,19 @@
 <script lang="ts">
+  import Sidebar from "./Main/Sidebar.svelte";
+  import MainDisplay from "./Main/Chat/Main.svelte";
+
+
 </script>
 
 <main>
-  Main
-  <br />
-  Currently the main page is not aviable, use <strong>?channel=name</strong> to test
-  out the new overlay.
+  <Sidebar />
+  <MainDisplay />
 </main>
 
 <style lang="scss">
+  main {
+    display: flex;
+    
+    background: linear-gradient(#080808, #000000);
+  }
 </style>

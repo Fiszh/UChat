@@ -1,3 +1,5 @@
+import { writable } from 'svelte/store';
+
 interface Emotes {
     "7TV": {
         global: ParsedEmote[];
@@ -13,6 +15,13 @@ interface Emotes {
     };
     "BITS": any[];
 }
+
+interface LoadingInfo {
+    text: string | undefined;
+    type: string | undefined;
+}
+
+export let loadingInfo = writable<LoadingInfo>({text: undefined, type: undefined});
 
 export const globals = {
     // BOT LIST

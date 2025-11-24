@@ -13,7 +13,7 @@
 
 </html>
 
-<style>
+<style lang="scss">
 	body {
 		overflow: hidden;
 		font-family: "Inter", system-ui, sans-serif;
@@ -24,6 +24,22 @@
 		height: 100%;
 
 		background: rgb(17, 17, 17);
+	}
+
+	*::-webkit-scrollbar {
+		width: 15px;
+	}
+
+	*::-webkit-scrollbar-track {
+		background-color: rgb(10, 10, 10);
+	}
+
+	*::-webkit-scrollbar-thumb {
+		background-color: rgb(255, 255, 255);
+	}
+
+	*::-webkit-scrollbar-thumb:hover {
+		background-color: rgb(219, 219, 219);
 	}
 
 	* {
@@ -38,5 +54,55 @@
 	.emote {
 		min-height: 5px;
 		max-height: 25px;
+	}
+
+	.note {
+		color: rgba(255, 255, 255, 0.575);
+	}
+
+	a[href="#help-notice"] {
+		all: unset;
+		display: block;
+		color: #8b8bff;
+		cursor: pointer;
+		margin-bottom: 5px;
+		text-align: center;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+
+	#rainbow-text {
+		font-weight: bold;
+		background: linear-gradient(90deg,
+				red,
+				orange,
+				yellow,
+				green,
+				blue,
+				indigo,
+				violet,
+				red);
+		background-size: 200%;
+		animation: rainbow 5s linear infinite;
+		display: inline-block;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		-webkit-background-clip: text;
+	}
+
+	@keyframes rainbow {
+		0% {
+			background-position: 200% 50%;
+		}
+
+		50% {
+			background-position: 100% 50%;
+		}
+
+		100% {
+			background-position: 0% 50%;
+		}
 	}
 </style>
