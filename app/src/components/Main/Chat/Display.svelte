@@ -1,4 +1,5 @@
 <script lang="ts">
+
     import { RotateCcw, Copy } from "lucide-svelte";
     import ColorPicker, { ChromeVariant } from "svelte-awesome-color-picker";
 
@@ -73,6 +74,14 @@
 
         background-color: rgba(255, 255, 255, 0.048);
 
+        :global(.chat) {
+            height: 100% !important;
+            padding: 0.2rem 0.4rem;
+            box-sizing: border-box;
+            position: relative !important;
+            background-color: var(--chat-background);
+        }
+
         & > p {
             background-color: rgba(0, 0, 0, 0.5);
 
@@ -126,7 +135,7 @@
                 button {
                     all: unset;
                     cursor: pointer;
-                    transition: all 0.4s ease-in-out;
+                    transition: all 0.2s ease-in-out;
                     display: flex;
                     align-items: center;
 
@@ -180,11 +189,5 @@
                 }
             }
         }
-    }
-
-    :global(.chat) {
-        height: 100% !important;
-        position: relative !important;
-        background-color: var(--chat-background);
     }
 </style>

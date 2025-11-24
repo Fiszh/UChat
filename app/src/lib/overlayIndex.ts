@@ -1,5 +1,5 @@
 import { cosmetics } from "$stores/cosmetics";
-import { globals, loadingInfo } from '$stores/global';
+import { globals } from '$stores/global';
 
 import SevenTV_main from '$lib/services/7TV/main';
 import SevenTV_ws from '$lib//services/7TV/websocket';
@@ -60,7 +60,7 @@ export async function getMainUser(channel: string | number) {
         try {
             const channel_bits_badges = broadcastBadges.filter((badge: badge) => badge?.setID === "bits");
 
-            globals.badges["TTV"].sub = channel_bits_badges.map((badge: badge) => ({
+            globals.badges["TTV"].bit = channel_bits_badges.map((badge: badge) => ({
                 id: badge.version,
                 url: badge.image4x || badge.image3x || badge.image2x || badge.image1x,
                 title: badge.title

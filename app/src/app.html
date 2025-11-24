@@ -48,12 +48,41 @@
 
 	.emote-wrapper {
 		min-height: 25px;
-		vertical-align: middle;
 	}
 
 	.emote {
 		min-height: 5px;
 		max-height: 25px;
+	}
+
+	/* 
+	START
+	WHAT MAKES EMOTES WORK IN ZERO-WIDTH 
+	*/
+	.emote-wrapper {
+		display: inline-grid;
+		grid-auto-rows: 0px;
+
+		position: relative;
+
+		line-height: normal;
+		vertical-align: middle;
+
+		.emote {
+			justify-self: center;
+		}
+
+		.emote.emoji {
+			height: 100vh;
+		}
+	}
+	/* END */
+
+	.twemoji {
+		height: 100vh !important;
+		display: inline-block;
+		vertical-align: middle;
+		line-height: normal;
 	}
 
 	.note {

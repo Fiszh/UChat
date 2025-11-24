@@ -34,10 +34,18 @@
 <div class="chat" bind:this={chat}>
   {#if chatMessages.length > 0}
     {#each chatMessages as msg, i (msg.tags["id"] ?? msg.tags["user-id"] ?? i)}
-      {#if msg.command == "PRIVMSG"}
+      {#if msg.command == "PRIVMSG" || msg?.tags?.["room-id"] == "0"}
         <ChatMessage
           message={{
-            user: msg.tags?.username || "Unknown",
+            user: (() => {
+              const username = (msg.tags?.username || "").trim().toLowerCase();
+              const displayName = (msg.tags?.["display-name"] || "")
+                .trim()
+                .toLowerCase();
+              return username === displayName
+                ? msg.tags?.["display-name"] || "Unknown"
+                : `${msg.tags?.username || "Unknown"} (${msg.tags?.["display-name"] || "Unknown"})`;
+            })(),
             text: `${msg.message}`,
             tags: msg.tags,
           }}

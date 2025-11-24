@@ -30,7 +30,7 @@
             if (found) {
                 found.value = type != "number" ? value : Number(value);
 
-                if (found.value && found.value != found.default) {
+                if (typeof found.value != undefined && found.value != found.default) {
                     console.log("set", found.param);
                     localParams[found.param] = found.value;
                 } else {

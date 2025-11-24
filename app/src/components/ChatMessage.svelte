@@ -11,16 +11,18 @@
     tags: Record<string, any>;
   };
 
+  const username = message.tags?.username;
+
   let userPaint: Paint;
   $: paintStyle = userPaint
     ? `
-      background-color: ${message.tags.color || usernameColor(message.user)};
+      background-color: ${message.tags.color || usernameColor(username)};
       ${userPaint.backgroundImage ? `background-image: ${userPaint.backgroundImage};` : ""}
       ${userPaint.shadows ? `filter: ${userPaint.shadows};` : ""}
     `
-    : `color: ${message.tags.color || usernameColor(message.user)};`;
+    : `color: ${message.tags.color || usernameColor(username)};`;
 
-  userPaint = getPaint(message.user) as Paint;
+  userPaint = getPaint(username) as Paint;
 
   let userBadges: parsedBadge[] = parseBadges(message.tags);
 

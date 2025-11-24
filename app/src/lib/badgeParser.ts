@@ -14,24 +14,8 @@ export function parseBadges(userstate: Record<string, any>): parsedBadge[] {
             let badgeSplit = Badge.split("/");
 
             if (badgeSplit[0] === 'subscriber' && globals.badges["TTV"].sub) { // SUB BADGES
-                if (userstate.badges) {
-                    if (userstate.badges.subscriber) {
-                        const badge = globals.badges["TTV"].sub.find((badge: Badge) => badge.id === userstate.badges.subscriber) as Badge | undefined;
-
-                        if (badge) {
-                            user_badges.push({
-                                badge_url: badge.url,
-                                alt: badge.title,
-                                background_color: undefined
-                            });
-
-                            continue;
-                        }
-                    }
-                }
-            } else if (badgeSplit[0] === "bits" && globals.badges["TTV"].bit) { // BIT BADGES
-                if (userstate.badges.bits) {
-                    const badge = globals.badges["TTV"].bit.find((badge: Badge) => badge.id === userstate.badges.bits) as Badge | undefined;
+                if (userstate?.badges?.["subscriber"]) {
+                    const badge = globals.badges["TTV"].sub.find((badge: Badge) => badge.id === userstate.badges["subscriber"]) as Badge | undefined;
 
                     if (badge) {
                         user_badges.push({
@@ -42,7 +26,20 @@ export function parseBadges(userstate: Record<string, any>): parsedBadge[] {
 
                         continue;
                     }
+                }
+            } else if (badgeSplit[0] === "bits" && globals.badges["TTV"].bit) { // BIT BADGES
+                if (userstate?.badges?.["bits"]) {
+                    const badge = globals.badges["TTV"].bit.find((badge: Badge) => badge.id === userstate.badges["bits"]) as Badge | undefined;
 
+                    if (badge) {
+                        user_badges.push({
+                            badge_url: badge.url,
+                            alt: badge.title,
+                            background_color: undefined
+                        });
+
+                        continue;
+                    }
                 }
             }
 
