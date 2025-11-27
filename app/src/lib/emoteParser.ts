@@ -1,8 +1,9 @@
-import { globals } from '$stores/global';
+import { emotes, globals } from '$stores/global';
 
 import { getPersonalSets } from "$lib/services/7TV/cosmetics";
 
 import twemoji from 'twemoji';
+import { get } from 'svelte/store';
 
 function splitTextWithTwemoji(text: string) {
     const parsedText = twemoji.parse(text, {
@@ -54,7 +55,9 @@ function sanitizeInput(input: string) {
 function findEntryAndTier(prefix: string, bits: number) {
     prefix = prefix.toLowerCase();
 
-    for (let entry of globals.emotes["BITS"]) {
+    const emote_data = get(emotes);
+
+    for (let entry of emote_data["BITS"]) {
         if (entry.name.toLowerCase() !== prefix) continue;
 
         for (let i = 0; i < entry.tiers.length; i++) {
@@ -131,17 +134,19 @@ export async function replaceWithEmotes(inputString: string, userstate: Record<s
 
     inputString = sanitizeInput(inputString);
 
+    const emote_data = get(emotes);
+
     try {
         const globalEmotesData = [
-            ...globals.emotes["7TV"].global,
-            ...globals.emotes["BTTV"].global,
-            ...globals.emotes["FFZ"].global,
+            ...emote_data["7TV"].global,
+            ...emote_data["BTTV"].global,
+            ...emote_data["FFZ"].global,
         ];
 
         const nonGlobalEmoteData = [
-            ...globals.emotes["7TV"].channel?.[originChannelID] || [],
-            ...globals.emotes["BTTV"].channel?.[originChannelID] || [],
-            ...globals.emotes["FFZ"].channel?.[originChannelID] || [],
+            ...emote_data["7TV"].channel?.[originChannelID] || [],
+            ...emote_data["BTTV"].channel?.[originChannelID] || [],
+            ...emote_data["FFZ"].channel?.[originChannelID] || [],
         ];
 
         const foundPersonalSets = getPersonalSets(userstate['user-id']);

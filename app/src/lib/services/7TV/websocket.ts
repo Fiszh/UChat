@@ -1,5 +1,5 @@
 import main from './main.js';
-const { parseSetData } = main;
+const { parseSetData, parsePaintData, parseBadgeData } = main;
 
 const id_types: Record<string, string> = {
     'entitlement.create': "id", // COSMETICS
@@ -55,23 +55,6 @@ type Events = {
     create_entitlement: (data: Entitlement) => void;
     delete_entitlement: (data: Entitlement) => void;
 };
-
-interface File {
-    name: string;
-    format: string;
-}
-
-interface Stop {
-    color: number;
-    at: number;
-}
-
-interface Shadow {
-    color: number;
-    x_offset: number | string;
-    y_offset: number | string;
-    radius: number | string;
-}
 
 interface Set {
     id: string;
@@ -186,6 +169,7 @@ class SevenTVWebSocket {
                     if (message_body.pushed) {
                         const emote_data: any[] = message_body.pushed.map((emote: any) => emote.value);
                         const parsed_emote_data = await parseSetData(emote_data);
+                        console.log(message_body);
                         for (const emote of parsed_emote_data) {
                             this.emit("add_emote", message_body.id, actor, emote); // SET ID, EMOTE INFO
                         }
@@ -263,66 +247,18 @@ class SevenTVWebSocket {
                     switch (message_body.object.kind) {
                         case "BADGE":
                             const badge_data = message_body.object.data;
-                            const hosts = badge_data.host;
+                            if (!badge_data) { return; };
 
-                            const urls = (hosts?.files || [])
-                                .filter((file: File) => file.format === (hosts.files?.[0]?.format))
-                                .map((file: File) => ({
-                                    url: `https:${hosts.url}/${file.name}`,
-                                    scale: file.name.replace(/\.[^/.]+$/, "").toLowerCase()
-                                }));
+                            const badge_message = parseBadgeData(badge_data);
 
-                            this.emit("create_badge", {
-                                id: badge_data.id,
-                                name: badge_data.name,
-                                tooltip: badge_data.tooltip,
-                                owner: [],
-                                urls,
-                            });
+                            this.emit("create_badge", badge_message);
 
                             break;
                         case "PAINT":
                             const paint_data = message_body.object.data;
                             if (!paint_data) { return; };
 
-                            const baseFunction = paint_data.repeat ? `repeating-${paint_data.function}` : paint_data.function;
-                            const gradientFunction = baseFunction?.toLowerCase().replace(/_/g, "-");
-                            const hasStops = paint_data.stops?.length > 0;
-                            const isLinear = ["linear-gradient", "repeating-linear-gradient"].includes(gradientFunction);
-
-                            let gradient = "";
-                            if (hasStops) {
-                                const normalized = paint_data.stops.map((stop: Stop) =>
-                                    `${argbToRgba(stop.color)} ${stop.at * 100}%`
-                                ).join(', ');
-
-                                const direction = isLinear ? `${paint_data.angle}deg` : paint_data.shape;
-                                gradient = `${gradientFunction}(${direction}, ${normalized})`;
-                            }
-
-                            let paint_message: Paint = {
-                                id: paint_data.id,
-                                name: paint_data.name,
-                                style: gradientFunction,
-                                shape: paint_data.shape,
-                                backgroundImage: hasStops
-                                    ? gradient
-                                    : `url('${paint_data.image_url}')`,
-                                shadows: null,
-                                KIND: hasStops ? 'non-animated' : 'animated',
-                                owner: [],
-                                url: paint_data.image_url
-                            };
-
-                            if (paint_data.shadows?.length) {
-                                const shadows = await Promise.all(paint_data.shadows.map((s: Shadow) => {
-                                    let rgbaColor = argbToRgba(s.color);
-                                    rgbaColor = rgbaColor.replace(/rgba\((\d+), (\d+), (\d+), (\d+(\.\d+)?)\)/, 'rgba($1, $2, $3)');
-                                    return `drop-shadow(${rgbaColor} ${s.x_offset}px ${s.y_offset}px ${s.radius}px)`;
-                                }));
-
-                                paint_message.shadows = shadows.length ? shadows.join(' ') : null;
-                            }
+                            const paint_message = await parsePaintData(paint_data);
 
                             this.emit("create_paint", paint_message);
 
@@ -475,17 +411,6 @@ class SevenTVWebSocket {
             this.emit('send_error', err);
         }
     }
-}
-
-function argbToRgba(color: number) {
-    if (color < 0) {
-        color = color >>> 0;
-    }
-
-    const red = (color >> 24) & 0xff;
-    const green = (color >> 16) & 0xff;
-    const blue = (color >> 8) & 0xff;
-    return `rgba(${red}, ${green}, ${blue}, 1)`;
 }
 
 export default SevenTVWebSocket;

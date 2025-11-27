@@ -1,16 +1,15 @@
 <script lang="ts">
-    import {
-        type Setting,
-        settings,
-        channelName,
-        channelID,
-        settingsParams,
-    } from "$stores/settings";
+    import { type Setting, settings, settingsParams } from "$stores/settings";
 
     let usingID = false;
 
     let localChannelName = "";
     let localChannelID = "";
+
+    $: if (!Object.keys($settingsParams).length) {
+        localChannelName = "";
+        localChannelID = "";
+    }
 
     let localParams: Record<string, Setting["value"]> = {};
 
@@ -30,11 +29,13 @@
             if (found) {
                 found.value = type != "number" ? value : Number(value);
 
-                if (typeof found.value != undefined && found.value != found.default) {
-                    console.log("set", found.param);
+                if (
+                    typeof found.value != undefined &&
+                    (typeof found.value == "string" ? found.value : true) &&
+                    found.value != found.default
+                ) {
                     localParams[found.param] = found.value;
                 } else {
-                    console.log("remove", found.param);
                     removeParam(found.param);
                 }
             }
@@ -62,20 +63,22 @@
     $: settingsParams.set(localParams);
 </script>
 
-{#snippet booleanSetting(param: string, defaultValue: boolean)}
+{#snippet booleanSetting(param: string, defaultValue: boolean, value: boolean)}
     <input
         type="checkbox"
-        checked={defaultValue}
-        class:active={defaultValue}
+        checked={defaultValue != value ? value : defaultValue}
+        class:active={value}
         on:change={(e) => handleInput(param, e.currentTarget.checked)}
     />
 {/snippet}
 
-{#snippet textSetting(param: string, defaultValue: number, type: string)}
+{#snippet textSetting(param: string, defaultValue: number, value: number)}
     <input
         type="text"
         placeholder={String(defaultValue)}
-        on:input={(e) => handleInput(param, e.currentTarget.value, type)}
+        value={defaultValue != value ? value : ""}
+        on:input={(e) =>
+            handleInput(param, e.currentTarget.value, typeof defaultValue)}
     />
 {/snippet}
 
@@ -83,17 +86,23 @@
     <section id="config">
         {#each $settings as setting, i (i)}
             <div class="setting-display">
-                <p class="setting-name">{@html setting.name}</p>
+                <p class="setting-name">
+                    {@html setting.name.replace(
+                        /\(([^)]+)\)/g,
+                        "<small>($1)</small>",
+                    )}
+                </p>
                 {#if setting.type == "boolean"}
                     {@render booleanSetting(
                         setting.param,
+                        setting.default as boolean,
                         setting.value as boolean,
                     )}
                 {:else if setting.type == "number" || setting.type == "text"}
                     {@render textSetting(
                         setting.param,
+                        setting.default as number,
                         setting.value as number,
-                        setting.type,
                     )}
                 {:else}
                     <strong>{setting.type}</strong> {@html "is a unknown type"}
@@ -228,6 +237,7 @@
 
         .setting-name {
             display: inline-flex;
+            align-items: flex-end;
             gap: 0.3rem;
         }
 
@@ -247,7 +257,7 @@
             display: block;
             width: 60px;
             height: 30px;
-            background-color: rgba(255, 255, 255, 0.057);
+            background-color: rgba(255, 255, 255, 0.096);
             border-radius: 30px;
             cursor: pointer;
             position: relative;
@@ -271,6 +281,10 @@
 
             &.active::after {
                 transform: translateX(30px);
+            }
+
+            &:hover:not(.active) {
+                background-color: rgba(255, 255, 255, 0.15);
             }
         }
     }

@@ -1,4 +1,4 @@
-# Custom Twitch Overlay
+# UChat | Custom Twitch Overlay
 
 https://dev.unii.dev/
 

@@ -2,13 +2,13 @@ import { writable } from 'svelte/store';
 
 export interface Setting {
     name: string;
-    param: string;
-    value: string | boolean | number;
-    default?: Setting["value"];
     type: "number" | "text" | "boolean";
+    value: string | boolean | number;
+    param: string;
+    default?: Setting["value"];
 }
 
-let configs: Setting[] = [
+const configs: Setting[] = [
     {
         "name": "Message are in <strong>bold</strong> text",
         "type": "boolean",
@@ -22,7 +22,7 @@ let configs: Setting[] = [
         "param": "msgCaps"
     },
     {
-        "name": "Custom chat font (any font on your pc)",
+        "name": "Custom chat font (any font on your device)",
         "type": "text",
         "value": "inter",
         "param": "font"
@@ -64,7 +64,7 @@ let configs: Setting[] = [
         "param": "badges"
     },
     {
-        "name": "Display channel points redeem messages",
+        "name": "Display channel points redeem & sub messages",
         "type": "boolean",
         "value": true,
         "param": "redeem"
@@ -88,7 +88,7 @@ let configs: Setting[] = [
         "param": "prefixBL"
     },
     {
-        "name": "Moderation actions (message deletion) effect displayed chat messages",
+        "name": "Moderation actions effect displayed chat messages (message deletion)",
         "type": "boolean",
         "value": true,
         "param": "modAction"
@@ -119,8 +119,10 @@ for (const config of configs) {
 
 export const config = configs;
 
-export let settings = writable<Setting[]>(configs);
+export let settings = writable<Setting[]>(configs.map(c => ({ ...c })));
 export let channelName = writable<String>("");
 export let channelID = writable<String>("");
+
+export let overlayVersion = writable<String>("");
 
 export let settingsParams = writable<Record<string, Setting["value"]>>({});

@@ -1,13 +1,19 @@
 <script lang="ts">
-
     import { RotateCcw, Copy } from "lucide-svelte";
     import ColorPicker, { ChromeVariant } from "svelte-awesome-color-picker";
 
     import ChatDisplay from "$components/ChatDisplay.svelte";
 
-    import { settingsParams } from "$stores/settings";
+    import {
+        channelID,
+        channelName,
+        config,
+        settings,
+        settingsParams,
+    } from "$stores/settings";
 
     let hex = "#191919";
+    let urlResults: HTMLElement | undefined = undefined;
 
     $: params = new URLSearchParams(
         Object.entries($settingsParams).map(([k, v]) => [
@@ -15,6 +21,33 @@
             String(typeof v == "boolean" ? Number(v) : v),
         ]),
     );
+
+    const resetSettings = () => {
+        settings.set(config.map((c) => ({ ...c })));
+        settingsParams.set({});
+
+        hex = "#191919";
+
+        channelName.set("");
+        channelID.set("");
+    };
+
+    function copyUrl() {
+        if (urlResults && urlResults.textContent) {
+            if ($settingsParams["channel"] || $settingsParams["id"]) {
+                navigator.clipboard
+                    .writeText(urlResults.textContent)
+                    .then(() => {
+                        alert("Overlay URL has been copied!");
+                    })
+                    .catch((err) => {
+                        console.error("Failed to copy URL: ", err);
+                    });
+            } else {
+                alert("Channel name or id not provided!.");
+            }
+        }
+    }
 </script>
 
 <div id="chat-preview" style="--chat-background: {hex}">
@@ -25,7 +58,10 @@
     <ChatDisplay />
     <section id="bottom">
         <div class="header">
-            Chat Preview Settings <button><RotateCcw /></button>
+            Chat Preview Settings <button
+                on:click={() => resetSettings()}
+                title="Reset Settings"><RotateCcw /></button
+            >
         </div>
         <div id="color-picker">
             <small class="title">Chat Background</small>
@@ -44,20 +80,19 @@
             <small class="title">Overlay URL</small>
 
             <div class="display">
-                <p id="url-results">
-                    {window.location.href}{params.toString().length
+                <p id="url-results" bind:this={urlResults}>
+                    {window.location.origin}/{params.toString().length
                         ? "?"
                         : ""}{params}
                 </p>
-                <button id="copy"><Copy /> Copy</button>
+                <button id="copy" on:click={copyUrl}><Copy /> Copy</button>
             </div>
         </div>
     </section>
-    <span class="note"
-        >We log IP addresses for abuse prevention. <a href="#help-notice"
-            >[Learn more]</a
-        ></span
-    >
+    <span class="note">
+        We log IP addresses for abuse prevention.
+        <a href="#help-notice">[Learn more]</a>
+    </span>
 </div>
 
 <style lang="scss">
@@ -68,9 +103,12 @@
     }
 
     #chat-preview {
+        max-width: 30rem;
         min-width: 30rem;
         display: flex;
         flex-direction: column;
+
+        user-select: none;
 
         background-color: rgba(255, 255, 255, 0.048);
 
@@ -171,6 +209,12 @@
             }
 
             #overlay-url {
+                #url-results {
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
                 button {
                     $border: #333;
 

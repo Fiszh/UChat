@@ -1,12 +1,65 @@
 <script lang="ts">
-    import {
-        House,
-        RefreshCcw,
-        Info,
-        Github,
-        Coffee,
-        LogIn,
-    } from "lucide-svelte";
+    import { House, RefreshCcw, Info, Github, Coffee } from "lucide-svelte";
+
+    import LoginButton from "$components/LoginButton.svelte";
+    import GlobalSettings from "./GlobalSettings.svelte";
+
+    import { valideToken } from "$lib/services/twitch";
+    import { delCookie, getCookie, setCookie } from "$lib/cookie";
+
+    import { overlayVersion } from "$stores/settings";
+
+    $: version_text = $overlayVersion;
+
+    let currentHash = window.location.hash || "#";
+
+    const onHashChange = () => (currentHash = window.location.hash || "#");
+
+    window.addEventListener("hashchange", onHashChange);
+
+    $: username = getCookie("twitchUsername") || ("" as string | undefined);
+    $: twitchToken = getCookie("twitchToken") || ("" as string | undefined);
+
+    async function handleToken(token: string) {
+        username = await valideToken(token);
+        twitchToken = token;
+
+        if (username) {
+            setCookie("twitchUsername", username, 1);
+        }
+    }
+
+    function logOut() {
+        delCookie("twitchUsername");
+
+        username = undefined;
+        twitchToken = undefined;
+    }
+
+    const navLinks = {
+        home: {
+            navLink: undefined as HTMLElement | undefined,
+            hash: ["", "#"],
+        },
+        help: {
+            navLink: undefined as HTMLElement | undefined,
+            hash: ["#help", "#help-notice"],
+        },
+    };
+
+    $: {
+        for (const navLink of Object.values(navLinks)) {
+            const hasHash = navLink.hash.some((h) => h === currentHash);
+
+            if (navLink.navLink instanceof HTMLElement) {
+                if (hasHash) {
+                    navLink.navLink.classList.add("active");
+                } else {
+                    navLink.navLink.classList.remove("active");
+                }
+            }
+        }
+    }
 </script>
 
 <aside>
@@ -21,18 +74,18 @@
             <h1 style="font-size:0.8rem; line-height: 1px;">
                 UChat Chat Overlay for Twitch
             </h1>
-            <small id="version_text">version_text</small>
+            <small id="version_text">{version_text}</small>
         </div>
     </header>
 
     <nav>
-        <a href="." class="active" aria-current="page">
+        <a href="/#" class="active" bind:this={navLinks["home"]["navLink"]}>
             <House size="20" /> Home
         </a>
         <a href="convert/" target="_blank" rel="noopener noreferrer">
             <RefreshCcw size="20" /> Invalid URL
         </a>
-        <a href="#help">
+        <a href="#help" bind:this={navLinks["help"]["navLink"]}>
             <Info size="20" /> Info & Privacy
         </a>
         <a
@@ -52,20 +105,18 @@
     </nav>
 
     <section id="account" aria-label="User account section">
-        <button id="login-button" aria-label="Login"
-            ><LogIn size="17" /> Login</button
-        >
+        <LoginButton onToken={handleToken} onLogOut={logOut} />
         <p class="note">Login is not required.</p>
         <p class="note">
             Your token is only shared to validate and never stored on the
             server.
         </p>
         <a href="#help-notice">[Learn more]</a>
-        <p id="settings_text">username Settings</p>
-        <div id="settingsButtons">
-            <button id="save" class="settingsButton">Save</button>
-            <button id="delete" class="settingsButton">Delete</button>
-        </div>
+        {#if username}
+            <GlobalSettings
+                user={{ name: username || "", token: twitchToken || "" }}
+            />
+        {/if}
     </section>
 </aside>
 
@@ -75,6 +126,7 @@
     aside {
         user-select: none;
         border-right: 1px solid #333;
+        min-width: 17rem;
         max-width: 17rem;
         width: 100%;
         position: relative;
@@ -152,73 +204,6 @@
 
             p {
                 margin: 0.3rem;
-            }
-
-            button {
-                $background: #141414;
-                $border: #333;
-
-                all: unset;
-                cursor: pointer;
-                width: 95%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 0.3rem;
-                padding: 0.6rem 0.7rem;
-                box-sizing: border-box;
-                background-color: $background;
-                transition: all 0.1s ease-in-out;
-                border-radius: 0.7rem;
-                border: 1px solid $border;
-
-                &:hover {
-                    background-color: color.adjust($background, $lightness: 5%);
-                    border-radius: 0.5rem;
-                }
-
-                &:hover:not(.settingsButton) {
-                    width: 100%;
-                    border-color: color.adjust($border, $lightness: 5%);
-                }
-            }
-
-            #settingsButtons {
-                display: flex;
-                width: 100%;
-                gap: 0.5rem;
-
-                #save {
-                    $background: #4caf50;
-                    $border: #2e6e3a;
-
-                    background-color: $background;
-                    border: 1px solid $border;
-
-                    &:hover {
-                        background-color: color.adjust(
-                            $background,
-                            $lightness: 5%
-                        );
-                        border-radius: 0.5rem;
-                    }
-                }
-
-                #delete {
-                    $background: #e53935;
-                    $border: #7a2b2b;
-
-                    background-color: $background;
-                    border: 1px solid $border;
-
-                    &:hover {
-                        background-color: color.adjust(
-                            $background,
-                            $lightness: 5%
-                        );
-                        border-radius: 0.5rem;
-                    }
-                }
             }
         }
     }

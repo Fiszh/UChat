@@ -21,7 +21,58 @@ interface LoadingInfo {
     type: string | undefined;
 }
 
-export let loadingInfo = writable<LoadingInfo>({text: undefined, type: undefined});
+export let loadingInfo = writable<LoadingInfo>({ text: undefined, type: undefined });
+
+interface Emotes {
+    "7TV": {
+        global: ParsedEmote[];
+        channel: Record<string, ParsedEmote[]>;
+    };
+    "BTTV": {
+        global: ParsedEmote[];
+        channel: Record<string, ParsedEmote[]>;
+    };
+    "FFZ": {
+        global: ParsedEmote[];
+        channel: Record<string, ParsedEmote[]>;
+    };
+    "BITS": any[];
+}
+
+interface Badges {
+    TTV: {
+        sub: any[];
+        global: any[];
+        bit: any[];
+    };
+    BTTV: {
+        global: any[];
+    };
+    FFZ: {
+        global: any[];
+        user: any[];
+    };
+    OTHER: {
+        Chatterino: any[];
+        ChatterinoHomies: any[];
+    };
+    channel: Record<string, string>;
+}
+
+export const emotes = writable<Emotes>({
+    "7TV": { global: [], channel: {} },
+    "BTTV": { global: [], channel: {} },
+    "FFZ": { global: [], channel: {} },
+    "BITS": []
+});
+
+export const badges = writable<Badges>({
+    TTV: { sub: [], global: [], bit: [] },
+    BTTV: { global: [] },
+    FFZ: { global: [], user: [] },
+    OTHER: { Chatterino: [], ChatterinoHomies: [] },
+    channel: {}
+});
 
 export const globals = {
     // BOT LIST
@@ -43,34 +94,6 @@ export const globals = {
     manifest_path: "manifest.json",
     chat_version: "" as string,
 
-    // EMOTES
-    emotes: {
-        "7TV": { global: [], channel: {} } as Emotes["7TV"],
-        "BTTV": { global: [], channel: {} } as Emotes["BTTV"],
-        "FFZ": { global: [], channel: {} } as Emotes["FFZ"],
-        "BITS": [] as Emotes["BITS"],
-    } as Emotes,
-
-    badges: {
-        "TTV": {
-            "sub": [],
-            "global": [],
-            "bit": [],
-        },
-        "BTTV": {
-            "global": [],
-        },
-        "FFZ": {
-            "global": [],
-            "user": []
-        },
-        "OTHER": {
-            "Chatterino": [],
-            "ChatterinoHomies": []
-        },
-        "channel": {} as Record<string, string> // AVATAR BADGES FOR SHARED CHAT
-    },
-
     // TTV
     channelTwitchID: null as string | null,
     channelTwitchName: null as string | null,
@@ -82,4 +105,4 @@ export const globals = {
     SevenTVemoteSetId: null as string | null,
 
     // OTHER
-};
+}

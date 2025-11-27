@@ -14,6 +14,7 @@ declare global {
         title: string;
         name?: string;
         color?: string;
+        tooltip?: string;
         urls: ScaleUrls[];
         url: string;
         owner?: any[]

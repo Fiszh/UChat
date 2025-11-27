@@ -1,4 +1,6 @@
-import { globals } from '$stores/global';
+import { get } from "svelte/store";
+
+import { badges, emotes, globals } from '$stores/global';
 
 import SevenTV_main from '$lib/services/7TV/main';
 import BTTV_main from '$lib//services/BTTV/main';
@@ -10,12 +12,19 @@ export async function getChannelEmotesViaTwitchID(twitchID: string) {
 
     processing_ids.push(twitchID); // prevent API spam
 
+    const emote_data = get(emotes);
+    const badge_data = get(badges);
+
     // 7TV
     try {
-        if (!globals.emotes["7TV"]["channel"][twitchID]) {
+        if (!emote_data["7TV"]["channel"][twitchID]) {
             const SevenTV_user_data = await SevenTV_main.getUserViaTwitchID(twitchID);
 
-            globals.emotes["7TV"]["channel"][twitchID] = SevenTV_user_data?.emote_data as ParsedEmote[];
+            emotes.update((emoteData) => {
+                emoteData["7TV"]["channel"][twitchID] = SevenTV_user_data?.emote_data as ParsedEmote[];
+
+                return emoteData;
+            });
 
             if (SevenTV_user_data?.id) {
                 globals.SevenTVID = SevenTV_user_data.id;
@@ -31,8 +40,14 @@ export async function getChannelEmotesViaTwitchID(twitchID: string) {
 
     // BTTV
     try {
-        if (!globals.emotes["BTTV"]["channel"][twitchID]) {
-            globals.emotes["BTTV"]["channel"][twitchID] = await BTTV_main.getEmoteData(twitchID);
+        if (!emote_data["BTTV"]["channel"][twitchID]) {
+            const bttvData = await BTTV_main.getEmoteData(twitchID) as ParsedEmote[];
+
+            emotes.update((emoteData) => {
+                emoteData["BTTV"]["channel"][twitchID] = bttvData;
+
+                return emoteData;
+            });
         }
     } catch (e) {
         console.error(`BTTV error for ${twitchID}:`, e);
@@ -40,9 +55,14 @@ export async function getChannelEmotesViaTwitchID(twitchID: string) {
 
     // FFZ
     try {
-        if (!globals.emotes["FFZ"]["channel"][twitchID]) {
+        if (!emote_data["FFZ"]["channel"][twitchID]) {
             const ffzData = await FFZ_main.getUserData(twitchID);
-            globals.emotes["FFZ"]["channel"][twitchID] = ffzData?.set || [];
+
+            emotes.update((emoteData) => {
+                emoteData["FFZ"]["channel"][twitchID] = ffzData?.set || [];
+
+                return emoteData;
+            });
         }
     } catch (e) {
         console.error(`FFZ error for ${twitchID}:`, e);
@@ -50,9 +70,15 @@ export async function getChannelEmotesViaTwitchID(twitchID: string) {
 
     // CHANNEL BADGE
     try {
-        if (!globals.badges.channel[twitchID]) {
+        if (!badge_data.channel[twitchID]) {
             const avatar = await getAvatarViaID(twitchID);
-            if (avatar) { globals.badges.channel[twitchID] = avatar; };
+            if (avatar) {
+                badges.update((badgeData) => {
+                    badgeData.channel[twitchID] = avatar;
+
+                    return badgeData;
+                });
+            };
         }
     } catch (e) {
         console.error(`Badge error for ${twitchID}:`, e);
@@ -75,7 +101,15 @@ async function getAvatarViaID(user_id: string) {
 }
 
 export async function getGlobalEmotes() {
-    globals.emotes["7TV"].global = await SevenTV_main.emoteSet.bySetID("global");
-    globals.emotes["BTTV"].global = await BTTV_main.getGlobalEmoteSet();
-    globals.emotes["FFZ"].global = await FFZ_main.getGlobalEmotes();
+    const SevenTV_data = await SevenTV_main.emoteSet.bySetID("global");
+    const BTTV_data = await BTTV_main.getGlobalEmoteSet();
+    const FFZ_data = await FFZ_main.getGlobalEmotes();
+
+    emotes.update((emoteData) => {
+        emoteData["7TV"].global = SevenTV_data;
+        emoteData["BTTV"].global = BTTV_data;
+        emoteData["FFZ"].global = FFZ_data;
+
+        return emoteData;
+    });
 }

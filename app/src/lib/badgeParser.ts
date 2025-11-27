@@ -1,9 +1,12 @@
-import { globals } from '$stores/global';
+import { get } from 'svelte/store';
 
 import { getBadge } from "$lib/services/7TV/cosmetics";
 
-export function parseBadges(userstate: Record<string, any>): parsedBadge[] {
+import { badges } from '$stores/global';
+
+export function parseBadges(userstate: Record<string, any>, badgeData?: Record<string, any>): parsedBadge[] {
     let user_badges = [];
+    const badges_data = badgeData || get(badges);
 
     // THIS NEEDS TO BE ALWAYS ON THE START TO MAKE SURE TWITCH BADGES WILL BE FIRST
     if (userstate['badges-raw'] && Object.keys(userstate['badges-raw']).length) {
@@ -13,9 +16,9 @@ export function parseBadges(userstate: Record<string, any>): parsedBadge[] {
         for (const Badge of badgesSplit) {
             let badgeSplit = Badge.split("/");
 
-            if (badgeSplit[0] === 'subscriber' && globals.badges["TTV"].sub) { // SUB BADGES
+            if (badgeSplit[0] === 'subscriber' && badges_data["TTV"].sub) { // SUB BADGES
                 if (userstate?.badges?.["subscriber"]) {
-                    const badge = globals.badges["TTV"].sub.find((badge: Badge) => badge.id === userstate.badges["subscriber"]) as Badge | undefined;
+                    const badge = badges_data["TTV"].sub.find((badge: Badge) => badge.id === userstate.badges["subscriber"]) as Badge | undefined;
 
                     if (badge) {
                         user_badges.push({
@@ -27,9 +30,9 @@ export function parseBadges(userstate: Record<string, any>): parsedBadge[] {
                         continue;
                     }
                 }
-            } else if (badgeSplit[0] === "bits" && globals.badges["TTV"].bit) { // BIT BADGES
+            } else if (badgeSplit[0] === "bits" && badges_data["TTV"].bit) { // BIT BADGES
                 if (userstate?.badges?.["bits"]) {
-                    const badge = globals.badges["TTV"].bit.find((badge: Badge) => badge.id === userstate.badges["bits"]) as Badge | undefined;
+                    const badge = badges_data["TTV"].bit.find((badge: Badge) => badge.id === userstate.badges["bits"]) as Badge | undefined;
 
                     if (badge) {
                         user_badges.push({
@@ -43,7 +46,8 @@ export function parseBadges(userstate: Record<string, any>): parsedBadge[] {
                 }
             }
 
-            const badge = globals.badges["TTV"].global.find((badge: Badge) => badge.id === `${badgeSplit[0]}_${badgeSplit[1]}`) as Badge | undefined;
+            // SEARCH IN GLOBAL IF NO CHANNEL BADGE FOUND
+            const badge = badges_data["TTV"].global.find((badge: Badge) => badge.id === `${badgeSplit[0]}_${badgeSplit[1]}`) as Badge | undefined;
 
             if (badge) {
                 user_badges.push({
@@ -67,5 +71,5 @@ export function parseBadges(userstate: Record<string, any>): parsedBadge[] {
         });
     }
 
-    return user_badges;
+    return user_badges as parsedBadge[];
 }

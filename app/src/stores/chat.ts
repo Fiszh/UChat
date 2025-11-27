@@ -1,4 +1,8 @@
-import { writable } from 'svelte/store';
+import { get, writable } from 'svelte/store';
+import { settings } from "$stores/settings";
+
+const currentSettings = get(settings) || [];
+const modActions = (currentSettings.find(setting => setting.param == "modAction") || { "value": true }).value;
 
 interface ParsedMessage {
   raw: string;
@@ -80,10 +84,12 @@ export function connect(channel_name: string) {
 
             break;
           case "CLEARMSG":
+            if (!modActions) { break; };
             messages.update(arr => arr.filter(item => item.tags["id"] !== parsed.tags.merged["target-msg-id"]));
 
             break;
           case "CLEARCHAT":
+            if (!modActions) { break; };
             messages.update(arr => arr.filter(item => item.tags["user-id"] !== parsed.tags.merged["target-user-id"]));
 
             break;
@@ -92,7 +98,7 @@ export function connect(channel_name: string) {
 
             if (parsed.tags.rawTags) { parsed.tags = parsed.tags.merged; };
 
-            messages.update((msgs: any[]) => [...msgs, parsed]);
+            messages.update(msgs => [...msgs.slice(-99), parsed]);
 
             break;
         }
@@ -135,6 +141,18 @@ function disconnect() {
   IRC_is_connected = false;
   clearInterval(heartbeatInterval);
   clearTimeout(heartbeatTimeout);
+}
+
+function sanitizeInput(input: string) {
+  if (typeof input !== "string") return input;
+
+  return input
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;")
+    .replace(/\//g, "&#x2F;");
 }
 
 /*FIXME PARSING DONT WORK
@@ -276,6 +294,9 @@ function parseIrcLine(raw: string): ParsedMessage {
       ...Object.fromEntries(Object.entries(rawTags).map(([key, value]) => [`${key}-raw`, value])),
       ...tags
     };
+
+    // REMOVE HTML TAGS
+    cleanMessage = sanitizeInput(cleanMessage);
 
     // RETURN PARSED
     parsed = {
