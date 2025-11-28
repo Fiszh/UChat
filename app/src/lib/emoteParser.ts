@@ -1,9 +1,10 @@
-import { emotes, globals } from '$stores/global';
-
-import { getPersonalSets } from "$lib/services/7TV/cosmetics";
+import { get } from 'svelte/store';
 
 import twemoji from 'twemoji';
-import { get } from 'svelte/store';
+
+import { getPaint, getPaintHTML, getPersonalSets } from "$lib/services/7TV/cosmetics";
+
+import { emotes, globals } from '$stores/global';
 
 function splitTextWithTwemoji(text: string) {
     const parsedText = twemoji.parse(text, {
@@ -90,8 +91,9 @@ interface FoundBits {
 
 interface FoundUser {
     type: string;
-    user: Record<string, any>;
     input: string;
+    name: string;
+    nameColor: string;
 }
 
 interface FoundOther {
@@ -129,7 +131,7 @@ function parseTwitchEmotes(message: string, userstate: Record<string, any>): any
 }
 
 
-export async function replaceWithEmotes(inputString: string, userstate: Record<string, any>, originChannelID: string | number): Promise<string> {
+export async function replaceWithEmotes(inputString: string, userstate: Record<string, any>, originChannelID: string | number, chatSettings: Record<string, any>): Promise<string> {
     if (!inputString) { return inputString };
 
     inputString = sanitizeInput(inputString);
@@ -210,12 +212,14 @@ export async function replaceWithEmotes(inputString: string, userstate: Record<s
 
             // Search for user if no emote is found
             // TODO ADD THIS BACK
-            // if (!foundEmote && (getSetting("mentionColor"))) { // check if mention color is enabled
-            //     foundUser = TTVUsersData.find(user => {
-            //         const userName = user.name.toLowerCase();
-            //         return [userName, userName.slice(1), `${userName},`, `${userName.slice(1)},`].some(val => part.toLowerCase() == val);
-            //     });
-            // }
+            const username = typeof part == "string" ? part.replace(/[@,]/g, "").toLowerCase() : "";
+            const mentionColor = chatSettings["mentionColor"];
+
+            if (!foundEmote && mentionColor) { // check if mention color is enabled
+                if (globals.userNameColor[username]) {
+                    foundUser = globals.userNameColor[username];
+                }
+            }
 
             if (foundEmote) {
                 if (foundEmote?.bits) {
@@ -243,7 +247,8 @@ export async function replaceWithEmotes(inputString: string, userstate: Record<s
                 foundParts.push({
                     "type": "user",
                     "input": part,
-                    "user": foundUser,
+                    "name": username,
+                    "nameColor": foundUser,
                 } as FoundUser);
             } else {
                 foundParts.push({
@@ -287,9 +292,27 @@ export async function replaceWithEmotes(inputString: string, userstate: Record<s
                     break;
                 case 'user':
                     part = part as FoundUser;
-                    const userHTML = `<span class="name-wrapper">
-                            <strong style="color: ${part["user"].color}">${part["input"]}</strong>
-                        </span>`;
+
+                    let hasPaint = false;
+                    let userStyle = `color: ${part["nameColor"]}`;
+
+                    if (part["name"]) {
+                        const userPaint = getPaint(part["name"] as Lowercase<string>);
+
+                        if (userPaint) {
+                            hasPaint = true;
+
+                            const userPaintHTML = getPaintHTML(userPaint) || { paint: "", shadow: "" };
+                            const displayPaint = chatSettings?.["paints"];
+                            const displayShadow = chatSettings?.["paintShadows"];
+
+                            userStyle = `background-color: ${part["nameColor"]};
+                            ${displayPaint ? userPaintHTML.paint + `${displayShadow ? userPaintHTML.shadow : ""}` : ""}
+                            `;
+                        }
+                    }
+
+                    const userHTML = `<strong class="username${hasPaint ? " paint" : ""}" style="${userStyle}">${part["input"]}</strong>`;
 
                     replacedParts.push(userHTML);
 

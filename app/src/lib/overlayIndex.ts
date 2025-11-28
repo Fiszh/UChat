@@ -4,12 +4,12 @@ import { cosmetics } from "$stores/cosmetics";
 import { badges, emotes, globals } from '$stores/global';
 
 import SevenTV_main from '$lib/services/7TV/main';
-import SevenTV_ws from '$lib//services/7TV/websocket';
+import SevenTV_ws from '$lib/services/7TV/websocket';
 
-import BTTV_main from '$lib//services/BTTV/main';
-import BTTV_ws from '$lib//services/BTTV/websocket';
+import BTTV_main from '$lib/services/BTTV/main';
+import BTTV_ws from '$lib/services/BTTV/websocket';
 
-import FFZ_main from '$lib//services/FFZ/main';
+import FFZ_main from '$lib/services/FFZ/main';
 
 // ANCHOR FUNCTIONS
 export async function getMainUser(channel: string | number) {
@@ -207,6 +207,7 @@ const services = {
     },
 };
 
+// YES I WILL LATER REWRITE IT SO THERE IS JUST ONE UPDATE DETECTOR INSTEAD OF GET FOR EACH FUCNTION // FIXME: REWRITE THIS :3
 // ANCHOR 7TV WEBSOCKET
 services["7TV"].ws.on("open", () => {
     if (globals.channelTwitchID) {
@@ -221,7 +222,6 @@ services["7TV"].ws.on("open", () => {
 
 services["7TV"].ws.on("add_emote", (id, actor, data) => {
     const cosmetic_data = get(cosmetics);
-    const emote_data = get(emotes);
 
     if (cosmetic_data.sets[id]) { // PERSONAL SETS
         data.set = "7TV Personal";
@@ -244,7 +244,6 @@ services["7TV"].ws.on("add_emote", (id, actor, data) => {
 
 services["7TV"].ws.on("remove_emote", (id, actor, data) => {
     const cosmetic_data = get(cosmetics);
-    const emote_data = get(emotes);
 
     if (cosmetic_data.sets[id]) { // PERSONAL SETS
         cosmetics.update((cosmeticsData) => {
@@ -264,8 +263,6 @@ services["7TV"].ws.on("remove_emote", (id, actor, data) => {
 });
 
 services["7TV"].ws.on("rename_emote", (id, actor, data) => {
-    const emote_data = get(emotes);
-
     if (globals.SevenTVemoteSetId == id && globals.channelTwitchID) {
         emotes.update((emoteData) => {
             const found_set = emoteData["7TV"]["channel"][globals.channelTwitchID || ""];

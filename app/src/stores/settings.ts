@@ -70,7 +70,7 @@ const configs: Setting[] = [
         "param": "redeem"
     },
     {
-        "name": "Display bots in chat (Based on FFZ bot badges)",
+        "name": "Display bots in chat (Based on FFZ & Twitch bot badges)",
         "type": "boolean",
         "value": true,
         "param": "bots"

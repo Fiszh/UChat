@@ -105,4 +105,5 @@ export const globals = {
     SevenTVemoteSetId: null as string | null,
 
     // OTHER
+    userNameColor: {} as Record<string, string>,
 }

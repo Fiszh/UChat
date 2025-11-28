@@ -5,6 +5,7 @@
 
   import { messages } from "$stores/chat";
   import { settings } from "$stores/settings";
+  import { globals } from "$stores/global";
 
   let chatMessages: Record<string, any>[] = [];
   let chat: HTMLElement;
@@ -76,23 +77,28 @@
     }
   });
 
-  function validateMessage(username: string, message: string): boolean {
+  function validateMessage(
+    username: string,
+    message: string,
+    user_badges: Record<string, string>,
+  ): boolean {
     const passed = [
       !chatSettings["userBL"].includes(username?.toLowerCase()),
       !chatSettings["prefixBL"].includes(
-        message?.charAt(0)?.toLowerCase() || "",
+        message?.charAt(0)?.toLowerCase() || undefined,
       ),
+      !chatSettings["bots"] ? !user_badges?.["bot-badge"] : true,
+      !chatSettings["bots"] ? !globals.custom_bots.includes(username) : true,
     ];
 
     return passed.every(Boolean);
   }
-  
+
   $: filteredMessages = chatMessages
     .filter(
       (msg) =>
-        (msg.command === "PRIVMSG" || msg?.tags?.["room-id"] === "0") &&
         chatSettings &&
-        validateMessage(msg.tags?.username, msg.message),
+        validateMessage(msg.tags?.username, msg.message, msg.tags?.badges),
     )
     .map((msg) => {
       const username = (msg.tags?.username || "").trim().toLowerCase();
@@ -101,6 +107,7 @@
         .toLowerCase();
 
       return {
+        id: crypto.randomUUID(), // THIS MAKES SURE MESSAGES WILL NOT MERGE
         ...msg,
         formattedUser:
           username === displayName
@@ -130,7 +137,7 @@
 </script>
 
 <div class="chat" bind:this={chat} style={chatStyle}>
-  {#each filteredMessages as msg, i (msg?.tags?.["id"] ?? i)}
+  {#each filteredMessages as msg (msg.id)}
     <ChatMessage
       message={{
         user: msg.formattedUser,

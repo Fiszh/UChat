@@ -69,6 +69,14 @@
       font-variant-ligatures: none;
     }
 
+    .paint {
+      -webkit-text-fill-color: transparent;
+      background-clip: text !important;
+      -webkit-background-clip: text !important;
+      background-size: cover !important;
+      text-shadow: none !important;
+    }
+
     /* 
 	START
 	WHAT MAKES EMOTES WORK IN ZERO-WIDTH 

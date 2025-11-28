@@ -8,7 +8,7 @@
   import Badge from "./Badge.svelte";
 
   import { type Setting, settings } from "$stores/settings";
-  import { emotes, badges } from "$stores/global";
+  import { emotes, badges, globals } from "$stores/global";
   import { cosmetics } from "$stores/cosmetics";
 
   export let message: {
@@ -19,6 +19,9 @@
 
   const tags = message.tags;
   const username = tags?.username.toLowerCase().trim();
+  const nameColor = message.tags.color || usernameColor(username);
+
+  globals.userNameColor[username] = nameColor;
 
   let chatSettings: Record<string, Setting["value"]> = {};
 
@@ -28,11 +31,20 @@
     : ({ paint: "", shadow: "" } as { paint: string; shadow: string });
 
   $: paintStyle = userPaint
-    ? `background-color: ${message.tags.color || usernameColor(username)};
-      ${typeof chatSettings?.["paints"] == "undefined" || chatSettings?.["paints"] ? 
-      paintHTML.paint + `${typeof chatSettings?.["paintShadows"] == "undefined" || chatSettings?.["paintShadows"] ? 
-      paintHTML.shadow : ""}` : ""}`
-    : `color: ${message.tags.color || usernameColor(username)};`;
+    ? `background-color: ${nameColor};
+      ${
+        typeof chatSettings?.["paints"] == "undefined" ||
+        chatSettings?.["paints"]
+          ? paintHTML.paint +
+            `${
+              typeof chatSettings?.["paintShadows"] == "undefined" ||
+              chatSettings?.["paintShadows"]
+                ? paintHTML.shadow
+                : ""
+            }`
+          : ""
+      }`
+    : `color: ${nameColor};`;
 
   userPaint = getPaint(username);
 
@@ -49,6 +61,7 @@
       message.text,
       message.tags,
       message.tags["room-id"],
+      chatSettings,
     );
   })();
 
@@ -58,11 +71,21 @@
         message.text,
         message.tags,
         message.tags["room-id"],
+        chatSettings,
       );
     });
 
     badges.subscribe(async () => {
       parsedBadges = parseBadges(tags);
+    });
+
+    settings.subscribe(async () => {
+      emoteText = await replaceWithEmotes(
+        message.text,
+        message.tags,
+        message.tags["room-id"],
+        chatSettings,
+      );
     });
   }
 
@@ -140,14 +163,6 @@
 <style lang="scss">
   .chat-message {
     padding: 0.1rem 0rem;
-
-    .paint {
-      -webkit-text-fill-color: transparent;
-      background-clip: text !important;
-      -webkit-background-clip: text !important;
-      background-size: cover !important;
-      text-shadow: none !important;
-    }
 
     .badge-wrapper {
       display: inline-flex;
