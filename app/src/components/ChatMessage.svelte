@@ -1,50 +1,82 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
+  import { getPaint, getPaintHTML } from "$lib/services/7TV/cosmetics";
   import { replaceWithEmotes } from "$lib/emoteParser";
   import { parseBadges } from "$lib/badgeParser";
-  import { getPaint, getPaintHTML } from "$lib/services/7TV/cosmetics";
 
   import Badge from "./Badge.svelte";
 
   import { type Setting, settings } from "$stores/settings";
   import { emotes, badges, globals } from "$stores/global";
   import { cosmetics } from "$stores/cosmetics";
+  import { messages } from "$stores/chat";
+  import { getChannelEmotesViaTwitchID } from "$lib/emotes";
 
   export let message: {
     user: string;
     text: string;
     tags: Record<string, any>;
+    id: string;
+    room_id: number;
   };
 
   const tags = message.tags;
-  const username = tags?.username.toLowerCase().trim();
+  const username = tags?.username.toLowerCase().trim() || "";
   const nameColor = message.tags.color || usernameColor(username);
+
+  if (message.room_id) {
+    getChannelEmotesViaTwitchID(String(message.room_id));
+  }
+
+  let FFZBadges = $badges.FFZ;
+
+  let chatMessage: HTMLElement;
 
   globals.userNameColor[username] = nameColor;
 
   let chatSettings: Record<string, Setting["value"]> = {};
+
+  $: if (chatSettings?.fadeOut && window.location.search) {
+    const delay = Number(chatSettings.fadeOut) * 1000;
+
+    setTimeout(() => {
+      if (!chatMessage) return;
+      chatMessage.classList.add("fadeOut");
+
+      setTimeout(() => {
+        if (!chatMessage) return;
+        chatMessage.remove();
+        chatMessage = undefined as unknown as HTMLElement;
+
+        messages.update((e) =>
+          e.filter((msg) => msg.tags.id != message.tags.id),
+        );
+      }, 2600);
+    }, delay);
+  }
 
   let userPaint: Paint | undefined;
   $: paintHTML = userPaint
     ? getPaintHTML(userPaint)
     : ({ paint: "", shadow: "" } as { paint: string; shadow: string });
 
-  $: paintStyle = userPaint
-    ? `background-color: ${nameColor};
-      ${
-        typeof chatSettings?.["paints"] == "undefined" ||
-        chatSettings?.["paints"]
-          ? paintHTML.paint +
-            `${
-              typeof chatSettings?.["paintShadows"] == "undefined" ||
-              chatSettings?.["paintShadows"]
-                ? paintHTML.shadow
-                : ""
-            }`
-          : ""
-      }`
-    : `color: ${nameColor};`;
+  $: paintStyle =
+    userPaint && chatSettings["paints"]
+      ? (() => {
+          let style = `background-color: ${nameColor};`;
+
+          style += paintHTML.paint || "";
+
+          if (chatSettings["paintShadows"]) {
+            style += paintHTML.shadow || "";
+          } else if (!chatSettings["paintShadows"] && chatSettings["fontStroke"]) {
+            style += "-webkit-text-stroke: 1px black;";
+          }
+
+          return style;
+        })()
+      : `color: ${nameColor};`;
 
   userPaint = getPaint(username);
 
@@ -56,36 +88,28 @@
       : ([] as parsedBadge[]);
   let emoteText = message.text;
 
-  (async () => {
+  async function parse() {
     emoteText = await replaceWithEmotes(
       message.text,
       message.tags,
-      message.tags["room-id"],
+      message.tags["source-room-id"] ?? message.tags["room-id"],
       chatSettings,
     );
-  })();
+  }
+
+  parse();
 
   if (!window.location.search) {
-    emotes.subscribe(async () => {
-      emoteText = await replaceWithEmotes(
-        message.text,
-        message.tags,
-        message.tags["room-id"],
-        chatSettings,
-      );
-    });
+    emotes.subscribe(() => parse());
 
     badges.subscribe(async () => {
       parsedBadges = parseBadges(tags);
     });
 
-    settings.subscribe(async () => {
-      emoteText = await replaceWithEmotes(
-        message.text,
-        message.tags,
-        message.tags["room-id"],
-        chatSettings,
-      );
+    settings.subscribe(() => parse());
+  } else {
+    badges.subscribe(async (e) => {
+      FFZBadges = e["FFZ"];
     });
   }
 
@@ -93,6 +117,12 @@
   const unsubscribeCosmetics = cosmetics.subscribe(async () => {
     parsedBadges = parseBadges(tags);
     userPaint = getPaint(username);
+  });
+
+  const unsubscribeSettings = settings.subscribe((config) => {
+    for (const setting of config) {
+      chatSettings[setting.param] = setting.value;
+    }
   });
 
   function usernameColor(name: string) {
@@ -120,12 +150,6 @@
     return colors[Math.abs(hash) % colors.length];
   }
 
-  const unsubscribeSettings = settings.subscribe((config) => {
-    for (const setting of config) {
-      chatSettings[setting.param] = setting.value;
-    }
-  });
-
   onMount(() => {
     return () => {
       unsubscribeSettings();
@@ -135,7 +159,12 @@
 </script>
 
 {#snippet paint()}
-  <strong class="username" class:paint={userPaint} style={paintStyle}>
+  <strong
+    class="username"
+    class:paint={chatSettings["paints"] &&
+      userPaint}
+    style={paintStyle}
+  >
     {@html message.user}
   </strong>
 {/snippet}
@@ -154,7 +183,7 @@
   </strong>
 {/snippet}
 
-<div class="chat-message">
+<div class="chat-message" bind:this={chatMessage}>
   {#if userBadges.length}{@render Badges()}{/if}
   {@render paint()}:
   <span>{@html emoteText}</span>
@@ -169,6 +198,19 @@
       line-height: normal;
       vertical-align: middle;
       gap: 5px;
+    }
+
+    &:global(.fadeOut) {
+      animation: fadeIt 2.5s forwards;
+    }
+  }
+
+  @keyframes fadeIt {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
     }
   }
 </style>

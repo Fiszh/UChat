@@ -199,7 +199,7 @@ export async function replaceWithEmotes(inputString: string, userstate: Record<s
                             url: result.tier.url,
                             site: 'TTV',
                             color: result.tier.color,
-                            bits: `<div class="bits-number">${bits}</div>`
+                            bits: `<span class="bits-number">${bits}</span>`
                         };
                     }
                 }

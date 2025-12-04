@@ -28,7 +28,7 @@ const configs: Setting[] = [
         "param": "font"
     },
     {
-        "name": "Font size (px)",
+        "name": "Font & Badge size (px)",
         "type": "number",
         "param": "fontSize",
         "value": 20
@@ -64,7 +64,7 @@ const configs: Setting[] = [
         "param": "badges"
     },
     {
-        "name": "Display channel points redeem & sub messages",
+        "name": "Display channel points redeem, sub messages, annoucements... (Redeems & USERNOTICES)",
         "type": "boolean",
         "value": true,
         "param": "redeem"

@@ -8,6 +8,8 @@
 
   import { getMainUser, connectToWS } from "$lib/overlayIndex";
   import { getChannelEmotesViaTwitchID, getGlobalEmotes } from "$lib/emotes";
+  import { getFFZBadges } from "$lib/badges";
+  import { settings } from "$stores/settings";
 
   let status = "";
 
@@ -26,8 +28,25 @@
       connect(channelName);
     }
 
+    for (const [key, value] of params) {
+      settings.update((list) =>
+        list.map((s) => {
+          if (s.param !== key) return s;
+
+          let v: any = value;
+
+          if (s.type === "number") v = Number(value);
+          if (s.type === "boolean") v = value == "1";
+
+          return { ...s, value: v };
+        }),
+      );
+    }
+
     // GET USER INFO AND IF USED CHANNEL ID CONNECT TO IRC
     (async () => {
+      await getFFZBadges();
+
       await getGlobalEmotes();
 
       const successGettingUser = await getMainUser(
@@ -56,3 +75,9 @@
 </script>
 
 <ChatDisplay />
+
+<style lang="scss">
+  :global(body) {
+    background-color: rgba(0, 0, 0, 0) !important;
+  }
+</style>

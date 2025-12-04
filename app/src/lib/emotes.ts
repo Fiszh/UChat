@@ -6,14 +6,17 @@ import SevenTV_main from '$lib/services/7TV/main';
 import BTTV_main from '$lib//services/BTTV/main';
 import FFZ_main from '$lib//services/FFZ/main';
 
+let emote_data: any = get(emotes);
+let badge_data: any = get(badges);
+
+emotes.subscribe((data) => emote_data = data);
+badges.subscribe((data) => badge_data = data);
+
 let processing_ids: string[] = [];
 export async function getChannelEmotesViaTwitchID(twitchID: string) {
     if (!twitchID || twitchID === "0" || processing_ids.includes(twitchID)) { return; };
 
     processing_ids.push(twitchID); // prevent API spam
-
-    const emote_data = get(emotes);
-    const badge_data = get(badges);
 
     // 7TV
     try {
@@ -63,6 +66,31 @@ export async function getChannelEmotesViaTwitchID(twitchID: string) {
 
                 return emoteData;
             });
+
+            if (twitchID == globals.channelTwitchID) {
+                badges.update((badgeData) => {
+                    if (ffzData.badges?.vip?.length) {
+                        badgeData["FFZ"]["user"]["vip"] = ffzData.badges.vip.reduce((max: Record<string, any>, item: any) => {
+                            return parseInt(item.scale) > parseInt(max.scale) ? item : max;
+                        }).url;
+                    }
+                    
+                    if (ffzData.badges?.mod?.length) {
+                        badgeData["FFZ"]["user"]["mod"] = ffzData.badges.mod.reduce((max: Record<string, any>, item: any) => {
+                            return parseInt(item.scale) > parseInt(max.scale) ? item : max;
+                        }).url;
+                    }
+
+                    if (ffzData.badges?.user_badge_ids) {
+                        badgeData["FFZ"]["user"]["user"] = Object.fromEntries(
+                            Object.entries(ffzData.badges.user_badge_ids as Record<string, string[]>)
+                                .flatMap(([badge, users]) => users.map((user: any) => [user, badge] as [string, string]))
+                        );
+                    }
+
+                    return badgeData;
+                })
+            }
         }
     } catch (e) {
         console.error(`FFZ error for ${twitchID}:`, e);

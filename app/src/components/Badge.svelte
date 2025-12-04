@@ -16,6 +16,6 @@
 
 <style>
     img {
-        max-height: 15px;
+        max-height: var(--chat-font-size);
     }
 </style>

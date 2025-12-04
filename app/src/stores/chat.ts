@@ -3,6 +3,7 @@ import { settings } from "$stores/settings";
 
 const currentSettings = get(settings) || [];
 const modActions = (currentSettings.find(setting => setting.param == "modAction") || { "value": true }).value;
+const usernotices = (currentSettings.find(setting => setting.param == "redeem") || { "value": true }).value;
 
 interface ParsedMessage {
   raw: string;
@@ -93,12 +94,25 @@ export function connect(channel_name: string) {
             messages.update(arr => arr.filter(item => item.tags["user-id"] !== parsed.tags.merged["target-user-id"]));
 
             break;
-          default:
-            //console.log("UNKNOWN PARSED COMMAND", parsed.command, parsed);
-
-            if (parsed.tags.rawTags) { parsed.tags = parsed.tags.merged; };
+          case "PRIVMSG":
+            parsed.tags = parsed.tags.merged ?? parsed.tags;
 
             messages.update(msgs => [...msgs.slice(-99), parsed]);
+
+            break;
+          case "USERNOTICE":
+            if (!usernotices) { break; };
+            parsed.tags = parsed.tags.merged ?? parsed.tags;
+
+            if (parsed.message && (parsed.tags as any).login) {
+              (parsed.tags as any).username = (parsed.tags as any).login;
+
+              messages.update(msgs => [...msgs.slice(-99), parsed]);
+            }
+
+            break;
+          default:
+            //console.log("UNKNOWN PARSED COMMAND", parsed.command, parsed);
 
             break;
         }

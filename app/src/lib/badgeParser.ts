@@ -1,12 +1,27 @@
-import { get } from 'svelte/store';
+import { get } from "svelte/store";
 
 import { getBadge } from "$lib/services/7TV/cosmetics";
 
 import { badges } from '$stores/global';
 
+let BadgesData: Record<string, any> = get(badges);
+
+badges.subscribe((e: any) => BadgesData = e);
+
 export function parseBadges(userstate: Record<string, any>, badgeData?: Record<string, any>): parsedBadge[] {
     let user_badges = [];
-    const badges_data = badgeData || get(badges);
+    const badges_data = badgeData || BadgesData;
+
+    // SHARED CHAT BADGE
+    const foundAvatarBadge = badges_data["channel"]?.[userstate["source-room-id"]];
+
+    if (foundAvatarBadge) {
+        user_badges.push({
+            badge_url: foundAvatarBadge,
+            alt: "Shared Chat",
+            background_color: undefined,
+        });
+    }
 
     // THIS NEEDS TO BE ALWAYS ON THE START TO MAKE SURE TWITCH BADGES WILL BE FIRST
     if (userstate['badges-raw'] && Object.keys(userstate['badges-raw']).length) {
@@ -49,6 +64,28 @@ export function parseBadges(userstate: Record<string, any>, badgeData?: Record<s
             // SEARCH IN GLOBAL IF NO CHANNEL BADGE FOUND
             const badge = badges_data["TTV"].global.find((badge: Badge) => badge.id === `${badgeSplit[0]}_${badgeSplit[1]}`) as Badge | undefined;
 
+            if (badge && badge.id) {
+                if (badge.id === "moderator_1" && badges_data["FFZ"]["user"]["mod"]) {
+                    user_badges.push({
+                        badge_url: badges_data["FFZ"]["user"]["mod"],
+                        alt: "Moderator",
+                        background_color: "#00ad03"
+                    });
+
+                    continue;
+                }
+
+                if (badge.id === "vip_1" && badges_data["FFZ"]["user"]["vip"]) {
+                    user_badges.push({
+                        badge_url: badges_data["FFZ"]["user"]["vip"],
+                        alt: "VIP",
+                        background_color: "#e005b9"
+                    });
+
+                    continue;
+                }
+            }
+
             if (badge) {
                 user_badges.push({
                     badge_url: badge.url,
@@ -61,8 +98,24 @@ export function parseBadges(userstate: Record<string, any>, badgeData?: Record<s
 
     // OTHER BADGES
 
+    // FFZ
+    const foundFFZBadges = badges_data["FFZ"]["global"].filter((badge: Record<string, any>) => badge.owners.includes(userstate["username"]));
+    const foundFFZBadge = badges_data["FFZ"]["global"].find((badge: Record<string, any>) => badge.id == badges_data["FFZ"]["user"]["user"][userstate["user-id"]]);
+
+    if (foundFFZBadge) {
+        foundFFZBadges.push(foundFFZBadge);
+    }
+
+    foundFFZBadges.forEach((foundFFZBadge: Badge) => {
+        user_badges.push({
+            badge_url: foundFFZBadge.urls[foundFFZBadge.urls.length - 1].url,
+            alt: foundFFZBadge.title,
+            background_color: foundFFZBadge.color,
+        });
+    });
     // 7TV
     const found7TVBadge = getBadge(userstate['user-id']);
+
     if (found7TVBadge) {
         user_badges.push({
             badge_url: found7TVBadge.urls[found7TVBadge.urls.length - 1].url,

@@ -5,7 +5,7 @@
 
   import { messages } from "$stores/chat";
   import { settings } from "$stores/settings";
-  import { globals } from "$stores/global";
+  import { badges, globals } from "$stores/global";
 
   let chatMessages: Record<string, any>[] = [];
   let chat: HTMLElement;
@@ -81,7 +81,12 @@
     username: string,
     message: string,
     user_badges: Record<string, string>,
+    tags: Record<string, string>,
   ): boolean {
+    const FFZBadges = $badges["FFZ"]["global"].filter(
+      (badge: Record<string, any>) => badge.owners.includes(username),
+    ) as Record<string, any>;
+
     const passed = [
       !chatSettings["userBL"].includes(username?.toLowerCase()),
       !chatSettings["prefixBL"].includes(
@@ -89,6 +94,11 @@
       ),
       !chatSettings["bots"] ? !user_badges?.["bot-badge"] : true,
       !chatSettings["bots"] ? !globals.custom_bots.includes(username) : true,
+      !chatSettings["bots"]
+        ? !FFZBadges.find((badge: Record<string, any>) => badge.id == 2)
+        : true,
+      !chatSettings["bots"] ? $badges["FFZ"]["user"]["user"][tags["user-id"] ?? ""] != 2 : true,
+      !chatSettings["redeem"] ? !tags?.["custom-reward-id"] : true,
     ];
 
     return passed.every(Boolean);
@@ -98,16 +108,22 @@
     .filter(
       (msg) =>
         chatSettings &&
-        validateMessage(msg.tags?.username, msg.message, msg.tags?.badges),
+        validateMessage(
+          msg.tags?.username,
+          msg.message,
+          msg.tags?.badges,
+          msg.tags,
+        ),
     )
     .map((msg) => {
       const username = (msg.tags?.username || "").trim().toLowerCase();
-      const displayName = (msg.tags?.["display-name"] || "")
+      const displayName = String(msg.tags?.["display-name"] ?? "")
         .trim()
         .toLowerCase();
 
       return {
-        id: crypto.randomUUID(), // THIS MAKES SURE MESSAGES WILL NOT MERGE
+        id: msg.tags.id ?? crypto.randomUUID(), // THIS MAKES SURE MESSAGES WILL NOT MERGE
+        room_id: msg.tags["source-room-id"] ?? globals.channelTwitchID,
         ...msg,
         formattedUser:
           username === displayName
@@ -122,7 +138,9 @@
       clearTimeout(scrollTimeout);
 
       scrollTimeout = setTimeout(() => {
-        chat.scrollTo({ top: chat.scrollHeight, behavior: "smooth" });
+        if (chat) {
+          chat.scrollTo({ top: chat.scrollHeight, behavior: "smooth" });
+        }
       }, 7); // delay so rapid updates don’t spam scroll
     });
 
@@ -143,6 +161,8 @@
         user: msg.formattedUser,
         text: msg.message,
         tags: msg.tags,
+        id: msg.id,
+        room_id: msg.room_id,
       }}
     />
   {/each}
@@ -172,7 +192,6 @@
     bottom: 0;
 
     /* SETTING */
-
     font-weight: var(--chat-bold);
     text-transform: var(--chat-case);
     font-family: var(--chat-font);

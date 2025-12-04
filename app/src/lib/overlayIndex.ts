@@ -11,6 +11,13 @@ import BTTV_ws from '$lib/services/BTTV/websocket';
 
 import FFZ_main from '$lib/services/FFZ/main';
 
+let cosmetic_data = get(cosmetics);
+let emote_data = get(emotes);
+
+// SUBSCRIBE TO CHANGES
+cosmetics.subscribe((data) => cosmetic_data = data);
+emotes.subscribe((data) => emote_data = data);
+
 // ANCHOR FUNCTIONS
 export async function getMainUser(channel: string | number) {
     try {
@@ -221,8 +228,6 @@ services["7TV"].ws.on("open", () => {
 })
 
 services["7TV"].ws.on("add_emote", (id, actor, data) => {
-    const cosmetic_data = get(cosmetics);
-
     if (cosmetic_data.sets[id]) { // PERSONAL SETS
         data.set = "7TV Personal";
 
@@ -243,8 +248,6 @@ services["7TV"].ws.on("add_emote", (id, actor, data) => {
 });
 
 services["7TV"].ws.on("remove_emote", (id, actor, data) => {
-    const cosmetic_data = get(cosmetics);
-
     if (cosmetic_data.sets[id]) { // PERSONAL SETS
         cosmetics.update((cosmeticsData) => {
             cosmeticsData.sets[id].emotes = cosmeticsData.sets[id].emotes.filter((emote: ParsedEmote) => emote.url !== data.url);
@@ -294,8 +297,6 @@ services["7TV"].ws.on("set_change", async (actor, data) => { // no need to resub
 });
 
 services["7TV"].ws.on("create_badge", (data) => {
-    const cosmetic_data = get(cosmetics);
-
     if (!cosmetic_data.badges[data.id]) {
         cosmetics.update((cosmeticsData) => {
             cosmeticsData.badges[data.id] = data;
@@ -306,8 +307,6 @@ services["7TV"].ws.on("create_badge", (data) => {
 });
 
 services["7TV"].ws.on("create_paint", (data) => {
-    const cosmetic_data = get(cosmetics);
-
     if (!cosmetic_data.paints[data.id]) {
         cosmetics.update((cosmeticsData) => {
             cosmeticsData.paints[data.id] = data;
@@ -318,8 +317,6 @@ services["7TV"].ws.on("create_paint", (data) => {
 });
 
 services["7TV"].ws.on("create_personal_set", (data) => { // CREATE PERSONAL SET
-    const cosmetic_data = get(cosmetics);
-
     if (!cosmetic_data.sets[data.id]) {
         cosmetics.update((cosmeticsData) => {
             cosmeticsData.sets[data.id] = {
@@ -337,8 +334,6 @@ services["7TV"].ws.on("create_personal_set", (data) => { // CREATE PERSONAL SET
 
 // PERSONAL SETS SHOULD NOT REMOVE THE OWNER, RIGHT 7TV?
 services["7TV"].ws.on("create_entitlement", (data) => { // BIND A BADGE, PAINT OR SET TO A USER
-    const cosmetic_data = get(cosmetics);
-
     if (cosmetic_data.sets[data.id] && cosmetic_data.sets[data.id]?.flags != 4) { // SET
         cosmetics.update((cosmeticsData) => {
             cosmeticsData.sets[data.id].owner.push(data.owner);
@@ -371,8 +366,6 @@ services["7TV"].ws.on("create_entitlement", (data) => { // BIND A BADGE, PAINT O
 });
 
 services["7TV"].ws.on("delete_entitlement", (data) => {
-    const cosmetic_data = get(cosmetics);
-
     let whatToDelete: string;
 
     if (cosmetic_data.badges[data.id]) { // BADGE
@@ -396,16 +389,12 @@ services["7TV"].ws.on("delete_entitlement", (data) => {
 
 // ANCHOR BTTV WEBSOCKET
 services["BTTV"].ws.on("open", () => {
-    const emote_data = get(emotes);
-
     if (globals.channelTwitchID && emote_data["BTTV"].channel[globals.channelTwitchID]?.length) {
         services['BTTV'].ws.subscribe(globals.channelTwitchID); // SET CHANGES
     }
 })
 
 services["BTTV"].ws.on("add_emote", (id, data) => {
-    const emote_data = get(emotes);
-
     if (id == globals.channelTwitchID && emote_data["BTTV"]["channel"][globals.channelTwitchID]) {
         emotes.update((emoteData) => {
             const found_set = emoteData["BTTV"]["channel"][globals.channelTwitchID || ""];
@@ -420,8 +409,6 @@ services["BTTV"].ws.on("add_emote", (id, data) => {
 });
 
 services["BTTV"].ws.on("remove_emote", (id, data) => {
-    const emote_data = get(emotes);
-
     if (id == globals.channelTwitchID && emote_data["BTTV"]["channel"][globals.channelTwitchID]) {
         emotes.update((emoteData) => {
             emoteData["BTTV"]["channel"][globals.channelTwitchID || ""] = emoteData["BTTV"]["channel"][globals.channelTwitchID || ""].filter((emote: ParsedEmote) => emote.emote_id !== data); // REMOVE EMOTE FROM SET
@@ -434,8 +421,6 @@ services["BTTV"].ws.on("remove_emote", (id, data) => {
 });
 
 services["BTTV"].ws.on("rename_emote", (id, data) => {
-    const emote_data = get(emotes);
-
     if (id == globals.channelTwitchID && emote_data["BTTV"]["channel"][globals.channelTwitchID]) {
         emotes.update((emoteData) => {
             const found_set = emoteData["BTTV"]["channel"][globals.channelTwitchID || ""];

@@ -37,38 +37,6 @@
 
 <style lang="scss">
   :global {
-    body {
-      overflow: hidden;
-      font-family: "Inter", system-ui, sans-serif;
-      color: white;
-      margin: 0;
-      padding: 0;
-      width: 100dvw;
-      height: 100dvh;
-
-      background: rgb(17, 17, 17);
-    }
-
-    *::-webkit-scrollbar {
-      width: 15px;
-    }
-
-    *::-webkit-scrollbar-track {
-      background-color: rgb(10, 10, 10);
-    }
-
-    *::-webkit-scrollbar-thumb {
-      background-color: rgb(255, 255, 255);
-    }
-
-    *::-webkit-scrollbar-thumb:hover {
-      background-color: rgb(219, 219, 219);
-    }
-
-    * {
-      font-variant-ligatures: none;
-    }
-
     .paint {
       -webkit-text-fill-color: transparent;
       background-clip: text !important;
@@ -77,10 +45,16 @@
       text-shadow: none !important;
     }
 
+    // THIS MAKES SURE BITS DISPLAY DONT LOOK WEIRD
+    .bits-wrapper {
+      display: inline-flex;
+      vertical-align: middle;
+    }
+
     /* 
-	START
-	WHAT MAKES EMOTES WORK IN ZERO-WIDTH 
-	*/
+    START
+    WHAT MAKES EMOTES WORK IN ZERO-WIDTH 
+    */
     .emote-wrapper {
       display: inline-grid;
       grid-auto-rows: 0px;
@@ -98,7 +72,6 @@
         height: 100vh;
       }
     }
-
     /* END */
 
     .twemoji {

@@ -50,7 +50,11 @@ interface Badges {
     };
     FFZ: {
         global: any[];
-        user: any[];
+        user: {
+            vip: string;
+            mod: string;
+            user: Record<string, number|string>;
+        };
     };
     OTHER: {
         Chatterino: any[];
@@ -69,7 +73,7 @@ export const emotes = writable<Emotes>({
 export const badges = writable<Badges>({
     TTV: { sub: [], global: [], bit: [] },
     BTTV: { global: [] },
-    FFZ: { global: [], user: [] },
+    FFZ: { global: [], user: { vip: "", mod: "", user: {} } },
     OTHER: { Chatterino: [], ChatterinoHomies: [] },
     channel: {}
 });
@@ -97,8 +101,6 @@ export const globals = {
     // TTV
     channelTwitchID: null as string | null,
     channelTwitchName: null as string | null,
-
-    TTVUsersData: [] as any[],
 
     // 7TV
     SevenTVID: null as string | null,
