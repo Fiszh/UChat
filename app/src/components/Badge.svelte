@@ -17,5 +17,7 @@
 <style>
     img {
         max-height: var(--chat-font-size);
+        width: auto;
+        object-fit: contain;
     }
 </style>

@@ -1,7 +1,7 @@
 <script lang="ts">
     import { RotateCcw, Copy, Send } from "lucide-svelte";
     import ColorPicker, { ChromeVariant } from "svelte-awesome-color-picker";
-    
+
     import { messages, sanitizeInput } from "$lib/chat";
 
     import ChatDisplay from "$components/ChatDisplay.svelte";
@@ -116,7 +116,9 @@
         const tags = generateFakeTwitchTags();
         const message = sanitizeInput(customMessageInput.value);
 
-        if (!message.length) { return; };
+        if (!message.length) {
+            return;
+        }
 
         messages.update((msgs) => [...msgs, { tags, message }]);
     }
