@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	%sveltekit.head%
+</head>
+
+<body data-sveltekit-preload-data="hover">
+	<div style="display: contents">%sveltekit.body%</div>
+</body>
+
+<style>
+	body {
+		overflow: hidden;
+		font-family: "Inter", system-ui, sans-serif;
+		color: white;
+		margin: 0;
+		padding: 0;
+		width: 100dvw;
+		height: 100dvh;
+
+		background: rgb(17, 17, 17);
+	}
+
+	*::-webkit-scrollbar {
+		width: 15px;
+	}
+
+	*::-webkit-scrollbar-track {
+		background-color: rgb(10, 10, 10);
+	}
+
+	*::-webkit-scrollbar-thumb {
+		background-color: rgb(255, 255, 255);
+	}
+
+	*::-webkit-scrollbar-thumb:hover {
+		background-color: rgb(219, 219, 219);
+	}
+
+	* {
+		font-variant-ligatures: none;
+	}
+</style>
+
+</html>
