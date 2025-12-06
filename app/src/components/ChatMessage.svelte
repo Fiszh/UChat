@@ -10,7 +10,7 @@
   import { type Setting, settings } from "$stores/settings";
   import { emotes, badges, globals } from "$stores/global";
   import { cosmetics } from "$stores/cosmetics";
-  import { disconnect, messages } from "$stores/chat";
+  import { disconnect, messages } from "$lib/chat";
   import { getChannelEmotesViaTwitchID } from "$lib/emotes";
   import { loadChat } from "$lib/loadChat";
 

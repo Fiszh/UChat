@@ -10,7 +10,7 @@
 
     import { emotes, badges } from "$stores/global";
     import { cosmetics } from "$stores/cosmetics";
-    import { messages } from "$stores/chat";
+    import { messages } from "$lib/chat";
     import { previewMessages } from "$stores/previewMessages";
 
     onMount(async () => {

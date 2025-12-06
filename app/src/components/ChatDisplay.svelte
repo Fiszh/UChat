@@ -3,7 +3,7 @@
 
   import ChatMessage from "./ChatMessage.svelte";
 
-  import { messages } from "$stores/chat";
+  import { messages } from "$lib/chat";
   import { settings } from "$stores/settings";
   import { badges, globals } from "$stores/global";
 
@@ -34,7 +34,7 @@
           break;
         case "font":
           styles["--chat-font"] = setting.value
-            ? `${setting.value}, Inter`
+            ? `"${setting.value}", Inter`
             : "Inter";
 
           break;

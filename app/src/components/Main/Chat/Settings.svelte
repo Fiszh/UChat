@@ -5,7 +5,9 @@
     let usingID = false;
 
     const rawLocalSettings = localStorage.getItem("local-settings");
-    const LocalSettings = rawLocalSettings ? JSON.parse(rawLocalSettings) : null;
+    const LocalSettings = rawLocalSettings
+        ? JSON.parse(rawLocalSettings)
+        : null;
 
     if (LocalSettings) {
         parseSavedSettings(LocalSettings);
@@ -58,21 +60,25 @@
                 } else {
                     found.value = found.default as Setting["value"];
                 }
-
-                if (
-                    typeof found.value != undefined &&
-                    (typeof found.value == "string" ? found.value : true) &&
-                    found.value != found.default
-                ) {
-                    setParam(found.param, found.value);
-                } else {
-                    removeParam(found.param);
-                }
             }
 
             return arr;
         });
     }
+
+    settings.subscribe((arr) => {
+        for (const setting of arr) {
+            if (
+                typeof setting.value != undefined &&
+                (typeof setting.value == "string" ? setting.value : true) &&
+                setting.value != setting.default
+            ) {
+                setParam(setting.param, setting.value);
+            } else {
+                removeParam(setting.param);
+            }
+        }
+    });
 
     function validateInput(value: string, type: string) {
         if (type == "number") {
@@ -283,7 +289,7 @@
         input[type="checkbox"] {
             appearance: none;
             display: block;
-            width: 60px;
+            min-width: 60px;
             height: 30px;
             background-color: rgba(255, 255, 255, 0.096);
             border-radius: 30px;

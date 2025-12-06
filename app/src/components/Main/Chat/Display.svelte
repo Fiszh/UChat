@@ -1,6 +1,8 @@
 <script lang="ts">
-    import { RotateCcw, Copy } from "lucide-svelte";
+    import { RotateCcw, Copy, Send } from "lucide-svelte";
     import ColorPicker, { ChromeVariant } from "svelte-awesome-color-picker";
+    
+    import { messages, sanitizeInput } from "$lib/chat";
 
     import ChatDisplay from "$components/ChatDisplay.svelte";
 
@@ -11,6 +13,9 @@
         settings,
         settingsParams,
     } from "$stores/settings";
+
+    import { badges } from "$stores/global";
+    import { previewMessages } from "$stores/previewMessages";
 
     let hex = "#191919";
     let urlResults: HTMLElement | undefined = undefined;
@@ -31,6 +36,8 @@
 
         params.forEach((_, key) => params.delete(key));
 
+        messages.set(previewMessages);
+
         hex = "#191919";
     };
 
@@ -49,6 +56,69 @@
                 alert("Channel name or id not provided!.");
             }
         }
+    }
+
+    function pickRandomBadges(): Record<string, string>[] {
+        const count = Math.floor(Math.random() * 2) + 1;
+        const shuffled = $badges["TTV"]["global"].sort(
+            () => 0.5 - Math.random(),
+        );
+        return shuffled.slice(0, count);
+    }
+
+    function randomString(len: number) {
+        const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+        let out = "";
+        for (let i = 0; i < len; i++) {
+            out += chars[Math.floor(Math.random() * chars.length)];
+        }
+        return out;
+    }
+
+    function generateFakeTwitchTags() {
+        const username = randomString(5);
+        const displayName = username;
+        const userId = Math.floor(Math.random() * 1_000_000_000).toString();
+
+        const badgesPicked = pickRandomBadges() as Record<string, string>[];
+
+        const badgesRaw = badgesPicked
+            .map((b: Record<string, string>) => {
+                const badge_split = b.id.split("_");
+
+                return `${badge_split[0]}/${badge_split[1]}`;
+            })
+            .join(",");
+        const badges_parsed: Record<string, string> = {};
+        badgesPicked.forEach((b: Record<string, string>) => {
+            const badge_split = b.id.split("_");
+
+            badges_parsed[badge_split[0]] = badge_split[1];
+        });
+
+        return {
+            username,
+            "display-name": displayName,
+            "user-id": userId,
+            "badges-raw": badgesRaw,
+            badges,
+            color: null,
+            "room-id": "0",
+        };
+    }
+
+    let customMessageInput: HTMLInputElement;
+    function addMessage() {
+        if (!customMessageInput) {
+            return;
+        }
+
+        const tags = generateFakeTwitchTags();
+        const message = sanitizeInput(customMessageInput.value);
+
+        if (!message.length) { return; };
+
+        messages.update((msgs) => [...msgs, { tags, message }]);
     }
 </script>
 
@@ -75,19 +145,36 @@
                     sliderDirection="horizontal"
                     isTextInput={false}
                 />
-                <p>{hex}</p>
+                <p class="bottom-input">{hex}</p>
+            </div>
+        </div>
+        <div id="custom-message">
+            <small class="title">Custom Message</small>
+
+            <div class="display">
+                <input
+                    id="message-input"
+                    class="bottom-input"
+                    bind:this={customMessageInput}
+                    placeholder="Message to display..."
+                />
+                <button id="send" class="bottom-button" on:click={addMessage}
+                    ><Send /> Send</button
+                >
             </div>
         </div>
         <div id="overlay-url">
             <small class="title">Overlay URL</small>
 
             <div class="display">
-                <p id="url-results" bind:this={urlResults}>
+                <p id="url-results" class="bottom-input" bind:this={urlResults}>
                     {window.location.origin}/{params.toString().length
                         ? "?"
                         : ""}{params}
                 </p>
-                <button id="copy" on:click={copyUrl}><Copy /> Copy</button>
+                <button id="copy" class="bottom-button" on:click={copyUrl}
+                    ><Copy /> Copy</button
+                >
             </div>
         </div>
     </section>
@@ -198,7 +285,7 @@
                 padding-top: 0.4rem;
                 box-sizing: border-box;
 
-                p {
+                .bottom-input {
                     margin: 0;
                     background-color: rgba(255, 255, 255, 0.075);
                     border: #333 1px solid;
@@ -207,6 +294,8 @@
                     box-sizing: border-box;
                     border-radius: 0.5rem;
                     gap: 1px;
+                    font-size: 1rem;
+                    color: white;
                 }
             }
 
@@ -216,22 +305,22 @@
                     overflow: hidden;
                     text-overflow: ellipsis;
                 }
+            }
 
-                button {
-                    $border: #333;
+            .bottom-button {
+                $border: #333;
 
-                    all: unset;
-                    display: flex;
-                    gap: 0.3rem;
-                    border: $border 1px solid;
-                    padding: 0.5rem 0.7rem;
-                    box-sizing: border-box;
-                    border-radius: 0.5rem;
-                    cursor: pointer;
+                all: unset;
+                display: flex;
+                gap: 0.3rem;
+                border: $border 1px solid;
+                padding: 0.5rem 0.7rem;
+                box-sizing: border-box;
+                border-radius: 0.7rem;
+                cursor: pointer;
 
-                    &:hover {
-                        border-color: color.adjust($border, $lightness: 15%);
-                    }
+                &:hover {
+                    border-color: color.adjust($border, $lightness: 15%);
                 }
             }
         }

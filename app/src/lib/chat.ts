@@ -71,8 +71,6 @@ export function connect(channel_name: string) {
         if (!line) { continue; };
         const parsed = parseIrcLine(line);
 
-        console.log(parsed);
-
         switch (parsed.command) {
           case "PING":
             TTV_IRC_WS?.send('PONG :tmi.twitch.tv');
@@ -164,7 +162,7 @@ export function disconnect() {
   clearTimeout(heartbeatTimeout);
 }
 
-function sanitizeInput(input: string) {
+export function sanitizeInput(input: string) {
   if (typeof input !== "string") return input;
 
   return input
@@ -176,10 +174,7 @@ function sanitizeInput(input: string) {
     .replace(/\//g, "&#x2F;");
 }
 
-/*FIXME PARSING DONT WORK
-
-MIGHT BE WORKING NOW
-*/
+/*NOTE PARSING MIGHT NOT WORK 100%*/
 function parseIrcLine(raw: string): ParsedMessage {
   let parsed = {
     raw,

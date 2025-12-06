@@ -4,7 +4,7 @@
   import ChatDisplay from "./ChatDisplay.svelte";
 
   import { globals, loadingInfo } from "$stores/global";
-  import { connectionStatus, connect } from "$stores/chat";
+  import { connectionStatus, connect } from "$lib/chat";
 
   import { getMainUser, connectToWS } from "$lib/overlayIndex";
   import { settings } from "$stores/settings";
