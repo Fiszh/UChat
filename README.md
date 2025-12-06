@@ -1,9 +1,6 @@
 # UChat | Custom Twitch Overlay
 
-https://dev.unii.dev/
-
-# Notice:
-This is a branch for the svelte rewrite, please use [main branch](https://github.com/Fiszh/UChat/tree/main) for the current code
+https://chat.unii.dev/
 
 > ⚠️ Read [this README](./app/README.md) before building/running the site yourself.
 
