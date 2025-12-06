@@ -40,6 +40,7 @@ interface Emotes {
 }
 
 interface Badges {
+    UChat: any[]
     TTV: {
         sub: any[];
         global: any[];
@@ -71,6 +72,7 @@ export const emotes = writable<Emotes>({
 });
 
 export const badges = writable<Badges>({
+    UChat: [],
     TTV: { sub: [], global: [], bit: [] },
     BTTV: { global: [] },
     FFZ: { global: [], user: { vip: "", mod: "", user: {} } },
@@ -94,9 +96,6 @@ export const globals = {
     I’ll probably accept it, but no guarantees.
     Make sure your bot isn’t on the FFZ bots list or doesn't have the Twitch Chat Bot badge before submitting
     */
-
-    manifest_path: "manifest.json",
-    chat_version: "" as string,
 
     // TTV
     channelTwitchID: null as string | null,

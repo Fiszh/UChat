@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
 
   import ChatDisplay from "./ChatDisplay.svelte";
 
@@ -7,9 +7,8 @@
   import { connectionStatus, connect } from "$stores/chat";
 
   import { getMainUser, connectToWS } from "$lib/overlayIndex";
-  import { getChannelEmotesViaTwitchID, getGlobalEmotes } from "$lib/emotes";
-  import { getFFZBadges } from "$lib/badges";
   import { settings } from "$stores/settings";
+  import { loadChat } from "$lib/loadChat";
 
   let status = "";
 
@@ -45,10 +44,6 @@
 
     // GET USER INFO AND IF USED CHANNEL ID CONNECT TO IRC
     (async () => {
-      await getFFZBadges();
-
-      await getGlobalEmotes();
-
       const successGettingUser = await getMainUser(
         channelID ? Number(channelID) : channelName!,
       );
@@ -62,7 +57,7 @@
           connect(globals.channelTwitchName);
         }
 
-        await getChannelEmotesViaTwitchID(globals.channelTwitchID);
+        await loadChat();
 
         await connectToWS();
       }
@@ -71,6 +66,30 @@
 
       console.log(globals);
     })();
+
+    // REFRESH IMAGES IF FAILED
+    let interval: ReturnType<typeof setInterval>;
+
+    function handleImageRetries(): void {
+      document
+        .querySelectorAll<HTMLImageElement>("img")
+        .forEach((img, index) => {
+          if (img.naturalWidth === 0 || img.naturalHeight === 0) {
+            setTimeout(() => {
+              img.src =
+                img.src.split("?")[0] + "?retry=" + new Date().getTime();
+            }, 500 * index);
+          }
+        });
+    }
+
+    onMount(() => {
+      interval = setInterval(handleImageRetries, 10000);
+    });
+
+    onDestroy(() => {
+      clearInterval(interval);
+    });
   });
 </script>
 

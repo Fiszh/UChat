@@ -23,13 +23,15 @@
     );
 
     const resetSettings = () => {
+        channelName.set("");
+        channelID.set("");
+
         settings.set(config.map((c) => ({ ...c })));
         settingsParams.set({});
 
-        hex = "#191919";
+        params.forEach((_, key) => params.delete(key));
 
-        channelName.set("");
-        channelID.set("");
+        hex = "#191919";
     };
 
     function copyUrl() {

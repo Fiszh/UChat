@@ -14,13 +14,14 @@ interface Options {
 
 type Events = {
     open: () => void;
+    opening: () => void;
     close: () => void;
     error: (data: any) => void;
     sent: (data: any) => void;
     send_error: (data: any) => void;
     raw: (data: any) => void;
-    subscribed: (id: string|number) => void;
-    unsubscribed: (id: string|number) => void;
+    subscribed: (id: string | number) => void;
+    unsubscribed: (id: string | number) => void;
     add_emote: (channel: string, data: any) => void;
     remove_emote: (channel: string, id: string) => void;
     rename_emote: (channel: string, data: any) => void;
@@ -80,13 +81,17 @@ class BTTVWebSocket {
 
         this.ws.addEventListener('open', async (event) => {
             console.log("BTTV WS OPEN");
-            this.emit("open");
+            this.emit("opening");
 
             if (this.setting.resubscribeOnReconnect) {
                 for (const id of this.subscriptions) {
                     this.subscribe(id);
                 }
+            } else {
+                this.subscriptions = [];
             }
+
+            this.emit("open");
         });
 
         this.ws.addEventListener('message', async (event) => {
@@ -116,7 +121,7 @@ class BTTVWebSocket {
 
                     break;
                 default:
-                    console.log("Unknown message from BTTV WebSocket: ", data);
+                    //console.log("Unknown message from BTTV WebSocket: ", data);
 
                     break;
             }
@@ -160,7 +165,7 @@ class BTTVWebSocket {
     * @param {string} id - Twitch user id.
     * @param {boolean} force - Forces the client to subscribe.
     */
-    async subscribe(id: string|number, force?: boolean) {
+    async subscribe(id: string | number, force?: boolean) {
         if (!id) { throw new Error("Missing 'id' parameter"); };
 
         if (this.subscriptions?.includes(id) && !force) {
@@ -215,7 +220,7 @@ class BTTVWebSocket {
     *
     * @param {string} id - Twitch user id.
     */
-    async unsubscribe(id: string|number) {
+    async unsubscribe(id: string | number) {
         if (!id) { throw new Error("Missing 'id' parameter"); };
 
         if (!this.subscriptions?.includes(id)) {
@@ -256,6 +261,10 @@ class BTTVWebSocket {
 
             this.emit('send_error', err);
         }
+    }
+
+    close() {
+        this.ws?.close();
     }
 }
 

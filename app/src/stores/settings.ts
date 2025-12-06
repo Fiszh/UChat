@@ -6,6 +6,7 @@ export interface Setting {
     value: string | boolean | number;
     param: string;
     default?: Setting["value"];
+    list?: boolean;
 }
 
 const configs: Setting[] = [
@@ -79,13 +80,15 @@ const configs: Setting[] = [
         "name": "Custom user blacklist (separate using spaces)",
         "type": "text",
         "value": "",
-        "param": "userBL"
+        "param": "userBL",
+        "list": true
     },
     {
         "name": "Custom prefix blacklist (separate using spaces)",
         "type": "text",
         "value": "",
-        "param": "prefixBL"
+        "param": "prefixBL",
+        "list": true
     },
     {
         "name": "Moderation actions effect displayed chat messages (message deletion)",

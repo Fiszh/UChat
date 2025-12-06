@@ -17,25 +17,17 @@ export const faqItems = [
         ]
     },
     {
-        question: 'What if I get an "Invalid URL" notice?',
-        answer: 'If you see this notice click the Invalid URL button in the sidebar or click here',
-        links: [
-            { name: "click here", url: "/convert/" }
-        ]
-    },
-    {
         question: "Why do my settings stay after refreshing?",
         answer: "Theyre saved in your browser Click Reset Settings to reset"
     },
     {
         question: "What chat commands are available?",
-        answer: "Commands can only be used by the broadcaster or a mod",
+        answer: "Commands can only be used by the broadcaster or a mod, you can also use commands with !uchat <command>",
         commands: [
             { cmd: "!reloadchat", desc: "Reloads the overlay" },
             { cmd: "!refreshchat", desc: "Refreshes the overlay" },
             { cmd: "!reloadws", desc: "Reconnects the 7TV and BTTV WebSockets" },
-            { cmd: "!reconnectchat", desc: "Reconnects to Twitch IRC" },
-            { cmd: "!chatversion", desc: "Displays the currently loaded version" }
+            { cmd: "!reconnectchat", desc: "Reconnects to Twitch IRC" }
         ]
     },
     {

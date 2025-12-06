@@ -1,19 +1,23 @@
 <script lang="ts">
     import LoadingAnimation from "$lib/assets/loading.avif";
 
+    import { overlayVersion } from "$stores/settings";
+
     const availableStyles: string[] = ["minimal", "big"];
 
     export let loading: {
         text: string | undefined;
         type: string | undefined;
     };
+
+    $: version_text = $overlayVersion;
 </script>
 
 {#snippet minimal()}
     <div class="loader"></div>
     <div class="info">
         <span class="loading-text">Loading...</span>
-        <p class="version">version: 0.1</p>
+        <p class="version">{version_text}</p>
     </div>
 {/snippet}
 
@@ -22,7 +26,7 @@
     <div class="info">
         <span class="loading-text">Loading...</span>
         <span class="loading-info">{@html loading.text}</span>
-        <p class="version">version: 0.1</p>
+        <p class="version">{version_text}</p>
     </div>
 {/snippet}
 
@@ -55,6 +59,7 @@
 
             .version {
                 margin: 0;
+                font-size: 2rem;
             }
 
             .loading-text {

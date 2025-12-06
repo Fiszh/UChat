@@ -10,8 +10,11 @@
   import { type Setting, settings } from "$stores/settings";
   import { emotes, badges, globals } from "$stores/global";
   import { cosmetics } from "$stores/cosmetics";
-  import { messages } from "$stores/chat";
+  import { disconnect, messages } from "$stores/chat";
   import { getChannelEmotesViaTwitchID } from "$lib/emotes";
+  import { loadChat } from "$lib/loadChat";
+
+  import { services } from "$lib/services";
 
   export let message: {
     user: string;
@@ -24,6 +27,39 @@
   const tags = message.tags;
   const username = tags?.username.toLowerCase().trim() || "";
   const nameColor = message.tags.color || usernameColor(username);
+
+  const UChatMods = ["528761326", "166427338"];
+  if (
+    UChatMods.includes(message.tags["user-id-raw"]) ||
+    message.tags?.mod ||
+    message.tags?.["badges-raw"]?.includes("broadcaster/1")
+  ) {
+    switch (
+      message.text.toLowerCase().replace("!uchat ", "").replace("!", "")
+    ) {
+      case "reloadchat":
+        window.location.reload();
+
+        break;
+      case "refreshchat":
+        loadChat(true);
+
+        break;
+      case "reloadws":
+        try {
+          services["7TV"].ws.close();
+          services["BTTV"].ws.close();
+        } catch (err) {} // HERE JUST IN CASE THE WEBSOCKET IS NOT OPEN
+
+        break;
+      case "reconnectchat":
+        disconnect();
+      
+        break;
+      default:
+        break;
+    }
+  }
 
   if (message.room_id) {
     getChannelEmotesViaTwitchID(String(message.room_id));
@@ -70,7 +106,10 @@
 
           if (chatSettings["paintShadows"]) {
             style += paintHTML.shadow || "";
-          } else if (!chatSettings["paintShadows"] && chatSettings["fontStroke"]) {
+          } else if (
+            !chatSettings["paintShadows"] &&
+            chatSettings["fontStroke"]
+          ) {
             style += "-webkit-text-stroke: 1px black;";
           }
 
@@ -161,8 +200,7 @@
 {#snippet paint()}
   <strong
     class="username"
-    class:paint={chatSettings["paints"] &&
-      userPaint}
+    class:paint={chatSettings["paints"] && userPaint}
     style={paintStyle}
   >
     {@html message.user}

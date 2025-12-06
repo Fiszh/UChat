@@ -1,7 +1,15 @@
 <script lang="ts">
+    import { parseSavedSettings } from "$lib/overlayIndex";
     import { type Setting, settings, settingsParams } from "$stores/settings";
 
     let usingID = false;
+
+    const rawLocalSettings = localStorage.getItem("local-settings");
+    const LocalSettings = rawLocalSettings ? JSON.parse(rawLocalSettings) : null;
+
+    if (LocalSettings) {
+        parseSavedSettings(LocalSettings);
+    }
 
     let localChannelName = "";
     let localChannelID = "";
@@ -11,11 +19,20 @@
         localChannelID = "";
     }
 
-    let localParams: Record<string, Setting["value"]> = {};
+    function setParam(key: string, value: Setting["value"]) {
+        settingsParams.update((arr) => {
+            arr[key] = value;
+
+            return arr;
+        });
+    }
 
     function removeParam(key: string) {
-        const { [key]: _, ...rest } = localParams;
-        localParams = rest;
+        settingsParams.update((arr) => {
+            const { [key]: _, ...rest } = arr;
+
+            return rest;
+        });
     }
 
     function handleInput(
@@ -27,14 +44,27 @@
             const found = arr.find((s) => s.param === param);
 
             if (found) {
-                found.value = type != "number" ? value : Number(value);
+                if (
+                    type == "number" &&
+                    typeof value == "string" &&
+                    value.length
+                ) {
+                    found.value = Number(String(value).replace(/[^0-9]+/g, ""));
+                } else if (
+                    typeof value == "boolean" ||
+                    typeof value == "string"
+                ) {
+                    found.value = value;
+                } else {
+                    found.value = found.default as Setting["value"];
+                }
 
                 if (
                     typeof found.value != undefined &&
                     (typeof found.value == "string" ? found.value : true) &&
                     found.value != found.default
                 ) {
-                    localParams[found.param] = found.value;
+                    setParam(found.param, found.value);
                 } else {
                     removeParam(found.param);
                 }
@@ -54,13 +84,11 @@
     }
 
     $: localChannelName.length && (!localChannelID.length || !usingID)
-        ? (localParams["channel"] = String(localChannelName))
+        ? setParam("channel", String(localChannelName))
         : removeParam("channel");
     $: localChannelID.length && (!localChannelName.length || usingID)
-        ? (localParams["id"] = String(localChannelID))
+        ? setParam("id", String(localChannelID))
         : removeParam("id");
-
-    $: settingsParams.set(localParams);
 </script>
 
 {#snippet booleanSetting(param: string, defaultValue: boolean, value: boolean)}

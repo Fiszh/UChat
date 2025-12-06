@@ -71,6 +71,8 @@ export function connect(channel_name: string) {
         if (!line) { continue; };
         const parsed = parseIrcLine(line);
 
+        console.log(parsed);
+
         switch (parsed.command) {
           case "PING":
             TTV_IRC_WS?.send('PONG :tmi.twitch.tv');
@@ -91,7 +93,12 @@ export function connect(channel_name: string) {
             break;
           case "CLEARCHAT":
             if (!modActions) { break; };
-            messages.update(arr => arr.filter(item => item.tags["user-id"] !== parsed.tags.merged["target-user-id"]));
+
+            if (parsed.tags.merged["target-user-id"]) {
+              messages.update(arr => arr.filter(item => item.tags["user-id"] !== parsed.tags.merged["target-user-id"]));
+            } else {
+              messages.set([]);
+            }
 
             break;
           case "PRIVMSG":
@@ -147,7 +154,7 @@ export function connect(channel_name: string) {
   });
 }
 
-function disconnect() {
+export function disconnect() {
   if (TTV_IRC_WS) {
     TTV_IRC_WS.close();
     TTV_IRC_WS = null;

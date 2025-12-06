@@ -3,13 +3,8 @@ import { get } from "svelte/store";
 import { cosmetics } from "$stores/cosmetics";
 import { badges, emotes, globals } from '$stores/global';
 
-import SevenTV_main from '$lib/services/7TV/main';
-import SevenTV_ws from '$lib/services/7TV/websocket';
-
-import BTTV_main from '$lib/services/BTTV/main';
-import BTTV_ws from '$lib/services/BTTV/websocket';
-
-import FFZ_main from '$lib/services/FFZ/main';
+import { services } from '$lib/services';
+import { settings, type Setting } from "$stores/settings";
 
 let cosmetic_data = get(cosmetics);
 let emote_data = get(emotes);
@@ -186,11 +181,34 @@ export async function getMainUser(channel: string | number) {
             return emoteData;
         });
 
-        // TODO: SETTINGS
+        // SETTINGS
+        if (response_data["user_settings"]) {
+            parseSavedSettings(response_data["user_settings"]);
+        }
 
         return true;
     } catch (err) {
         return false;
+    }
+}
+
+export function parseSavedSettings(saved_settings: Setting) {
+    for (const [key, value] of Object.entries(saved_settings)) {
+        settings.update((arr) => {
+            const foundSetting = arr.find(
+                (setting) => setting.param == key,
+            );
+
+            if (foundSetting) {
+                if (!Array.isArray(value)) {
+                    foundSetting.value = value as Setting["value"];
+                } else {
+                    foundSetting.value = value.join(" ") as Setting["value"];
+                }
+            }
+
+            return arr;
+        });
     }
 }
 
@@ -199,22 +217,6 @@ export async function connectToWS() {
     services["BTTV"].ws.connect();
 }
 
-// ANCHOR WEBSOCKETS
-const services = {
-    "7TV": {
-        "main": SevenTV_main,
-        "ws": new SevenTV_ws({ reconnect: true }),
-    },
-    "BTTV": {
-        "main": BTTV_main,
-        "ws": new BTTV_ws({ reconnect: true }),
-    },
-    "FFZ": {
-        "main": FFZ_main,
-    },
-};
-
-// YES I WILL LATER REWRITE IT SO THERE IS JUST ONE UPDATE DETECTOR INSTEAD OF GET FOR EACH FUCNTION // FIXME: REWRITE THIS :3
 // ANCHOR 7TV WEBSOCKET
 services["7TV"].ws.on("open", () => {
     if (globals.channelTwitchID) {
@@ -244,7 +246,7 @@ services["7TV"].ws.on("add_emote", (id, actor, data) => {
         });
     }
 
-    console.log("Emote added:", id, data);
+    //console.log("Emote added:", id, data);
 });
 
 services["7TV"].ws.on("remove_emote", (id, actor, data) => {
@@ -262,7 +264,7 @@ services["7TV"].ws.on("remove_emote", (id, actor, data) => {
         });
     }
 
-    console.log("Emote removed:", id, data);
+    //console.log("Emote removed:", id, data);
 });
 
 services["7TV"].ws.on("rename_emote", (id, actor, data) => {
@@ -279,7 +281,7 @@ services["7TV"].ws.on("rename_emote", (id, actor, data) => {
         });
     }
 
-    console.log("Emote renamed:", id, data);
+    //console.log("Emote renamed:", id, data);
 });
 
 services["7TV"].ws.on("set_change", async (actor, data) => { // no need to resub to a new set id, already done via the websocket client
@@ -293,7 +295,7 @@ services["7TV"].ws.on("set_change", async (actor, data) => { // no need to resub
         });
     }
 
-    console.log("Emote set changed:", data);
+    //console.log("Emote set changed:", data);
 });
 
 services["7TV"].ws.on("create_badge", (data) => {
@@ -362,7 +364,7 @@ services["7TV"].ws.on("create_entitlement", (data) => { // BIND A BADGE, PAINT O
         })
     }
 
-    console.log("Created entitlement:", data);
+    //console.log("Created entitlement:", data);
 });
 
 services["7TV"].ws.on("delete_entitlement", (data) => {
@@ -384,7 +386,7 @@ services["7TV"].ws.on("delete_entitlement", (data) => {
         return cosmeticsData;
     })
 
-    console.log("Deleted entitlement:", data);
+    //console.log("Deleted entitlement:", data);
 });
 
 // ANCHOR BTTV WEBSOCKET
@@ -405,7 +407,7 @@ services["BTTV"].ws.on("add_emote", (id, data) => {
         });
     }
 
-    console.log("Emote added:", id, data);
+    //console.log("Emote added:", id, data);
 });
 
 services["BTTV"].ws.on("remove_emote", (id, data) => {
@@ -417,7 +419,7 @@ services["BTTV"].ws.on("remove_emote", (id, data) => {
         });
     }
 
-    console.log("Emote removed:", id, data);
+    //console.log("Emote removed:", id, data);
 });
 
 services["BTTV"].ws.on("rename_emote", (id, data) => {
@@ -434,5 +436,5 @@ services["BTTV"].ws.on("rename_emote", (id, data) => {
         });
     }
 
-    console.log("Emote renamed:", id, data);
+    //console.log("Emote renamed:", id, data);
 });

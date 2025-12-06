@@ -22,6 +22,7 @@ interface Options {
 
 type Events = {
     open: () => void;
+    opening: () => void;
     close: () => void;
     error: (data: any) => void;
     sent: (data: any) => void;
@@ -124,7 +125,7 @@ class SevenTVWebSocket {
 
         this.ws.addEventListener('open', () => {
             console.log("7TV WS OPEN");
-            this.emit("open");
+            this.emit("opening");
 
             // RESUB TO EVERY TOPIC
             if (this.setting.resubscribeOnReconnect) {
@@ -136,7 +137,11 @@ class SevenTVWebSocket {
                         }
                     }
                 }
+            } else {
+                this.subscriptions = [];
             }
+
+            this.emit("open");
         });
 
         this.ws.addEventListener('message', async (event) => {
@@ -169,7 +174,6 @@ class SevenTVWebSocket {
                     if (message_body.pushed) {
                         const emote_data: any[] = message_body.pushed.map((emote: any) => emote.value);
                         const parsed_emote_data = await parseSetData(emote_data);
-                        console.log(message_body);
                         for (const emote of parsed_emote_data) {
                             this.emit("add_emote", message_body.id, actor, emote); // SET ID, EMOTE INFO
                         }
@@ -195,7 +199,7 @@ class SevenTVWebSocket {
                             ); // SET ID, { OLD INFO, NEW INFO }
                         }
                     } else {
-                        console.log("Unknown set update message from 7TV WebSocket: ", data);
+                        //console.log("Unknown set update message from 7TV WebSocket: ", data);
                     }
 
                     break;
@@ -264,7 +268,7 @@ class SevenTVWebSocket {
 
                             break;
                         default:
-                            console.log(`New cosmetic kind: ${message_body.object.kind}`, message_body.object);
+                            //console.log(`New cosmetic kind: ${message_body.object.kind}`, message_body.object);
 
                             break;
                     }
@@ -308,7 +312,7 @@ class SevenTVWebSocket {
 
                     break;
                 default:
-                    console.log("Unknown message from 7TV WebSocket: ", data);
+                    //console.log("Unknown message from 7TV WebSocket: ", data);
 
                     break;
             }
@@ -410,6 +414,10 @@ class SevenTVWebSocket {
             const err = new Error('WebSocket is not open. Cannot send message.');
             this.emit('send_error', err);
         }
+    }
+
+    close() {
+        this.ws?.close();
     }
 }
 

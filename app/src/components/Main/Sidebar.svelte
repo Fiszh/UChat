@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { House, RefreshCcw, Info, Github, Coffee } from "lucide-svelte";
+    import { House, Info, Github, Coffee } from "lucide-svelte";
 
     import LoginButton from "$components/LoginButton.svelte";
     import GlobalSettings from "./GlobalSettings.svelte";
@@ -18,21 +18,30 @@
     window.addEventListener("hashchange", onHashChange);
 
     $: username = getCookie("twitchUsername") || ("" as string | undefined);
+    $: twitchID = getCookie("twitchId") || ("" as string | undefined);
     $: twitchToken = getCookie("twitchToken") || ("" as string | undefined);
 
     async function handleToken(token: string) {
-        username = await valideToken(token);
+        const user_info = await valideToken(token);
         twitchToken = token;
 
-        if (username) {
-            setCookie("twitchUsername", username, 1);
+        if (user_info) {
+            username = user_info["login"];
+            twitchID = user_info["user_id"];
+
+            if (username) {
+                setCookie("twitchUsername", username, 1);
+                setCookie("twitchId", twitchID, 1);
+            }
         }
     }
 
     function logOut() {
         delCookie("twitchUsername");
+        delCookie("twitchId");
 
         username = undefined;
+        twitchID = undefined;
         twitchToken = undefined;
     }
 
@@ -82,9 +91,9 @@
         <a href="/#" class="active" bind:this={navLinks["home"]["navLink"]}>
             <House size="20" /> Home
         </a>
-        <a href="convert/" target="_blank" rel="noopener noreferrer">
+        <!-- <a href="convert/" target="_blank" rel="noopener noreferrer">
             <RefreshCcw size="20" /> Invalid URL
-        </a>
+        </a> -->
         <a href="#help" bind:this={navLinks["help"]["navLink"]}>
             <Info size="20" /> Info & Privacy
         </a>
@@ -112,9 +121,13 @@
             server.
         </p>
         <a href="#help-notice">[Learn more]</a>
-        {#if username}
+        {#if username} 
             <GlobalSettings
-                user={{ name: username || "", token: twitchToken || "" }}
+                user={{
+                    name: username || "",
+                    token: twitchToken || "",
+                    user_id: twitchID || "",
+                }}
             />
         {/if}
     </section>

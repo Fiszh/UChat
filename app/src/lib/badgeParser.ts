@@ -13,6 +13,17 @@ export function parseBadges(userstate: Record<string, any>, badgeData?: Record<s
     const badges_data = badgeData || BadgesData;
 
     // SHARED CHAT BADGE
+    const foundUChatBadges = badges_data["UChat"].filter((badge: Record<string, any>) => badge.users.includes(userstate["user-id-raw"]));
+
+    foundUChatBadges.forEach((foundUChatBadge: Record<string, any>) => {
+        user_badges.push({
+            badge_url: foundUChatBadge.urls["4x"],
+            alt: foundUChatBadge.id,
+            background_color: undefined,
+        });
+    });
+
+    // SHARED CHAT BADGE
     const foundAvatarBadge = badges_data["channel"]?.[userstate["source-room-id"]];
 
     if (foundAvatarBadge) {
@@ -98,6 +109,19 @@ export function parseBadges(userstate: Record<string, any>, badgeData?: Record<s
 
     // OTHER BADGES
 
+    // CHATTERINO & CHATTERNI HOMIES
+    const foundChatterinoBadges = [...badges_data["OTHER"]["Chatterino"], ...badges_data["OTHER"]["ChatterinoHomies"]].filter(badge => badge.owners.includes(userstate["user-id-raw"]));
+
+    if (foundChatterinoBadges) {
+        foundChatterinoBadges.forEach((foundChatterinoBadge: Badge) => {
+            user_badges.push({
+                badge_url: foundChatterinoBadge.url,
+                alt: foundChatterinoBadge.title,
+                background_color: undefined,
+            });
+        })
+    }
+
     // FFZ
     const foundFFZBadges = badges_data["FFZ"]["global"].filter((badge: Record<string, any>) => badge.owners.includes(userstate["username"]));
     const foundFFZBadge = badges_data["FFZ"]["global"].find((badge: Record<string, any>) => badge.id == badges_data["FFZ"]["user"]["user"][userstate["user-id"]]);
@@ -113,6 +137,18 @@ export function parseBadges(userstate: Record<string, any>, badgeData?: Record<s
             background_color: foundFFZBadge.color,
         });
     });
+
+    // BTTV
+    const foundBTTVBadge = badges_data["BTTV"]["global"].find((badge: Record<string, any>) => badge.providerId == userstate?.["user-id"]);
+
+    if (foundBTTVBadge) {
+        user_badges.push({
+            badge_url: foundBTTVBadge?.badge?.svg,
+            alt: foundBTTVBadge?.badge?.description,
+            background_color: undefined
+        });
+    }
+
     // 7TV
     const found7TVBadge = getBadge(userstate['user-id']);
 

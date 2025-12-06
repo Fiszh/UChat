@@ -73,7 +73,15 @@
           break;
       }
 
-      chatSettings[setting.param] = setting.value;
+      if (setting.list && typeof setting.value == "string") {
+        chatSettings[setting.param] = setting.value.split(" ");
+      } else {
+        chatSettings[setting.param] = setting.value;
+      }
+
+      if (!window.location.search) {
+        localStorage.setItem("local-settings", JSON.stringify(chatSettings));
+      }
     }
   });
 
@@ -97,7 +105,9 @@
       !chatSettings["bots"]
         ? !FFZBadges.find((badge: Record<string, any>) => badge.id == 2)
         : true,
-      !chatSettings["bots"] ? $badges["FFZ"]["user"]["user"][tags["user-id"] ?? ""] != 2 : true,
+      !chatSettings["bots"]
+        ? $badges["FFZ"]["user"]["user"][tags["user-id"] ?? ""] != 2
+        : true,
       !chatSettings["redeem"] ? !tags?.["custom-reward-id"] : true,
     ];
 
