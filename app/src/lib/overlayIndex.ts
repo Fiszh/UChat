@@ -2,6 +2,7 @@ import { get } from "svelte/store";
 
 import { cosmetics } from "$stores/cosmetics";
 import { badges, emotes, globals } from '$stores/global';
+import { overlayVersion } from "$stores/settings";
 
 import { services } from '$lib/services';
 import { settings, type Setting } from "$stores/settings";
@@ -14,9 +15,27 @@ cosmetics.subscribe((data) => cosmetic_data = data);
 emotes.subscribe((data) => emote_data = data);
 
 // ANCHOR FUNCTIONS
+export async function getVersion(): Promise<string> {
+    try {
+        const response_version = await fetch("/manifest.json");
+        const data_version = await response_version.json();
+
+        return data_version.version;
+    } catch (err) {
+        console.error(err);
+
+        return "Unknown version";
+    }
+}
 export async function getMainUser(channel: string | number) {
     try {
-        const response = await fetch(`https://api.unii.dev/channel?${typeof channel == "string" ? `name=` : `id=`}${channel}`);
+        const version = await getVersion();
+
+        const response = await fetch(`https://api.unii.dev/channel?${typeof channel == "string" ? `name=` : `id=`}${channel}`, {
+            headers: {
+                "version": version
+            }
+        });
 
         if (!response.ok) {
             console.error("Fetch error:", response.status, response.statusText);

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { parseSavedSettings } from "$lib/overlayIndex";
-    import { settings, type Setting } from "$stores/settings";
+    import { savedSettings, settings } from "$stores/settings";
     import { slide } from "svelte/transition";
 
     export let user: {
@@ -18,6 +18,8 @@
             const data = await response.json();
 
             if (data.success && data.settings) {
+                savedSettings.set(data.settings);
+
                 parseSavedSettings(data.settings);
             }
         }

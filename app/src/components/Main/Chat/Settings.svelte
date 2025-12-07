@@ -1,6 +1,14 @@
 <script lang="ts">
+    import { get } from "svelte/store";
+
     import { parseSavedSettings } from "$lib/overlayIndex";
-    import { type Setting, settings, settingsParams } from "$stores/settings";
+
+    import {
+        savedSettings,
+        type Setting,
+        settings,
+        settingsParams,
+    } from "$stores/settings";
 
     let usingID = false;
 
@@ -67,11 +75,16 @@
     }
 
     settings.subscribe((arr) => {
+        const saved_settings = get(savedSettings);
+
         for (const setting of arr) {
             if (
                 typeof setting.value != undefined &&
                 (typeof setting.value == "string" ? setting.value : true) &&
-                setting.value != setting.default
+                setting.value !=
+                    (saved_settings[setting.param]
+                        ? saved_settings[setting.param]
+                        : setting.default)
             ) {
                 setParam(setting.param, setting.value);
             } else {

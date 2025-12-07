@@ -9,6 +9,7 @@
 
   import { loadingInfo } from "$stores/global";
   import { overlayVersion } from "$stores/settings";
+  import { getVersion } from "$lib/overlayIndex";
 
   $: LoadingMsg = $loadingInfo;
 
@@ -18,19 +19,11 @@
   onMount(() => {
     const params = new URLSearchParams(window.location.search);
     hasChannel = params.has("channel") || params.has("id");
-    
+
     (async () => {
-      try {
-        const response_version = await fetch("/manifest.json");
-        const data_version = await response_version.json();
-
-        overlayVersion.set(data_version.version);
-      } catch (err) {
-        overlayVersion.set("Unknown version");
-        console.error(err);
-      }
+      overlayVersion.set(await getVersion());
     })();
-
+    
     mounted = true;
   });
 </script>

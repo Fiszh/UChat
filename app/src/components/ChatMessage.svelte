@@ -54,7 +54,7 @@
         break;
       case "reconnectchat":
         disconnect();
-      
+
         break;
       default:
         break;
@@ -223,8 +223,10 @@
 
 <div class="chat-message" bind:this={chatMessage}>
   {#if userBadges.length}{@render Badges()}{/if}
-  {@render paint()}:
-  <span>{@html emoteText}</span>
+  {@render paint()}{#if !message.tags.action}:{/if}
+  <span style:color={message.tags.action ? nameColor : "defaultColor"}
+    >{@html emoteText}</span
+  >
 </div>
 
 <style lang="scss">

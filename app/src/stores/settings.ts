@@ -123,6 +123,7 @@ for (const config of configs) {
 export const config = configs;
 
 export let settings = writable<Setting[]>(configs.map(c => ({ ...c })));
+export let savedSettings = writable<Record<string, any>>([]);
 export let channelName = writable<String>("");
 export let channelID = writable<String>("");
 
