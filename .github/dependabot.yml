@@ -1,0 +1,7 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/app"      # path to your package.json
+    schedule:
+      interval: "weekly"   # can be "daily" / "monthly" if you want
+    open-pull-requests-limit: 5
