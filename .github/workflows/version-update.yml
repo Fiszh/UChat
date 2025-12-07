@@ -1,4 +1,4 @@
-name: Update Version Manifest
+name: Update App Version
 
 permissions:
   contents: write
@@ -12,20 +12,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Get latest commit message as version
-        id: get_version
+      - name: Bump patch version
         run: |
-          VERSION=$(git log -1 --pretty=%s)
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          cd app
+          npm version patch -m "Update version manifest to %s [skip ci]"
 
       - name: Update manifest.json
         run: |
-          echo "{\"version\":\"${{ steps.get_version.outputs.version }}\"}" > app/static/manifest.json
+          VERSION=$(node -p "require('./app/package.json').version")
+          echo "{\"version\":\"$VERSION\"}" > app/static/manifest.json
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add app/static/manifest.json
-          git diff --cached --quiet || git commit -m "Update version manifest to ${{ steps.get_version.outputs.version }}"
-          git push
+          git commit -m "Sync manifest.json version to $VERSION [skip ci]" || echo "No changes"
+          git push origin main --tags
