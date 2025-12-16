@@ -26,7 +26,7 @@
   main {
     display: flex;
     width: 100%;
-    height: 100%;
+    height: 100dvh;
 
     background: linear-gradient(#080808, #000000);
   }

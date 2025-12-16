@@ -121,7 +121,7 @@
             server.
         </p>
         <a href="#help-notice">[Learn more]</a>
-        {#if username} 
+        {#if username}
             <GlobalSettings
                 user={{
                     name: username || "",
@@ -218,6 +218,13 @@
             p {
                 margin: 0.3rem;
             }
+        }
+    }
+
+    @media (max-width: 768px) {
+        aside {
+            position: absolute;
+            display: none;
         }
     }
 </style>

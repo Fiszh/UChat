@@ -327,4 +327,13 @@
             }
         }
     }
+
+    @media (max-width: 768px) {
+        #chat-preview {
+            max-width: unset;
+            min-width: unset;
+
+            height: 100%;
+        }
+    }
 </style>

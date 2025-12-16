@@ -12,10 +12,19 @@
     import { cosmetics } from "$stores/cosmetics";
     import { messages } from "$lib/chat";
     import { previewMessages } from "$stores/previewMessages";
+    import { MessageSquare, Settings } from "lucide-svelte";
+
+    let isMobile: boolean = window.innerWidth <= 768;
+
+    window.addEventListener("resize", () => {
+        isMobile = window.innerWidth <= 768;
+    });
+
+    let tab: string = "settings";
 
     onMount(async () => {
         messages.set(previewMessages);
-        
+
         if (!$badges["TTV"].global.length) {
             await getBadges();
         }
@@ -42,17 +51,63 @@
             await pushUserInfoViaGQL("01FDSMJ8MG0005Y8ZGBVC26NJ6");
         }
     });
+
+    const changeTab = (setTab: string) => (tab = setTab);
 </script>
 
 <section>
-    <SettingsDisplay />
-    <ChatDisplay />
+    {#if isMobile}
+        {#if tab == "settings"}
+            <SettingsDisplay />
+        {:else}
+            <ChatDisplay />
+        {/if}
+        <footer>
+            <button on:click={() => changeTab("settings")}>
+                <Settings />
+                Settings
+            </button>
+            <button on:click={() => changeTab("preview")}>
+                <MessageSquare />
+                Preview
+            </button>
+        </footer>
+    {:else}
+        <SettingsDisplay />
+        <ChatDisplay />
+    {/if}
 </section>
 
-<style>
+<style lang="scss">
     section {
         display: flex;
-        height: 100dvh;
+        height: 100%;
         width: 100%;
+    }
+
+    @media (max-width: 768px) {
+        section {
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        footer {
+            bottom: 0;
+            position: absolute;
+            border-top: 1px #333 solid;
+            padding: 1rem 2rem 1rem 2rem;
+            box-sizing: border-box;
+            width: 100%;
+            display: flex;
+            justify-content: space-evenly;
+
+            button {
+                all: unset;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+        }
     }
 </style>

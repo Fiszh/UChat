@@ -283,8 +283,6 @@
         }
 
         .setting-name {
-            display: inline-flex;
-            align-items: flex-end;
             gap: 0.3rem;
         }
 
@@ -332,6 +330,21 @@
 
             &:hover:not(.active) {
                 background-color: rgba(255, 255, 255, 0.15);
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        .setting-display:has(input[type="text"]) {
+            flex-direction: column;
+            padding-bottom: 0.5rem;
+
+            .setting-name {
+                width: 100%;
+            }
+
+            input {
+                width: 100%;
             }
         }
     }
