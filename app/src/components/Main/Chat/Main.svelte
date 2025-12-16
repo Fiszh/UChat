@@ -9,8 +9,6 @@
         Settings,
     } from "lucide-svelte";
 
-    const icon_size = "1rem";
-
     import SettingsDisplay from "./Settings.svelte";
     import ChatDisplay from "./Display.svelte";
 
@@ -18,16 +16,10 @@
     import SevenTV_main from "$lib/services/7TV/main";
     import { pushUserInfoViaGQL } from "$lib/services/7TV/cosmetics";
 
-    import { emotes, badges } from "$stores/global";
+    import { emotes, badges, icon_size, isMobile } from "$stores/global";
     import { cosmetics } from "$stores/cosmetics";
     import { messages } from "$lib/chat";
     import { previewMessages } from "$stores/previewMessages";
-
-    let isMobile: boolean = window.innerWidth <= 768;
-
-    window.addEventListener("resize", () => {
-        isMobile = window.innerWidth <= 768;
-    });
 
     let tab: string = "settings";
 
@@ -65,23 +57,24 @@
 </script>
 
 <section>
-    {#if isMobile}
+    {#if $isMobile}
         {#if tab == "settings"}
             <SettingsDisplay />
         {:else}
             <ChatDisplay />
         {/if}
+
         <footer>
             <button on:click={() => changeTab("settings")}>
-                <Settings size={icon_size} />
+                <Settings size={$icon_size} />
                 Settings
             </button>
             <button on:click={() => changeTab("preview")}>
-                <MessageSquare size={icon_size} />
+                <MessageSquare size={$icon_size} />
                 Preview
             </button>
             <a href="#help">
-                <Info size={icon_size} /> About
+                <Info size={$icon_size} /> About
             </a>
             <a
                 class="hide-on-small"
@@ -89,7 +82,7 @@
                 target="_blank"
                 rel="noopener noreferrer"
             >
-                <Github size={icon_size} /> GitHub
+                <Github size={$icon_size} /> GitHub
             </a>
             <a
                 class="hide-on-small"
@@ -97,7 +90,7 @@
                 target="_blank"
                 rel="noopener noreferrer"
             >
-                <Coffee size={icon_size} /> Support
+                <Coffee size={$icon_size} /> Support
             </a>
         </footer>
     {:else}

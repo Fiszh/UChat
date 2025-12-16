@@ -115,7 +115,6 @@
         }
 
         h3 {
-            line-height: 0;
             font-size: 1rem;
             text-align: center;
         }

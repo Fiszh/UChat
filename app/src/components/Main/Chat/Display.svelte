@@ -14,7 +14,7 @@
         settingsParams,
     } from "$stores/settings";
 
-    import { badges } from "$stores/global";
+    import { badges, icon_size } from "$stores/global";
     import { previewMessages } from "$stores/previewMessages";
 
     let hex = "#191919";
@@ -134,7 +134,7 @@
         <div class="header">
             Chat Preview Settings <button
                 on:click={() => resetSettings()}
-                title="Reset Settings"><RotateCcw /></button
+                title="Reset Settings"><RotateCcw size={$icon_size} /></button
             >
         </div>
         <div id="color-picker">
@@ -161,7 +161,7 @@
                     placeholder="Message to display..."
                 />
                 <button id="send" class="bottom-button" on:click={addMessage}
-                    ><Send /> Send</button
+                    ><Send size={$icon_size} /> Send</button
                 >
             </div>
         </div>
@@ -175,7 +175,7 @@
                         : ""}{params}
                 </p>
                 <button id="copy" class="bottom-button" on:click={copyUrl}
-                    ><Copy /> Copy</button
+                    ><Copy size={$icon_size} /> Copy</button
                 >
             </div>
         </div>
@@ -296,7 +296,7 @@
                     box-sizing: border-box;
                     border-radius: 0.5rem;
                     gap: 1px;
-                    font-size: 1rem;
+                    font-size: 1.15rem;
                     color: white;
                 }
             }
@@ -334,7 +334,13 @@
             min-width: unset;
             overflow: auto;
 
+            font-size: 0.7rem;
+
             height: 100%;
+
+            #bottom .display .bottom-input {
+                font-size: 0.7rem;
+            }
         }
     }
 </style>

@@ -1,5 +1,8 @@
 import { writable } from 'svelte/store';
 
+export let icon_size = writable<string>("1.5rem");
+export let isMobile = writable<boolean>(false);
+
 interface Emotes {
     "7TV": {
         global: ParsedEmote[];

@@ -7,11 +7,21 @@
 
   import LoadingUI from "../components/Loading.svelte";
 
-  import { loadingInfo } from "$stores/global";
+  import { icon_size, isMobile, loadingInfo } from "$stores/global";
   import { overlayVersion } from "$stores/settings";
   import { getVersion } from "$lib/overlayIndex";
 
   $: LoadingMsg = $loadingInfo;
+
+  function setMobile() {
+    isMobile.set(window.innerWidth <= 768);
+
+    if ($isMobile) {
+      icon_size.set("1rem");
+    } else {
+      icon_size.set("1.5rem");
+    }
+  }
 
   let mounted = false;
   let hasChannel = false;
@@ -23,7 +33,10 @@
     (async () => {
       overlayVersion.set(await getVersion());
     })();
-    
+
+    setMobile();
+    window.addEventListener("resize", setMobile);
+
     mounted = true;
   });
 </script>
