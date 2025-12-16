@@ -1,6 +1,16 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
+    import {
+        Coffee,
+        Github,
+        Info,
+        MessageSquare,
+        Settings,
+    } from "lucide-svelte";
+
+    const icon_size = "1rem";
+
     import SettingsDisplay from "./Settings.svelte";
     import ChatDisplay from "./Display.svelte";
 
@@ -12,7 +22,6 @@
     import { cosmetics } from "$stores/cosmetics";
     import { messages } from "$lib/chat";
     import { previewMessages } from "$stores/previewMessages";
-    import { MessageSquare, Settings } from "lucide-svelte";
 
     let isMobile: boolean = window.innerWidth <= 768;
 
@@ -64,13 +73,32 @@
         {/if}
         <footer>
             <button on:click={() => changeTab("settings")}>
-                <Settings />
+                <Settings size={icon_size} />
                 Settings
             </button>
             <button on:click={() => changeTab("preview")}>
-                <MessageSquare />
+                <MessageSquare size={icon_size} />
                 Preview
             </button>
+            <a href="#help">
+                <Info size={icon_size} /> About
+            </a>
+            <a
+                class="hide-on-small"
+                href="https://github.com/Fiszh/UChat"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <Github size={icon_size} /> GitHub
+            </a>
+            <a
+                class="hide-on-small"
+                href="https://buymeacoffee.com/jzlnkf5qgo"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <Coffee size={icon_size} /> Support
+            </a>
         </footer>
     {:else}
         <SettingsDisplay />
@@ -92,8 +120,6 @@
         }
 
         footer {
-            bottom: 0;
-            position: absolute;
             border-top: 1px #333 solid;
             padding: 1rem 2rem 1rem 2rem;
             box-sizing: border-box;
@@ -101,13 +127,22 @@
             display: flex;
             justify-content: space-evenly;
 
+            font-size: 0.6rem;
+
+            a,
             button {
                 all: unset;
+                pointer-events: auto;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
             }
+        }
+    }
+    @media (max-width: 320px) {
+        footer .hide-on-small {
+            display: none;
         }
     }
 </style>

@@ -197,6 +197,7 @@
         width: 100%;
         display: flex;
         flex-direction: column;
+        overflow: auto;
 
         background-color: rgba(255, 255, 255, 0.021);
 
@@ -264,7 +265,6 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        border-radius: 1rem;
         padding: 0rem 0.7rem;
         box-sizing: border-box;
 
@@ -292,30 +292,33 @@
             border-radius: 0.5rem;
             border: none;
             background-color: rgba(255, 255, 255, 0.057);
-            font-size: 25px;
+            font-size: 1.7rem;
             text-align: center;
             outline: none;
         }
 
         input[type="checkbox"] {
+            --after-size: 26px;
+
             appearance: none;
-            display: block;
+            display: flex;
             min-width: 60px;
-            height: 30px;
+            height: calc(4px + var(--after-size));
             background-color: rgba(255, 255, 255, 0.096);
             border-radius: 30px;
             cursor: pointer;
             position: relative;
             transition: background-color 0.2s;
+            justify-content: flex-start;
+            align-items: center;
 
             &::after {
                 content: "";
                 position: absolute;
-                width: 26px;
-                height: 26px;
+                width: var(--after-size);
+                height: var(--after-size);
                 background-color: white;
                 border-radius: 50%;
-                top: 2px;
                 left: 2px;
                 transition: transform 0.2s;
             }
@@ -325,7 +328,7 @@
             }
 
             &.active::after {
-                transform: translateX(30px);
+                transform: translateX(calc(4px + var(--after-size)));
             }
 
             &:hover:not(.active) {
@@ -338,6 +341,7 @@
         .setting-display:has(input[type="text"]) {
             flex-direction: column;
             padding-bottom: 0.5rem;
+            box-sizing: border-box;
 
             .setting-name {
                 width: 100%;
@@ -345,6 +349,49 @@
 
             input {
                 width: 100%;
+            }
+        }
+
+        .setting-display {
+            .setting-name {
+                font-size: 0.7rem;
+            }
+
+            input[type="text"] {
+                font-size: 1rem;
+            }
+
+            input[type="checkbox"] {
+                --after-size: 15px;
+
+                min-width: 30px;
+                aspect-ratio: 2/1;
+
+                &::after {
+                    border-radius: 50%;
+                }
+            }
+        }
+
+        #settings {
+            & > p {
+                font-size: 0.8rem;
+            }
+
+            #channel {
+                font-size: 0.8rem;
+
+                label {
+                    font-size: 0.7rem;
+                    padding: 0.1rem 0.05rem;
+                    align-items: center;
+                    display: flex;
+
+                    input {
+                        width: 0.7rem;
+                        height: 0.7rem;
+                    }
+                }
             }
         }
     }

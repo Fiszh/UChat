@@ -114,6 +114,23 @@
     return passed.every(Boolean);
   }
 
+  function generateUUID(): string {
+    let UUID: string = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx";
+    
+    try {
+      UUID = window.crypto.randomUUID();
+    } catch {
+      // fallback
+      UUID = UUID.replace(/[xy]/g, (c) => {
+        const r = (Math.random() * 16) | 0;
+        const v = c === "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      });
+    } finally {
+      return UUID;
+    }
+  }
+
   $: filteredMessages = chatMessages
     .filter(
       (msg) =>
@@ -132,7 +149,7 @@
         .toLowerCase();
 
       return {
-        id: msg.tags.id ?? crypto.randomUUID(), // THIS MAKES SURE MESSAGES WILL NOT MERGE
+        id: msg.tags.id ?? generateUUID(), // THIS MAKES SURE MESSAGES WILL NOT MERGE
         room_id: msg.tags["source-room-id"] ?? globals.channelTwitchID,
         ...msg,
         formattedUser:

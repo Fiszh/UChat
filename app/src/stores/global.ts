@@ -54,7 +54,7 @@ interface Badges {
         user: {
             vip: string;
             mod: string;
-            user: Record<string, number|string>;
+            user: Record<string, number | string>;
         };
     };
     OTHER: {

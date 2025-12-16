@@ -53,6 +53,10 @@
       text-shadow: none !important;
     }
 
+    // *>* {
+    //   outline: 1px solid;
+    // }
+
     // THIS MAKES SURE BITS DISPLAY DONT LOOK WEIRD
     .bits-wrapper {
       display: inline-flex;

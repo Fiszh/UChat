@@ -332,6 +332,7 @@
         #chat-preview {
             max-width: unset;
             min-width: unset;
+            overflow: auto;
 
             height: 100%;
         }
