@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    import { ArrowLeft, CircleQuestionMark, ShieldCheck } from "lucide-svelte";
+    import { CircleQuestionMark, ShieldCheck } from "lucide-svelte";
 
     import { faqItems, privacyItems } from "$stores/faq";
 
@@ -38,8 +38,6 @@
 </script>
 
 <div id="faq-container">
-    <button id="back" on:click={() => history.back()}><ArrowLeft /> Back</button
-    >
     <h2>Info & Privacy</h2>
     <h3>All the info you need to get started with UChat</h3>
 
@@ -103,10 +101,6 @@
 
         justify-content: center;
         text-align: center;
-
-        #back {
-            display: none;
-        }
 
         h2 {
             font-size: 2.5rem;
@@ -223,22 +217,6 @@
     @media (max-width: 768px) {
         #faq-container {
             padding: 0.3rem 1rem 2.5rem 1rem;
-
-            #back {
-                all: unset;
-                display: flex;
-                align-items: center;
-                font-weight: bold;
-                position: absolute;
-                border-radius: 0.3rem;
-                border: 1px solid #ffffff8f;
-
-                font-weight: 600;
-                font-size: 1.2rem;
-
-                padding: 10px 14px;
-                background: #242424;
-            }
         }
     }
 </style>
