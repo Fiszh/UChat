@@ -239,7 +239,9 @@ export async function replaceWithEmotes(inputString: string, userstate: Record<s
                         if (last?.overlapped) {
                             const overlappedArray = last.overlapped;
 
-                            overlappedArray.push({ ...foundEmote, "overlap_index": overlappedArray.length });
+                            if ((overlappedArray[overlappedArray.length - 1]?.["emote_id"] ?? last["primary"]["emote_id"]) != foundEmote["emote_id"]) {
+                                overlappedArray.push({ ...foundEmote, "overlap_index": overlappedArray.length });
+                            }
                         }
                     }
                 }
