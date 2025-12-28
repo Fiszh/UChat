@@ -75,7 +75,7 @@
     <header id="topbar">
         <img
             class="logo"
-            src="https://cdn.unii.dev/uchat/logo.avif"
+            src="https://chat.unii.dev/images/logo.avif"
             alt="UChat Logo"
         />
         <div id="name">
