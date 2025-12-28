@@ -211,7 +211,6 @@ export async function replaceWithEmotes(inputString: string, userstate: Record<s
             }
 
             // Search for user if no emote is found
-            // TODO ADD THIS BACK
             const username = typeof part == "string" ? part.replace(/[@,]/g, "").toLowerCase() : "";
             const mentionColor = chatSettings["mentionColor"];
 
