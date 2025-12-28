@@ -5,7 +5,7 @@
 <svelte:head>
 	<link
 		rel="icon"
-		href="https://chat.unii.dev/uchat/favicon.ico"
+		href="https://chat.unii.dev/images/favicon.ico"
 		type="image/x-icon"
 	/>
 
