@@ -38,6 +38,16 @@
     window.addEventListener("resize", setMobile);
 
     mounted = true;
+
+    const isFirefox = navigator.userAgent.toLowerCase().includes("firefox");
+
+    if (isFirefox) {
+      document.documentElement.style.setProperty("--scrollbar-width", "auto");
+      document.documentElement.style.setProperty(
+        "--scrollbar-color",
+        "rgb(255,255,255) rgb(10,10,10)",
+      );
+    }
   });
 </script>
 

@@ -5,8 +5,8 @@
 <svelte:head>
 	<link
 		rel="icon"
-		href="https://cdn.unii.dev/uchat/logo.ico"
-		type="image/png"
+		href="https://cdn.unii.dev/uchat/favicon.ico"
+		type="image/x-icon"
 	/>
 
 	<title>UChat - Custom Twitch Chat Overlay by uniiDev</title>
@@ -20,7 +20,7 @@
 
 	<meta
 		name="keywords"
-		content="Twitch chat overlay, overlay URL, chat settings, saved preferences, reset settings, invalid URL, channel name, Twitch emotes, 7TV, BetterTTV, FrankerFaceZ"
+		content="UChat, Twitch chat overlay, UChat overlay, Twitch chat overlay tool, overlay URL, chat settings, saved preferences, reset settings, invalid URL, channel name, Twitch emotes, 7TV, BetterTTV, BTTV, FrankerFaceZ, FFZ, OBS overlay, Streamlabs overlay, XSplit overlay, live stream chat, Twitch overlay customization, Twitch chat viewer, Twitch chat integration, chat moderation tools, Twitch stream tools"
 	/>
 
 	<meta
@@ -33,16 +33,30 @@
 	/>
 	<meta
 		property="og:description"
-		content="UChat is a custom Twitch chat overlay with support for 7TV, BetterTwitchTV, and FrankerFaceZ."
+		content="UChat is a Twitch chat overlay with custom settings, saved preferences, and support for 7TV, BTTV, and FFZ. Copy your overlay URL, reset settings, and preview chat instantly. Works with OBS, Streamlabs, and XSplit."
 	/>
+	<meta
+		name="twitter:description"
+		content="UChat is a Twitch chat overlay with custom settings, saved preferences, and support for 7TV, BTTV, and FFZ. Copy your overlay URL, reset settings, and preview chat instantly. Works with OBS, Streamlabs, and XSplit."
+	/>
+
 	<meta property="og:url" content="https://chat.unii.dev" />
-	<meta property="og:image" content="https://cdn.unii.dev/uchat/logo.png" />
+	<meta property="og:type" content="website" />
+
+	<meta
+		property="og:image"
+		content="https://chat.unii.dev/images/banner.png"
+	/>
+
 	<meta
 		name="twitter:image"
-		content="https://cdn.unii.dev/uchat/twitter.png"
+		content="https://chat.unii.dev/images/banner.png"
 	/>
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="theme-color" content="#43B581" />
+	<meta name="twitter:site" content="@KillerFiszh" />
+	<meta name="twitter:creator" content="@KillerFiszh" />
+
 	<link rel="canonical" href="https://chat.unii.dev" />
 
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -59,9 +73,10 @@
 	<script type="application/ld+json">
 		{
 			"@context": "https://schema.org",
-			"@type": "Person",
-			"name": "uniiDev",
+			"@type": "SoftwareApplication",
+			"name": "UChat",
 			"url": "https://chat.unii.dev",
+			"applicationCategory": "WebApplication",
 			"sameAs": [
 				"https://github.com/Fiszh/UChat",
 				"https://twitch.tv/uniiDev",
