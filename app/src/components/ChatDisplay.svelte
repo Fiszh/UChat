@@ -65,6 +65,12 @@
             : "25px";
 
           break;
+        case "fontColor":
+          styles["--chat-font-color"] = setting.value && typeof setting?.value == "string"
+            ? `${!setting.value.startsWith("#") ? "#" : ""}${setting.value}`
+            : "white";
+
+          break;
         default:
           if (typeof setting.value == "string") {
             setting.value = setting.value.toLowerCase();
@@ -204,6 +210,7 @@
     --chat-font-stroke: unset;
     --chat-shadow: unset;
     --chat-emote-size: 20px;
+    --chat-font-color: 20px;
   }
 
   .chat {
@@ -224,6 +231,7 @@
     font-family: var(--chat-font);
     font-size: var(--chat-font-size);
     text-shadow: var(--chat-font-stroke);
+    color: var(--chat-font-color);
 
     & > :global(*) {
       filter: var(--chat-shadow);

@@ -2,7 +2,7 @@ import { writable } from 'svelte/store';
 
 export interface Setting {
     name: string;
-    type: "number" | "text" | "boolean";
+    type: "number" | "text" | "boolean" | "color-picker";
     value: string | boolean | number;
     param: string;
     default?: Setting["value"];
@@ -23,7 +23,13 @@ const configs: Setting[] = [
         "param": "msgCaps"
     },
     {
-        "name": "Custom chat font (any font on your device)",
+        "name": "Custom chat font (hex)",
+        "type": "text",
+        "value": "FFFFFF",
+        "param": "fontColor"
+    },
+    {
+        "name": "Chat font color",
         "type": "text",
         "value": "inter",
         "param": "font"
