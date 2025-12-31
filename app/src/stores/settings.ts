@@ -25,14 +25,14 @@ const configs: Setting[] = [
     {
         "name": "Custom chat font (hex)",
         "type": "text",
-        "value": "FFFFFF",
-        "param": "fontColor"
+        "value": "inter",
+        "param": "font"
     },
     {
         "name": "Chat font color",
         "type": "text",
-        "value": "inter",
-        "param": "font"
+        "value": "FFFFFF",
+        "param": "fontColor"
     },
     {
         "name": "Font & Badge size (px)",
