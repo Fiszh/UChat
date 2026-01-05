@@ -1,6 +1,8 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
+    import "app.css";
+
     onMount(() => {
         const hash = new URLSearchParams(window.location.hash.slice(1));
         const token = hash.get("access_token");

@@ -1,0 +1,84 @@
+body {
+    overflow: hidden;
+    font-family: "BLMelody", system-ui, sans-serif;
+    color: white;
+    margin: 0;
+    padding: 0;
+    width: 100dvw;
+    height: 100dvh;
+
+    background: rgb(17, 17, 17);
+}
+
+* {
+    scrollbar-width: var(--scrollbar-width, auto);
+    scrollbar-color: var(--scrollbar-color, auto);
+}
+
+*::-webkit-scrollbar {
+    width: 15px;
+}
+
+*::-webkit-scrollbar-track {
+    background-color: rgb(10, 10, 10);
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: rgb(255, 255, 255);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(219, 219, 219);
+}
+
+* {
+    font-variant-ligatures: none;
+}
+
+@font-face {
+    font-family: "Just Sans";
+    src: url("/fonts/Just-Sans/JUST-Sans-Regular.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Just Sans";
+    src: url("/fonts/Just-Sans/JUST-Sans-ExBold.otf") format("opentype");
+    font-weight: 800;
+}
+
+@font-face {
+    font-family: 'BLMelody';
+    src: url('/fonts/Melody/BLMelody-ExtraLight.otf') format('opentype');
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'BLMelody';
+    src: url('/fonts/Melody/BLMelody-Light.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'BLMelody';
+    src: url('/fonts/Melody/BLMelody-Book.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'BLMelody';
+    src: url('/fonts/Melody/BLMelody-Medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'BLMelody';
+    src: url('/fonts/Melody/BLMelody-Bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+}

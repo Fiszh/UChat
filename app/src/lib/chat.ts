@@ -27,11 +27,11 @@ let IRC_is_connected = false;
 let reconnectAttempts = 0;
 const MAX_RECONNECTS = 10;
 
-let heartbeatInterval: number | undefined = undefined;
-let heartbeatTimeout: number | undefined = undefined;
+let heartbeatInterval: ReturnType<typeof setTimeout> | undefined = undefined;
+let heartbeatTimeout: ReturnType<typeof setTimeout> | undefined = undefined;
 
 export function connect(channel_name: string) {
-  if (!channel_name || IRC_is_connected) { return; };
+  if (!channel_name || IRC_is_connected) return;
 
   connectionStatus.set('connecting');
 
@@ -68,7 +68,7 @@ export function connect(channel_name: string) {
       const messagesSplit = event.data.split('\r\n');
 
       for (const line of messagesSplit) {
-        if (!line) { continue; };
+        if (!line) continue;
         const parsed = parseIrcLine(line);
 
         switch (parsed.command) {
@@ -85,12 +85,13 @@ export function connect(channel_name: string) {
 
             break;
           case "CLEARMSG":
-            if (!modActions) { break; };
+            if (!modActions) break;
+
             messages.update(arr => arr.filter(item => item.tags["id"] !== parsed.tags.merged["target-msg-id"]));
 
             break;
           case "CLEARCHAT":
-            if (!modActions) { break; };
+            if (!modActions) break;
 
             if (parsed.tags.merged["target-user-id"]) {
               messages.update(arr => arr.filter(item => item.tags["user-id"] !== parsed.tags.merged["target-user-id"]));
@@ -106,7 +107,8 @@ export function connect(channel_name: string) {
 
             break;
           case "USERNOTICE":
-            if (!usernotices) { break; };
+            if (!usernotices) break;
+
             parsed.tags = parsed.tags.merged ?? parsed.tags;
 
             if (parsed.message && (parsed.tags as any).login) {
@@ -143,6 +145,7 @@ export function connect(channel_name: string) {
       connectionStatus.set('close');
     } else {
       connectionStatus.set('reconnect_limit_reached');
+
       return;
     }
   });
@@ -157,12 +160,14 @@ export function disconnect() {
     TTV_IRC_WS.close();
     TTV_IRC_WS = null;
   }
+
   IRC_is_connected = false;
+
   clearInterval(heartbeatInterval);
   clearTimeout(heartbeatTimeout);
 }
 
-export function sanitizeInput(input: string) {
+export function sanitizeInput(input: string): string {
   if (typeof input !== "string") return input;
 
   return input
@@ -252,10 +257,12 @@ function parseIrcLine(raw: string): ParsedMessage {
     Object.entries(rawTags).forEach(([key, value]) => {
       if (isNumber(value) && value !== "") {
         const numberValue = Number(value);
+
         tags[key] = numberValue > 1 ? numberValue : Boolean(numberValue);
       } else {
         let matches = [];
         let matchesType = "TAG_VALUE_REGEX";
+
         if (value.includes(':')) {
           matches = [...value.matchAll(EMOTE_POSITIONS_REGEX)];
 
@@ -270,9 +277,11 @@ function parseIrcLine(raw: string): ParsedMessage {
 
             if (matchesType == "TAG_VALUE_REGEX") {
               if (!tags[key]) { tags[key] = {} };
+
               tags[key][id] = nums;
             } else if (matchesType == "EMOTE_POSITIONS_REGEX") {
               if (!tags[key]) { tags[key] = [] };
+
               tags[key][id] = [...nums.split(",")];
             }
           }
@@ -283,13 +292,8 @@ function parseIrcLine(raw: string): ParsedMessage {
     });
 
     function addTag(key: string, value: any) {
-      if (Object.values(rawTags).length) {
-        rawTags[key] = value;
-      }
-
-      if (Object.values(tags).length) {
-        tags[key] = value;
-      }
+      if (Object.values(rawTags).length) rawTags[key] = value;
+      if (Object.values(tags).length) tags[key] = value;
     }
 
     // INSTERT USERNAME INTO TAGS
@@ -300,6 +304,7 @@ function parseIrcLine(raw: string): ParsedMessage {
     // ADD ACTION TAG
     if (typeof cleanMessage === "string" && cleanMessage.startsWith('\x01ACTION') && cleanMessage.endsWith('\x01')) {
       addTag("action", true);
+
       cleanMessage = cleanMessage.slice(8, -1);
     } else {
       addTag("action", false);

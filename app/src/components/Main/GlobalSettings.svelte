@@ -46,10 +46,10 @@
                     );
                 })
                 .map((setting) => {
-                    if (setting.list) {
+                    if (setting.type == "text" && setting.list) {
                         return [
                             setting.param,
-                            String(setting.value).split(" "),
+                            setting.value.split(" ").filter(Boolean),
                         ];
                     }
                     return [setting.param, setting.value];

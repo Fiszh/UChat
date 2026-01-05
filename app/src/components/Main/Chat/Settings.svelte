@@ -2,6 +2,8 @@
     import { get } from "svelte/store";
 
     import { parseSavedSettings } from "$lib/overlayIndex";
+    
+    import SettingsColorPicker from "./SettingsColorPicker.svelte";
 
     import {
         savedSettings,
@@ -102,6 +104,8 @@
         return value;
     }
 
+    let colorPicker: Record<string, string> = {};
+
     $: localChannelName.length && (!localChannelID.length || !usingID)
         ? setParam("channel", String(localChannelName))
         : removeParam("channel");
@@ -129,6 +133,13 @@
     />
 {/snippet}
 
+{#snippet colorPickerSetting(param: string, value: string)}
+    <p style="all:unset; display:flex; align-items:center;">
+        {value}
+        <SettingsColorPicker onChange={(newHex) => handleInput(param, newHex, "color-picker")} />
+    </p>
+{/snippet}
+
 <div id="settings">
     <section id="config">
         {#each $settings as setting, i (i)}
@@ -151,8 +162,14 @@
                         setting.default as number,
                         setting.value as number,
                     )}
+                {:else if setting.type == "color-picker"}
+                    {@render colorPickerSetting(
+                        setting.param,
+                        setting.value,
+                    )}
                 {:else}
-                    <strong>{setting.type}</strong> {@html "is a unknown type"}
+                    <strong>{(setting as any).type}</strong>
+                    {@html "is a unknown type"}
                 {/if}
             </div>
         {/each}
@@ -197,7 +214,8 @@
         width: 100%;
         display: flex;
         flex-direction: column;
-        overflow: auto;
+        overflow-y: auto;
+        overflow-x: hidden;
 
         background-color: rgba(255, 255, 255, 0.021);
 

@@ -10,7 +10,7 @@
   let chatMessages: Record<string, any>[] = [];
   let chat: HTMLElement;
 
-  let styles: Record<string, string> = {};
+  let styles: Record<string, string | number> = {};
   $: chatStyle = Object.entries(styles)
     .map(([k, v]) => `${k}: ${v}`)
     .join("; ");
@@ -25,7 +25,7 @@
     for (const setting of config) {
       switch (setting.param) {
         case "msgBold":
-          styles["--chat-bold"] = setting.value ? "bold" : "unset";
+          styles["--chat-bold"] = setting.value ? "bold" : "normal";
 
           break;
         case "msgCaps":
@@ -33,9 +33,11 @@
 
           break;
         case "font":
-          styles["--chat-font"] = setting.value
-            ? `"${setting.value}", Inter`
-            : "Inter";
+          const font = setting.value as string;
+
+          styles["--chat-font"] = font
+            ? `${font.includes(" ") ? `"${font}"` : font}, BLMelody`
+            : "BLMelody";
 
           break;
         case "fontSize":
@@ -54,9 +56,8 @@
 
           break;
         case "fontShadow":
-          styles["--chat-shadow"] = setting.value
-            ? `drop-shadow(0 0 5px rgba(0, 0, 0,  ${Math.max(0, Math.min(1, (Number(setting.value) || 4) / 10))}));`
-            : "unset";
+          styles["--chat-shadow"] =
+            (typeof setting.value == "number" ? setting.value : 10) / 10;
 
           break;
         case "emoteSize":
@@ -66,9 +67,10 @@
 
           break;
         case "fontColor":
-          styles["--chat-font-color"] = setting.value && typeof setting?.value == "string"
-            ? `${!setting.value.startsWith("#") ? "#" : ""}${setting.value}`
-            : "white";
+          styles["--chat-font-color"] =
+            setting.value && typeof setting?.value == "string"
+              ? `${!setting.value.startsWith("#") ? "#" : ""}${setting.value}`
+              : "white";
 
           break;
         default:
@@ -79,8 +81,8 @@
           break;
       }
 
-      if (setting.list && typeof setting.value == "string") {
-        chatSettings[setting.param] = setting.value.split(" ");
+      if (setting.type == "text" && setting.list) {
+        chatSettings[setting.param] = setting.value.split(" ").filter(Boolean);
       } else {
         chatSettings[setting.param] = setting.value;
       }
@@ -103,9 +105,11 @@
 
     const passed = [
       !chatSettings["userBL"].includes(username?.toLowerCase()),
-      !chatSettings["prefixBL"].includes(
-        message?.charAt(0)?.toLowerCase() || undefined,
-      ),
+      chatSettings["prefixBL"].length
+        ? !chatSettings["prefixBL"].some((prefix: string) =>
+            message?.toLowerCase().startsWith(prefix.toLowerCase()),
+          )
+        : true,
       !chatSettings["bots"] ? !user_badges?.["bot-badge"] : true,
       !chatSettings["bots"] ? !globals.custom_bots.includes(username) : true,
       !chatSettings["bots"]
@@ -122,7 +126,7 @@
 
   function generateUUID(): string {
     let UUID: string = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx";
-    
+
     try {
       UUID = window.crypto.randomUUID();
     } catch {
@@ -166,18 +170,20 @@
     }) as any;
 
   onMount(() => {
-    let scrollTimeout: number;
+    let scrollTimeout: ReturnType<typeof setTimeout>;
+
     const observer = new MutationObserver(() => {
       clearTimeout(scrollTimeout);
 
       scrollTimeout = setTimeout(() => {
-        if (chat) {
-          chat.scrollTo({ top: chat.scrollHeight, behavior: "smooth" });
-        }
-      }, 7); // delay so rapid updates don’t spam scroll
+        chat?.scrollTo({
+          top: chat.scrollHeight,
+          behavior: "smooth",
+        });
+      }, 10);
     });
 
-    observer.observe(chat, { childList: true, subtree: true });
+    observer.observe(chat, { childList: true });
 
     return () => {
       unsubscribeMessages();
@@ -208,7 +214,7 @@
     --chat-font: "Inter";
     --chat-font-size: 20px;
     --chat-font-stroke: unset;
-    --chat-shadow: unset;
+    --chat-shadow: 10;
     --chat-emote-size: 20px;
     --chat-font-color: 20px;
   }
@@ -234,7 +240,7 @@
     color: var(--chat-font-color);
 
     & > :global(*) {
-      filter: var(--chat-shadow);
+      filter: drop-shadow(0 0 5px rgba(0, 0, 0, var(--chat-shadow)));
     }
 
     /* EMTOTE SIZE SETTINGS */

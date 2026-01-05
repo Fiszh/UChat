@@ -54,6 +54,8 @@
         padding: 1.1rem 1.5rem;
         background-color: rgba(0, 0, 0, 0.25);
 
+        z-index: 99999999;
+
         .info {
             align-self: center;
 

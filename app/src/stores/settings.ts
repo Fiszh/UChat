@@ -1,13 +1,36 @@
 import { writable } from 'svelte/store';
 
-export interface Setting {
+export interface DefaultSetting {
     name: string;
-    type: "number" | "text" | "boolean" | "color-picker";
-    value: string | boolean | number;
     param: string;
-    default?: Setting["value"];
+}
+
+interface NumberSetting extends DefaultSetting {
+    type: "number";
+    value:  number;
+    default?: number;
+}
+
+interface TextSetting extends DefaultSetting {
+    type: "text";
+    value:  string;
+    default?: string;
     list?: boolean;
 }
+
+interface BooleanSetting extends DefaultSetting {
+    type: "boolean";
+    value:  boolean;
+    default?: boolean;
+}
+
+interface ColorPickerSetting extends DefaultSetting {
+    type: "color-picker";
+    value:  string;
+    default?: string;
+}
+
+export type Setting = NumberSetting | TextSetting | BooleanSetting | ColorPickerSetting;
 
 const configs: Setting[] = [
     {
@@ -25,13 +48,13 @@ const configs: Setting[] = [
     {
         "name": "Custom chat font (hex)",
         "type": "text",
-        "value": "inter",
+        "value": "BLMelody",
         "param": "font"
     },
     {
         "name": "Chat font color",
-        "type": "text",
-        "value": "FFFFFF",
+        "type": "color-picker",
+        "value": "#FFFFFF",
         "param": "fontColor"
     },
     {
@@ -50,7 +73,7 @@ const configs: Setting[] = [
         "name": "Message shadow (0-10)",
         "type": "number",
         "param": "fontShadow",
-        "value": 4
+        "value": 10
     },
     {
         "name": "Emote size (px)",
