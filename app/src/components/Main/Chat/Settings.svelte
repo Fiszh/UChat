@@ -2,7 +2,7 @@
     import { get } from "svelte/store";
 
     import { parseSavedSettings } from "$lib/overlayIndex";
-    
+
     import SettingsColorPicker from "./SettingsColorPicker.svelte";
 
     import {
@@ -104,8 +104,6 @@
         return value;
     }
 
-    let colorPicker: Record<string, string> = {};
-
     $: localChannelName.length && (!localChannelID.length || !usingID)
         ? setParam("channel", String(localChannelName))
         : removeParam("channel");
@@ -136,42 +134,46 @@
 {#snippet colorPickerSetting(param: string, value: string)}
     <p style="all:unset; display:flex; align-items:center;">
         {value}
-        <SettingsColorPicker onChange={(newHex) => handleInput(param, newHex, "color-picker")} />
+        <SettingsColorPicker
+            onChange={(newHex) => handleInput(param, newHex, "color-picker")}
+        />
     </p>
 {/snippet}
 
 <div id="settings">
     <section id="config">
         {#each $settings as setting, i (i)}
-            <div class="setting-display">
-                <p class="setting-name">
-                    {@html setting.name.replace(
-                        /\(([^)]+)\)/g,
-                        "<small>($1)</small>",
-                    )}
-                </p>
-                {#if setting.type == "boolean"}
-                    {@render booleanSetting(
-                        setting.param,
-                        setting.default as boolean,
-                        setting.value as boolean,
-                    )}
-                {:else if setting.type == "number" || setting.type == "text"}
-                    {@render textSetting(
-                        setting.param,
-                        setting.default as number,
-                        setting.value as number,
-                    )}
-                {:else if setting.type == "color-picker"}
-                    {@render colorPickerSetting(
-                        setting.param,
-                        setting.value,
-                    )}
-                {:else}
-                    <strong>{(setting as any).type}</strong>
-                    {@html "is a unknown type"}
-                {/if}
-            </div>
+            {#if !setting.hide}
+                <div class="setting-display">
+                    <p class="setting-name">
+                        {@html setting.name.replace(
+                            /\(([^)]+)\)/g,
+                            "<small>($1)</small>",
+                        )}
+                    </p>
+                    {#if setting.type == "boolean"}
+                        {@render booleanSetting(
+                            setting.param,
+                            setting.default as boolean,
+                            setting.value as boolean,
+                        )}
+                    {:else if setting.type == "number" || setting.type == "text"}
+                        {@render textSetting(
+                            setting.param,
+                            setting.default as number,
+                            setting.value as number,
+                        )}
+                    {:else if setting.type == "color-picker"}
+                        {@render colorPickerSetting(
+                            setting.param,
+                            setting.value,
+                        )}
+                    {:else}
+                        <strong>{(setting as any).type}</strong>
+                        {@html "is a unknown type"}
+                    {/if}
+                </div>
+            {/if}
         {/each}
     </section>
     <p>↓ Channel Info ↓</p>

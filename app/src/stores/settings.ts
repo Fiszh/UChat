@@ -3,6 +3,7 @@ import { writable } from 'svelte/store';
 export interface DefaultSetting {
     name: string;
     param: string;
+    hide?: boolean;
 }
 
 interface NumberSetting extends DefaultSetting {
