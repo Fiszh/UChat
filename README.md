@@ -15,18 +15,19 @@ Create a PR or DM me on Discord/Twitch whispers
 
 - Make messages **bold**
 - Make messages UPPERCASE
-- Choose a custom chat font
-- Adjust font & badge size
-- Enable font stroke
-- Add message shadow
-- Change emote size
-- Set text fade out duration
+- Custom chat font
+- Chat text color
+- Adjust font size
+- Font stroke
+- Message shadow
+- Emote size
+- Custom message fade out 
 - Show/hide badges
 - Show/hide channel points redeems, sub messages, announcements
 - Show/hide bots in chat
-- Add custom user blacklist
-- Add custom prefix blacklist
-- Show moderation actions in chat
+- User blacklist
+- Prefix blacklist
+- Toggle moderation actions
 - Color mentions
 - Show 7TV Paints
 - Show 7TV Paint Shadows
