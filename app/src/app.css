@@ -35,6 +35,17 @@ body {
     font-variant-ligatures: none;
 }
 
+.bg-grid {
+    background-color: #1e1e1e;
+    background-image:
+        linear-gradient(45deg, rgba(255, 255, 255, 0.08) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(255, 255, 255, 0.08) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.08) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.08) 75%);
+    background-size: 16px 16px;
+    background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+}
+
 @font-face {
     font-family: "Just Sans";
     src: url("/fonts/Just-Sans/JUST-Sans-Regular.otf") format("opentype");

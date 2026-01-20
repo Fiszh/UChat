@@ -4,6 +4,8 @@
   import { getPaint, getPaintHTML } from "$lib/services/7TV/cosmetics";
   import { replaceWithEmotes } from "$lib/emoteParser";
   import { parseBadges } from "$lib/badgeParser";
+  import { services } from "$lib/services";
+  import { fixNameColor } from "$lib/overlayIndex";
 
   import Badge from "./Badge.svelte";
 
@@ -13,8 +15,6 @@
   import { disconnect, messages } from "$lib/chat";
   import { getChannelEmotesViaTwitchID } from "$lib/emotes";
   import { loadChat } from "$lib/loadChat";
-
-  import { services } from "$lib/services";
 
   export let message: {
     user: string;
@@ -26,7 +26,9 @@
 
   const tags = message.tags;
   const username = tags?.username.toLowerCase().trim() || "";
-  const nameColor = message.tags.color || usernameColor(username);
+  const nameColor = message.tags.color
+    ? fixNameColor(message.tags.color)
+    : usernameColor(username);
 
   const UChatMods = ["528761326", "166427338"];
   if (
@@ -61,9 +63,7 @@
     }
   }
 
-  if (message.room_id) {
-    getChannelEmotesViaTwitchID(String(message.room_id));
-  }
+  if (message.room_id) getChannelEmotesViaTwitchID(String(message.room_id));
 
   let FFZBadges = $badges.FFZ;
 

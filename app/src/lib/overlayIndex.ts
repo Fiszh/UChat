@@ -1,8 +1,9 @@
 import { get } from "svelte/store";
 
+import tinycolor from "tinycolor2";
+
 import { cosmetics } from "$stores/cosmetics";
 import { badges, emotes, globals } from '$stores/global';
-import { overlayVersion } from "$stores/settings";
 
 import { services } from '$lib/services';
 import { settings, type Setting } from "$stores/settings";
@@ -15,6 +16,14 @@ cosmetics.subscribe((data) => cosmetic_data = data);
 emotes.subscribe((data) => emote_data = data);
 
 // ANCHOR FUNCTIONS
+export function fixNameColor(name_color: string): string {
+    if (tinycolor(name_color).getBrightness() <= 50) {
+        return tinycolor(name_color).lighten(30).toString();
+    } else {
+        return name_color;
+    }
+}
+
 export async function getVersion(): Promise<string> {
     try {
         const response_version = await fetch("/manifest.json");
@@ -27,6 +36,7 @@ export async function getVersion(): Promise<string> {
         return "Unknown version";
     }
 }
+
 export async function getMainUser(channel: string | number) {
     try {
         const version = await getVersion();

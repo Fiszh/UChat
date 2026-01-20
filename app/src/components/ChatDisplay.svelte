@@ -23,6 +23,7 @@
 
   const unsubscribeSettings = settings.subscribe((config) => {
     for (const setting of config) {
+      if (!window.location.search && (typeof setting.previewReact != "undefined" && !setting.previewReact)) continue;
       switch (setting.param) {
         case "msgBold":
           styles["--chat-bold"] = setting.value ? "bold" : "normal";

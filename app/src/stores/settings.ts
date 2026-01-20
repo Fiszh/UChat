@@ -4,30 +4,31 @@ export interface DefaultSetting {
     name: string;
     param: string;
     hide?: boolean;
+    previewReact?: boolean;
 }
 
 interface NumberSetting extends DefaultSetting {
     type: "number";
-    value:  number;
+    value: number;
     default?: number;
 }
 
 interface TextSetting extends DefaultSetting {
     type: "text";
-    value:  string;
+    value: string;
     default?: string;
     list?: boolean;
 }
 
 interface BooleanSetting extends DefaultSetting {
     type: "boolean";
-    value:  boolean;
+    value: boolean;
     default?: boolean;
 }
 
 interface ColorPickerSetting extends DefaultSetting {
     type: "color-picker";
-    value:  string;
+    value: string;
     default?: string;
 }
 
@@ -38,7 +39,7 @@ const configs: Setting[] = [
         "name": "Message are in <strong>bold</strong> text",
         "type": "boolean",
         "value": true,
-        "param": "msgBold"
+        "param": "msgBold",
     },
     {
         "name": "Message are in UPPERCASE",
@@ -62,7 +63,8 @@ const configs: Setting[] = [
         "name": "Font & Badge size (px)",
         "type": "number",
         "param": "fontSize",
-        "value": 20
+        "value": 20,
+        "previewReact": false
     },
     {
         "name": "Font stroke",
@@ -80,13 +82,15 @@ const configs: Setting[] = [
         "name": "Emote size (px)",
         "type": "number",
         "param": "emoteSize",
-        "value": 25
+        "value": 25,
+        "previewReact": false
     },
     {
         "name": "Text fade out (seconds)",
         "type": "number",
         "param": "fadeOut",
-        "value": 0
+        "value": 0,
+        "previewReact": false
     },
     {
         "name": "Display badges",

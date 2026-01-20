@@ -129,7 +129,9 @@
         <span>Chat Preview</span>
         <small>Live preview of your settings</small>
     </p>
-    <ChatDisplay />
+    <section id="chat-display" class="bg-grid">
+        <ChatDisplay />
+    </section>
     <section id="bottom">
         <div class="header">
             Chat Preview Settings <button
@@ -195,13 +197,23 @@
 
     #chat-preview {
         max-width: 30rem;
-        min-width: 30rem;
+        width: 100%;
+
         display: flex;
         flex-direction: column;
+
+        height: 100dvh;
 
         user-select: none;
 
         background-color: rgba(255, 255, 255, 0.048);
+
+        #chat-display {
+            display: flex;
+            height: 100%;
+
+            min-height: 0;
+        }
 
         :global(.chat) {
             height: 100% !important;
@@ -237,6 +249,8 @@
             box-sizing: border-box;
 
             border-top: #333 1px solid;
+
+            bottom: 0;
 
             & > * {
                 border-bottom: 1px solid;
@@ -313,6 +327,7 @@
                 $border: #333;
 
                 all: unset;
+                align-items: center;
                 display: flex;
                 gap: 0.3rem;
                 border: $border 1px solid;
@@ -332,11 +347,11 @@
         #chat-preview {
             max-width: unset;
             min-width: unset;
-            overflow: auto;
 
             font-size: 0.7rem;
 
             height: 100%;
+            width: 100dvw;
 
             #bottom .display .bottom-input {
                 font-size: 0.7rem;

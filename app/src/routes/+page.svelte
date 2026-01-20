@@ -64,6 +64,14 @@
   {:else}
     <Main />
   {/if}
+{:else}
+  <noscript style="color:black;">
+    <div>
+      <h1>JavaScript is disabled</h1>
+      <p>This app requires JavaScript to work.</p>
+      <p>Enable JavaScript to use the app.</p>
+    </div>
+  </noscript>
 {/if}
 
 <style lang="scss">
@@ -74,6 +82,17 @@
       -webkit-background-clip: text !important;
       background-size: cover !important;
       text-shadow: none !important;
+    }
+
+    noscript div {
+      width: 100%;
+      height: 100%;
+      background-color: black;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
 
     // *>* {

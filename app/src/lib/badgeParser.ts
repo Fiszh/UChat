@@ -13,17 +13,6 @@ export function parseBadges(userstate: Record<string, any>, badgeData?: Record<s
     const badges_data = badgeData || BadgesData;
 
     // SHARED CHAT BADGE
-    const foundUChatBadges = badges_data["UChat"].filter((badge: Record<string, any>) => badge.users.includes(userstate["user-id-raw"]));
-
-    foundUChatBadges.forEach((foundUChatBadge: Record<string, any>) => {
-        user_badges.push({
-            badge_url: foundUChatBadge.urls["4x"],
-            alt: foundUChatBadge.id,
-            background_color: undefined,
-        });
-    });
-
-    // SHARED CHAT BADGE
     const foundAvatarBadge = badges_data["channel"]?.[userstate["source-room-id"]];
 
     if (foundAvatarBadge) {
@@ -33,6 +22,17 @@ export function parseBadges(userstate: Record<string, any>, badgeData?: Record<s
             background_color: undefined,
         });
     }
+
+    // SHARED CHAT BADGE
+    const foundUChatBadges = badges_data["UChat"].filter((badge: Record<string, any>) => badge.users.includes(userstate["user-id-raw"]));
+
+    foundUChatBadges.forEach((foundUChatBadge: Record<string, any>) => {
+        user_badges.push({
+            badge_url: foundUChatBadge.urls["4x"],
+            alt: foundUChatBadge.id,
+            background_color: undefined,
+        });
+    });
 
     // THIS NEEDS TO BE ALWAYS ON THE START TO MAKE SURE TWITCH BADGES WILL BE FIRST
     if (userstate['badges-raw'] && Object.keys(userstate['badges-raw']).length) {

@@ -11,6 +11,8 @@
         settings,
         settingsParams,
     } from "$stores/settings";
+    import { CircleQuestionMark } from "lucide-svelte";
+    import { isMobile } from "$stores/global";
 
     let usingID = false;
 
@@ -145,12 +147,27 @@
         {#each $settings as setting, i (i)}
             {#if !setting.hide}
                 <div class="setting-display">
+                    {#if typeof setting["previewReact"] != "undefined" && !setting["previewReact"] && $isMobile}
+                        <p id="preview-warning">
+                            This setting does not effect the chat preview.
+                        </p>
+                    {/if}
                     <p class="setting-name">
                         {@html setting.name.replace(
                             /\(([^)]+)\)/g,
                             "<small>($1)</small>",
                         )}
+
+                        {#if typeof setting["previewReact"] != "undefined" && !setting["previewReact"] && !$isMobile}
+                            <span
+                                class="warning"
+                                title="This setting does not effect the chat preview."
+                            >
+                                <CircleQuestionMark size="1rem" />
+                            </span>
+                        {/if}
                     </p>
+
                     {#if setting.type == "boolean"}
                         {@render booleanSetting(
                             setting.param,
@@ -304,6 +321,11 @@
 
         .setting-name {
             gap: 0.3rem;
+            display: inline-flex;
+
+            .warning {
+                cursor: pointer;
+            }
         }
 
         input[type="text"] {
@@ -324,6 +346,7 @@
             display: flex;
             min-width: 60px;
             height: calc(4px + var(--after-size));
+            width: calc(var(--after-size) * 2);
             background-color: rgba(255, 255, 255, 0.096);
             border-radius: 30px;
             cursor: pointer;
@@ -414,5 +437,12 @@
                 }
             }
         }
+    }
+
+    #preview-warning {
+        margin: 0;
+        font-size: 0.5rem;
+        text-align: center;
+        color: rgb(255, 215, 215);
     }
 </style>
