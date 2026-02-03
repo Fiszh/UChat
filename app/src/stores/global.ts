@@ -3,22 +3,6 @@ import { writable } from 'svelte/store';
 export let icon_size = writable<string>("1.5rem");
 export let isMobile = writable<boolean>(false);
 
-interface Emotes {
-    "7TV": {
-        global: ParsedEmote[];
-        channel: Record<string, ParsedEmote[]>;
-    };
-    "BTTV": {
-        global: ParsedEmote[];
-        channel: Record<string, ParsedEmote[]>;
-    };
-    "FFZ": {
-        global: ParsedEmote[];
-        channel: Record<string, ParsedEmote[]>;
-    };
-    "BITS": any[];
-}
-
 interface LoadingInfo {
     text: string | undefined;
     type: string | undefined;
