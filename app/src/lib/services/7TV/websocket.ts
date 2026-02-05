@@ -30,7 +30,7 @@ type Events = {
     raw: (data: any) => void;
     subscribed: (t: string, data: any) => void;
     unsubscribed: (id: string | number) => void;
-    add_emote: (id: string, actor: string, emote: ParsedEmote) => void;
+    add_emote: (id: string, actor: string, emote: ParsedEmote[]) => void;
     remove_emote: (id: string, actor: string, emote: ParsedEmote) => void;
     rename_emote: (
         id: string,
@@ -174,9 +174,8 @@ class SevenTVWebSocket {
                     if (message_body.pushed) {
                         const emote_data: any[] = message_body.pushed.map((emote: any) => emote.value);
                         const parsed_emote_data = await parseSetData(emote_data);
-                        for (const emote of parsed_emote_data) {
-                            this.emit("add_emote", message_body.id, actor, emote); // SET ID, EMOTE INFO
-                        }
+                        
+                        this.emit("add_emote", message_body.id, actor, parsed_emote_data); // SET ID, EMOTE INFO
                     } else if (message_body.pulled) {
                         const emote_data = message_body.pulled.map((emote: any) => emote.old_value);
                         const parsed_emote_data = await parseSetData(emote_data);

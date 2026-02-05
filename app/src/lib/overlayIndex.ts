@@ -260,16 +260,14 @@ services["7TV"].ws.on("open", () => {
 
 services["7TV"].ws.on("add_emote", (id, actor, data) => {
     if (cosmetic_data.sets[id]) { // PERSONAL SETS
-        data.set = "7TV Personal";
-
         cosmetics.update((cosmeticsData) => {
-            cosmeticsData.sets[id].emotes.push(data);
+            cosmeticsData.sets[id].emotes = data;
 
             return cosmeticsData;
         })
     } else if (globals.SevenTVemoteSetId == id && globals.channelTwitchID) { // CHANNEL SET
         emotes.update((emoteData) => {
-            emoteData["7TV"]["channel"][globals.channelTwitchID || ""].push(data);
+            emoteData["7TV"]["channel"][globals.channelTwitchID || ""].push(...data);
 
             return emoteData;
         });
@@ -279,13 +277,7 @@ services["7TV"].ws.on("add_emote", (id, actor, data) => {
 });
 
 services["7TV"].ws.on("remove_emote", (id, actor, data) => {
-    if (cosmetic_data.sets[id]) { // PERSONAL SETS
-        cosmetics.update((cosmeticsData) => {
-            cosmeticsData.sets[id].emotes = cosmeticsData.sets[id].emotes.filter((emote: ParsedEmote) => emote.url !== data.url);
-
-            return cosmeticsData;
-        })
-    } else if (globals.SevenTVemoteSetId == id && globals.channelTwitchID) {// CHANNEL SET
+    if (globals.SevenTVemoteSetId == id && globals.channelTwitchID) {// CHANNEL SET
         emotes.update((emoteData) => {
             emoteData["7TV"]["channel"][globals.channelTwitchID || ""] = emoteData["7TV"]["channel"][globals.channelTwitchID || ""].filter(emote => emote.url !== data.url);
 
