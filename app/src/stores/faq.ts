@@ -78,7 +78,7 @@ export const faqItems = [
     },
     {
         question: "Will the overlay support Kick?",
-        answer: 'No, currently due to the overall state of the platform I do not plan of adding that.'
+        answer: 'No, currently due to the overall state of the platform, I do not plan on adding that.'
     }
 ]
 
