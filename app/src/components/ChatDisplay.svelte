@@ -75,9 +75,7 @@
 
           break;
         default:
-          if (typeof setting.value == "string") {
-            setting.value = setting.value.toLowerCase();
-          }
+          if (typeof setting.value == "string") setting.value = setting.value.toLowerCase();
 
           break;
       }

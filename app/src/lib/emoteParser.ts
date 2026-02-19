@@ -107,7 +107,7 @@ interface EmoteInfo {
     site: "TTV";
 }
 
-function parseTwitchEmotes(message: string, userstate: Record<string, any>): any[] {
+function parseTwitchEmotes(message: string, userstate: Record<string, any>): EmoteInfo[] {
     if (userstate.emotes) {
         const entries = Object.entries(userstate.emotes) as [string, string | string[]][];
 
@@ -130,9 +130,8 @@ function parseTwitchEmotes(message: string, userstate: Record<string, any>): any
     }
 }
 
-
 export async function replaceWithEmotes(inputString: string, userstate: Record<string, any>, originChannelID: string | number, chatSettings: Record<string, any>): Promise<string> {
-    if (!inputString) { return inputString };
+    if (!inputString) return inputString;
 
     inputString = sanitizeInput(inputString);
 

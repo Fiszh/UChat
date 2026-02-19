@@ -14,7 +14,7 @@ badges.subscribe((data) => badge_data = data);
 
 let processing_ids: string[] = [];
 export async function getChannelEmotesViaTwitchID(twitchID: string) {
-    if (!twitchID || twitchID === "0" || processing_ids.includes(twitchID)) { return; };
+    if (!twitchID || twitchID === "0" || processing_ids.includes(twitchID)) return;
 
     processing_ids.push(twitchID); // prevent API spam
 

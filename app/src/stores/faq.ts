@@ -75,6 +75,10 @@ export const faqItems = [
     {
         question: "What is YAUTO?",
         answer: 'YAUTO short for "Yet Another Useless Twitch Overlay" was the former name of this project It was renamed to UChat on 02/08/2025 for a cleaner and more recognizable name'
+    },
+    {
+        question: "Will the overlay support Kick?",
+        answer: 'No, currently due to the overall state of the platform I do not plans of adding that.'
     }
 ]
 
