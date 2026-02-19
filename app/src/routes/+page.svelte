@@ -80,7 +80,7 @@
       -webkit-text-fill-color: transparent;
       background-clip: text !important;
       -webkit-background-clip: text !important;
-      background-size: cover !important;
+      background-size: 100% 100% !important;
       text-shadow: none !important;
     }
 
