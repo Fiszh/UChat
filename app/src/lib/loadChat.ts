@@ -1,4 +1,4 @@
-import { getBTTVBadges, getChatterinoBadges, getChatterinoHomiesBadges, getFFZBadges, getMainBadges } from "$lib/badges";
+import { getBTTVBadges, getChatterinoBadges, getChatterinoHomiesBadges, getFFZBadges, getMainBadges, getPolandBOTBadges } from "$lib/badges";
 import { getChannelEmotesViaTwitchID, getGlobalEmotes } from "$lib/emotes";
 import { globals, loadingInfo } from "$stores/global";
 import { settings, settingsParams } from "$stores/settings";
@@ -16,6 +16,7 @@ export async function loadChat(displayLoading?: boolean) {
     await getFFZBadges();
     await getChatterinoBadges();
     await getChatterinoHomiesBadges();
+    await getPolandBOTBadges();
 
     await getGlobalEmotes();
     if (globals.channelTwitchID) await getChannelEmotesViaTwitchID(globals.channelTwitchID);
