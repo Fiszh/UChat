@@ -112,3 +112,14 @@ export async function getChatterinoHomiesBadges() {
         return e;
     });
 }
+
+export async function getPolandBOTBadges() {
+    const response = await fetch("https://devpoland.xyz/api/roles");
+    const data = await response.json();
+
+    badges.update(e => {
+        e["OTHER"]["PolandBOT"] = data;
+
+        return e;
+    });
+}

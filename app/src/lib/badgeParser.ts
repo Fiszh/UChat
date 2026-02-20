@@ -160,5 +160,23 @@ export function parseBadges(userstate: Record<string, any>, badgeData?: Record<s
         });
     }
 
+    // Poland_BOT
+    const rolesPriority = ["developer", "mod", "supporter", "artist", "streamer", "contributor"];
+    const foundPolandBOTBadge = badges_data["OTHER"]["PolandBOT"];
+
+    if (foundPolandBOTBadge) {
+        for (const role of rolesPriority) {
+            const userList = foundPolandBOTBadge[role] as string[] | undefined;
+            if (userList?.includes(userstate["user-id-raw"])) {
+                user_badges.push({
+                    badge_url: `https://devpoland.xyz/badges/${role}.avif`,
+                    alt: role,
+                    background_color: undefined,
+                });
+                break;
+            }
+        }
+    }
+
     return user_badges as parsedBadge[];
 }
