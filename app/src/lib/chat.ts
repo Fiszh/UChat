@@ -30,6 +30,61 @@ const MAX_RECONNECTS = 10;
 let heartbeatInterval: ReturnType<typeof setTimeout> | undefined = undefined;
 let heartbeatTimeout: ReturnType<typeof setTimeout> | undefined = undefined;
 
+function assignMessage(parsed: ReturnType<typeof parseIrcLine>) {
+  switch (parsed.command) {
+    case "PING":
+      TTV_IRC_WS?.send('PONG :tmi.twitch.tv');
+
+      break;
+    case "RECONNECT":
+      disconnect();
+
+      return;
+    case "PONG":
+      clearTimeout(heartbeatTimeout);
+
+      break;
+    case "CLEARMSG":
+      if (!modActions) break;
+
+      messages.update(arr => arr.filter(item => item.tags["id"] !== parsed.tags.merged["target-msg-id"]));
+
+      break;
+    case "CLEARCHAT":
+      if (!modActions) break;
+
+      if (parsed.tags.merged["target-user-id"]) {
+        messages.update(arr => arr.filter(item => item.tags["user-id"] !== parsed.tags.merged["target-user-id"]));
+      } else {
+        messages.set([]);
+      }
+
+      break;
+    case "PRIVMSG":
+      parsed.tags = parsed.tags.merged ?? parsed.tags;
+
+      messages.update(msgs => [...msgs.slice(-99), parsed]);
+
+      break;
+    case "USERNOTICE":
+      if (!usernotices) break;
+
+      parsed.tags = parsed.tags.merged ?? parsed.tags;
+
+      if (parsed.message && (parsed.tags as any).login) {
+        (parsed.tags as any).username = (parsed.tags as any).login;
+
+        messages.update(msgs => [...msgs.slice(-99), parsed]);
+      }
+
+      break;
+    default:
+      //console.log("UNKNOWN PARSED COMMAND", parsed.command, parsed);
+
+      break;
+  }
+}
+
 export function connect(channel_name: string) {
   if (!channel_name || IRC_is_connected) return;
 
@@ -71,58 +126,7 @@ export function connect(channel_name: string) {
         if (!line) continue;
         const parsed = parseIrcLine(line);
 
-        switch (parsed.command) {
-          case "PING":
-            TTV_IRC_WS?.send('PONG :tmi.twitch.tv');
-
-            break;
-          case "RECONNECT":
-            disconnect();
-
-            return;
-          case "PONG":
-            clearTimeout(heartbeatTimeout);
-
-            break;
-          case "CLEARMSG":
-            if (!modActions) break;
-
-            messages.update(arr => arr.filter(item => item.tags["id"] !== parsed.tags.merged["target-msg-id"]));
-
-            break;
-          case "CLEARCHAT":
-            if (!modActions) break;
-
-            if (parsed.tags.merged["target-user-id"]) {
-              messages.update(arr => arr.filter(item => item.tags["user-id"] !== parsed.tags.merged["target-user-id"]));
-            } else {
-              messages.set([]);
-            }
-
-            break;
-          case "PRIVMSG":
-            parsed.tags = parsed.tags.merged ?? parsed.tags;
-
-            messages.update(msgs => [...msgs.slice(-99), parsed]);
-
-            break;
-          case "USERNOTICE":
-            if (!usernotices) break;
-
-            parsed.tags = parsed.tags.merged ?? parsed.tags;
-
-            if (parsed.message && (parsed.tags as any).login) {
-              (parsed.tags as any).username = (parsed.tags as any).login;
-
-              messages.update(msgs => [...msgs.slice(-99), parsed]);
-            }
-
-            break;
-          default:
-            //console.log("UNKNOWN PARSED COMMAND", parsed.command, parsed);
-
-            break;
-        }
+        assignMessage(parsed);
       }
     } catch (err) {
       console.error('Error in message handler:', err);
@@ -153,6 +157,24 @@ export function connect(channel_name: string) {
   TTV_IRC_WS.addEventListener('error', (err) => {
     console.error('WebSocket error:', err);
   });
+}
+
+export async function getLastMessages(channel_name: string) {
+  const response = await fetch(`https://recent-messages.robotty.de/api/v2/recent-messages/${channel_name}`);
+
+  if (!response.ok) return console.error(response);
+
+  const data = await response.json();
+
+  if (data?.messages?.length) {
+    const messages = data.messages.reverse().slice(0, 100).reverse();
+
+    for (const message of messages) {
+      const parsed = parseIrcLine(message);
+
+      assignMessage(parsed);
+    }
+  }
 }
 
 export function disconnect() {

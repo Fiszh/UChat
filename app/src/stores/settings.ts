@@ -147,6 +147,13 @@ const configs: Setting[] = [
         "type": "boolean",
         "value": true,
         "param": "paintShadows"
+    },
+    {
+        "name": "Loads in last chat messages",
+        "type": "boolean",
+        "value": false,
+        "hide": true,
+        "param": "lastMsg"
     }
 ]
 
