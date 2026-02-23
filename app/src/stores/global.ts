@@ -79,6 +79,7 @@ export const globals = {
         "reapsex",
         "timeoutwithbits", // from speedyemperor
         "soundalerts", // from speedyemperor
+        "turtegbot",
     ] as string[],
     /*
     If you want your bot added, open a PR on the repo.
