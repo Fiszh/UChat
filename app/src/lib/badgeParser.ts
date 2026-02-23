@@ -149,6 +149,17 @@ export function parseBadges(userstate: Record<string, any>, badgeData?: Record<s
         });
     }
 
+    // TurtegBot
+    const foundTurtegBotBadge = badges_data["OTHER"]["TurtegBot"].find((badge: any) => badge.users?.includes(userstate["user-id-raw"]));
+
+    if (foundTurtegBotBadge) {
+        user_badges.push({
+            badge_url: foundTurtegBotBadge.image,
+            alt: foundTurtegBotBadge.title,
+            background_color: undefined,
+        });
+    }
+
     // 7TV
     const found7TVBadge = getBadge(userstate['user-id']);
 
