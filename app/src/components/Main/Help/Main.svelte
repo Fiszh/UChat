@@ -182,10 +182,11 @@
             flex-direction: column;
 
             p {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 0.3rem;
                 margin: 0;
+
+                :global(a) {
+                    display: inline;
+                }
             }
 
             .commands {

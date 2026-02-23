@@ -32,12 +32,16 @@
 
   const UChatMods = ["528761326", "166427338"];
   if (
-    UChatMods.includes(message.tags["user-id-raw"]) ||
-    message.tags?.mod ||
-    message.tags?.["badges-raw"]?.includes("broadcaster/1")
+    (UChatMods.includes(message.tags["user-id-raw"]) ||
+      message.tags?.mod ||
+      message.tags?.["badges-raw"]?.includes("broadcaster/1")) &&
+    message.text.startsWith("!")
   ) {
     switch (
-      message.text.toLowerCase().replace("!uchat ", "").replace("!", "")
+      message.text
+        .toLowerCase()
+        .trim()
+        .replace(/^(!uchat\s|!)/, "")
     ) {
       case "reloadchat":
         window.location.reload();
