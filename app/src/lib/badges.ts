@@ -123,3 +123,14 @@ export async function getPolandBOTBadges() {
         return e;
     });
 }
+
+export async function getTurtegBotBadges() {
+    const response = await fetch("https://turteg-api.xslash.ovh/v1/ffz/badges");
+    const data = await response.json();
+
+    badges.update(e => {
+        e["OTHER"]["TurtegBot"] = data.badges;
+
+        return e;
+    })
+}

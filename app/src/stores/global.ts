@@ -48,6 +48,7 @@ interface Badges {
         Chatterino: any[];
         ChatterinoHomies: any[];
         PolandBOT: Record<string, string[]>;
+        TurtegBot: any[];
     };
     channel: Record<string, string>;
 }
@@ -64,7 +65,7 @@ export const badges = writable<Badges>({
     TTV: { sub: [], global: [], bit: [] },
     BTTV: { global: [] },
     FFZ: { global: [], user: { vip: "", mod: "", user: {} } },
-    OTHER: { Chatterino: [], ChatterinoHomies: [], PolandBOT: {} },
+    OTHER: { Chatterino: [], ChatterinoHomies: [], PolandBOT: {}, TurtegBot: [] },
     channel: {}
 });
 
