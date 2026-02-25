@@ -340,13 +340,22 @@ class SevenTVWebSocket {
         if (!id) { throw new Error("Missing 'id' parameter"); };
         if (!type) { throw new Error("Missing 'type' parameter"); };
 
-        if (this.subscriptions?.[id]?.[type]) {
+        const idKey = String(id);
+        if (idKey === '__proto__' || idKey === 'constructor' || idKey === 'prototype') {
+            throw new Error("Invalid 'id' parameter");
+        }
+
+        if (this.subscriptions?.[idKey]?.[type]) {
             throw new Error(`Already subscribed`);
         }
 
         let id_type: Record<string, any> = { id };
+        const idField = id_types[type] || 'id';
+        if (idField === '__proto__' || idField === 'constructor' || idField === 'prototype') {
+            throw new Error("Invalid subscription id field");
+        }
         if (id_types[type]) {
-            id_type = { [id_types[type]]: id };
+            id_type = { [idField]: id };
         }
 
         condition = { ...condition_types[type], ...id_type };
@@ -364,11 +373,11 @@ class SevenTVWebSocket {
             this.ws.send(JSON.stringify(message));
         }
 
-        if (!this.subscriptions[id]) {
-            this.subscriptions[id] = {};
+        if (!this.subscriptions[idKey]) {
+            this.subscriptions[idKey] = {};
         }
 
-        this.subscriptions[id][type] = condition;
+        this.subscriptions[idKey][type] = condition;
 
         return true;
     }
