@@ -17,7 +17,7 @@ declare global {
         tooltip?: string;
         urls: ScaleUrls[];
         url: string;
-        owner?: any[]
+        owner?: any[];
     }
 
     interface parsedBadge {
@@ -27,11 +27,11 @@ declare global {
     }
 
     interface SevenTVBadge {
-        id: string,
-        name: string,
-        tooltip: any,
-        owner: any[],
-        urls: any
+        id: string;
+        name: string;
+        tooltip: any;
+        owner: any[];
+        urls: any;
     }
 
     interface Paint {
@@ -42,7 +42,7 @@ declare global {
         backgroundImage: any;
         shadows: string | null;
         KIND: string;
-        owner: any[]
+        owner: any[];
         url: string;
     }
 
@@ -56,4 +56,4 @@ declare global {
     }
 }
 
-export { };
+export {};

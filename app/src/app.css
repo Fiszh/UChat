@@ -43,7 +43,11 @@ body {
         linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.08) 75%),
         linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.08) 75%);
     background-size: 16px 16px;
-    background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+    background-position:
+        0 0,
+        0 8px,
+        8px -8px,
+        -8px 0;
 }
 
 @font-face {
@@ -60,36 +64,36 @@ body {
 }
 
 @font-face {
-    font-family: 'BLMelody';
-    src: url('/fonts/Melody/BLMelody-ExtraLight.otf') format('opentype');
+    font-family: "BLMelody";
+    src: url("/fonts/Melody/BLMelody-ExtraLight.otf") format("opentype");
     font-weight: 200;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'BLMelody';
-    src: url('/fonts/Melody/BLMelody-Light.otf') format('opentype');
+    font-family: "BLMelody";
+    src: url("/fonts/Melody/BLMelody-Light.otf") format("opentype");
     font-weight: 300;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'BLMelody';
-    src: url('/fonts/Melody/BLMelody-Book.otf') format('opentype');
+    font-family: "BLMelody";
+    src: url("/fonts/Melody/BLMelody-Book.otf") format("opentype");
     font-weight: 400;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'BLMelody';
-    src: url('/fonts/Melody/BLMelody-Medium.otf') format('opentype');
+    font-family: "BLMelody";
+    src: url("/fonts/Melody/BLMelody-Medium.otf") format("opentype");
     font-weight: 500;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'BLMelody';
-    src: url('/fonts/Melody/BLMelody-Bold.otf') format('opentype');
+    font-family: "BLMelody";
+    src: url("/fonts/Melody/BLMelody-Bold.otf") format("opentype");
     font-weight: 700;
     font-style: normal;
 }

@@ -1,4 +1,4 @@
-import main from './main.js';
+import main from "./main.js";
 const { parseSetData } = main;
 
 const blocked_events = ["broadcast_me", "lookup_user"];
@@ -25,7 +25,7 @@ type Events = {
     add_emote: (channel: string, data: any) => void;
     remove_emote: (channel: string, id: string) => void;
     rename_emote: (channel: string, data: any) => void;
-}
+};
 
 // WEBSOCKET
 class BTTVWebSocket {
@@ -37,18 +37,18 @@ class BTTVWebSocket {
         maxReconnectAttempts: number;
         resubscribeOnReconnect: boolean;
     };
-    subscriptions: any[]
-    listeners: Record<string, Function[]>;;
+    subscriptions: any[];
+    listeners: Record<string, Function[]>;
 
     /**
-    * @param {Object} [options={}]
-    * @property {boolean} [reconnect=false] - Automatically reconnect if connection closes
-    * @property {number} [reconnectInterval=1000] - Time in ms between reconnect attempts
-    * @property {number} [maxReconnectAttempts=Infinity] - Max number of reconnect tries before giving up
-    * @property {boolean} [resubscribeOnReconnect=true] - Re-subscribe to previous subscriptions after reconnecting
-    */
+     * @param {Object} [options={}]
+     * @property {boolean} [reconnect=false] - Automatically reconnect if connection closes
+     * @property {number} [reconnectInterval=1000] - Time in ms between reconnect attempts
+     * @property {number} [maxReconnectAttempts=Infinity] - Max number of reconnect tries before giving up
+     * @property {boolean} [resubscribeOnReconnect=true] - Re-subscribe to previous subscriptions after reconnecting
+     */
     constructor(options: Options = {}) {
-        this.url = 'wss://sockets.betterttv.net/ws';
+        this.url = "wss://sockets.betterttv.net/ws";
         this.ws = null;
         this.setting = {
             reconnect: options.reconnect ?? false,
@@ -61,8 +61,8 @@ class BTTVWebSocket {
     }
 
     /**
-    * Listen to a event
-    */
+     * Listen to a event
+     */
     on<K extends keyof Events>(event: K, cb: Events[K]) {
         if (!this.listeners[event]) this.listeners[event] = [];
         this.listeners[event]!.push(cb);
@@ -74,12 +74,12 @@ class BTTVWebSocket {
     }
 
     /**
-    * Connect to the WebSocket.
-    */
+     * Connect to the WebSocket.
+     */
     connect() {
         this.ws = new WebSocket(this.url);
 
-        this.ws.addEventListener('open', async (event) => {
+        this.ws.addEventListener("open", async (event) => {
             console.log("BTTV WS OPEN");
             this.emit("opening");
 
@@ -94,30 +94,47 @@ class BTTVWebSocket {
             this.emit("open");
         });
 
-        this.ws.addEventListener('message', async (event) => {
+        this.ws.addEventListener("message", async (event) => {
             let data = JSON.parse(event.data);
 
             this.emit("raw", data);
 
-            if (!data?.name || blocked_events.includes(data["name"])) { return; };
+            if (!data?.name || blocked_events.includes(data["name"])) {
+                return;
+            }
 
             switch (data["name"]) {
                 case "emote_create":
-                    const parsed_emote_data = await parseSetData([data?.data?.emote]);
+                    const parsed_emote_data = await parseSetData([
+                        data?.data?.emote,
+                    ]);
 
-                    for (const emote of parsed_emote_data) { // TWITCH ID IS WAY TO TELL THE SET
-                        this.emit("add_emote", data?.data?.channel?.replace("twitch:", ""), emote); // EVENT, TWITCH ID, EMOTE DATA
+                    for (const emote of parsed_emote_data) {
+                        // TWITCH ID IS WAY TO TELL THE SET
+                        this.emit(
+                            "add_emote",
+                            data?.data?.channel?.replace("twitch:", ""),
+                            emote,
+                        ); // EVENT, TWITCH ID, EMOTE DATA
                     }
 
                     break;
                 case "emote_delete":
-                    this.emit("remove_emote", data?.data?.channel?.replace("twitch:", ""), data?.data?.emoteId);
+                    this.emit(
+                        "remove_emote",
+                        data?.data?.channel?.replace("twitch:", ""),
+                        data?.data?.emoteId,
+                    );
 
                     break;
                 case "emote_update":
                     const emote_update = data?.data?.emote;
 
-                    this.emit("rename_emote", data?.data?.channel?.replace("twitch:", ""), emote_update);
+                    this.emit(
+                        "rename_emote",
+                        data?.data?.channel?.replace("twitch:", ""),
+                        emote_update,
+                    );
 
                     break;
                 default:
@@ -127,22 +144,27 @@ class BTTVWebSocket {
             }
         });
 
-        this.ws.addEventListener('close', async (event) => {
+        this.ws.addEventListener("close", async (event) => {
             this.ws = null;
 
             console.log("closed");
             this.emit("close");
 
             if (this.setting.reconnect) {
-                console.log(`reconnecting in ${this.setting.reconnectInterval / 1000}s`);
+                console.log(
+                    `reconnecting in ${this.setting.reconnectInterval / 1000}s`,
+                );
 
-                setTimeout(() => this.connect(), this.setting.reconnectInterval);
+                setTimeout(
+                    () => this.connect(),
+                    this.setting.reconnectInterval,
+                );
             } else {
                 this.subscriptions = [];
             }
         });
 
-        this.ws.addEventListener('error', async (event) => {
+        this.ws.addEventListener("error", async (event) => {
             console.error(event);
 
             this.emit("error", event);
@@ -150,8 +172,8 @@ class BTTVWebSocket {
     }
 
     /**
-    * Disconnect the WebSocket.
-    */
+     * Disconnect the WebSocket.
+     */
     disconnect() {
         if (this.ws) {
             this.ws.close();
@@ -160,13 +182,15 @@ class BTTVWebSocket {
     }
 
     /**
-    * Subscribe to BTTV channel events.
-    *
-    * @param {string} id - Twitch user id.
-    * @param {boolean} force - Forces the client to subscribe.
-    */
+     * Subscribe to BTTV channel events.
+     *
+     * @param {string} id - Twitch user id.
+     * @param {boolean} force - Forces the client to subscribe.
+     */
     async subscribe(id: string | number, force?: boolean) {
-        if (!id) { throw new Error("Missing 'id' parameter"); };
+        if (!id) {
+            throw new Error("Missing 'id' parameter");
+        }
 
         if (this.subscriptions?.includes(id) && !force) {
             throw new Error(`Already subscribed`);
@@ -198,8 +222,8 @@ class BTTVWebSocket {
         const message = {
             name: "join_channel",
             data: {
-                name: `twitch:${id}`
-            }
+                name: `twitch:${id}`,
+            },
         };
 
         if (this.ws) {
@@ -216,12 +240,14 @@ class BTTVWebSocket {
     }
 
     /**
-    * Unsubscribe from BTTV channel events.
-    *
-    * @param {string} id - Twitch user id.
-    */
+     * Unsubscribe from BTTV channel events.
+     *
+     * @param {string} id - Twitch user id.
+     */
     async unsubscribe(id: string | number) {
-        if (!id) { throw new Error("Missing 'id' parameter"); };
+        if (!id) {
+            throw new Error("Missing 'id' parameter");
+        }
 
         if (!this.subscriptions?.includes(id)) {
             throw new Error(`${id} is not subscribed`);
@@ -230,15 +256,15 @@ class BTTVWebSocket {
         const message = {
             name: "part_channel",
             data: {
-                name: `twitch:${id}`
-            }
+                name: `twitch:${id}`,
+            },
         };
 
         if (this.ws) {
             this.ws.send(JSON.stringify(message));
         }
 
-        this.subscriptions = this.subscriptions.filter(subId => subId !== id);
+        this.subscriptions = this.subscriptions.filter((subId) => subId !== id);
 
         this.emit("unsubscribed", id);
 
@@ -246,20 +272,22 @@ class BTTVWebSocket {
     }
 
     /**
-    * Sends a message over the WebSocket if it’s open.
-    *
-    * Emits 'sent' event on success or 'send_error' event on failure.
-    *
-    * @param {string} message - The message to send.
-    */
+     * Sends a message over the WebSocket if it’s open.
+     *
+     * Emits 'sent' event on success or 'send_error' event on failure.
+     *
+     * @param {string} message - The message to send.
+     */
     send(message: any) {
         if (this.ws && this.ws.readyState === WebSocket.OPEN) {
             this.ws.send(message);
-            this.emit('sent', message);
+            this.emit("sent", message);
         } else {
-            const err = new Error('WebSocket is not open. Cannot send message.');
+            const err = new Error(
+                "WebSocket is not open. Cannot send message.",
+            );
 
-            this.emit('send_error', err);
+            this.emit("send_error", err);
         }
     }
 

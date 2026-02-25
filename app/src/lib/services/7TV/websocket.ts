@@ -1,14 +1,14 @@
-import main from './main.js';
+import main from "./main.js";
 const { parseSetData, parsePaintData, parseBadgeData } = main;
 
 const id_types: Record<string, string> = {
-    'entitlement.create': "id", // COSMETICS
-    'user.*': "object_id", // SET CHANGES
-    'emote_set.update': "object_id", // EMOTE CHANGES
+    "entitlement.create": "id", // COSMETICS
+    "user.*": "object_id", // SET CHANGES
+    "emote_set.update": "object_id", // EMOTE CHANGES
 };
 
 const condition_types: Record<string, any> = {
-    'entitlement.create': { platform: 'TWITCH', ctx: 'channel' },
+    "entitlement.create": { platform: "TWITCH", ctx: "channel" },
 };
 
 interface Options {
@@ -39,7 +39,7 @@ type Events = {
             old: { name: string; id: string };
             new: { name: string; id: string };
             emote_data: any;
-        }
+        },
     ) => void;
     set_change: (
         actor: string,
@@ -47,7 +47,7 @@ type Events = {
             old_set: { name: string; id: string };
             new_set: { name: string; id: string };
             SevenTV_user_id: string;
-        }
+        },
     ) => void;
     create_badge: (data: SevenTVBadge) => void;
     create_paint: (data: Paint) => void;
@@ -60,25 +60,25 @@ type Events = {
 interface Set {
     id: string;
     name: string;
-    owner: Connection
-    flags: number
+    owner: Connection;
+    flags: number;
 }
 
 interface Connection {
-    id: string,
-    platform: string,
-    username: string,
-    display_name: string
-    linked_at: number,
-    emote_capacity: number,
-    emote_set_id: string,
-    emote_set: any
+    id: string;
+    platform: string;
+    username: string;
+    display_name: string;
+    linked_at: number;
+    emote_capacity: number;
+    emote_set_id: string;
+    emote_set: any;
 }
 
 interface Entitlement {
     id: number | string;
     kind: string;
-    owner: Connection
+    owner: Connection;
 }
 
 class SevenTVWebSocket {
@@ -93,10 +93,10 @@ class SevenTVWebSocket {
     };
     subscriptions: Record<string, any>;
     caughtPersonalSets: any[];
-    listeners: Record<string, Function[]>;;
+    listeners: Record<string, Function[]>;
 
     constructor(options: Options = {}) {
-        this.url = options.url ?? 'wss://events.7tv.io/v3';
+        this.url = options.url ?? "wss://events.7tv.io/v3";
         this.ws = null;
         this.setting = {
             reconnect: options.reconnect ?? false,
@@ -123,7 +123,7 @@ class SevenTVWebSocket {
     connect() {
         this.ws = new WebSocket(this.url);
 
-        this.ws.addEventListener('open', () => {
+        this.ws.addEventListener("open", () => {
             console.log("7TV WS OPEN");
             this.emit("opening");
 
@@ -144,12 +144,12 @@ class SevenTVWebSocket {
             this.emit("open");
         });
 
-        this.ws.addEventListener('message', async (event) => {
+        this.ws.addEventListener("message", async (event) => {
             let data;
             try {
                 data = JSON.parse(event.data);
             } catch {
-                console.error('Failed to parse JSON:', event.data);
+                console.error("Failed to parse JSON:", event.data);
                 return;
             }
 
@@ -159,7 +159,9 @@ class SevenTVWebSocket {
                 this.emit("subscribed", data?.t, data?.d?.data);
             }
 
-            if (!data?.d?.type || !data?.d?.body) { return; };
+            if (!data?.d?.type || !data?.d?.body) {
+                return;
+            }
 
             const message_data = data.d;
             let message_body = message_data.body;
@@ -167,35 +169,51 @@ class SevenTVWebSocket {
             switch (message_data.type as string) {
                 case "emote_set.update":
                     const actor: string = message_body?.actor
-                        ? (message_body.actor.display_name && /^[\x20-\x7E]*$/.test(message_body.actor.display_name))
+                        ? message_body.actor.display_name &&
+                          /^[\x20-\x7E]*$/.test(message_body.actor.display_name)
                             ? message_body.actor.display_name
-                            : message_body.actor.username : "UNKNOWN"
+                            : message_body.actor.username
+                        : "UNKNOWN";
 
                     if (message_body.pushed) {
-                        const emote_data: any[] = message_body.pushed.map((emote: any) => emote.value);
-                        const parsed_emote_data = await parseSetData(emote_data);
-                        
-                        this.emit("add_emote", message_body.id, actor, parsed_emote_data); // SET ID, EMOTE INFO
+                        const emote_data: any[] = message_body.pushed.map(
+                            (emote: any) => emote.value,
+                        );
+                        const parsed_emote_data =
+                            await parseSetData(emote_data);
+
+                        this.emit(
+                            "add_emote",
+                            message_body.id,
+                            actor,
+                            parsed_emote_data,
+                        ); // SET ID, EMOTE INFO
                     } else if (message_body.pulled) {
-                        const emote_data = message_body.pulled.map((emote: any) => emote.old_value);
-                        const parsed_emote_data = await parseSetData(emote_data);
+                        const emote_data = message_body.pulled.map(
+                            (emote: any) => emote.old_value,
+                        );
+                        const parsed_emote_data =
+                            await parseSetData(emote_data);
                         for (const emote of parsed_emote_data) {
-                            this.emit("remove_emote", message_body.id, actor, emote); // SET ID, EMOTE INFO
+                            this.emit(
+                                "remove_emote",
+                                message_body.id,
+                                actor,
+                                emote,
+                            ); // SET ID, EMOTE INFO
                         }
                     } else if (message_body.updated) {
                         for (const emote of message_body.updated) {
-                            const new_emote_data = await parseSetData([emote.value]);
+                            const new_emote_data = await parseSetData([
+                                emote.value,
+                            ]);
                             const old_value = emote.old_value;
                             const new_value = emote.value;
-                            this.emit("rename_emote",
-                                message_body.id,
-                                actor,
-                                {
-                                    old: { name: old_value.name, id: old_value.id },
-                                    new: { name: new_value.name, id: new_value.id },
-                                    emote_data: new_emote_data[0],
-                                }
-                            ); // SET ID, { OLD INFO, NEW INFO }
+                            this.emit("rename_emote", message_body.id, actor, {
+                                old: { name: old_value.name, id: old_value.id },
+                                new: { name: new_value.name, id: new_value.id },
+                                emote_data: new_emote_data[0],
+                            }); // SET ID, { OLD INFO, NEW INFO }
                         }
                     } else {
                         //console.log("Unknown set update message from 7TV WebSocket: ", data);
@@ -205,7 +223,9 @@ class SevenTVWebSocket {
                 case "user.update": // RESUB TO NEW SET ID
                     if (message_body.updated) {
                         const actor: string = message_body?.actor
-                            ? message_body.actor.display_name || message_body.actor.username || "UNKNOWN"
+                            ? message_body.actor.display_name ||
+                              message_body.actor.username ||
+                              "UNKNOWN"
                             : "UNKNOWN";
 
                         const unique = [];
@@ -226,31 +246,50 @@ class SevenTVWebSocket {
                         message_body.updated = unique;
 
                         for (const emote_set_update of message_body.updated) {
-                            if (emote_set_update?.key === "style") { continue; };
+                            if (emote_set_update?.key === "style") {
+                                continue;
+                            }
 
                             const set_data = {
-                                old_set: { name: emote_set_update.value[0].old_value.name, id: emote_set_update.value[0].old_value.id },
-                                new_set: { name: emote_set_update.value[0].value.name, id: emote_set_update.value[0].value.id },
-                                SevenTV_user_id: message_body.id
+                                old_set: {
+                                    name: emote_set_update.value[0].old_value
+                                        .name,
+                                    id: emote_set_update.value[0].old_value.id,
+                                },
+                                new_set: {
+                                    name: emote_set_update.value[0].value.name,
+                                    id: emote_set_update.value[0].value.id,
+                                },
+                                SevenTV_user_id: message_body.id,
                             };
 
                             this.emit("set_change", actor, set_data);
 
                             if (this.setting.autoSubscribeToNewSetId) {
-                                this.unsubscribe(set_data.old_set.id, "emote_set.update");
-                                this.subscribe(set_data.new_set.id, "emote_set.update");
+                                this.unsubscribe(
+                                    set_data.old_set.id,
+                                    "emote_set.update",
+                                );
+                                this.subscribe(
+                                    set_data.new_set.id,
+                                    "emote_set.update",
+                                );
                             }
                         }
                     }
 
                     break;
                 case "cosmetic.create":
-                    if (!message_body.object?.kind) { return; };
+                    if (!message_body.object?.kind) {
+                        return;
+                    }
 
                     switch (message_body.object.kind) {
                         case "BADGE":
                             const badge_data = message_body.object.data;
-                            if (!badge_data) { return; };
+                            if (!badge_data) {
+                                return;
+                            }
 
                             const badge_message = parseBadgeData(badge_data);
 
@@ -259,9 +298,12 @@ class SevenTVWebSocket {
                             break;
                         case "PAINT":
                             const paint_data = message_body.object.data;
-                            if (!paint_data) { return; };
+                            if (!paint_data) {
+                                return;
+                            }
 
-                            const paint_message = await parsePaintData(paint_data);
+                            const paint_message =
+                                await parsePaintData(paint_data);
 
                             this.emit("create_paint", paint_message);
 
@@ -279,8 +321,10 @@ class SevenTVWebSocket {
                     const set_data: Set = {
                         id: set_object.id,
                         name: set_object.name,
-                        owner: set_object.owner?.connections?.find((c: Connection) => c.platform === "TWITCH"),
-                        flags: message_body.object?.flags || 0
+                        owner: set_object.owner?.connections?.find(
+                            (c: Connection) => c.platform === "TWITCH",
+                        ),
+                        flags: message_body.object?.flags || 0,
                     };
 
                     this.caughtPersonalSets.push(set_data);
@@ -302,12 +346,19 @@ class SevenTVWebSocket {
                     const entitlement_object = message_body.object;
 
                     const entitlement_data: Entitlement = {
-                        id: Number(entitlement_object.id) ? entitlement_object.id : entitlement_object.ref_id,
+                        id: Number(entitlement_object.id)
+                            ? entitlement_object.id
+                            : entitlement_object.ref_id,
                         kind: entitlement_object.kind,
-                        owner: entitlement_object.user?.connections?.find((c: Connection) => c.platform === "TWITCH"),
+                        owner: entitlement_object.user?.connections?.find(
+                            (c: Connection) => c.platform === "TWITCH",
+                        ),
                     };
 
-                    this.emit(message_data.type.split(".").reverse().join("_"), entitlement_data);
+                    this.emit(
+                        message_data.type.split(".").reverse().join("_"),
+                        entitlement_data,
+                    );
 
                     break;
                 default:
@@ -317,31 +368,48 @@ class SevenTVWebSocket {
             }
         });
 
-        this.ws.addEventListener('close', () => {
+        this.ws.addEventListener("close", () => {
             this.ws = null;
             console.log("closed");
             this.emit("close");
 
             if (this.setting.reconnect) {
-                console.log(`reconnecting in ${this.setting.reconnectInterval / 1000}s`);
-                setTimeout(() => this.connect(), this.setting.reconnectInterval);
+                console.log(
+                    `reconnecting in ${this.setting.reconnectInterval / 1000}s`,
+                );
+                setTimeout(
+                    () => this.connect(),
+                    this.setting.reconnectInterval,
+                );
             } else {
                 this.subscriptions = {};
             }
         });
 
-        this.ws.addEventListener('error', (error) => {
+        this.ws.addEventListener("error", (error) => {
             console.error(error);
             this.emit("error", error);
         });
     }
 
-    async subscribe(id: string | number, type: string, condition: Record<string | number, any> = {}) {
-        if (!id) { throw new Error("Missing 'id' parameter"); };
-        if (!type) { throw new Error("Missing 'type' parameter"); };
+    async subscribe(
+        id: string | number,
+        type: string,
+        condition: Record<string | number, any> = {},
+    ) {
+        if (!id) {
+            throw new Error("Missing 'id' parameter");
+        }
+        if (!type) {
+            throw new Error("Missing 'type' parameter");
+        }
 
         const idKey = String(id);
-        if (idKey === '__proto__' || idKey === 'constructor' || idKey === 'prototype') {
+        if (
+            idKey === "__proto__" ||
+            idKey === "constructor" ||
+            idKey === "prototype"
+        ) {
             throw new Error("Invalid 'id' parameter");
         }
 
@@ -350,8 +418,12 @@ class SevenTVWebSocket {
         }
 
         let id_type: Record<string, any> = { id };
-        const idField = id_types[type] || 'id';
-        if (idField === '__proto__' || idField === 'constructor' || idField === 'prototype') {
+        const idField = id_types[type] || "id";
+        if (
+            idField === "__proto__" ||
+            idField === "constructor" ||
+            idField === "prototype"
+        ) {
             throw new Error("Invalid subscription id field");
         }
         if (id_types[type]) {
@@ -383,8 +455,12 @@ class SevenTVWebSocket {
     }
 
     async unsubscribe(id: string | number, type: string) {
-        if (!id) { throw new Error("Missing 'id' parameter"); };
-        if (!type) { throw new Error("Missing 'type' parameter"); };
+        if (!id) {
+            throw new Error("Missing 'id' parameter");
+        }
+        if (!type) {
+            throw new Error("Missing 'type' parameter");
+        }
 
         if (!this.subscriptions[id]) {
             throw new Error(`${id} is not subscribed to anything`);
@@ -417,10 +493,12 @@ class SevenTVWebSocket {
     send(message: any) {
         if (this.ws && this.ws.readyState === WebSocket.OPEN) {
             this.ws.send(message);
-            this.emit('sent', message);
+            this.emit("sent", message);
         } else {
-            const err = new Error('WebSocket is not open. Cannot send message.');
-            this.emit('send_error', err);
+            const err = new Error(
+                "WebSocket is not open. Cannot send message.",
+            );
+            this.emit("send_error", err);
         }
     }
 

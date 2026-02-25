@@ -1,7 +1,7 @@
 interface Emote {
     id: string;
     name: string;
-    animated: boolean
+    animated: boolean;
     owner: { display_name: string; name: string };
     data: {
         modifier_flags: number;
@@ -11,7 +11,10 @@ interface Emote {
     };
 }
 
-async function parseSetData(data: Emote[], emoteSet?: string): Promise<ParsedEmote[]> {
+async function parseSetData(
+    data: Emote[],
+    emoteSet?: string,
+): Promise<ParsedEmote[]> {
     return data.map((emote: Emote) => ({
         name: emote?.name,
         original_name: emote?.name,
@@ -20,7 +23,7 @@ async function parseSetData(data: Emote[], emoteSet?: string): Promise<ParsedEmo
         url: emote.animated
             ? `https://cdn.frankerfacez.com/emote/${emote.id}/animated/4`
             : `https://cdn.frankerfacez.com/emote/${emote.id}/4`,
-        set: emoteSet === 'global' ? 'Global FFZ' : 'FFZ'
+        set: emoteSet === "global" ? "Global FFZ" : "FFZ",
     }));
 }
 
@@ -28,12 +31,16 @@ async function getGlobalEmotes() {
     let emote_data: any = [];
 
     try {
-        const response = await fetch(`https://api.frankerfacez.com/v1/set/global`);
+        const response = await fetch(
+            `https://api.frankerfacez.com/v1/set/global`,
+        );
 
         if (response.ok) {
             const data = await response.json();
 
-            const emote_sets = Object.values(data?.sets || {}).flatMap((set: any) => set.emoticons || []);
+            const emote_sets = Object.values(data?.sets || {}).flatMap(
+                (set: any) => set.emoticons || [],
+            );
 
             emote_data = await parseSetData(emote_sets, "global");
         }
@@ -45,19 +52,23 @@ async function getGlobalEmotes() {
 }
 
 async function getUserData(twitchId: string | number) {
-    let user_data: { set: ParsedEmote[], badges: any } = {
+    let user_data: { set: ParsedEmote[]; badges: any } = {
         set: [],
-        badges: {}
+        badges: {},
     };
 
     try {
-        const response = await fetch(`https://api.frankerfacez.com/v1/room/id/${twitchId}`);
+        const response = await fetch(
+            `https://api.frankerfacez.com/v1/room/id/${twitchId}`,
+        );
 
         if (response.ok) {
             const data = await response.json();
 
             if (data?.sets?.[data?.room?.set]?.emoticons) {
-                user_data["set"] = await parseSetData(data.sets[data.room.set].emoticons);
+                user_data["set"] = await parseSetData(
+                    data.sets[data.room.set].emoticons,
+                );
             }
 
             // BADGES
@@ -66,17 +77,21 @@ async function getUserData(twitchId: string | number) {
                 const { vip_badge, mod_urls, user_badge_ids } = data.room;
 
                 if (vip_badge) {
-                    user_data.badges["vip"] = Object.entries(vip_badge).map(([size, url]) => ({
-                        url,
-                        scale: `${size}x`
-                    }));
+                    user_data.badges["vip"] = Object.entries(vip_badge).map(
+                        ([size, url]) => ({
+                            url,
+                            scale: `${size}x`,
+                        }),
+                    );
                 }
 
                 if (mod_urls) {
-                    user_data.badges["mod"] = Object.entries(mod_urls).map(([size, url]) => ({
-                        url,
-                        scale: `${size}x`
-                    }));
+                    user_data.badges["mod"] = Object.entries(mod_urls).map(
+                        ([size, url]) => ({
+                            url,
+                            scale: `${size}x`,
+                        }),
+                    );
                 }
 
                 if (Object.keys(user_badge_ids)?.length) {
@@ -103,7 +118,7 @@ async function getBadges() {
             badge_data = data?.badges.map((badge: Badge) => {
                 const urls = Object.entries(badge.urls).map(([size, url]) => ({
                     url,
-                    scale: `${size}x`
+                    scale: `${size}x`,
                 }));
 
                 return {
@@ -111,9 +126,9 @@ async function getBadges() {
                     title: badge.title,
                     color: badge.color,
                     urls,
-                    owners: data?.users?.[badge?.id]
-                }
-            })
+                    owners: data?.users?.[badge?.id],
+                };
+            });
         }
     } catch (error) {
         throw new Error(`Error fetching badge data: ${error}`);
@@ -127,4 +142,4 @@ export default {
     getGlobalEmotes,
     getUserData,
     getBadges,
-}
+};

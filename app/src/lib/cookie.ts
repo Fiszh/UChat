@@ -4,7 +4,9 @@ export function setCookie(name: string, value: string, days: number = 30) {
 }
 
 export function getCookie(name: string) {
-    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    const match = document.cookie.match(
+        new RegExp("(^| )" + name + "=([^;]+)"),
+    );
     return match ? match[2] : null;
 }
 

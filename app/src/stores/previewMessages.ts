@@ -1,81 +1,83 @@
 export const previewMessages = [
     {
         tags: {
-            "username": 'uniiDev',
-            "display-name": 'uniiDev',
+            username: "uniiDev",
+            "display-name": "uniiDev",
             "user-id": "528761326",
             "badges-raw": "broadcaster/1,twitch-recap-2024/1",
-            "badges": { "broadcaster": "1", "twitch-recap-2024": "1" },
-            "color": "#ffb3ff",
-            "room-id": "0"
+            badges: { broadcaster: "1", "twitch-recap-2024": "1" },
+            color: "#ffb3ff",
+            "room-id": "0",
         },
-        message: "Alright"
+        message: "Alright",
     },
     {
         tags: {
-            "username": 'de_palace',
-            "display-name": 'de_palace',
+            username: "de_palace",
+            "display-name": "de_palace",
             "badges-raw": null,
-            "badges": {},
-            "color": "#1dee8b",
-            "room-id": "0"
+            badges: {},
+            color: "#1dee8b",
+            "room-id": "0",
         },
-        message: "!vanish"
+        message: "!vanish",
     },
     {
         tags: {
-            "username": 'ftk789',
-            "display-name": 'ftk789',
+            username: "ftk789",
+            "display-name": "ftk789",
             "user-id": "166427338",
             "badges-raw": "subscriber/3,chatter-cs-go-2022/1",
-            "badges": { "subscriber": "3", "chatter-cs-go-2022": "1" },
-            "color": "#8A3DE2",
-            "room-id": "0"
+            badges: { subscriber: "3", "chatter-cs-go-2022": "1" },
+            color: "#8A3DE2",
+            "room-id": "0",
         },
-        message: "Thats a real jammer ShoulderDance RaveTime"
+        message: "Thats a real jammer ShoulderDance RaveTime",
     },
     {
         tags: {
-            "username": 'strayyzz',
-            "display-name": 'strayyzz',
+            username: "strayyzz",
+            "display-name": "strayyzz",
             "badges-raw": "moderator/1,subscriber/3003",
-            "badges": { "moderator": "1", "subscriber": "3003" },
-            "color": "#00FF7F",
-            "room-id": "0"
+            badges: { moderator: "1", subscriber: "3003" },
+            color: "#00FF7F",
+            "room-id": "0",
         },
-        message: "Piss is not boobs or butt Wisdom"
+        message: "Piss is not boobs or butt Wisdom",
     },
     {
         tags: {
-            "username": 'jolong66',
-            "display-name": 'jolong66',
+            username: "jolong66",
+            "display-name": "jolong66",
             "badges-raw": "vip/1,subscriber/0,sub-gift-leader/3",
-            "badges": { "vip": "1", "subscriber": "0", "sub-gift-leader": "3" },
-            "color": "#FF69B4",
-            "room-id": "0"
+            badges: { vip: "1", subscriber: "0", "sub-gift-leader": "3" },
+            color: "#FF69B4",
+            "room-id": "0",
         },
-        message: "aga life is like a box of chocolate, you never know when im gonna eat them all catEat"
+        message:
+            "aga life is like a box of chocolate, you never know when im gonna eat them all catEat",
     },
     {
         tags: {
-            "username": 'university_1',
-            "display-name": 'university_1',
+            username: "university_1",
+            "display-name": "university_1",
             "badges-raw": "bot-badge/1,subscriber/2,bits/100",
-            "badges": { "bot-badge": "1", "subscriber": "2", "bits": "100" },
-            "color": undefined,
-            "room-id": "0"
+            badges: { "bot-badge": "1", subscriber: "2", bits: "100" },
+            color: undefined,
+            "room-id": "0",
         },
-        message: "Pog chat overlay with better zero width emotes catJAM WideRaveTime ALERT"
+        message:
+            "Pog chat overlay with better zero width emotes catJAM WideRaveTime ALERT",
     },
     {
         tags: {
-            "username": 'sonku___',
-            "display-name": 'sonku___',
+            username: "sonku___",
+            "display-name": "sonku___",
             "badges-raw": "bits/1250000,sub-gift-leader/1",
-            "badges": { "bits": "1250000", "sub-gift-leader": "1" },
-            "color": "#433E43",
-            "room-id": "0"
+            badges: { bits: "1250000", "sub-gift-leader": "1" },
+            color: "#433E43",
+            "room-id": "0",
         },
-        message: "@uniiDev, who the hell is FISzhh wtf 🤔"
-    }
-]
+        message: "@uniiDev, who the hell is FISzhh wtf 🤔",
+    },
+];

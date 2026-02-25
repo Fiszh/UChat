@@ -1,32 +1,34 @@
 {
-	"name": "uchat",
-	"private": true,
-	"version": "3.2.1",
-	"type": "module",
-	"scripts": {
-		"dev": "vite dev",
-		"build": "vite build",
-		"preview": "vite preview",
-		"prepare": "svelte-kit sync || echo ''",
-		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"dev:open": "vite dev --open --host"
-	},
-	"devDependencies": {
-		"@sveltejs/adapter-static": "^3.0.10",
-		"@sveltejs/kit": "^2.49.4",
-		"@sveltejs/vite-plugin-svelte": "^7.0.0",
-		"@types/tinycolor2": "^1.4.6",
-		"sass-embedded": "^1.97.2",
-		"svelte": "^5.46.1",
-		"svelte-check": "^4.3.5",
-		"typescript": "^5.9.3",
-		"vite": "^7.3.1"
-	},
-	"dependencies": {
-		"lucide-svelte": "^0.575.0",
-		"svelte-awesome-color-picker": "^4.1.0",
-		"tinycolor2": "^1.6.0",
-		"twemoji": "^14.0.2"
-	}
+    "name": "uchat",
+    "private": true,
+    "version": "3.2.1",
+    "type": "module",
+    "scripts": {
+        "dev": "vite dev",
+        "build": "vite build",
+        "preview": "vite preview",
+        "prepare": "svelte-kit sync || echo ''",
+        "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+        "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+        "dev:open": "vite dev --open --host"
+    },
+    "devDependencies": {
+        "@sveltejs/adapter-static": "^3.0.10",
+        "@sveltejs/kit": "^2.49.4",
+        "@sveltejs/vite-plugin-svelte": "^7.0.0",
+        "@types/tinycolor2": "^1.4.6",
+        "prettier": "^3.8.1",
+        "prettier-plugin-svelte": "^3.5.0",
+        "sass-embedded": "^1.97.2",
+        "svelte": "^5.46.1",
+        "svelte-check": "^4.3.5",
+        "typescript": "^5.9.3",
+        "vite": "^7.3.1"
+    },
+    "dependencies": {
+        "lucide-svelte": "^0.575.0",
+        "svelte-awesome-color-picker": "^4.1.0",
+        "tinycolor2": "^1.6.0",
+        "twemoji": "^14.0.2"
+    }
 }

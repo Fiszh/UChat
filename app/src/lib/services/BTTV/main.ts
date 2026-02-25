@@ -1,4 +1,13 @@
-const BTTVZeroWidth = ["SoSnowy", "IceCold", "SantaHat", "TopHat", "ReinDeer", "CandyCane", "cvMask", "cvHazmat"];
+const BTTVZeroWidth = [
+    "SoSnowy",
+    "IceCold",
+    "SantaHat",
+    "TopHat",
+    "ReinDeer",
+    "CandyCane",
+    "cvMask",
+    "cvHazmat",
+];
 
 interface Emote {
     id: string;
@@ -8,7 +17,12 @@ interface Emote {
     flags?: any;
     host: {
         url: string;
-        files: { name: string; width: number; height: number; format: string }[];
+        files: {
+            name: string;
+            width: number;
+            height: number;
+            format: string;
+        }[];
     };
     user?: { displayName?: string; name?: string };
 }
@@ -18,19 +32,19 @@ interface BadgeUser {
     badge: {
         description: string;
         svg: string;
-    }
+    };
 }
 
 async function parseSetData(data: Emote[], emoteSet?: string) {
     return data.map((emote: Emote) => {
-        return<ParsedEmote> {
+        return <ParsedEmote>{
             name: emote.code,
             original_name: emote?.codeOriginal,
             emote_id: emote.id,
             flags: BTTVZeroWidth.includes(emote.code) ? 256 : undefined,
             url: `https://cdn.betterttv.net/emote/${emote.id}/3x`,
-            set: emoteSet == 'global' ? 'Global BTTV' : 'BTTV',
-        }
+            set: emoteSet == "global" ? "Global BTTV" : "BTTV",
+        };
     });
 }
 
@@ -38,7 +52,9 @@ async function getGlobalEmoteSet() {
     let emote_data: any[] = [];
 
     try {
-        const response = await fetch(`https://api.betterttv.net/3/cached/emotes/global`);
+        const response = await fetch(
+            `https://api.betterttv.net/3/cached/emotes/global`,
+        );
 
         if (response.ok) {
             const data = await response.json();
@@ -58,7 +74,9 @@ async function getEmoteData(twitchID: string | number) {
     let emote_data: any[] = [];
 
     try {
-        const response = await fetch(`https://api.betterttv.net/3/cached/users/twitch/${twitchID}`);
+        const response = await fetch(
+            `https://api.betterttv.net/3/cached/users/twitch/${twitchID}`,
+        );
 
         if (response.ok) {
             const data = await response.json();
@@ -80,7 +98,9 @@ async function getBadgeData() {
     let badge_data: any[] = [];
 
     try {
-        const response = await fetch(`https://api.betterttv.net/3/cached/badges/twitch`);
+        const response = await fetch(
+            `https://api.betterttv.net/3/cached/badges/twitch`,
+        );
 
         if (response.ok) {
             const data = await response.json();
@@ -90,15 +110,17 @@ async function getBadgeData() {
                     const svg = user.badge.svg;
                     if (!acc[svg]) {
                         acc[svg] = {
-                            id: user.badge.description.toLowerCase().replace(/\s+/g, '_'),
+                            id: user.badge.description
+                                .toLowerCase()
+                                .replace(/\s+/g, "_"),
                             title: user.badge.description,
-                            urls: [{ url: svg, scale: '4x' }],
-                            owners: []
+                            urls: [{ url: svg, scale: "4x" }],
+                            owners: [],
                         };
                     }
                     acc[svg].owners.push(user.providerId);
                     return acc;
-                }, {})
+                }, {}),
             );
         }
     } catch (error) {
@@ -113,4 +135,4 @@ export default {
     getGlobalEmoteSet,
     getEmoteData,
     getBadgeData,
-}
+};

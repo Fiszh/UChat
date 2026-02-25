@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+import { writable } from "svelte/store";
 
 export let icon_size = writable<string>("1.5rem");
 export let isMobile = writable<boolean>(false);
@@ -8,26 +8,29 @@ interface LoadingInfo {
     type: string | undefined;
 }
 
-export let loadingInfo = writable<LoadingInfo>({ text: undefined, type: undefined });
+export let loadingInfo = writable<LoadingInfo>({
+    text: undefined,
+    type: undefined,
+});
 
 interface Emotes {
     "7TV": {
         global: ParsedEmote[];
         channel: Record<string, ParsedEmote[]>;
     };
-    "BTTV": {
+    BTTV: {
         global: ParsedEmote[];
         channel: Record<string, ParsedEmote[]>;
     };
-    "FFZ": {
+    FFZ: {
         global: ParsedEmote[];
         channel: Record<string, ParsedEmote[]>;
     };
-    "BITS": any[];
+    BITS: any[];
 }
 
 interface Badges {
-    UChat: any[]
+    UChat: any[];
     TTV: {
         sub: any[];
         global: any[];
@@ -55,9 +58,9 @@ interface Badges {
 
 export const emotes = writable<Emotes>({
     "7TV": { global: [], channel: {} },
-    "BTTV": { global: [], channel: {} },
-    "FFZ": { global: [], channel: {} },
-    "BITS": []
+    BTTV: { global: [], channel: {} },
+    FFZ: { global: [], channel: {} },
+    BITS: [],
 });
 
 export const badges = writable<Badges>({
@@ -65,8 +68,13 @@ export const badges = writable<Badges>({
     TTV: { sub: [], global: [], bit: [] },
     BTTV: { global: [] },
     FFZ: { global: [], user: { vip: "", mod: "", user: {} } },
-    OTHER: { Chatterino: [], ChatterinoHomies: [], PolandBOT: {}, TurtegBot: [] },
-    channel: {}
+    OTHER: {
+        Chatterino: [],
+        ChatterinoHomies: [],
+        PolandBOT: {},
+        TurtegBot: [],
+    },
+    channel: {},
 });
 
 export const globals = {
@@ -96,4 +104,4 @@ export const globals = {
 
     // OTHER
     userNameColor: {} as Record<string, string>,
-}
+};

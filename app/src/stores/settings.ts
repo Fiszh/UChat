@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+import { writable } from "svelte/store";
 
 export interface DefaultSetting {
     name: string;
@@ -32,130 +32,134 @@ interface ColorPickerSetting extends DefaultSetting {
     default?: string;
 }
 
-export type Setting = NumberSetting | TextSetting | BooleanSetting | ColorPickerSetting;
+export type Setting =
+    | NumberSetting
+    | TextSetting
+    | BooleanSetting
+    | ColorPickerSetting;
 
 const configs: Setting[] = [
     {
-        "name": "Message are in <strong>bold</strong> text",
-        "type": "boolean",
-        "value": true,
-        "param": "msgBold",
+        name: "Message are in <strong>bold</strong> text",
+        type: "boolean",
+        value: true,
+        param: "msgBold",
     },
     {
-        "name": "Message are in UPPERCASE",
-        "type": "boolean",
-        "value": false,
-        "param": "msgCaps"
+        name: "Message are in UPPERCASE",
+        type: "boolean",
+        value: false,
+        param: "msgCaps",
     },
     {
-        "name": "Custom chat font (hex)",
-        "type": "text",
-        "value": "BLMelody",
-        "param": "font"
+        name: "Custom chat font (hex)",
+        type: "text",
+        value: "BLMelody",
+        param: "font",
     },
     {
-        "name": "Chat font color",
-        "type": "color-picker",
-        "value": "#FFFFFF",
-        "param": "fontColor"
+        name: "Chat font color",
+        type: "color-picker",
+        value: "#FFFFFF",
+        param: "fontColor",
     },
     {
-        "name": "Font & Badge size (px)",
-        "type": "number",
-        "param": "fontSize",
-        "value": 20,
-        "previewReact": false
+        name: "Font & Badge size (px)",
+        type: "number",
+        param: "fontSize",
+        value: 20,
+        previewReact: false,
     },
     {
-        "name": "Font stroke",
-        "type": "boolean",
-        "value": false,
-        "param": "fontStroke"
+        name: "Font stroke",
+        type: "boolean",
+        value: false,
+        param: "fontStroke",
     },
     {
-        "name": "Message shadow (0-10)",
-        "type": "number",
-        "param": "fontShadow",
-        "value": 10
+        name: "Message shadow (0-10)",
+        type: "number",
+        param: "fontShadow",
+        value: 10,
     },
     {
-        "name": "Emote size (px)",
-        "type": "number",
-        "param": "emoteSize",
-        "value": 25,
-        "previewReact": false
+        name: "Emote size (px)",
+        type: "number",
+        param: "emoteSize",
+        value: 25,
+        previewReact: false,
     },
     {
-        "name": "Text fade out (seconds)",
-        "type": "number",
-        "param": "fadeOut",
-        "value": 0,
-        "previewReact": false
+        name: "Text fade out (seconds)",
+        type: "number",
+        param: "fadeOut",
+        value: 0,
+        previewReact: false,
     },
     {
-        "name": "Display badges",
-        "type": "boolean",
-        "value": true,
-        "param": "badges"
+        name: "Display badges",
+        type: "boolean",
+        value: true,
+        param: "badges",
     },
     {
-        "name": "Display channel points redeem, sub messages, annoucements... (Redeems & USERNOTICES)",
-        "type": "boolean",
-        "value": true,
-        "param": "redeem"
+        name: "Display channel points redeem, sub messages, annoucements... (Redeems & USERNOTICES)",
+        type: "boolean",
+        value: true,
+        param: "redeem",
     },
     {
-        "name": "Display bots in chat (Based on FFZ & Twitch bot badges)",
-        "type": "boolean",
-        "value": true,
-        "param": "bots"
+        name: "Display bots in chat (Based on FFZ & Twitch bot badges)",
+        type: "boolean",
+        value: true,
+        param: "bots",
     },
     {
-        "name": "Custom user blacklist (separate using spaces)",
-        "type": "text",
-        "value": "",
-        "param": "userBL",
-        "list": true
+        name: "Custom user blacklist (separate using spaces)",
+        type: "text",
+        value: "",
+        param: "userBL",
+        list: true,
     },
     {
-        "name": "Custom prefix blacklist (separate using spaces)",
-        "type": "text",
-        "value": "",
-        "param": "prefixBL",
-        "list": true
+        name: "Custom prefix blacklist (separate using spaces)",
+        type: "text",
+        value: "",
+        param: "prefixBL",
+        list: true,
     },
     {
-        "name": "Moderation actions effect displayed chat messages (message deletion)",
-        "type": "boolean",
-        "value": true,
-        "param": "modAction"
+        name: "Moderation actions effect displayed chat messages (message deletion)",
+        type: "boolean",
+        value: true,
+        param: "modAction",
     },
     {
-        "name": "Mentions are <div id=\"rainbow-text\">Colored</div>",
-        "type": "boolean",
-        "value": false,
-        "param": "mentionColor"
+        name: 'Mentions are <div id="rainbow-text">Colored</div>',
+        type: "boolean",
+        value: false,
+        param: "mentionColor",
     },
     {
-        "name": "Display 7TV Paints",
-        "type": "boolean",
-        "value": true,
-        "param": "paints"
+        name: "Display 7TV Paints",
+        type: "boolean",
+        value: true,
+        param: "paints",
     },
     {
-        "name": "Display 7TV Paint Shadows (may cause drops in performance)",
-        "type": "boolean",
-        "value": true,
-        "param": "paintShadows"
+        name: "Display 7TV Paint Shadows (may cause drops in performance)",
+        type: "boolean",
+        value: true,
+        param: "paintShadows",
     },
     {
-        "name": "Loads in last chat messages",
-        "type": "boolean",
-        "value": false,
-        "hide": true,
-        "param": "lastMsg"
-    }
-]
+        name: "Loads in last chat messages",
+        type: "boolean",
+        value: false,
+        hide: true,
+        param: "lastMsg",
+    },
+];
 
 for (const config of configs) {
     config["default"] = config["value"] as Setting["default"];
@@ -163,7 +167,7 @@ for (const config of configs) {
 
 export const config = configs;
 
-export let settings = writable<Setting[]>(configs.map(c => ({ ...c })));
+export let settings = writable<Setting[]>(configs.map((c) => ({ ...c })));
 export let savedSettings = writable<Record<string, any>>([]);
 export let channelName = writable<String>("");
 export let channelID = writable<String>("");
