@@ -38,7 +38,11 @@ export type Setting =
     | BooleanSetting
     | ColorPickerSetting;
 
-const configs: Setting[] = [
+const defaultEmoteSize = 25;
+
+export let setEmoteSize = writable<number>(defaultEmoteSize);
+
+export const configs: Setting[] = [
     {
         name: "Message are in <strong>bold</strong> text",
         type: "boolean",
@@ -52,13 +56,13 @@ const configs: Setting[] = [
         param: "msgCaps",
     },
     {
-        name: "Custom chat font (hex)",
+        name: "Custom chat font",
         type: "text",
         value: "BLMelody",
         param: "font",
     },
     {
-        name: "Chat font color",
+        name: "Chat font color (hex)",
         type: "color-picker",
         value: "#FFFFFF",
         param: "fontColor",
@@ -86,7 +90,7 @@ const configs: Setting[] = [
         name: "Emote size (px)",
         type: "number",
         param: "emoteSize",
-        value: 25,
+        value: defaultEmoteSize,
         previewReact: false,
     },
     {

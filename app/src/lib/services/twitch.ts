@@ -7,18 +7,15 @@ export async function valideToken(
         },
     });
 
-    if (!response.ok) {
-        throw new Error("Error validating accessToken...");
-    }
+    if (!response.ok) throw new Error("Error validating accessToken...");
 
     const data = await response.json();
 
-    if (data?.login) {
+    if (data?.login)
         return {
             login: data?.login,
             user_id: data?.user_id,
         };
-    }
 
     return false;
 }

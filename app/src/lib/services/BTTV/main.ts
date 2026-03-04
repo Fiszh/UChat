@@ -35,7 +35,10 @@ interface BadgeUser {
     };
 }
 
-async function parseSetData(data: Emote[], emoteSet?: string) {
+async function parseSetData(
+    data: Emote[],
+    emoteSet?: string,
+): Promise<ParsedEmote[]> {
     return data.map((emote: Emote) => {
         return <ParsedEmote>{
             name: emote.code,
@@ -59,9 +62,7 @@ async function getGlobalEmoteSet() {
         if (response.ok) {
             const data = await response.json();
 
-            if (data?.length) {
-                emote_data = await parseSetData(data, "global");
-            }
+            if (data?.length) emote_data = await parseSetData(data, "global");
         }
     } catch (error) {
         throw new Error(`Error fetching emote data: ${error}`);

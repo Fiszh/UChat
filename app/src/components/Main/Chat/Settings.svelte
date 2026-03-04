@@ -21,9 +21,7 @@
         ? JSON.parse(rawLocalSettings)
         : null;
 
-    if (LocalSettings) {
-        parseSavedSettings(LocalSettings);
-    }
+    if (LocalSettings) parseSavedSettings(LocalSettings);
 
     let localChannelName = "";
     let localChannelID = "";
@@ -340,42 +338,36 @@
         }
 
         input[type="checkbox"] {
-            --after-size: 26px;
+            --size: 2rem;
 
             appearance: none;
-            display: flex;
-            min-width: 60px;
-            height: calc(4px + var(--after-size));
-            width: calc(var(--after-size) * 2);
-            background-color: rgba(255, 255, 255, 0.096);
-            border-radius: 30px;
-            cursor: pointer;
             position: relative;
+            width: calc(var(--size) * 2);
+            height: var(--size);
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 999px;
+            cursor: pointer;
             transition: background-color 0.2s;
-            justify-content: flex-start;
-            align-items: center;
 
             &::after {
                 content: "";
                 position: absolute;
-                width: var(--after-size);
-                height: var(--after-size);
-                background-color: white;
+                width: calc(var(--size) - 4px);
+                height: calc(var(--size) - 4px);
+                background: white;
                 border-radius: 50%;
+                top: 50%;
                 left: 2px;
-                transition: transform 0.2s;
+                transform: translateY(-50%);
+                transition: left 0.2s;
             }
 
             &.active {
                 background-color: #4caf50;
-            }
 
-            &.active::after {
-                transform: translateX(calc(4px + var(--after-size)));
-            }
-
-            &:hover:not(.active) {
-                background-color: rgba(255, 255, 255, 0.15);
+                &::after {
+                    left: calc(100% - var(--size) + 2px);
+                }
             }
         }
     }

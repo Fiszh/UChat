@@ -4,7 +4,7 @@
     import ChatMessage from "./ChatMessage.svelte";
 
     import { messages } from "$lib/chat";
-    import { settings } from "$stores/settings";
+    import { setEmoteSize, settings } from "$stores/settings";
     import { badges, globals } from "$stores/global";
 
     let chatMessages: Record<string, any>[] = [];
@@ -19,16 +19,53 @@
         (msgs) => (chatMessages = msgs),
     );
 
-    let chatSettings: Record<string, any> = {};
+    type ChatSettings = Record<
+        string,
+        Record<string, boolean | string | number | string[] | undefined>
+    >;
+
+    let chatSettings: ChatSettings = {};
 
     const unsubscribeSettings = settings.subscribe((config) => {
+        chatSettings = config.reduce<ChatSettings>((acc, setting) => {
+            if (setting.type == "text" && setting.list) {
+                acc[setting.param] = {
+                    value: setting.value.split(" ").filter(Boolean),
+                    default: setting.default,
+                };
+            } else {
+                acc[setting.param] = {
+                    value: setting.value,
+                    default: setting.default,
+                };
+            }
+
+            return acc;
+        }, {});
+
+        if (!window.location.search) {
+            const localSettings = Object.entries(chatSettings).reduce<
+                Record<string, ChatSettings[string][string]>
+            >((acc, [key, value]) => {
+                acc[key] = value.value;
+
+                return acc;
+            }, {});
+
+            localStorage.setItem(
+                "local-settings",
+                JSON.stringify(localSettings),
+            );
+        }
+
         for (const setting of config) {
             if (
-                !window.location.search &&
+                !window.location.search && // CHECKS IF ITS PREVIEW
                 typeof setting.previewReact != "undefined" &&
-                !setting.previewReact
+                !setting.previewReact // CHECKS IF SETTING IS REACTIVE IN PREVIEW
             )
                 continue;
+
             switch (setting.param) {
                 case "msgBold":
                     styles["--chat-bold"] = setting.value ? "bold" : "normal";
@@ -73,9 +110,21 @@
 
                     break;
                 case "emoteSize":
-                    styles["--chat-emote-size"] = setting.value
-                        ? `${setting.value}px`
+                    let emoteSize = setting.value;
+                    const fontSize = chatSettings["fontSize"];
+
+                    if (
+                        emoteSize == setting.default &&
+                        fontSize.value != fontSize.default &&
+                        typeof fontSize.value == "number"
+                    )
+                        emoteSize = fontSize.value + 5;
+
+                    styles["--chat-emote-size"] = emoteSize
+                        ? `${emoteSize}px`
                         : "25px";
+
+                    setEmoteSize.set(emoteSize as number);
 
                     break;
                 case "fontColor":
@@ -91,21 +140,6 @@
 
                     break;
             }
-
-            if (setting.type == "text" && setting.list) {
-                chatSettings[setting.param] = setting.value
-                    .split(" ")
-                    .filter(Boolean);
-            } else {
-                chatSettings[setting.param] = setting.value;
-            }
-
-            if (!window.location.search) {
-                localStorage.setItem(
-                    "local-settings",
-                    JSON.stringify(chatSettings),
-                );
-            }
         }
     });
 
@@ -120,23 +154,27 @@
         ) as Record<string, any>;
 
         const passed = [
-            !chatSettings["userBL"].includes(username?.toLowerCase()),
-            chatSettings["prefixBL"].length
-                ? !chatSettings["prefixBL"].some((prefix: string) =>
+            Array.isArray(chatSettings["userBL"].value)
+                ? !chatSettings["userBL"].value.includes(
+                      username?.toLowerCase(),
+                  )
+                : true,
+            Array.isArray(chatSettings["prefixBL"].value)
+                ? !chatSettings["prefixBL"].value.some((prefix: string) =>
                       message?.toLowerCase().startsWith(prefix.toLowerCase()),
                   )
                 : true,
-            !chatSettings["bots"] ? !user_badges?.["bot-badge"] : true,
-            !chatSettings["bots"]
+            !chatSettings["bots"].value ? !user_badges?.["bot-badge"] : true,
+            !chatSettings["bots"].value
                 ? !globals.custom_bots.includes(username)
                 : true,
-            !chatSettings["bots"]
+            !chatSettings["bots"].value
                 ? !FFZBadges.find((badge: Record<string, any>) => badge.id == 2)
                 : true,
-            !chatSettings["bots"]
+            !chatSettings["bots"].value
                 ? $badges["FFZ"]["user"]["user"][tags["user-id"] ?? ""] != 2
                 : true,
-            !chatSettings["redeem"] ? !tags?.["custom-reward-id"] : true,
+            !chatSettings["redeem"].value ? !tags?.["custom-reward-id"] : true,
         ];
 
         return passed.every(Boolean);

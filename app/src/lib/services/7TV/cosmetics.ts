@@ -64,9 +64,7 @@ export async function pushUserInfoViaGQL(sevenTV_ID: string): Promise<void> {
         }),
     });
 
-    if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-    }
+    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
     let data = await response.json();
 
@@ -80,9 +78,8 @@ export async function pushUserInfoViaGQL(sevenTV_ID: string): Promise<void> {
         !data?.["user"] ||
         !data["user"]?.["connections"] ||
         !data["user"]?.["style"]
-    ) {
+    )
         return;
-    }
 
     const foundTwitchConnection = data["user"]["connections"].find(
         (connection: { platform: string }) => connection?.platform == "TWITCH",
@@ -92,9 +89,7 @@ export async function pushUserInfoViaGQL(sevenTV_ID: string): Promise<void> {
         const badge = parseBadgeData(data["user"]["style"]["badge"]);
 
         if (badge) {
-            if (foundTwitchConnection) {
-                badge.owner.push(foundTwitchConnection);
-            }
+            if (foundTwitchConnection) badge.owner.push(foundTwitchConnection);
 
             cosmetics.update((e) => ({
                 ...e,
@@ -110,9 +105,7 @@ export async function pushUserInfoViaGQL(sevenTV_ID: string): Promise<void> {
         const paint = await parsePaintData(data["user"]["style"]["paint"]);
 
         if (paint) {
-            if (foundTwitchConnection) {
-                paint.owner.push(foundTwitchConnection);
-            }
+            if (foundTwitchConnection) paint.owner.push(foundTwitchConnection);
 
             cosmetics.update((e) => ({
                 ...e,

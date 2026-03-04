@@ -1,6 +1,8 @@
 interface Emote {
     id: string;
     name: string;
+    height: number;
+    width: number;
     animated: boolean;
     owner: { display_name: string; name: string };
     data: {
@@ -20,9 +22,20 @@ async function parseSetData(
         original_name: emote?.name,
         emote_id: emote?.id,
         flags: emote?.data?.modifier_flags,
-        url: emote.animated
-            ? `https://cdn.frankerfacez.com/emote/${emote.id}/animated/4`
-            : `https://cdn.frankerfacez.com/emote/${emote.id}/4`,
+        urls: Object.keys(emote.animated || emote.urls).reduce<
+            Record<string, ParsedEmotesUrls>
+        >((acc, scale) => {
+            const numberScale = Number(scale);
+
+            acc[scale] = {
+                scale,
+                url: `https://cdn.frankerfacez.com/emote/${emote.id}/animated/${scale}`,
+                width: emote.width * numberScale,
+                height: emote.height * numberScale,
+            };
+
+            return acc;
+        }, {}),
         set: emoteSet === "global" ? "Global FFZ" : "FFZ",
     }));
 }
@@ -65,38 +78,34 @@ async function getUserData(twitchId: string | number) {
         if (response.ok) {
             const data = await response.json();
 
-            if (data?.sets?.[data?.room?.set]?.emoticons) {
+            if (data?.sets?.[data?.room?.set]?.emoticons)
                 user_data["set"] = await parseSetData(
                     data.sets[data.room.set].emoticons,
                 );
-            }
 
             // BADGES
 
             if (data.room) {
                 const { vip_badge, mod_urls, user_badge_ids } = data.room;
 
-                if (vip_badge) {
+                if (vip_badge)
                     user_data.badges["vip"] = Object.entries(vip_badge).map(
                         ([size, url]) => ({
                             url,
                             scale: `${size}x`,
                         }),
                     );
-                }
 
-                if (mod_urls) {
+                if (mod_urls)
                     user_data.badges["mod"] = Object.entries(mod_urls).map(
                         ([size, url]) => ({
                             url,
                             scale: `${size}x`,
                         }),
                     );
-                }
 
-                if (Object.keys(user_badge_ids)?.length) {
+                if (Object.keys(user_badge_ids)?.length)
                     user_data.badges["user_badge_ids"] = user_badge_ids;
-                }
             }
         }
     } catch (error) {

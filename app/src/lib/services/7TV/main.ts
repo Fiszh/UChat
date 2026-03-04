@@ -22,22 +22,29 @@ async function parseSetData(
     data: Emote[],
     emoteSet?: string,
 ): Promise<ParsedEmote[]> {
-    return data.map((emote: Emote) => {
-        const emote4x =
-            emote.data.host.files.find((f) => f.name === "4x.avif") ||
-            emote.data.host.files.find((f) => f.name === "3x.avif") ||
-            emote.data.host.files.find((f) => f.name === "2x.avif") ||
-            emote.data.host.files.find((f) => f.name === "1x.avif");
+    return data.map<ParsedEmote>((emote: Emote) => ({
+        name: emote?.name,
+        original_name: emote?.data?.name,
+        emote_id: emote?.id,
+        flags: emote?.data?.flags,
+        urls: emote.data.host.files.reduce<Record<string, ParsedEmotesUrls>>(
+            (acc, file) => {
+                const scale = file.name.split(".")?.[0];
 
-        return <ParsedEmote>{
-            name: emote?.name,
-            original_name: emote?.data?.name,
-            emote_id: emote?.id,
-            flags: emote?.data?.flags,
-            url: `https://cdn.7tv.app/emote/${emote.id}/${emote4x?.name || "1x.avif"}`,
-            set: emoteSet === "global" ? "Global 7TV" : "7TV",
-        };
-    });
+                if (typeof scale == "string" && file.name.endsWith(".avif"))
+                    acc[scale] = {
+                        scale,
+                        url: `https://cdn.7tv.app/emote/${emote.id}/${file.name}`,
+                        width: file.width,
+                        height: file.height,
+                    };
+
+                return acc;
+            },
+            {},
+        ),
+        set: emoteSet === "global" ? "Global 7TV" : "7TV",
+    }));
 }
 
 interface Stop {
@@ -139,9 +146,8 @@ async function emoteSetViaSetID(emoteSetId: string) {
         if (response.ok) {
             const data = await response.json();
 
-            if (data.emotes) {
+            if (data.emotes)
                 emote_data = await parseSetData(data.emotes, emoteSetId);
-            }
         }
     } catch (error) {
         throw new Error(`Error fetching emote data: ${error}`);
@@ -161,9 +167,8 @@ async function emoteSetViaTwitchID(twitchID: string | number) {
         if (response.ok) {
             const data = await response.json();
 
-            if (data?.emote_set?.emotes) {
+            if (data?.emote_set?.emotes)
                 emote_data = await parseSetData(data.emote_set.emotes);
-            }
         }
     } catch (error) {
         throw new Error(`Error fetching emote data: ${error}`);
@@ -227,9 +232,7 @@ async function getUserViaTwitchID(twitchID: string | number) {
 }
 
 function argbToRgba(color: number) {
-    if (color < 0) {
-        color = color >>> 0;
-    }
+    if (color < 0) color = color >>> 0;
 
     const red = (color >> 24) & 0xff;
     const green = (color >> 16) & 0xff;

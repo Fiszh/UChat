@@ -19,13 +19,12 @@ export function parseBadges(
     const foundAvatarBadge =
         badges_data["channel"]?.[userstate["source-room-id"]];
 
-    if (foundAvatarBadge) {
+    if (foundAvatarBadge)
         user_badges.push({
             badge_url: foundAvatarBadge,
             alt: "Shared Chat",
             background_color: undefined,
         });
-    }
 
     // SHARED CHAT BADGE
     const foundUChatBadges = badges_data["UChat"].filter(
@@ -120,13 +119,12 @@ export function parseBadges(
                 }
             }
 
-            if (badge) {
+            if (badge)
                 user_badges.push({
                     badge_url: badge.url,
                     alt: badge.title,
                     background_color: undefined,
                 });
-            }
         }
     }
 
@@ -159,9 +157,7 @@ export function parseBadges(
             badges_data["FFZ"]["user"]["user"][userstate["user-id"]],
     );
 
-    if (foundFFZBadge) {
-        foundFFZBadges.push(foundFFZBadge);
-    }
+    if (foundFFZBadge) foundFFZBadges.push(foundFFZBadge);
 
     foundFFZBadges.forEach((foundFFZBadge: Badge) => {
         user_badges.push({

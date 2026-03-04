@@ -155,13 +155,10 @@ class SevenTVWebSocket {
 
             this.emit("raw", data);
 
-            if (data?.d?.command == "SUBSCRIBE") {
+            if (data?.d?.command == "SUBSCRIBE")
                 this.emit("subscribed", data?.t, data?.d?.data);
-            }
 
-            if (!data?.d?.type || !data?.d?.body) {
-                return;
-            }
+            if (!data?.d?.type || !data?.d?.body) return;
 
             const message_data = data.d;
             let message_body = message_data.body;
@@ -246,9 +243,7 @@ class SevenTVWebSocket {
                         message_body.updated = unique;
 
                         for (const emote_set_update of message_body.updated) {
-                            if (emote_set_update?.key === "style") {
-                                continue;
-                            }
+                            if (emote_set_update?.key === "style") continue;
 
                             const set_data = {
                                 old_set: {
@@ -280,16 +275,12 @@ class SevenTVWebSocket {
 
                     break;
                 case "cosmetic.create":
-                    if (!message_body.object?.kind) {
-                        return;
-                    }
+                    if (!message_body.object?.kind) return;
 
                     switch (message_body.object.kind) {
                         case "BADGE":
                             const badge_data = message_body.object.data;
-                            if (!badge_data) {
-                                return;
-                            }
+                            if (!badge_data) return;
 
                             const badge_message = parseBadgeData(badge_data);
 
@@ -298,9 +289,7 @@ class SevenTVWebSocket {
                             break;
                         case "PAINT":
                             const paint_data = message_body.object.data;
-                            if (!paint_data) {
-                                return;
-                            }
+                            if (!paint_data) return;
 
                             const paint_message =
                                 await parsePaintData(paint_data);
@@ -397,25 +386,19 @@ class SevenTVWebSocket {
         type: string,
         condition: Record<string | number, any> = {},
     ) {
-        if (!id) {
-            throw new Error("Missing 'id' parameter");
-        }
-        if (!type) {
-            throw new Error("Missing 'type' parameter");
-        }
+        if (!id) throw new Error("Missing 'id' parameter");
+        if (!type) throw new Error("Missing 'type' parameter");
 
         const idKey = String(id);
         if (
             idKey === "__proto__" ||
             idKey === "constructor" ||
             idKey === "prototype"
-        ) {
+        )
             throw new Error("Invalid 'id' parameter");
-        }
 
-        if (this.subscriptions?.[idKey]?.[type]) {
+        if (this.subscriptions?.[idKey]?.[type])
             throw new Error(`Already subscribed`);
-        }
 
         let id_type: Record<string, any> = { id };
         const idField = id_types[type] || "id";
@@ -423,12 +406,10 @@ class SevenTVWebSocket {
             idField === "__proto__" ||
             idField === "constructor" ||
             idField === "prototype"
-        ) {
+        )
             throw new Error("Invalid subscription id field");
-        }
-        if (id_types[type]) {
-            id_type = { [idField]: id };
-        }
+
+        if (id_types[type]) id_type = { [idField]: id };
 
         condition = { ...condition_types[type], ...id_type };
 
@@ -441,13 +422,9 @@ class SevenTVWebSocket {
             },
         };
 
-        if (this.ws) {
-            this.ws.send(JSON.stringify(message));
-        }
+        if (this.ws) this.ws.send(JSON.stringify(message));
 
-        if (!this.subscriptions[idKey]) {
-            this.subscriptions[idKey] = {};
-        }
+        if (!this.subscriptions[idKey]) this.subscriptions[idKey] = {};
 
         this.subscriptions[idKey][type] = condition;
 
@@ -455,20 +432,14 @@ class SevenTVWebSocket {
     }
 
     async unsubscribe(id: string | number, type: string) {
-        if (!id) {
-            throw new Error("Missing 'id' parameter");
-        }
-        if (!type) {
-            throw new Error("Missing 'type' parameter");
-        }
+        if (!id) throw new Error("Missing 'id' parameter");
+        if (!type) throw new Error("Missing 'type' parameter");
 
-        if (!this.subscriptions[id]) {
+        if (!this.subscriptions[id])
             throw new Error(`${id} is not subscribed to anything`);
-        }
 
-        if (!this.subscriptions[id][type]) {
+        if (!this.subscriptions[id][type])
             throw new Error(`${id} is not subscribed to ${type}`);
-        }
 
         const message = {
             op: 36,
@@ -479,9 +450,7 @@ class SevenTVWebSocket {
             },
         };
 
-        if (this.ws) {
-            this.ws.send(JSON.stringify(message));
-        }
+        if (this.ws) this.ws.send(JSON.stringify(message));
 
         delete this.subscriptions[id][type];
 

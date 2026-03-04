@@ -9,6 +9,10 @@ import {
 } from "$lib/services/7TV/cosmetics";
 
 import { emotes, globals } from "$stores/global";
+import { setEmoteSize } from "$stores/settings";
+
+let emoteSize = get(setEmoteSize);
+setEmoteSize.subscribe((value) => (emoteSize = value));
 
 function splitTextWithTwemoji(text: string) {
     const parsedText = twemoji.parse(text, {
@@ -237,9 +241,39 @@ export async function replaceWithEmotes(
 
             // Other emotes
             if (!foundEmote) {
-                foundEmote = emoteData.find(
+                const matchingEmote = emoteData.find(
                     (emote) => emote.name && part === sanitizeInput(emote.name),
                 );
+
+                if (matchingEmote) {
+                    if (matchingEmote.url) foundEmote = matchingEmote;
+
+                    if (matchingEmote.urls) {
+                        const emoteUrls = Object.values(
+                            matchingEmote.urls as Record<
+                                string,
+                                ParsedEmotesUrls
+                            >,
+                        );
+
+                        if (emoteUrls && emoteUrls.length) {
+                            const bestUrl = emoteUrls.reduce<ParsedEmotesUrls>(
+                                (prev, curr) =>
+                                    Math.abs(curr.height - emoteSize) <
+                                    Math.abs(prev.height - emoteSize)
+                                        ? curr
+                                        : prev,
+                                emoteUrls[0],
+                            );
+
+                            if (bestUrl && bestUrl.url)
+                                foundEmote = {
+                                    url: bestUrl.url,
+                                    ...matchingEmote,
+                                };
+                        }
+                    }
+                }
             }
 
             // Search for user if no emote is found

@@ -46,14 +46,32 @@ declare global {
         url: string;
     }
 
-    interface ParsedEmote {
+    interface ParsedEmotesUrls {
+        scale: string;
+        url: string;
+        width: number;
+        height: number;
+    }
+
+    interface ParsedEmoteBase {
         name: string;
         original_name: string;
         emote_id: string;
         flags: number;
-        url: string;
         set: string;
     }
+
+    interface ParsedEmoteSingle extends ParsedEmoteBase {
+        url: string;
+        urls?: never;
+    }
+
+    interface ParsedEmoteMultiple extends ParsedEmoteBase {
+        urls: Record<string, ParsedEmotesUrls>;
+        url?: never;
+    }
+
+    type ParsedEmote = ParsedEmoteSingle | ParsedEmoteMultiple;
 }
 
 export {};

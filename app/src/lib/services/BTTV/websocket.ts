@@ -99,9 +99,7 @@ class BTTVWebSocket {
 
             this.emit("raw", data);
 
-            if (!data?.name || blocked_events.includes(data["name"])) {
-                return;
-            }
+            if (!data?.name || blocked_events.includes(data["name"])) return;
 
             switch (data["name"]) {
                 case "emote_create":
@@ -188,15 +186,12 @@ class BTTVWebSocket {
      * @param {boolean} force - Forces the client to subscribe.
      */
     async subscribe(id: string | number, force?: boolean) {
-        if (!id) {
-            throw new Error("Missing 'id' parameter");
-        }
+        if (!id) throw new Error("Missing 'id' parameter");
 
-        if (this.subscriptions?.includes(id) && !force) {
+        if (this.subscriptions?.includes(id) && !force)
             throw new Error(`Already subscribed`);
-        }
 
-        if (this.ws && this.ws.readyState !== this.ws.OPEN) {
+        if (this.ws && this.ws.readyState !== this.ws.OPEN)
             await new Promise<void>((resolve, reject) => {
                 const handleOpen = () => {
                     cleanup();
@@ -217,7 +212,6 @@ class BTTVWebSocket {
                     this.ws.addEventListener("close", handleClose);
                 }
             });
-        }
 
         const message = {
             name: "join_channel",
@@ -226,13 +220,9 @@ class BTTVWebSocket {
             },
         };
 
-        if (this.ws) {
-            this.ws.send(JSON.stringify(message));
-        }
+        if (this.ws) this.ws.send(JSON.stringify(message));
 
-        if (!this.subscriptions.includes(id)) {
-            this.subscriptions.push(id);
-        }
+        if (!this.subscriptions.includes(id)) this.subscriptions.push(id);
 
         this.emit("subscribed", id);
 
@@ -245,13 +235,10 @@ class BTTVWebSocket {
      * @param {string} id - Twitch user id.
      */
     async unsubscribe(id: string | number) {
-        if (!id) {
-            throw new Error("Missing 'id' parameter");
-        }
+        if (!id) throw new Error("Missing 'id' parameter");
 
-        if (!this.subscriptions?.includes(id)) {
+        if (!this.subscriptions?.includes(id))
             throw new Error(`${id} is not subscribed`);
-        }
 
         const message = {
             name: "part_channel",
@@ -260,9 +247,7 @@ class BTTVWebSocket {
             },
         };
 
-        if (this.ws) {
-            this.ws.send(JSON.stringify(message));
-        }
+        if (this.ws) this.ws.send(JSON.stringify(message));
 
         this.subscriptions = this.subscriptions.filter((subId) => subId !== id);
 

@@ -9,7 +9,7 @@
     import {
         channelID,
         channelName,
-        config,
+        configs,
         settings,
         settingsParams,
     } from "$stores/settings";
@@ -31,7 +31,7 @@
         channelName.set("");
         channelID.set("");
 
-        settings.set(config.map((c) => ({ ...c })));
+        settings.set(configs.map((c) => ({ ...c })));
         settingsParams.set({});
 
         params.forEach((_, key) => params.delete(key));
@@ -109,16 +109,12 @@
 
     let customMessageInput: HTMLInputElement;
     function addMessage() {
-        if (!customMessageInput) {
-            return;
-        }
+        if (!customMessageInput) return;
 
         const tags = generateFakeTwitchTags();
         const message = sanitizeInput(customMessageInput.value);
 
-        if (!message.length) {
-            return;
-        }
+        if (!message.length) return;
 
         messages.update((msgs) => [...msgs, { tags, message }]);
     }
@@ -347,6 +343,8 @@
         #chat-preview {
             max-width: unset;
             min-width: unset;
+
+            overflow-y: auto;
 
             font-size: 0.7rem;
 
