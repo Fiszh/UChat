@@ -105,6 +105,7 @@
         // THIS MAKES SURE BITS DISPLAY DONT LOOK WEIRD
         .bits-wrapper {
             display: inline-flex;
+            align-items: center;
             vertical-align: middle;
         }
 
