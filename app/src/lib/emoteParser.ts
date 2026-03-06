@@ -245,8 +245,6 @@ export async function replaceWithEmotes(
                     (emote) => emote.name && part === sanitizeInput(emote.name),
                 );
 
-                console.log(emoteData);
-
                 if (matchingEmote) {
                     if (matchingEmote.url) foundEmote = matchingEmote;
 

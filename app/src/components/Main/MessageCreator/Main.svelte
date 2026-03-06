@@ -8,15 +8,50 @@
     import { initChat } from "$lib/loadChat";
     import { getUser } from "$lib/services/twitch";
     import { getChannelEmotesViaTwitchID } from "$lib/emotes";
+    import { pushUserInfoViaGQL } from "$lib/services/7TV/cosmetics";
+    import { getBadges } from "$lib/preview";
+
+    import SevenTV_main from "$lib/services/7TV/main";
 
     let messageDisplay: HTMLElement;
 
     async function loadChatInfo() {
         await initChat();
+        await getBadges();
 
         const channel_info = await getUser(channel.name);
+        const user_info = await getUser(message["tags"]["display-name"]);
+
+        let sevenTV_user_id;
+        let mappedBadges = "";
+
+        if (user_info) {
+            if (user_info[0]["badges"].length) {
+                mappedBadges = user_info[0]["badges"]
+                    .flatMap(
+                        (badge: Record<string, string>) =>
+                            badge["setID"] + "/" + badge["version"],
+                    )
+                    .join(",");
+            }
+
+            message["tags"]["user-id"] = user_info[0]["id"];
+
+            const sevenTV_user = await SevenTV_main.getUserViaTwitchID(
+                user_info[0]["id"],
+            );
+
+            if (sevenTV_user) sevenTV_user_id = sevenTV_user["id"];
+        }
+
+        if (sevenTV_user_id) await pushUserInfoViaGQL(sevenTV_user_id);
 
         if (channel_info) channel = { ...channel, id: channel_info[0]["id"] };
+        if (user_info)
+            message = {
+                ...message,
+                tags: { ...message.tags, "badges-raw": mappedBadges },
+            };
 
         getChannelEmotesViaTwitchID(channel.id);
     }
@@ -48,7 +83,6 @@
             "display-name": "uniiDev",
             "user-id": "528761326",
             "badges-raw": "broadcaster/1,twitch-recap-2024/1",
-            badges: { broadcaster: "1", "twitch-recap-2024": "1" },
             color: "#ffb3ff",
             "room-id": "0",
         },
