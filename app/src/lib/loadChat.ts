@@ -9,17 +9,12 @@ import {
 } from "$lib/badges";
 import { getChannelEmotesViaTwitchID, getGlobalEmotes } from "$lib/emotes";
 import { globals, loadingInfo } from "$stores/global";
-import { settings, settingsParams } from "$stores/settings";
+import { settings } from "$stores/settings";
 import { get } from "svelte/store";
 import { getLastMessages } from "./chat";
 
-export async function loadChat(displayLoading?: boolean) {
-    if (displayLoading) loadingInfo.set({ text: undefined, type: "minimal" });
-
-    const overlaySettings = get(settings);
-    console.log(overlaySettings);
-
-    await Promise.allSettled([
+export async function initChat() {
+    return await Promise.allSettled([
         getMainBadges(),
 
         // OTHER BADGES
@@ -33,6 +28,15 @@ export async function loadChat(displayLoading?: boolean) {
         // EMOTES
         getGlobalEmotes(),
     ]);
+}
+
+export async function loadChat(displayLoading?: boolean) {
+    if (displayLoading) loadingInfo.set({ text: undefined, type: "minimal" });
+
+    const overlaySettings = get(settings);
+    console.log(overlaySettings);
+
+    await initChat();
 
     if (globals.channelTwitchID)
         await getChannelEmotesViaTwitchID(globals.channelTwitchID);
