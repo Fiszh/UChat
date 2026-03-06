@@ -4,7 +4,8 @@
     import { Download, RefreshCcw } from "lucide-svelte";
     import Settings from "$components/Main/Chat/Settings.svelte";
 
-    import html2canvas from "html2canvas";
+    import { toPng } from "html-to-image";
+
     import { initChat } from "$lib/loadChat";
     import { getUser } from "$lib/services/twitch";
     import { getChannelEmotesViaTwitchID } from "$lib/emotes";
@@ -58,20 +59,17 @@
 
     function downloadImage() {
         if (messageDisplay) {
-            html2canvas(messageDisplay, {
-                scale: 2,
-                windowWidth: 1920,
-                windowHeight: 1080,
-                useCORS: true,
-                allowTaint: false,
-                backgroundColor: null,
-                onclone: (doc) => {
-                    doc.querySelector(".bg-grid")?.classList.remove("bg-grid");
-                },
-            }).then((canvas) => {
+            messageDisplay.classList.remove("bg-grid");
+
+            toPng(messageDisplay, {
+                pixelRatio: 2,
+                backgroundColor: undefined,
+            }).then((dataUrl) => {
+                messageDisplay.classList.add("bg-grid");
+
                 const link = document.createElement("a");
                 link.download = `${channel["name"]}-${message["tags"]["display-name"]}-message.png`;
-                link.href = canvas.toDataURL("image/png");
+                link.href = dataUrl;
                 link.click();
             });
         }
@@ -107,7 +105,6 @@
 
 <Settings dispayChannelInput={false} />
 <main>
-    <topbar class="warning">PAINTS CURRENTLY DO NOT WORK</topbar>
     <h2>UChat Message Creator</h2>
     <section id="message" class="bg-grid" bind:this={messageDisplay}>
         <ChatDisplay />
@@ -149,14 +146,6 @@
 
 <style lang="scss">
     @use "sass:color";
-
-    .warning {
-        width: 100%;
-        text-align: center;
-        background-color: red;
-        padding-block: 0.5rem;
-        box-sizing: border-box;
-    }
 
     h2 {
         font-size: 2rem;

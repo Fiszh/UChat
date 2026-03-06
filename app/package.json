@@ -1,7 +1,7 @@
 {
     "name": "uchat",
     "private": true,
-    "version": "3.3.1",
+    "version": "3.4.0",
     "type": "module",
     "scripts": {
         "dev": "vite dev",
@@ -26,7 +26,7 @@
         "vite": "^7.3.1"
     },
     "dependencies": {
-        "html2canvas": "^1.4.1",
+        "html-to-image": "^1.11.13",
         "lucide-svelte": "^0.575.0",
         "svelte-awesome-color-picker": "^4.1.0",
         "tinycolor2": "^1.6.0",
