@@ -19,3 +19,13 @@ export async function valideToken(
 
     return false;
 }
+
+export async function getUser(channel: string) {
+    const response = await fetch(
+        `https://api.ivr.fi/v2/twitch/user?login=${channel}`,
+    );
+
+    if (!response.ok) return alert(`Failed to get the channel ${channel}.`);
+
+    return await response.json();
+}

@@ -6,6 +6,8 @@
 
     import HelpMain from "./Main/Help/Main.svelte";
 
+    import MessageCreatorMain from "./Main/MessageCreator/Main.svelte";
+
     import { icon_size, isMobile } from "$stores/global";
 
     let hash = window.location.hash;
@@ -21,6 +23,8 @@
     <Sidebar />
     {#if hash.includes("help")}
         <HelpMain />
+    {:else if hash.includes("message-creator")}
+        <MessageCreatorMain />
     {:else}
         <MainDisplay />
     {/if}

@@ -1,5 +1,11 @@
 <script lang="ts">
-    import { House, Info, Github, Coffee } from "lucide-svelte";
+    import {
+        House,
+        Info,
+        Github,
+        Coffee,
+        MessageSquareMore,
+    } from "lucide-svelte";
 
     import LoginButton from "$components/LoginButton.svelte";
     import GlobalSettings from "./GlobalSettings.svelte";
@@ -50,6 +56,10 @@
             navLink: undefined as HTMLElement | undefined,
             hash: ["", "#"],
         },
+        msgCreator: {
+            navLink: undefined as HTMLElement | undefined,
+            hash: ["#message-creator"],
+        },
         help: {
             navLink: undefined as HTMLElement | undefined,
             hash: ["#help", "#help-notice"],
@@ -94,6 +104,12 @@
         <!-- <a href="convert/" target="_blank" rel="noopener noreferrer">
             <RefreshCcw size="20" /> Invalid URL
         </a> -->
+        <a
+            href="#message-creator"
+            bind:this={navLinks["msgCreator"]["navLink"]}
+        >
+            <MessageSquareMore size="20" /> Message creator
+        </a>
         <a href="#help" bind:this={navLinks["help"]["navLink"]}>
             <Info size="20" /> Info & Privacy
         </a>

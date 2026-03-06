@@ -14,6 +14,8 @@
     import { CircleQuestionMark } from "lucide-svelte";
     import { isMobile } from "$stores/global";
 
+    export let dispayChannelInput: boolean = true;
+
     let usingID = false;
 
     const rawLocalSettings = localStorage.getItem("local-settings");
@@ -191,38 +193,40 @@
             {/if}
         {/each}
     </section>
-    <p>↓ Channel Info ↓</p>
-    <section id="channel">
-        <label>
-            <input
-                type="checkbox"
-                id="channel-id-check"
-                bind:checked={usingID}
-            /> Use Channel ID
-        </label>
+    {#if dispayChannelInput}
+        <p>↓ Channel Info ↓</p>
+        <section id="channel">
+            <label>
+                <input
+                    type="checkbox"
+                    id="channel-id-check"
+                    bind:checked={usingID}
+                /> Use Channel ID
+            </label>
 
-        {#if usingID}
-            <input
-                placeholder="Channel ID"
-                bind:value={localChannelID}
-                on:input={(e) =>
-                    (localChannelID = validateInput(
-                        e.currentTarget.value,
-                        "number",
-                    ))}
-            />
-        {:else}
-            <input
-                placeholder="Channel Name"
-                bind:value={localChannelName}
-                on:input={(e) =>
-                    (localChannelName = validateInput(
-                        e.currentTarget.value,
-                        "twitch_name",
-                    ))}
-            />
-        {/if}
-    </section>
+            {#if usingID}
+                <input
+                    placeholder="Channel ID"
+                    bind:value={localChannelID}
+                    on:input={(e) =>
+                        (localChannelID = validateInput(
+                            e.currentTarget.value,
+                            "number",
+                        ))}
+                />
+            {:else}
+                <input
+                    placeholder="Channel Name"
+                    bind:value={localChannelName}
+                    on:input={(e) =>
+                        (localChannelName = validateInput(
+                            e.currentTarget.value,
+                            "twitch_name",
+                        ))}
+                />
+            {/if}
+        </section>
+    {/if}
 </div>
 
 <style lang="scss">

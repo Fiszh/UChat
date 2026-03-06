@@ -272,7 +272,7 @@
         --chat-font-stroke: unset;
         --chat-shadow: 10;
         --chat-emote-size: 20px;
-        --chat-font-color: 20px;
+        --chat-font-color: #ffffff;
     }
 
     .chat {
