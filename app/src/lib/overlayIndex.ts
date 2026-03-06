@@ -340,7 +340,7 @@ services["7TV"].ws.on("remove_emote", (id, actor, data) => {
             emoteData["7TV"]["channel"][globals.channelTwitchID || ""] =
                 emoteData["7TV"]["channel"][
                     globals.channelTwitchID || ""
-                ].filter((emote) => emote.url !== data.url);
+                ].filter((emote) => emote.emote_id !== data.emote_id);
 
             return emoteData;
         });
