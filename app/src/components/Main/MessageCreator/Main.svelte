@@ -37,6 +37,7 @@
             }
 
             message["tags"]["user-id"] = user_info[0]["id"];
+            message["tags"]["color"] = user_info[0]["chatColor"];
 
             const sevenTV_user = await SevenTV_main.getUserViaTwitchID(
                 user_info[0]["id"],
