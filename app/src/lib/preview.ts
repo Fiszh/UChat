@@ -18,9 +18,9 @@ export async function getBadges() {
             (version: Record<string, any>) => ({
                 id: badge.set_id + "_" + version.id,
                 url:
-                    version.image_url_1x ||
-                    version.image_url_2x ||
                     version.image_url_4x ||
+                    version.image_url_2x ||
+                    version.image_url_1x ||
                     "",
                 title: version.title,
             }),
