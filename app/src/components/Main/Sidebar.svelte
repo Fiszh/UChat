@@ -14,6 +14,7 @@
     import { delCookie, getCookie, setCookie } from "$lib/cookie";
 
     import { overlayVersion } from "$stores/settings";
+    import { dev } from "$app/environment";
 
     $: version_text = $overlayVersion;
 
@@ -93,7 +94,7 @@
             <h1 style="font-size:0.8rem; line-height: 1px;">
                 UChat Chat Overlay for Twitch
             </h1>
-            <small id="version_text">{version_text}</small>
+            <small id="version_text">{version_text} {dev ? "DEV" : ""}</small>
         </div>
     </header>
 

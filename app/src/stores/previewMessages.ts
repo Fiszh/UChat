@@ -69,15 +69,4 @@ export const previewMessages = [
         message:
             "Pog chat overlay with better zero width emotes catJAM WideRaveTime ALERT",
     },
-    {
-        tags: {
-            username: "sonku___",
-            "display-name": "sonku___",
-            "badges-raw": "bits/1250000,sub-gift-leader/1",
-            badges: { bits: "1250000", "sub-gift-leader": "1" },
-            color: "#433E43",
-            "room-id": "0",
-        },
-        message: "@uniiDev, who the hell is FISzhh wtf 🤔",
-    },
 ];

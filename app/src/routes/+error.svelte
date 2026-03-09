@@ -68,4 +68,35 @@
         height: 20dvw;
         border-radius: 10px;
     }
+
+    @media (max-width: 768px) {
+        main {
+            padding: 25px;
+            flex-direction: column;
+            justify-content: center;
+            gap: 3rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2rem;
+        }
+
+        img {
+            height: 60dvw;
+        }
+
+        p {
+            width: 100%;
+        }
+
+        #buttons {
+            justify-content: center;
+            & > * {
+                font-size: 1rem;
+                padding: 0.5rem 1rem;
+                border-radius: 7px;
+            }
+        }
+    }
 </style>
