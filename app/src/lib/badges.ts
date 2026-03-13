@@ -29,7 +29,7 @@ export async function getMainBadges() {
     const data = await response.json();
 
     const map = [...data["UChat"], ...data["YAUTC"]].map((badge) => {
-        if (Object.values(badge["imgs"]["animated"]).length) {
+        if (badge["imgs"]["animated"]) {
             badge["urls"] = badge["imgs"]["animated"];
         } else {
             badge["urls"] = badge["imgs"]["static"];
