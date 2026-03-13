@@ -1,5 +1,6 @@
 import { get, writable } from "svelte/store";
 import { settings } from "$stores/settings";
+import { execCommand } from "./chatCommands";
 
 const currentSettings = get(settings) || [];
 const modActions = (
@@ -83,6 +84,8 @@ function assignMessage(parsed: ReturnType<typeof parseIrcLine>) {
             break;
         case "PRIVMSG":
             parsed.tags = parsed.tags.merged ?? parsed.tags;
+
+            execCommand(parsed.message, parsed.tags);
 
             messages.update((msgs) => [...msgs.slice(-99), parsed]);
 

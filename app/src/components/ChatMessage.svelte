@@ -30,43 +30,6 @@
         ? fixNameColor(message.tags.color)
         : usernameColor(username);
 
-    const UChatMods = ["528761326", "166427338"];
-    if (
-        (UChatMods.includes(message.tags["user-id-raw"]) ||
-            message.tags?.mod ||
-            message.tags?.["badges-raw"]?.includes("broadcaster/1")) &&
-        message.text.startsWith("!")
-    ) {
-        switch (
-            message.text
-                .toLowerCase()
-                .trim()
-                .replace(/^(!uchat\s|!)/, "")
-        ) {
-            case "reloadchat":
-                window.location.reload();
-
-                break;
-            case "refreshchat":
-                loadChat(true);
-
-                break;
-            case "reloadws":
-                try {
-                    services["7TV"].ws.close();
-                    services["BTTV"].ws.close();
-                } catch (err) {} // HERE JUST IN CASE THE WEBSOCKET IS NOT OPEN
-
-                break;
-            case "reconnectchat":
-                disconnect();
-
-                break;
-            default:
-                break;
-        }
-    }
-
     if (message.room_id) getChannelEmotesViaTwitchID(String(message.room_id));
 
     let FFZBadges = $badges.FFZ;
