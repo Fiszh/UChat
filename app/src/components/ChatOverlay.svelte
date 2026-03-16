@@ -12,9 +12,25 @@
 
     let status = "";
 
-    connectionStatus.subscribe((s) => {
-        status = s;
-    });
+    connectionStatus.subscribe((s) => (status = s));
+
+    // REFRESH IMAGES IF FAILED
+    let imageReloadInterval: ReturnType<typeof setInterval>;
+
+    function handleImageRetries(): void {
+        document
+            .querySelectorAll<HTMLImageElement>("img")
+            .forEach((img, index) => {
+                if (!img.complete || img.naturalWidth === 0) {
+                    setTimeout(() => {
+                        img.src =
+                            img.src.split("?")[0] +
+                            "?retry=" +
+                            new Date().getTime();
+                    }, 500 * index);
+                }
+            });
+    }
 
     onMount(() => {
         loadingInfo.set({ text: undefined, type: "minimal" });
@@ -23,9 +39,7 @@
         const channelName = params.get("channel");
         const channelID = params.get("id");
 
-        if (channelName) {
-            connect(channelName);
-        }
+        if (channelName) connect(channelName);
 
         for (const [key, value] of params) {
             settings.update((list) =>
@@ -53,9 +67,7 @@
                 globals.channelTwitchName &&
                 globals.channelTwitchID
             ) {
-                if (!channelName) {
-                    connect(globals.channelTwitchName);
-                }
+                if (!channelName) connect(globals.channelTwitchName);
 
                 await loadChat();
 
@@ -67,31 +79,7 @@
             console.log(globals);
         })();
 
-        // REFRESH IMAGES IF FAILED
-        let interval: ReturnType<typeof setInterval>;
-
-        function handleImageRetries(): void {
-            document
-                .querySelectorAll<HTMLImageElement>("img")
-                .forEach((img, index) => {
-                    if (img.naturalWidth === 0 || img.naturalHeight === 0) {
-                        setTimeout(() => {
-                            img.src =
-                                img.src.split("?")[0] +
-                                "?retry=" +
-                                new Date().getTime();
-                        }, 500 * index);
-                    }
-                });
-        }
-
-        onMount(() => {
-            interval = setInterval(handleImageRetries, 10000);
-        });
-
-        onDestroy(() => {
-            clearInterval(interval);
-        });
+        imageReloadInterval = setInterval(handleImageRetries, 10000);
     });
 </script>
 
