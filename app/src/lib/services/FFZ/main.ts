@@ -22,14 +22,14 @@ async function parseSetData(
         original_name: emote?.name,
         emote_id: emote?.id,
         flags: emote?.data?.modifier_flags,
-        urls: Object.keys(emote.animated || emote.urls).reduce<
+        urls: Object.entries(emote.animated || emote.urls).reduce<
             Record<string, ParsedEmotesUrls>
-        >((acc, scale) => {
+        >((acc, [scale, url]) => {
             const numberScale = Number(scale);
 
             acc[scale] = {
                 scale,
-                url: `https://cdn.frankerfacez.com/emote/${emote.id}/animated/${scale}`,
+                url,
                 width: emote.width * numberScale,
                 height: emote.height * numberScale,
             };
