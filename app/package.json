@@ -1,7 +1,7 @@
 {
     "name": "uchat",
     "private": true,
-    "version": "3.4.2",
+    "version": "3.4.3",
     "type": "module",
     "scripts": {
         "dev": "vite dev",
@@ -10,7 +10,9 @@
         "prepare": "svelte-kit sync || echo ''",
         "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
         "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-        "dev:open": "vite dev --open --host"
+        "dev:open": "vite dev --open --host",
+        "typecheck": "bunx tsc --noEmit && bunx prettier --check .",
+        "fmt": "bunx prettier --write ."
     },
     "devDependencies": {
         "@sveltejs/adapter-static": "^3.0.10",

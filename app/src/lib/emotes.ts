@@ -25,19 +25,29 @@ export async function getChannelEmotesViaTwitchID(twitchID: string) {
             const SevenTV_user_data =
                 await SevenTV_main.getUserViaTwitchID(twitchID);
 
-            emotes.update((emoteData) => {
-                emoteData["7TV"]["channel"][twitchID] =
-                    SevenTV_user_data?.emote_data as ParsedEmote[];
+            if (SevenTV_user_data) {
+                emotes.update((emoteData) => {
+                    if ("emote_data" in SevenTV_user_data)
+                        emoteData["7TV"]["channel"][twitchID] =
+                            SevenTV_user_data?.emote_data as ParsedEmote[];
 
-                return emoteData;
-            });
+                    if (
+                        "id" in SevenTV_user_data &&
+                        SevenTV_user_data["id"] == null
+                    )
+                        emoteData["7TV"]["channel"][twitchID] =
+                            [] as ParsedEmote[];
 
-            if (SevenTV_user_data?.id) {
-                globals.SevenTVID = SevenTV_user_data.id;
-            }
+                    return emoteData;
+                });
 
-            if (SevenTV_user_data?.emote_set_id) {
-                globals.SevenTVemoteSetId = SevenTV_user_data.emote_set_id;
+                if (SevenTV_user_data?.id) {
+                    globals.SevenTVID = SevenTV_user_data.id;
+                }
+
+                if ("emote_set_id" in SevenTV_user_data) {
+                    globals.SevenTVemoteSetId = SevenTV_user_data.emote_set_id;
+                }
             }
         }
     } catch (e) {
