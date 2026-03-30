@@ -4,19 +4,9 @@ Project is currently deployed at: https://chat.unii.dev/
 
 A highly customizable Twitch chat overlay for OBS and other streaming programs.
 
-## ⚠️ API Usage
-
-> The backend/API used by this site is not for personal or public use.  
-> This repo does not include a backend. If you need API functionality, build it using the [main site repo](https://github.com/Fiszh/uniiDev).  
-> Please do not ask for API code.
-
 # Want your app’s badges or your bot added to the overlay?
 
-Create a pull request or contact me on Discord/Twitch.
-
-> ⚠️ NOTICE ⚠️  
-> Make sure your bot is not on the FFZ bots list and does not have the Twitch Chat Bot badge before submitting.  
-> I reserve the right to decline any app or bot without giving a reason.
+Create a pull request.
 
 ## Chat Customization Settings
 
