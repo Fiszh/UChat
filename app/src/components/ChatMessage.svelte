@@ -95,29 +95,24 @@
             : ([] as parsedBadge[]);
     let emoteText = message.text;
 
-    async function parse() {
-        emoteText = await replaceWithEmotes(
+    const parse = async () =>
+        (emoteText = await replaceWithEmotes(
             message.text,
             message.tags,
             message.tags["source-room-id"] ?? message.tags["room-id"],
             chatSettings,
-        );
-    }
+        ));
 
     parse();
 
     if (!window.location.search) {
         emotes.subscribe(() => parse());
 
-        badges.subscribe(async () => {
-            parsedBadges = parseBadges(tags);
-        });
+        badges.subscribe(async () => (parsedBadges = parseBadges(tags)));
 
         settings.subscribe(() => parse());
     } else {
-        badges.subscribe(async (e) => {
-            FFZBadges = e["FFZ"];
-        });
+        badges.subscribe(async (e) => (FFZBadges = e["FFZ"]));
     }
 
     // THIS CAN BE KEPT ON OVERLAY

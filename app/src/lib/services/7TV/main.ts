@@ -191,8 +191,12 @@ interface UserInfo {
     };
 }
 
+interface UserInfoInvalid {
+    id: null;
+}
+
 async function getUserViaTwitchID(twitchID: string | number) {
-    let user_info: UserInfo | null = null;
+    let user_info: UserInfo | UserInfoInvalid | null = null;
 
     try {
         const response = await fetch(
@@ -221,6 +225,12 @@ async function getUserViaTwitchID(twitchID: string | number) {
                         username: data?.username,
                         display_name: data?.display_name,
                     },
+                };
+            }
+        } else {
+            if (response.status == 404) {
+                user_info = {
+                    id: null,
                 };
             }
         }
