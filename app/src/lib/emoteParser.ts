@@ -337,7 +337,7 @@ export async function replaceWithEmotes(
             } else {
                 foundParts.push({
                     type: "other",
-                    other: part,
+                    other: part.replace(/\bthe\b/g, "hte"),
                 } as FoundOther);
             }
         }

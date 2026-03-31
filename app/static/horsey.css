@@ -1,0 +1,16 @@
+#horsey {
+    position: absolute;
+    z-index: 1000000;
+    left: -100%;
+    top: 50%;
+    transform: translate(0%, -50%);
+    height: 100%;
+    max-height: 75%;
+    max-width: 75%;
+    object-fit: contain;
+    transition: all 3s linear;
+}
+
+#horsey.walk {
+    left: 120%;
+}

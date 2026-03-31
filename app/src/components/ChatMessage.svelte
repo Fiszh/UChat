@@ -4,7 +4,6 @@
     import { getPaint, getPaintHTML } from "$lib/services/7TV/cosmetics";
     import { replaceWithEmotes } from "$lib/emoteParser";
     import { parseBadges } from "$lib/badgeParser";
-    import { services } from "$lib/services";
     import { fixNameColor } from "$lib/overlayIndex";
 
     import Badge from "./Badge.svelte";
@@ -12,9 +11,9 @@
     import { type Setting, settings } from "$stores/settings";
     import { emotes, badges, globals } from "$stores/global";
     import { cosmetics } from "$stores/cosmetics";
-    import { disconnect, messages } from "$lib/chat";
+    import { messages } from "$lib/chat";
     import { getChannelEmotesViaTwitchID } from "$lib/emotes";
-    import { loadChat } from "$lib/loadChat";
+    import { spawnHorsey } from "$lib/april/functions";
 
     export let message: {
         user: string;
@@ -153,6 +152,13 @@
     }
 
     onMount(() => {
+        const chance = Math.random();
+
+        if (chance <= 0.05)
+            chatMessage.style.transform = `scaleX(${1 + Math.random() * 0.3})`;
+
+        if (message.text.includes("horse") && chance <= 0.07) spawnHorsey();
+
         return () => {
             unsubscribeSettings();
             unsubscribeCosmetics();
