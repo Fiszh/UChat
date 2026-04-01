@@ -40,14 +40,6 @@ export function parseBadges(
         });
     });
 
-    // PUSH FAKE STAFF BADGE
-    user_badges.push({
-        badge_url:
-            "https://static-cdn.jtvnw.net/badges/v1/d97c37bd-a6f5-4c38-8f57-4e4bef88af34/3",
-        alt: "Staff",
-        background_color: undefined,
-    });
-
     // THIS NEEDS TO BE ALWAYS ON THE START TO MAKE SURE TWITCH BADGES WILL BE FIRST
     if (
         userstate["badges-raw"] &&
@@ -205,11 +197,9 @@ export function parseBadges(
     // 7TV
     const found7TVBadge = getBadge(userstate["user-id"]);
 
-    // GIVE EVERYONE FAKE 7TV ADMIN BADGE
     if (found7TVBadge) {
         user_badges.push({
-            badge_url:
-                "https://cdn.7tv.app/badge/01GAFAKCYG000E8VNG1S1RMTBH/4x.webp", //found7TVBadge.urls[found7TVBadge.urls.length - 1].url,
+            badge_url: found7TVBadge.urls[found7TVBadge.urls.length - 1].url,
             alt: found7TVBadge.name,
             background_color: undefined,
         });

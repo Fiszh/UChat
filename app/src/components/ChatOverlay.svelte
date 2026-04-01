@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { onMount, onDestroy } from "svelte";
 
     import ChatDisplay from "./ChatDisplay.svelte";
 
@@ -9,8 +9,6 @@
     import { getMainUser, connectToWS } from "$lib/overlayIndex";
     import { settings } from "$stores/settings";
     import { loadChat } from "$lib/loadChat";
-
-    import { init } from "$lib/april/functions";
 
     let status = "";
 
@@ -35,10 +33,6 @@
     }
 
     onMount(() => {
-        // @ts-ignore
-        import("$lib/april/loops");
-        init();
-
         loadingInfo.set({ text: undefined, type: "minimal" });
 
         const params = new URLSearchParams(window.location.search);
