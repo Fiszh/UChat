@@ -81,8 +81,8 @@
                     const font = setting.value as string;
 
                     styles["--chat-font"] = font
-                        ? `${font.includes(" ") ? `"${font}"` : font}, BLMelody`
-                        : "BLMelody";
+                        ? `${font.includes(" ") ? `"${font}"` : font}, Geist`
+                        : "Geist";
 
                     break;
                 case "fontSize":

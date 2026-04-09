@@ -1,6 +1,6 @@
 body {
     overflow: hidden;
-    font-family: "BLMelody", system-ui, sans-serif;
+    font-family: "Geist", system-ui, sans-serif;
     color: white;
     margin: 0;
     padding: 0;
@@ -94,6 +94,70 @@ body {
 @font-face {
     font-family: "BLMelody";
     src: url("/fonts/Melody/BLMelody-Bold.otf") format("opentype");
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Satoshi";
+    src: url("/fonts/Satoshi/Satoshi-Light.otf") format("opentype");
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Satoshi";
+    src: url("/fonts/Satoshi/Satoshi-Regular.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Satoshi";
+    src: url("/fonts/Satoshi/Satoshi-Medium.otf") format("opentype");
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Satoshi";
+    src: url("/fonts/Satoshi/Satoshi-Bold.otf") format("opentype");
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Satoshi";
+    src: url("/fonts/Satoshi/Satoshi-Black.otf") format("opentype");
+    font-weight: 900;
+    font-style: normal;
+}
+
+/* CURRENT FONT */
+@font-face {
+    font-family: "Geist";
+    src: url("/fonts/Geist/Geist-Regular.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Geist";
+    src: url("/fonts/Geist/Geist-Medium.otf") format("opentype");
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Geist";
+    src: url("/fonts/Geist/Geist-SemiBold.otf") format("opentype");
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Geist";
+    src: url("/fonts/Geist/Geist-Bold.otf") format("opentype");
     font-weight: 700;
     font-style: normal;
 }

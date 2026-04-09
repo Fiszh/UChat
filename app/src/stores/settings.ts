@@ -58,7 +58,7 @@ export const configs: Setting[] = [
     {
         name: "Custom chat font",
         type: "text",
-        value: "BLMelody",
+        value: "Geist",
         param: "font",
     },
     {
