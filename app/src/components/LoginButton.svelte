@@ -65,7 +65,7 @@
 
     button {
         $background: #141414;
-        $border: #333;
+        $border: #242424;
 
         all: unset;
         cursor: pointer;

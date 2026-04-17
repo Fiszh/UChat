@@ -4,6 +4,7 @@
     import { parseSavedSettings } from "$lib/overlayIndex";
 
     import SettingsColorPicker from "./SettingsColorPicker.svelte";
+    import Dialog from "$components/Dialog.svelte";
 
     import {
         savedSettings,
@@ -15,6 +16,14 @@
     import { isMobile } from "$stores/global";
 
     export let dispayChannelInput: boolean = true;
+
+    let showHidden = false;
+    let hiddenWarning = false;
+
+    const showHiddenSettings = () => {
+        showHidden = true;
+        hiddenWarning = true;
+    };
 
     let usingID = false;
 
@@ -114,12 +123,17 @@
         : removeParam("id");
 </script>
 
+<Dialog name="Warming" bind:show={hiddenWarning}>
+    Hidden settings are not meant to be used regularly, please keep that in mind
+    when enabling them.
+</Dialog>
+
 {#snippet booleanSetting(param: string, defaultValue: boolean, value: boolean)}
     <input
         type="checkbox"
         checked={defaultValue != value ? value : defaultValue}
         class:active={value}
-        on:change={(e) => handleInput(param, e.currentTarget.checked)}
+        onchange={(e) => handleInput(param, e.currentTarget.checked)}
     />
 {/snippet}
 
@@ -128,7 +142,7 @@
         type="text"
         placeholder={String(defaultValue)}
         value={defaultValue != value ? value : ""}
-        on:input={(e) =>
+        oninput={(e) =>
             handleInput(param, e.currentTarget.value, typeof defaultValue)}
     />
 {/snippet}
@@ -145,14 +159,17 @@
 <div id="settings">
     <section id="config">
         {#each $settings as setting, i (i)}
-            {#if !setting.hide}
-                <div class="setting-display">
+            {#if !setting.hide || (setting.hide && showHidden)}
+                <div class="setting-display" class:hidden={setting.hide}>
                     {#if typeof setting["previewReact"] != "undefined" && !setting["previewReact"] && $isMobile}
                         <p id="preview-warning">
                             This setting does not effect the chat preview.
                         </p>
                     {/if}
                     <p class="setting-name">
+                        {#if setting.hide}
+                            (Hidden)
+                        {/if}
                         {@html setting.name.replace(
                             /\(([^)]+)\)/g,
                             "<small>($1)</small>",
@@ -192,6 +209,12 @@
                 </div>
             {/if}
         {/each}
+
+        {#if !showHidden}
+            <button id="hidden-settings" onclick={showHiddenSettings}
+                >Show hidden settings</button
+            >
+        {/if}
     </section>
     {#if dispayChannelInput}
         <p>↓ Channel Info ↓</p>
@@ -208,7 +231,7 @@
                 <input
                     placeholder="Channel ID"
                     bind:value={localChannelID}
-                    on:input={(e) =>
+                    oninput={(e) =>
                         (localChannelID = validateInput(
                             e.currentTarget.value,
                             "number",
@@ -218,7 +241,7 @@
                 <input
                     placeholder="Channel Name"
                     bind:value={localChannelName}
-                    on:input={(e) =>
+                    oninput={(e) =>
                         (localChannelName = validateInput(
                             e.currentTarget.value,
                             "twitch_name",
@@ -240,7 +263,7 @@
 
         background-color: rgba(255, 255, 255, 0.021);
 
-        border-right: #333 1px solid;
+        border-right: #242424 1px solid;
 
         #config {
             width: 100%;
@@ -265,7 +288,7 @@
             text-align: center;
             font-weight: bold;
 
-            border-top: #333 1px solid;
+            border-top: #242424 1px solid;
             background-color: rgba(255, 255, 255, 0.05);
         }
 
@@ -277,7 +300,7 @@
             box-sizing: border-box;
             position: relative;
             background-color: rgba(255, 255, 255, 0.014);
-            border-top: #333 1px solid;
+            border-top: #242424 1px solid;
 
             label {
                 user-select: none;
@@ -288,8 +311,8 @@
                 background-color: #0e0e0e;
                 padding: 0.3rem 0.2rem;
                 box-sizing: border-box;
-                border-bottom: 1px solid #333;
-                border-left: 1px solid #333;
+                border-bottom: 1px solid #202020;
+                border-left: 1px solid #202020;
             }
 
             & > input {
@@ -311,11 +334,15 @@
         border-image: linear-gradient(
                 to right,
                 #33333300 5%,
-                #333 20%,
-                #333 80%,
+                #161616 20%,
+                #161616 80%,
                 #33333300 95%
             )
             1;
+
+        &.hidden {
+            color: rgb(255, 118, 118);
+        }
 
         &:last-child {
             border: none;
@@ -335,10 +362,18 @@
             width: 25%;
             border-radius: 0.5rem;
             border: none;
-            background-color: rgba(255, 255, 255, 0.057);
+            background-color: rgba(255, 255, 255, 0.05);
             font-size: 1.7rem;
             text-align: center;
-            outline: none;
+
+            outline: transparent 1px solid;
+            transition: outline-color 0.3s ease;
+
+            &:hover,
+            &:active,
+            &:focus-within {
+                outline-color: #242424;
+            }
         }
 
         input[type="checkbox"] {
@@ -358,7 +393,7 @@
                 position: absolute;
                 width: calc(var(--size) - 4px);
                 height: calc(var(--size) - 4px);
-                background: white;
+                background: rgb(212, 212, 212);
                 border-radius: 50%;
                 top: 50%;
                 left: 2px;
@@ -367,12 +402,26 @@
             }
 
             &.active {
-                background-color: #4caf50;
+                background-color: #4a994d;
 
                 &::after {
+                    background: white;
                     left: calc(100% - var(--size) + 2px);
                 }
             }
+        }
+    }
+
+    #hidden-settings {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1rem;
+        padding-block: 0.5rem;
+        cursor: pointer;
+
+        &:hover {
+            color: rgba(255, 255, 255, 0.85);
         }
     }
 

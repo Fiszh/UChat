@@ -25,7 +25,7 @@ export const faqItems = [
     },
     {
         question: "What chat commands are available?",
-        answer: "Commands can only be used by the broadcaster or a mod, you can also use commands with !uchat <command>",
+        answer: "Commands can only be used by the broadcaster or a mod, you can also use commands with !uchat <command>. Click to copy a command.",
         commands: [
             { cmd: "!reloadchat", desc: "Reloads the overlay" },
             { cmd: "!refreshchat", desc: "Refreshes the overlay" },

@@ -194,13 +194,13 @@
             padding: 0.5rem 1rem;
             box-sizing: border-box;
             cursor: text;
-            border: 1px #333 solid;
+            border: 1px #242424 solid;
         }
     }
 
     button {
         $background: #141414;
-        $border: #333;
+        $border: #242424;
 
         all: unset;
         cursor: pointer;

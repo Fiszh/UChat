@@ -226,17 +226,21 @@
         }) as any;
 
     onMount(() => {
-        let scrollTimeout: ReturnType<typeof setTimeout>;
+        let lastScrollTime = 0;
+        let scrollRaf: number;
 
         const observer = new MutationObserver(() => {
-            clearTimeout(scrollTimeout);
+            cancelAnimationFrame(scrollRaf);
+            scrollRaf = requestAnimationFrame(() => {
+                const now = Date.now();
+                const fast = now - lastScrollTime < 100;
+                lastScrollTime = now;
 
-            scrollTimeout = setTimeout(() => {
                 chat?.scrollTo({
                     top: chat.scrollHeight,
-                    behavior: "smooth",
+                    behavior: fast ? "instant" : "smooth",
                 });
-            }, 10);
+            });
         });
 
         observer.observe(chat, { childList: true });

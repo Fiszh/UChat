@@ -127,7 +127,7 @@
             padding: 0.3rem 2rem;
             box-sizing: border-box;
 
-            border: #333 1px solid;
+            border: #161616 1px solid;
 
             background-color: rgba(255, 255, 255, 0.014);
 
@@ -163,8 +163,8 @@
                 border-image: linear-gradient(
                         to right,
                         #33333300 2.5%,
-                        #333 10%,
-                        #333 90%,
+                        #161616 10%,
+                        #161616 90%,
                         #33333300 97.5%
                     )
                     1;
@@ -198,7 +198,7 @@
                 box-sizing: border-box;
                 background-color: rgba(255, 255, 255, 0.014);
 
-                border: #333 1px solid;
+                border: #161616 1px solid;
                 border-radius: 1rem;
 
                 list-style-type: none;

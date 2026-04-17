@@ -86,7 +86,7 @@
             overflow: hidden;
         }
         footer {
-            border-top: 1px #333 solid;
+            border-top: 1px #161616 solid;
             padding: 0.5rem 2rem;
             box-sizing: border-box;
             width: 100%;

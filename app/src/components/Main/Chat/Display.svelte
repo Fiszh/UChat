@@ -222,7 +222,7 @@
         & > p {
             background-color: rgba(0, 0, 0, 0.5);
 
-            border-bottom: #333 1px solid;
+            border-bottom: #242424 1px solid;
             display: flex;
             flex-direction: column;
             margin: 0;
@@ -244,7 +244,7 @@
             padding: 0.7rem 1rem;
             box-sizing: border-box;
 
-            border-top: #333 1px solid;
+            border-top: #242424 1px solid;
 
             bottom: 0;
 
@@ -253,8 +253,8 @@
                 border-image: linear-gradient(
                         to right,
                         #33333300 2.5%,
-                        #333 10%,
-                        #333 90%,
+                        #161616 10%,
+                        #161616 90%,
                         #33333300 97.5%
                     )
                     1;

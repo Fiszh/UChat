@@ -1,22 +1,16 @@
 <script lang="ts">
-    import { onMount, onDestroy } from "svelte";
+    import { onMount } from "svelte";
 
     import ChatDisplay from "./ChatDisplay.svelte";
 
     import { globals, loadingInfo } from "$stores/global";
-    import { connectionStatus, connect } from "$lib/chat";
+    import { connect } from "$lib/chat";
 
     import { getMainUser, connectToWS } from "$lib/overlayIndex";
     import { settings } from "$stores/settings";
     import { loadChat } from "$lib/loadChat";
 
-    let status = "";
-
-    connectionStatus.subscribe((s) => (status = s));
-
     // REFRESH IMAGES IF FAILED
-    let imageReloadInterval: ReturnType<typeof setInterval>;
-
     function handleImageRetries(): void {
         document
             .querySelectorAll<HTMLImageElement>("img")
@@ -79,7 +73,7 @@
             console.log(globals);
         })();
 
-        imageReloadInterval = setInterval(handleImageRetries, 10000);
+        setInterval(handleImageRetries, 10000);
     });
 </script>
 

@@ -155,7 +155,7 @@
 
     aside {
         user-select: none;
-        border-right: 1px solid #333;
+        border-right: 1px solid #242424;
         min-width: 17rem;
         max-width: 17rem;
         width: 100%;
@@ -170,7 +170,7 @@
             padding: 0.7rem 1rem;
             box-sizing: border-box;
 
-            border-bottom: 1px solid #333;
+            border-bottom: 1px solid #242424;
             background-color: rgba(0, 0, 0);
 
             img {
@@ -208,6 +208,8 @@
 
                 border-radius: 0.7rem;
 
+                border: transparent 1px solid;
+
                 &:hover {
                     transform: scale(1.05);
                     background-color: rgb(20, 20, 20);
@@ -216,7 +218,7 @@
                 &.active {
                     transform: scale(1.05);
                     background-color: rgb(24, 24, 24);
-                    border: 1px solid #333;
+                    border-color: #2c2c2c;
                 }
             }
         }
@@ -224,7 +226,7 @@
         #account {
             padding: 0.7rem;
             box-sizing: border-box;
-            border-top: 1px solid #333;
+            border-top: 1px solid #242424;
             display: flex;
             flex-direction: column;
             align-items: center;
