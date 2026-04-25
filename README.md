@@ -4,7 +4,7 @@ Project is currently deployed at: https://chat.unii.dev/
 
 A highly customizable Twitch chat overlay for OBS and other streaming programs.
 
-# Want your app’s badges or your bot added to the overlay?
+## Want your app’s badges or your bot added to the overlay?
 
 Create a pull request.
 
