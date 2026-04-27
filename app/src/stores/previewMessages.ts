@@ -69,4 +69,39 @@ export const previewMessages = [
         message:
             "Pog chat overlay with better zero width emotes catJAM WideRaveTime ALERT",
     },
+    {
+        tags: {
+            username: "k1n_",
+            "display-name": "K1N_",
+            "user-id": "196937696",
+            "badges-raw": "dragonscimmy/1",
+            badges: { dragonscimmy: "1" },
+            color: "#FF69B4",
+            "room-id": "0",
+        },
+        message: "yugi61",
+    },
+    {
+        tags: {
+            username: "xslash58",
+            "display-name": "Xslash58",
+            "user-id": "198740595",
+            "badges-raw": "destiny-2-the-final-shape-streamer/1",
+            badges: { "destiny-2-the-final-shape-streamer": "1" },
+            color: "#28A656",
+            "room-id": "0",
+        },
+        message: "gżegżółka bah",
+    },
+    {
+        tags: {
+            username: "cascow_",
+            "display-name": "cascoW_",
+            "badges-raw": "bingbonglove/1",
+            badges: { bingbonglove: "1" },
+            color: "#00DDC0",
+            "room-id": "0",
+        },
+        message: "I'm thinking Miku, Miku Ooh-ee-ooh",
+    },
 ];

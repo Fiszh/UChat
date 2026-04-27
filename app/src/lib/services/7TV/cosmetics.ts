@@ -5,6 +5,10 @@ const { parseBadgeData, parsePaintData } = main;
 
 import { cosmetics } from "$stores/cosmetics";
 
+// GQL
+import cosmetics_single from "./GQL/cosmetics/single.gql?raw";
+import cosmetics_multiple from "./GQL/cosmetics/multiple.gql?raw";
+
 interface Owner {
     id: string;
     platform: string;
@@ -39,39 +43,41 @@ export function getPersonalSets(twitchID: string): any | undefined {
     ) as any | undefined;
 }
 
-export function getPaintHTML(paint_data: Paint): Record<string, string> {
-    return {
-        paint:
-            `${paint_data.backgroundImage ? `background-image: ${paint_data.backgroundImage};` : ""}` ||
-            "",
-        shadow:
-            `${paint_data.shadows ? `filter: ${paint_data.shadows};` : ""}` ||
-            "",
-    };
-}
+export const getPaintHTML = (paint_data: Paint): Record<string, string> => ({
+    paint:
+        `${paint_data.backgroundImage ? `background-image: ${paint_data.backgroundImage};` : ""}` ||
+        "",
+    shadow:
+        `${paint_data.shadows ? `filter: ${paint_data.shadows};` : ""}` || "",
+});
 
-export async function pushUserInfoViaGQL(sevenTV_ID: string): Promise<void> {
+export async function pushUserInfoViaGQL(sevenTV_ID: string): Promise<boolean> {
     const response = await fetch("https://7tv.io/v3/gql", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            query: "query GetUserForUserPage($id: ObjectID!) { user(id: $id) { id username display_name avatar_url style { color paint { id kind name function color angle shape image_url repeat stops { at color } shadows { x_offset y_offset radius color } } badge { id kind name tooltip tag host { url files { name static_name width height frame_count size format } } } } connections { username id platform } } }",
+            query: cosmetics_single,
             variables: {
                 id: `${sevenTV_ID}`,
             },
         }),
     });
 
-    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    if (!response.ok) {
+        console.error(`HTTP error! Status: ${response.status}`);
+
+        return false;
+    }
 
     let data = await response.json();
 
     if (data && data["data"]) {
         data = data["data"];
     } else {
-        throw new Error(`No data found!`);
+        console.error(`No data found!`);
+        return false;
     }
 
     if (
@@ -79,14 +85,69 @@ export async function pushUserInfoViaGQL(sevenTV_ID: string): Promise<void> {
         !data["user"]?.["connections"] ||
         !data["user"]?.["style"]
     )
-        return;
+        return false;
 
-    const foundTwitchConnection = data["user"]["connections"].find(
+    return await pushUserInfoFromGQL(data);
+}
+
+export async function pushUsersInfoViaGQL(
+    sevenTV_IDs: string[],
+): Promise<boolean> {
+    const response = await fetch("https://7tv.io/v3/gql", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            query: cosmetics_multiple,
+            variables: {
+                list: sevenTV_IDs,
+            },
+        }),
+    });
+
+    if (!response.ok) {
+        console.error(`HTTP error! Status: ${response.status}`);
+
+        return false;
+    }
+
+    let data = await response.json();
+
+    if (data && data["data"]) {
+        data = data["data"];
+
+        if (
+            data["usersByID"] &&
+            Array.isArray(data["usersByID"]) &&
+            data["usersByID"].length
+        ) {
+            for (const user of data["usersByID"]) {
+                if (!user["connections"] || !user["style"]) continue;
+
+                await pushUserInfoFromGQL(user);
+            }
+
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        console.error(`No data found!`);
+        return false;
+    }
+}
+
+async function pushUserInfoFromGQL(data: Record<string, any>): Promise<true> {
+    let user = data;
+    if (data["user"]) user = data["user"];
+
+    const foundTwitchConnection = user["connections"].find(
         (connection: { platform: string }) => connection?.platform == "TWITCH",
     );
 
-    if (data["user"]["style"]["badge"]) {
-        const badge = parseBadgeData(data["user"]["style"]["badge"]);
+    if (user["style"]["badge"]) {
+        const badge = parseBadgeData(user["style"]["badge"]);
 
         if (badge) {
             if (foundTwitchConnection) badge.owner.push(foundTwitchConnection);
@@ -101,8 +162,8 @@ export async function pushUserInfoViaGQL(sevenTV_ID: string): Promise<void> {
         }
     }
 
-    if (data["user"]["style"]["paint"]) {
-        const paint = await parsePaintData(data["user"]["style"]["paint"]);
+    if (user["style"]["paint"]) {
+        const paint = await parsePaintData(user["style"]["paint"]);
 
         if (paint) {
             if (foundTwitchConnection) paint.owner.push(foundTwitchConnection);
@@ -116,4 +177,6 @@ export async function pushUserInfoViaGQL(sevenTV_ID: string): Promise<void> {
             }));
         }
     }
+
+    return true;
 }

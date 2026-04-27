@@ -7,7 +7,7 @@
 
     import { getBadges } from "$lib/preview";
     import SevenTV_main from "$lib/services/7TV/main";
-    import { pushUserInfoViaGQL } from "$lib/services/7TV/cosmetics";
+    import { pushUsersInfoViaGQL } from "$lib/services/7TV/cosmetics";
     import { messages } from "$lib/chat";
 
     import { emotes, badges, icon_size, isMobile } from "$stores/global";
@@ -41,8 +41,14 @@
         }
 
         if (!$cosmetics.badges.length && !$cosmetics.paints.length) {
-            await pushUserInfoViaGQL("01GAK4CXN00002Z53DR6PAWQVE");
-            await pushUserInfoViaGQL("01FDSMJ8MG0005Y8ZGBVC26NJ6");
+            const stv_users = [
+                "01GAK4CXN00002Z53DR6PAWQVE",
+                "01FDSMJ8MG0005Y8ZGBVC26NJ6",
+                "01FH0MNYA800096T3FQZKZQVZB",
+                "01F74DWQMR0005C7FW3P0F45Y5",
+            ];
+
+            await pushUsersInfoViaGQL(stv_users);
         }
     });
 

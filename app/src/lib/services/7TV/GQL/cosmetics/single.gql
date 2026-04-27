@@ -1,0 +1,56 @@
+query GetUserForUserPage($id: ObjectID!) {
+    user(id: $id) {
+        id
+        username
+        display_name
+        avatar_url
+        style {
+            color
+            paint {
+                id
+                kind
+                name
+                function
+                color
+                angle
+                shape
+                image_url
+                repeat
+                stops {
+                    at
+                    color
+                }
+                shadows {
+                    x_offset
+                    y_offset
+                    radius
+                    color
+                }
+            }
+            badge {
+                id
+                kind
+                name
+                tooltip
+                tag
+                host {
+                    url
+                    files {
+                        name
+                        static_name
+                        width
+                        height
+                        frame_count
+                        size
+                        format
+                    }
+                }
+            }
+        }
+        connections {
+            username
+            id
+            platform
+        }
+    }
+}
