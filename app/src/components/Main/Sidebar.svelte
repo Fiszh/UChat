@@ -15,18 +15,13 @@
 
     import { overlayVersion } from "$stores/settings";
     import { dev } from "$app/environment";
+    import Commits from "./Commits.svelte";
 
-    $: version_text = $overlayVersion;
+    let showCommits = $state<boolean>(false);
 
-    let currentHash = window.location.hash || "#";
-
-    const onHashChange = () => (currentHash = window.location.hash || "#");
-
-    window.addEventListener("hashchange", onHashChange);
-
-    $: username = getCookie("twitchUsername") || ("" as string | undefined);
-    $: twitchID = getCookie("twitchId") || ("" as string | undefined);
-    $: twitchToken = getCookie("twitchToken") || ("" as string | undefined);
+    let username = $state<string | null>(getCookie("twitchUsername"));
+    let twitchID = $state<string | null>(getCookie("twitchId"));
+    let twitchToken = $state<string | null>(getCookie("twitchToken"));
 
     async function handleToken(token: string) {
         const user_info = await valideToken(token);
@@ -47,9 +42,9 @@
         delCookie("twitchUsername");
         delCookie("twitchId");
 
-        username = undefined;
-        twitchID = undefined;
-        twitchToken = undefined;
+        username = null;
+        twitchID = null;
+        twitchToken = null;
     }
 
     const navLinks = {
@@ -67,23 +62,40 @@
         },
     };
 
-    $: {
-        for (const navLink of Object.values(navLinks)) {
-            const hasHash = navLink.hash.some((h) => h === currentHash);
+    let currentHash = $state(window.location.hash || "#");
 
-            if (navLink.navLink instanceof HTMLElement) {
-                if (hasHash) {
-                    navLink.navLink.classList.add("active");
-                } else {
-                    navLink.navLink.classList.remove("active");
-                }
-            }
-        }
-    }
+    const onHashChange = () => (currentHash = window.location.hash || "#");
+
+    window.addEventListener("hashchange", onHashChange);
+
+    $effect(() => {
+        const navLinksValues = Object.values(navLinks);
+
+        const unselected = navLinksValues.filter(
+            (navLink) => !navLink.hash.includes(currentHash),
+        );
+
+        const selected = navLinksValues.find((navLink) =>
+            navLink.hash.includes(currentHash),
+        );
+
+        if (selected) selected.navLink?.classList.add("active");
+
+        for (const navLink of unselected)
+            navLink.navLink?.classList.remove("active");
+    });
 </script>
 
+<Commits bind:showCommits />
+
 <aside>
-    <header id="topbar">
+    <header
+        id="topbar"
+        role="button"
+        tabindex="0"
+        onclick={() => (showCommits = true)}
+        onkeydown={(e) => e.key === "Enter" && (showCommits = true)}
+    >
         <img
             class="logo"
             src="https://chat.unii.dev/images/logo.avif"
@@ -94,11 +106,12 @@
             <h1 style="font-size:0.8rem; line-height: 1px;">
                 UChat Chat Overlay for Twitch
             </h1>
-            <small id="version_text">{version_text} {dev ? "DEV" : ""}</small>
+            <small id="version_text">{$overlayVersion} {dev ? "DEV" : ""}</small
+            >
         </div>
     </header>
 
-    <nav>
+    <nav data-hash={currentHash}>
         <a href="/#" class="active" bind:this={navLinks["home"]["navLink"]}>
             <House size="20" /> Home
         </a>
@@ -172,6 +185,12 @@
 
             border-bottom: 1px solid #242424;
             background-color: rgba(0, 0, 0);
+
+            cursor: pointer;
+
+            &:hover {
+                text-decoration: underline;
+            }
 
             img {
                 max-height: 2.5rem;

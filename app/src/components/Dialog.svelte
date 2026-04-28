@@ -1,18 +1,18 @@
 <script lang="ts">
     import { X } from "lucide-svelte";
 
-    let { name, show = $bindable(false), children } = $props();
+    let { name, show = false, ref = $bindable(null), children } = $props();
 
     const close = () => (show = false);
 </script>
 
 {#if show}
-    <section class="dialog">
+    <section class="dialog" bind:this={ref}>
         <h3>{name} <button onclick={close}><X /></button></h3>
 
         {@render children()}
     </section>
-    <section id="site-blackout"></section>
+    <section id="site-blackout" role="presentation" onclick={close}></section>
 {/if}
 
 <style lang="scss">
@@ -22,6 +22,7 @@
         height: 100%;
         background-color: rgba(0, 0, 0, 0.25);
         z-index: 999;
+        cursor: pointer;
     }
 
     .dialog {
@@ -35,14 +36,18 @@
         display: flex;
         flex-direction: column;
 
+        overflow: hidden;
+
         gap: 0.7rem;
 
-        max-width: 30rem;
-        max-height: 25rem;
+        max-width: 55rem;
+        max-height: 50rem;
 
         padding: 0.4rem 0.7rem;
 
         border-radius: 0.5rem;
+
+        border: 0.15rem dashed #1b1b1b;
 
         h3 {
             margin: 0;

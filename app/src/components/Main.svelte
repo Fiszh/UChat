@@ -15,8 +15,6 @@
     const onHashChange = () => (hash = window.location.hash);
 
     window.addEventListener("hashchange", onHashChange);
-
-    $: console.log("Hash changed to", hash);
 </script>
 
 <main>

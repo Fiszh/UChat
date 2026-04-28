@@ -5,19 +5,14 @@
 
     const availableStyles: string[] = ["minimal", "big"];
 
-    export let loading: {
-        text: string | undefined;
-        type: string | undefined;
-    };
-
-    $: version_text = $overlayVersion;
+    const { text, type } = $props<string | undefined>();
 </script>
 
 {#snippet minimal()}
     <div class="loader"></div>
     <div class="info">
         <span class="loading-text">Loading...</span>
-        <p class="version">{version_text}</p>
+        <p class="version">{$overlayVersion}</p>
     </div>
 {/snippet}
 
@@ -25,20 +20,18 @@
     <img class="loader" src={LoadingAnimation} alt="Loading..." />
     <div class="info">
         <span class="loading-text">Loading...</span>
-        <span class="loading-info">{@html loading.text}</span>
-        <p class="version">{version_text}</p>
+        <span class="loading-info">{@html text}</span>
+        <p class="version">{$overlayVersion}</p>
     </div>
 {/snippet}
 
 <div
-    class="loading {loading.type}"
-    style="display: {loading.type && availableStyles.includes(loading.type)
-        ? 'flex'
-        : 'none'}"
+    class="loading {type}"
+    style="display: {type && availableStyles.includes(type) ? 'flex' : 'none'}"
 >
-    {#if loading.type == "minimal"}
+    {#if type == "minimal"}
         {@render minimal()}
-    {:else if loading.type == "big"}
+    {:else if type == "big"}
         {@render big()}
     {/if}
 </div>

@@ -11,9 +11,7 @@
         answer: string,
         links: { name: string; url: string }[],
     ) {
-        if (!links.length) {
-            return answer;
-        }
+        if (!links.length) return answer;
 
         let Answer = answer;
         for (const link of links) {
@@ -26,14 +24,11 @@
         return Answer;
     }
 
-    function copy(text: string) {
-        navigator.clipboard.writeText(text);
-    }
+    const copy = (text: string) => navigator.clipboard.writeText(text);
 
     onMount(() => {
-        if (window.location.hash == "#help-notice") {
+        if (window.location.hash == "#help-notice")
             helpNotice?.scrollIntoView({ behavior: "smooth" });
-        }
     });
 </script>
 

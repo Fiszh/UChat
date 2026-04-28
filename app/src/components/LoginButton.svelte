@@ -5,10 +5,12 @@
 
     import { delCookie, getCookie, setCookie } from "$lib/cookie";
 
-    export let onToken: (token: string) => void;
-    export let onLogOut: () => void;
+    let {
+        onToken,
+        onLogOut,
+    }: { onToken: (token: string) => void; onLogOut: () => void } = $props();
 
-    $: hasToken = getCookie("twitchToken");
+    let hasToken = $state(getCookie("twitchToken"));
 
     const clientId = "11pghkhf9gq7dke49sw1pmumjcthma";
     const redirectUri = `${window.location.origin}/auth`;
@@ -50,7 +52,7 @@
     });
 </script>
 
-<button id="login-button" aria-label="Login" on:click={openTwitchPopup}
+<button id="login-button" aria-label="Login" onclick={openTwitchPopup}
     >{#if hasToken}
         <LogOut size="17" />
         Logout

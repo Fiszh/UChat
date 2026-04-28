@@ -17,14 +17,16 @@
     import { badges, icon_size } from "$stores/global";
     import { previewMessages } from "$stores/previewMessages";
 
-    let hex = "#191919";
+    let hex = $state("#191919");
     let urlResults: HTMLElement | undefined = undefined;
 
-    $: params = new URLSearchParams(
-        Object.entries($settingsParams).map(([k, v]) => [
-            k,
-            String(typeof v == "boolean" ? Number(v) : v),
-        ]),
+    const params = $derived(
+        new URLSearchParams(
+            Object.entries($settingsParams).map(([k, v]) => [
+                k,
+                String(typeof v == "boolean" ? Number(v) : v),
+            ]),
+        ),
     );
 
     const resetSettings = () => {
@@ -131,7 +133,7 @@
     <section id="bottom">
         <div class="header">
             Chat Preview Settings <button
-                on:click={() => resetSettings()}
+                onclick={() => resetSettings()}
                 title="Reset Settings"><RotateCcw size={$icon_size} /></button
             >
         </div>
@@ -158,7 +160,7 @@
                     bind:this={customMessageInput}
                     placeholder="Message to display..."
                 />
-                <button id="send" class="bottom-button" on:click={addMessage}
+                <button id="send" class="bottom-button" onclick={addMessage}
                     ><Send size={$icon_size} /> Send</button
                 >
             </div>
@@ -172,7 +174,7 @@
                         ? "?"
                         : ""}{params}
                 </p>
-                <button id="copy" class="bottom-button" on:click={copyUrl}
+                <button id="copy" class="bottom-button" onclick={copyUrl}
                     ><Copy size={$icon_size} /> Copy</button
                 >
             </div>

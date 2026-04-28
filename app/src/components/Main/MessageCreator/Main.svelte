@@ -105,6 +105,7 @@
 </script>
 
 <Settings dispayChannelInput={false} />
+
 <main>
     <h2>UChat Message Creator</h2>
     <section id="message" class="bg-grid" bind:this={messageDisplay}>

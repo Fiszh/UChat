@@ -4,7 +4,6 @@
     import { getPaint, getPaintHTML } from "$lib/services/7TV/cosmetics";
     import { replaceWithEmotes } from "$lib/emoteParser";
     import { parseBadges } from "$lib/badgeParser";
-    import { services } from "$lib/services";
     import { fixNameColor } from "$lib/overlayIndex";
 
     import Badge from "./Badge.svelte";
@@ -12,59 +11,65 @@
     import { type Setting, settings } from "$stores/settings";
     import { emotes, badges, globals } from "$stores/global";
     import { cosmetics } from "$stores/cosmetics";
-    import { disconnect, messages } from "$lib/chat";
+    import { messages } from "$lib/chat";
     import { getChannelEmotesViaTwitchID } from "$lib/emotes";
-    import { loadChat } from "$lib/loadChat";
 
-    export let message: {
+    interface Props {
         user: string;
         text: string;
         tags: Record<string, any>;
         id: string;
         room_id: number;
-    };
+    }
 
-    const tags = message.tags;
-    const username = tags?.username.toLowerCase().trim() || "";
-    const nameColor = message.tags.color
-        ? fixNameColor(message.tags.color)
-        : usernameColor(username);
+    let { user, text, tags, id, room_id }: Props = $props();
 
-    if (message.room_id) getChannelEmotesViaTwitchID(String(message.room_id));
+    const username = $derived(tags?.username.toLowerCase().trim() ?? "");
+    const nameColor = $derived(
+        tags.color ? fixNameColor(tags.color) : usernameColor(username),
+    );
 
     let FFZBadges = $badges.FFZ;
 
     let chatMessage: HTMLElement;
 
-    globals.userNameColor[username] = nameColor;
-
     let chatSettings: Record<string, Setting["value"]> = {};
 
-    $: if (chatSettings?.fadeOut && window.location.search) {
-        const delay = Number(chatSettings.fadeOut) * 1000;
-
-        setTimeout(() => {
-            if (!chatMessage) return;
-            chatMessage.classList.add("fadeOut");
+    $effect(() => {
+        if (chatSettings?.fadeOut && window.location.search) {
+            const delay = Number(chatSettings.fadeOut) * 1000;
 
             setTimeout(() => {
                 if (!chatMessage) return;
-                chatMessage.remove();
-                chatMessage = undefined as unknown as HTMLElement;
+                chatMessage.classList.add("fadeOut");
 
-                messages.update((e) =>
-                    e.filter((msg) => msg.tags.id != message.tags.id),
-                );
-            }, 2600);
-        }, delay);
-    }
+                setTimeout(() => {
+                    if (!chatMessage) return;
+                    chatMessage.remove();
+                    chatMessage = undefined as unknown as HTMLElement;
 
-    let userPaint: Paint | undefined;
-    $: paintHTML = userPaint
-        ? getPaintHTML(userPaint)
-        : ({ paint: "", shadow: "" } as { paint: string; shadow: string });
+                    messages.update((e) =>
+                        e.filter((msg) => msg.tags.id != tags.id),
+                    );
+                }, 2600);
+            }, delay);
+        }
+    });
 
-    $: paintStyle =
+    let userPaint = $derived<Paint | undefined>(
+        username ? getPaint(username) : undefined,
+    );
+    let paintHTML = $state<Record<string, string>>({ paint: "", shadow: "" });
+
+    $effect(() => {
+        if (userPaint) {
+            paintHTML = getPaintHTML(userPaint);
+        } else {
+            paintHTML = { paint: "", shadow: "" };
+        }
+    });
+
+    let paintStyle = $derived<string>(
         userPaint && chatSettings["paints"]
             ? (() => {
                   let style = `background-color: ${nameColor};`;
@@ -82,24 +87,25 @@
 
                   return style;
               })()
-            : `color: ${nameColor};`;
+            : `color: ${nameColor};`,
+    );
 
-    userPaint = getPaint(username);
+    let parsedBadges = $derived(parseBadges(tags));
 
-    let parsedBadges = parseBadges(tags);
-
-    $: userBadges =
+    let userBadges = $derived(
         typeof chatSettings?.["badges"] == "undefined" ||
-        chatSettings?.["badges"]
+            chatSettings?.["badges"]
             ? parsedBadges
-            : ([] as parsedBadge[]);
-    let emoteText = message.text;
+            : ([] as parsedBadge[]),
+    );
+
+    let emoteText = $state<string>();
 
     const parse = async () =>
         (emoteText = await replaceWithEmotes(
-            message.text,
-            message.tags,
-            message.tags["source-room-id"] ?? message.tags["room-id"],
+            text,
+            tags,
+            tags["source-room-id"] ?? tags["room-id"],
             chatSettings,
         ));
 
@@ -153,6 +159,10 @@
     }
 
     onMount(() => {
+        if (room_id) getChannelEmotesViaTwitchID(String(room_id));
+
+        globals.userNameColor[username] = nameColor;
+
         return () => {
             unsubscribeSettings();
             unsubscribeCosmetics();
@@ -166,7 +176,7 @@
         class:paint={chatSettings["paints"] && userPaint}
         style={paintStyle}
     >
-        {@html message.user}
+        {@html user}
     </strong>
 {/snippet}
 
@@ -174,11 +184,9 @@
     <strong class="badge-wrapper">
         {#each userBadges as badge, i (i)}
             <Badge
-                badge={{
-                    badge_url: badge.badge_url,
-                    alt: badge.alt,
-                    background_color: badge.background_color!,
-                }}
+                badge_url={badge.badge_url}
+                alt={badge.alt}
+                background_color={badge.background_color}
             />
         {/each}
     </strong>
@@ -186,9 +194,9 @@
 
 <div class="chat-message" bind:this={chatMessage}>
     {#if userBadges.length}{@render Badges()}{/if}
-    {@render paint()}{#if !message.tags.action}:{/if}
-    <span style:color={message.tags.action ? nameColor : "defaultColor"}
-        >{@html emoteText}</span
+    {@render paint()}{#if !tags.action}:{/if}
+    <span style:color={tags.action ? nameColor : "defaultColor"}
+        >{@html emoteText || text}</span
     >
 </div>
 

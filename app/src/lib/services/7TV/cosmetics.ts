@@ -43,7 +43,9 @@ export function getPersonalSets(twitchID: string): any | undefined {
     ) as any | undefined;
 }
 
-export const getPaintHTML = (paint_data: Paint): Record<string, string> => ({
+export const getPaintHTML = (
+    paint_data: Paint,
+): { paint: string; shadow: string } => ({
     paint:
         `${paint_data.backgroundImage ? `background-image: ${paint_data.backgroundImage};` : ""}` ||
         "",

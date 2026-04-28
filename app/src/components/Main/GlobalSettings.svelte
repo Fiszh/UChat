@@ -3,15 +3,11 @@
     import { savedSettings, settings } from "$stores/settings";
     import { slide } from "svelte/transition";
 
-    export let user: {
-        name: string;
-        token: string;
-        user_id: string;
-    };
+    let { name, token, user_id }: Record<string, string> = $props<string>();
 
     async function getSettings() {
         const response = await fetch(
-            `https://api.unii.dev/settings/${user.user_id}`,
+            `https://api.unii.dev/settings/${user_id}`,
         );
 
         if (response.ok) {
@@ -25,12 +21,12 @@
         }
     }
 
-    $: if (user.user_id) {
-        getSettings();
-    }
+    $effect(() => {
+        if (user_id) getSettings();
+    });
 
     async function save() {
-        if (!user.token) {
+        if (!token) {
             alert("You are not logged in");
             return;
         }
@@ -67,7 +63,7 @@
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "x-auth-token": `Bearer ${user.token}`,
+                    "x-auth-token": `Bearer ${token}`,
                 },
                 body: JSON.stringify(mappedSettings),
             },
@@ -89,7 +85,7 @@
     }
 
     async function deleteSettings() {
-        if (!user.token) {
+        if (!token) {
             alert("You are not logged in");
             return;
         }
@@ -99,7 +95,7 @@
             {
                 method: "DELETE",
                 headers: {
-                    "x-auth-token": `Bearer ${user.token}`,
+                    "x-auth-token": `Bearer ${token}`,
                 },
             },
         );
@@ -121,10 +117,10 @@
     }
 </script>
 
-<p id="settings_text" transition:slide>{user.name} Settings</p>
+<p id="settings_text" transition:slide>{name} Settings</p>
 <div id="settingsButtons" transition:slide>
-    <button id="save" class="settingsButton" on:click={save}>Save</button>
-    <button id="delete" class="settingsButton" on:click={deleteSettings}
+    <button id="save" class="settingsButton" onclick={save}>Save</button>
+    <button id="delete" class="settingsButton" onclick={deleteSettings}
         >Delete</button
     >
 </div>

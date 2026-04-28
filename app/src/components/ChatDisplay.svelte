@@ -11,9 +11,11 @@
     let chat: HTMLElement;
 
     let styles: Record<string, string | number> = {};
-    $: chatStyle = Object.entries(styles)
-        .map(([k, v]) => `${k}: ${v}`)
-        .join("; ");
+    const chatStyle = $derived(
+        Object.entries(styles)
+            .map(([k, v]) => `${k}: ${v}`)
+            .join("; "),
+    );
 
     const unsubscribeMessages = messages.subscribe(
         (msgs) => (chatMessages = msgs),
@@ -61,8 +63,9 @@
         for (const setting of config) {
             if (
                 !window.location.search && // CHECKS IF ITS PREVIEW
-                typeof setting.previewReact != "undefined" &&
-                !setting.previewReact // CHECKS IF SETTING IS REACTIVE IN PREVIEW
+                ((typeof setting.previewReact != "undefined" &&
+                    !setting.previewReact) || // CHECKS IF SETTING IS REACTIVE IN PREVIEW
+                    (typeof setting.hide != "undefined" && !setting.hide)) // CHECKS IF SETTING IS HIDDEN
             )
                 continue;
 
@@ -197,33 +200,38 @@
         }
     }
 
-    $: filteredMessages = chatMessages
-        .filter(
-            (msg) =>
-                chatSettings &&
-                validateMessage(
-                    msg.tags?.username,
-                    msg.message,
-                    msg.tags?.badges,
-                    msg.tags,
-                ),
-        )
-        .map((msg) => {
-            const username = (msg.tags?.username || "").trim().toLowerCase();
-            const displayName = String(msg.tags?.["display-name"] ?? "")
-                .trim()
-                .toLowerCase();
+    let filteredMessages = $derived(
+        chatMessages
+            .filter(
+                (msg) =>
+                    chatSettings &&
+                    validateMessage(
+                        msg.tags?.username,
+                        msg.message,
+                        msg.tags?.badges,
+                        msg.tags,
+                    ),
+            )
+            .map((msg) => {
+                const username = (msg.tags?.username || "")
+                    .trim()
+                    .toLowerCase();
+                const displayName = String(msg.tags?.["display-name"] ?? "")
+                    .trim()
+                    .toLowerCase();
 
-            return {
-                id: msg.tags.id ?? generateUUID(), // THIS MAKES SURE MESSAGES WILL NOT MERGE
-                room_id: msg.tags["source-room-id"] ?? globals.channelTwitchID,
-                ...msg,
-                formattedUser:
-                    username === displayName
-                        ? msg.tags?.["display-name"] || "Unknown"
-                        : `${msg.tags?.username || "Unknown"} (${msg.tags?.["display-name"] || "Unknown"})`,
-            };
-        }) as any;
+                return {
+                    id: msg.tags.id ?? generateUUID(), // THIS MAKES SURE MESSAGES WILL NOT MERGE
+                    room_id:
+                        msg.tags["source-room-id"] ?? globals.channelTwitchID,
+                    ...msg,
+                    formattedUser:
+                        username === displayName
+                            ? msg.tags?.["display-name"] || "Unknown"
+                            : `${msg.tags?.username || "Unknown"} (${msg.tags?.["display-name"] || "Unknown"})`,
+                };
+            }) as any,
+    );
 
     onMount(() => {
         let lastScrollTime = 0;
@@ -256,13 +264,11 @@
 <div class="chat" bind:this={chat} style={chatStyle}>
     {#each filteredMessages as msg (msg.id)}
         <ChatMessage
-            message={{
-                user: msg.formattedUser,
-                text: msg.message,
-                tags: msg.tags,
-                id: msg.id,
-                room_id: msg.room_id,
-            }}
+            user={msg.formattedUser}
+            text={msg.message}
+            tags={msg.tags}
+            id={msg.id}
+            room_id={msg.room_id}
         />
     {/each}
 </div>

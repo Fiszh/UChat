@@ -15,17 +15,17 @@
     import { CircleQuestionMark } from "lucide-svelte";
     import { isMobile } from "$stores/global";
 
-    export let dispayChannelInput: boolean = true;
+    let { dispayChannelInput = true } = $props();
 
-    let showHidden = false;
-    let hiddenWarning = false;
+    let showHidden = $state(false);
+    let hiddenWarning = $state(false);
 
     const showHiddenSettings = () => {
         showHidden = true;
         hiddenWarning = true;
     };
 
-    let usingID = false;
+    let usingID = $state(false);
 
     const rawLocalSettings = localStorage.getItem("local-settings");
     const LocalSettings = rawLocalSettings
@@ -34,13 +34,15 @@
 
     if (LocalSettings) parseSavedSettings(LocalSettings);
 
-    let localChannelName = "";
-    let localChannelID = "";
+    let localChannelName = $state("");
+    let localChannelID = $state("");
 
-    $: if (!Object.keys($settingsParams).length) {
-        localChannelName = "";
-        localChannelID = "";
-    }
+    $effect(() => {
+        if (!Object.keys($settingsParams).length) {
+            localChannelName = "";
+            localChannelID = "";
+        }
+    });
 
     function setParam(key: string, value: Setting["value"]) {
         settingsParams.update((arr) => {
@@ -115,12 +117,16 @@
         return value;
     }
 
-    $: localChannelName.length && (!localChannelID.length || !usingID)
-        ? setParam("channel", String(localChannelName))
-        : removeParam("channel");
-    $: localChannelID.length && (!localChannelName.length || usingID)
-        ? setParam("id", String(localChannelID))
-        : removeParam("id");
+    $effect(() =>
+        localChannelName.length && (!localChannelID.length || !usingID)
+            ? setParam("channel", String(localChannelName))
+            : removeParam("channel"),
+    );
+    $effect(() =>
+        localChannelID.length && (!localChannelName.length || usingID)
+            ? setParam("id", String(localChannelID))
+            : removeParam("id"),
+    );
 </script>
 
 <Dialog name="Warming" bind:show={hiddenWarning}>
@@ -175,7 +181,7 @@
                             "<small>($1)</small>",
                         )}
 
-                        {#if typeof setting["previewReact"] != "undefined" && !setting["previewReact"] && !$isMobile}
+                        {#if ((typeof setting["previewReact"] != "undefined" && !setting["previewReact"]) || setting["hide"]) && !$isMobile}
                             <span
                                 class="warning"
                                 title="This setting does not effect the chat preview."
@@ -353,7 +359,7 @@
             display: inline-flex;
 
             .warning {
-                cursor: pointer;
+                cursor: help;
             }
         }
 

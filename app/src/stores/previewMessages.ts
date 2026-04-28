@@ -79,7 +79,7 @@ export const previewMessages = [
             color: "#FF69B4",
             "room-id": "0",
         },
-        message: "yugi61",
+        message: "@uniiDev yugi61",
     },
     {
         tags: {
