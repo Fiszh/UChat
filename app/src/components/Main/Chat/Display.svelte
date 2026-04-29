@@ -20,6 +20,8 @@
     let hex = "#191919";
     let urlResults: HTMLElement | undefined = undefined;
 
+    let customMessageInput: HTMLInputElement;
+
     $: params = new URLSearchParams(
         Object.entries($settingsParams).map(([k, v]) => [
             k,
@@ -107,7 +109,6 @@
         };
     }
 
-    let customMessageInput: HTMLInputElement;
     function addMessage() {
         if (!customMessageInput) return;
 

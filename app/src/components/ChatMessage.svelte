@@ -4,7 +4,6 @@
     import { getPaint, getPaintHTML } from "$lib/services/7TV/cosmetics";
     import { replaceWithEmotes } from "$lib/emoteParser";
     import { parseBadges } from "$lib/badgeParser";
-    import { services } from "$lib/services";
     import { fixNameColor } from "$lib/overlayIndex";
 
     import Badge from "./Badge.svelte";
@@ -12,9 +11,8 @@
     import { type Setting, settings } from "$stores/settings";
     import { emotes, badges, globals } from "$stores/global";
     import { cosmetics } from "$stores/cosmetics";
-    import { disconnect, messages } from "$lib/chat";
+    import { messages } from "$lib/chat";
     import { getChannelEmotesViaTwitchID } from "$lib/emotes";
-    import { loadChat } from "$lib/loadChat";
 
     export let message: {
         user: string;
@@ -31,8 +29,6 @@
         : usernameColor(username);
 
     if (message.room_id) getChannelEmotesViaTwitchID(String(message.room_id));
-
-    let FFZBadges = $badges.FFZ;
 
     let chatMessage: HTMLElement;
 
@@ -111,8 +107,6 @@
         badges.subscribe(async () => (parsedBadges = parseBadges(tags)));
 
         settings.subscribe(() => parse());
-    } else {
-        badges.subscribe(async (e) => (FFZBadges = e["FFZ"]));
     }
 
     // THIS CAN BE KEPT ON OVERLAY
