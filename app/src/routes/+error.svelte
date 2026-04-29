@@ -142,10 +142,6 @@
 </main>
 
 <style lang="scss">
-    :global(body) {
-        background: linear-gradient(45deg, #080808, #0d0d10);
-    }
-
     main {
         width: 97dvw;
         height: 100dvh;
