@@ -29,8 +29,6 @@
         tags.color ? fixNameColor(tags.color) : usernameColor(username),
     );
 
-    let FFZBadges = $badges.FFZ;
-
     let chatMessage: HTMLElement;
 
     let chatSettings: Record<string, Setting["value"]> = {};
@@ -117,8 +115,6 @@
         badges.subscribe(async () => (parsedBadges = parseBadges(tags)));
 
         settings.subscribe(() => parse());
-    } else {
-        badges.subscribe(async (e) => (FFZBadges = e["FFZ"]));
     }
 
     // THIS CAN BE KEPT ON OVERLAY
