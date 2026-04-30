@@ -1,8 +1,7 @@
 <script lang="ts">
     import ChatDisplay from "$components/ChatDisplay.svelte";
-    import { messages } from "$lib/chat";
     import { getBadges } from "$lib/preview";
-    import { badges, emotes, isMobile } from "$stores/global";
+    import { emotes, isMobile } from "$stores/global";
     import { onMount } from "svelte";
 
     import SevenTV_main from "$lib/services/7TV/main";
@@ -33,58 +32,6 @@
         "DIESOFCRINGE",
     ];
 
-    function randomString(len: number) {
-        const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-        let out = "";
-        for (let i = 0; i < len; i++)
-            out += chars[Math.floor(Math.random() * chars.length)];
-        return out;
-    }
-
-    function pickRandomBadges(): Record<string, string>[] {
-        const count = Math.floor(Math.random() * 2) + 1;
-        const shuffled = $badges["TTV"]["global"].sort(
-            () => 0.5 - Math.random(),
-        );
-        return shuffled.slice(0, count);
-    }
-
-    function sendFakeMessage() {
-        const username = randomString(5);
-        const displayName = username;
-        const userId = Math.floor(Math.random() * 1_000_000_000).toString();
-
-        const badgesPicked = pickRandomBadges() as Record<string, string>[];
-
-        const badgesRaw = badgesPicked
-            .map((b: Record<string, string>) => {
-                const badge_split = b.id.split("_");
-
-                return `${badge_split[0]}/${badge_split[1]}`;
-            })
-            .join(",");
-        const badges_parsed: Record<string, string> = {};
-        badgesPicked.forEach((b: Record<string, string>) => {
-            const badge_split = b.id.split("_");
-
-            badges_parsed[badge_split[0]] = badge_split[1];
-        });
-
-        const message = msgs[Math.floor(Math.random() * msgs.length)];
-
-        const tags = {
-            username,
-            "display-name": displayName,
-            "user-id": userId,
-            "badges-raw": badgesRaw,
-            badges,
-            color: null,
-            "room-id": "0",
-        };
-
-        messages.update((msgs) => [...msgs, { tags, message }]);
-    }
-
     onMount(async () => {
         loaded = true;
 
@@ -112,7 +59,9 @@
             },
         }));
 
-        setInterval(sendFakeMessage, 1000);
+        setInterval(() => {
+            const message = msgs[Math.floor(Math.random() * msgs.length)];
+        }, 1000);
     });
 
     const goBack = () => history.back();
