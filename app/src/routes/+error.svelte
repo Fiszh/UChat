@@ -128,7 +128,7 @@
         </p>
         <div id="buttons">
             <button onclick={goBack}>Go back a page</button>
-            <a href="/">Go back homepage</a>
+            <a href="/" data-sveltekit-preload-data="off">Go back homepage</a>
         </div>
     </div>
 
