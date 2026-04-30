@@ -3,7 +3,7 @@
     import { messages } from "$lib/chat";
     import { getBadges } from "$lib/preview";
     import { badges, emotes, isMobile } from "$stores/global";
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
 
     import SevenTV_main from "$lib/services/7TV/main";
 
@@ -85,6 +85,8 @@
         messages.update((msgs) => [...msgs, { tags, message }]);
     }
 
+    let sendInterval: ReturnType<typeof setInterval>;
+
     onMount(async () => {
         loaded = true;
 
@@ -112,8 +114,10 @@
             },
         }));
 
-        setInterval(sendFakeMessage, 1000);
+        sendInterval = setInterval(sendFakeMessage, 1000);
     });
+
+    onDestroy(() => clearInterval(sendInterval));
 
     const goBack = () => history.back();
 </script>
