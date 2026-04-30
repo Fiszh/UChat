@@ -1,8 +1,8 @@
 <script lang="ts">
     import ChatDisplay from "$components/ChatDisplay.svelte";
     import { getBadges } from "$lib/preview";
-    import { emotes, isMobile } from "$stores/global";
-    import { onMount } from "svelte";
+    import { badges, emotes, isMobile } from "$stores/global";
+    import { onDestroy, onMount } from "svelte";
 
     import SevenTV_main from "$lib/services/7TV/main";
 
@@ -32,6 +32,8 @@
         "DIESOFCRINGE",
     ];
 
+    let sendInterval: ReturnType<typeof setInterval>;
+
     onMount(async () => {
         loaded = true;
 
@@ -59,10 +61,10 @@
             },
         }));
 
-        setInterval(() => {
-            const message = msgs[Math.floor(Math.random() * msgs.length)];
-        }, 1000);
+        sendInterval = setInterval(sendFakeMessage, 1000);
     });
+
+    onDestroy(() => clearInterval(sendInterval));
 
     const goBack = () => history.back();
 </script>
@@ -100,6 +102,7 @@
         justify-content: space-between;
         align-items: center;
     }
+
     h1 {
         font-size: 2.5rem;
     }
@@ -111,6 +114,13 @@
         padding-top: 0.5rem;
         height: 50%;
         width: 25%;
+
+        :global(.chat) {
+            height: 100% !important;
+            padding: 0.2rem 0.4rem;
+            box-sizing: border-box;
+            position: relative !important;
+        }
 
         user-select: none;
 
@@ -138,13 +148,6 @@
             0 1px 2px rgba(255, 255, 255, 0.2),
             0 4px 8px rgba(0, 0, 0, 0.15),
             0 12px 24px rgba(0, 0, 0, 0.1);
-    }
-
-    :global(.chat) {
-        height: 100% !important;
-        padding: 0.2rem 0.4rem;
-        box-sizing: border-box;
-        position: relative !important;
     }
 
     #buttons {
