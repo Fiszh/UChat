@@ -340,7 +340,7 @@ services["7TV"].ws.on("remove_emote", (id, actor, data) => {
             emoteData["7TV"]["channel"][globals.channelTwitchID || ""] =
                 emoteData["7TV"]["channel"][
                     globals.channelTwitchID || ""
-                ].filter((emote) => emote.emote_id !== data.emote_id);
+                ].filter((emote) => emote.name !== data.name);
 
             return emoteData;
         });
@@ -355,7 +355,7 @@ services["7TV"].ws.on("rename_emote", (id, actor, data) => {
             const found_set =
                 emoteData["7TV"]["channel"][globals.channelTwitchID || ""];
             let foundEmote = found_set.find(
-                (emote) => emote.emote_id === (data.old.id || data.new.id),
+                (emote) => emote.name === data.old.name,
             );
 
             if (foundEmote) {
@@ -470,7 +470,7 @@ services["7TV"].ws.on("create_entitlement", (data) => {
 });
 
 services["7TV"].ws.on("delete_entitlement", (data) => {
-    let whatToDelete: string;
+    let whatToDelete: "badges" | "paints" | undefined;
 
     if (cosmetic_data.badges[data.id]) {
         // BADGE
@@ -481,7 +481,7 @@ services["7TV"].ws.on("delete_entitlement", (data) => {
     }
 
     cosmetics.update((cosmeticsData) => {
-        if (whatToDelete == "badges" || whatToDelete == "paints") {
+        if (typeof whatToDelete == "string") {
             for (const entitlement of Object.values(
                 cosmeticsData[whatToDelete],
             ) as Record<string, any>[]) {
