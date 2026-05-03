@@ -4,7 +4,10 @@
     import { getPaint, getPaintHTML } from "$lib/services/7TV/cosmetics";
     import { replaceWithEmotes } from "$lib/emoteParser";
     import { parseBadges } from "$lib/badgeParser";
-    import { fixNameColor } from "$lib/overlayIndex";
+    import {
+        fixNameColor,
+        subscribeEventAPIToSharedChatUser,
+    } from "$lib/overlayIndex";
 
     import Badge from "./Badge.svelte";
 
@@ -28,7 +31,10 @@
         ? fixNameColor(message.tags.color)
         : usernameColor(username);
 
-    if (message.room_id) getChannelEmotesViaTwitchID(String(message.room_id));
+    if (message.room_id && String(message.room_id) != globals.channelTwitchID) {
+        getChannelEmotesViaTwitchID(String(message.room_id));
+        subscribeEventAPIToSharedChatUser(String(message.room_id));
+    }
 
     let chatMessage: HTMLElement;
 

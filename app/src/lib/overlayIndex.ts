@@ -16,13 +16,10 @@ cosmetics.subscribe((data) => (cosmetic_data = data));
 emotes.subscribe((data) => (emote_data = data));
 
 // ANCHOR FUNCTIONS
-export function fixNameColor(name_color: string): string {
-    if (tinycolor(name_color).getBrightness() <= 50) {
-        return tinycolor(name_color).lighten(30).toString();
-    } else {
-        return name_color;
-    }
-}
+export const fixNameColor = (name_color: string): string =>
+    tinycolor(name_color).getBrightness() <= 50
+        ? tinycolor(name_color).lighten(30).toString()
+        : name_color;
 
 export async function getVersion(): Promise<string> {
     try {
@@ -291,6 +288,35 @@ export async function connectToWS() {
     services["BTTV"].ws.connect();
 }
 
+export async function subscribeEventAPIToSharedChatUser(room_id: string) {
+    if (room_id == globals.channelTwitchID) return;
+
+    if (emote_data["BTTV"]["channel"][room_id])
+        services["BTTV"].ws.subscribe(room_id, false, true); // BTTV
+
+    services["7TV"].ws.subscribe(room_id, "entitlement.create", {}, true); // PAINTS, BADGES & PERSONAL EMOTES
+
+    if (emote_data["7TV"]["channel"][room_id]) {
+        const channel_set = emote_data["7TV"]["channel"][room_id];
+
+        if (channel_set["id"])
+            services["7TV"].ws.subscribe(
+                channel_set["id"],
+                "emote_set.update",
+                {},
+                true,
+            );
+
+        if (channel_set["user_id"])
+            services["7TV"].ws.subscribe(
+                channel_set["user_id"],
+                "user.*",
+                {},
+                true,
+            );
+    }
+}
+
 // ANCHOR 7TV WEBSOCKET
 services["7TV"].ws.on("open", () => {
     if (globals.channelTwitchID) {
@@ -301,15 +327,22 @@ services["7TV"].ws.on("open", () => {
 
         if (globals.SevenTVID) {
             services["7TV"].ws.subscribe(globals.SevenTVID, "user.*"); // SET CHANGES
-            if (globals.SevenTVemoteSetId) {
+            if (globals.SevenTVemoteSetId)
                 services["7TV"].ws.subscribe(
                     globals.SevenTVemoteSetId,
                     "emote_set.update",
                 );
-            } // EMOTE CHANGES
+            // EMOTE CHANGES
         }
     }
 });
+
+const getSetKey = (set_id: string) =>
+    Object.keys(emote_data["7TV"]["channel"]).find(
+        (k) =>
+            "id" in emote_data["7TV"]["channel"][k] &&
+            emote_data["7TV"]["channel"][k].id == set_id,
+    );
 
 services["7TV"].ws.on("add_emote", (id, actor, data) => {
     if (cosmetic_data.sets[id]) {
@@ -319,28 +352,36 @@ services["7TV"].ws.on("add_emote", (id, actor, data) => {
 
             return cosmeticsData;
         });
-    } else if (globals.SevenTVemoteSetId == id && globals.channelTwitchID) {
+    } else {
         // CHANNEL SET
-        emotes.update((emoteData) => {
-            emoteData["7TV"]["channel"][globals.channelTwitchID || ""].push(
-                ...data,
-            );
+        const set_key = getSetKey(id);
 
-            return emoteData;
-        });
+        if (typeof set_key == "string") {
+            emotes.update((emoteData) => {
+                const found_set = emoteData["7TV"]["channel"][set_key];
+
+                if ("emotes" in found_set) found_set["emotes"].push(...data);
+
+                return emoteData;
+            });
+        }
     }
 
     //console.log("Emote added:", id, data);
 });
 
 services["7TV"].ws.on("remove_emote", (id, actor, data) => {
-    if (globals.SevenTVemoteSetId == id && globals.channelTwitchID) {
+    const set_key = getSetKey(id);
+
+    if (typeof set_key == "string") {
         // CHANNEL SET
         emotes.update((emoteData) => {
-            emoteData["7TV"]["channel"][globals.channelTwitchID || ""] =
-                emoteData["7TV"]["channel"][
-                    globals.channelTwitchID || ""
-                ].filter((emote) => emote.name !== data.name);
+            const found_set = emoteData["7TV"]["channel"][set_key];
+
+            if (found_set && "emotes" in found_set)
+                found_set["emotes"] = found_set["emotes"].filter(
+                    (emote) => emote.name !== data.name,
+                );
 
             return emoteData;
         });
@@ -350,16 +391,18 @@ services["7TV"].ws.on("remove_emote", (id, actor, data) => {
 });
 
 services["7TV"].ws.on("rename_emote", (id, actor, data) => {
-    if (globals.SevenTVemoteSetId == id && globals.channelTwitchID) {
-        emotes.update((emoteData) => {
-            const found_set =
-                emoteData["7TV"]["channel"][globals.channelTwitchID || ""];
-            let foundEmote = found_set.find(
-                (emote) => emote.name === data.old.name,
-            );
+    const set_key = getSetKey(id);
 
-            if (foundEmote) {
-                foundEmote.name = data.new.name;
+    if (typeof set_key == "string") {
+        emotes.update((emoteData) => {
+            const found_set = emoteData["7TV"]["channel"][set_key];
+
+            if (found_set && "emotes" in found_set) {
+                let foundEmote = found_set["emotes"].find(
+                    (emote) => emote.name === data.old.name,
+                );
+
+                if (foundEmote) foundEmote.name = data.new.name;
             }
 
             return emoteData;
@@ -371,13 +414,21 @@ services["7TV"].ws.on("rename_emote", (id, actor, data) => {
 
 services["7TV"].ws.on("set_change", async (actor, data) => {
     // no need to resub to a new set id, already done via the websocket client
-    if (globals.channelTwitchID) {
-        const newSet = await services["7TV"].main.emoteSet.bySetID(
-            data.new_set.id,
-        );
+    const newSet = await services["7TV"].main.emoteSet.bySetID(data.new_set.id);
 
+    const set_key = getSetKey(data.old_set.id);
+
+    if (typeof set_key == "string") {
         emotes.update((emoteData) => {
-            emoteData["7TV"]["channel"][globals.channelTwitchID || ""] = newSet;
+            const channelSets = emoteData["7TV"]["channel"];
+
+            if (typeof set_key == "string") {
+                channelSets[set_key] = {
+                    ...channelSets[set_key],
+                    id: data.new_set.id,
+                    emotes: newSet,
+                } as SavedSevenTVSet;
+            }
 
             return emoteData;
         });
@@ -509,13 +560,9 @@ services["BTTV"].ws.on("open", () => {
 });
 
 services["BTTV"].ws.on("add_emote", (id, data) => {
-    if (
-        id == globals.channelTwitchID &&
-        emote_data["BTTV"]["channel"][globals.channelTwitchID]
-    ) {
+    if (id && emote_data["BTTV"]["channel"][id]) {
         emotes.update((emoteData) => {
-            const found_set =
-                emoteData["BTTV"]["channel"][globals.channelTwitchID || ""];
+            const found_set = emoteData["BTTV"]["channel"][id];
 
             found_set.push(data);
 
@@ -527,15 +574,11 @@ services["BTTV"].ws.on("add_emote", (id, data) => {
 });
 
 services["BTTV"].ws.on("remove_emote", (id, data) => {
-    if (
-        id == globals.channelTwitchID &&
-        emote_data["BTTV"]["channel"][globals.channelTwitchID]
-    ) {
+    if (id && emote_data["BTTV"]["channel"][id]) {
         emotes.update((emoteData) => {
-            emoteData["BTTV"]["channel"][globals.channelTwitchID || ""] =
-                emoteData["BTTV"]["channel"][
-                    globals.channelTwitchID || ""
-                ].filter((emote: ParsedEmote) => emote.emote_id !== data); // REMOVE EMOTE FROM SET
+            emoteData["BTTV"]["channel"][id] = emoteData["BTTV"]["channel"][
+                id
+            ].filter((emote: ParsedEmote) => emote.emote_id !== data); // REMOVE EMOTE FROM SET
 
             return emoteData;
         });
@@ -545,20 +588,14 @@ services["BTTV"].ws.on("remove_emote", (id, data) => {
 });
 
 services["BTTV"].ws.on("rename_emote", (id, data) => {
-    if (
-        id == globals.channelTwitchID &&
-        emote_data["BTTV"]["channel"][globals.channelTwitchID]
-    ) {
+    if (id && emote_data["BTTV"]["channel"][id]) {
         emotes.update((emoteData) => {
-            const found_set =
-                emoteData["BTTV"]["channel"][globals.channelTwitchID || ""];
+            const found_set = emoteData["BTTV"]["channel"][id];
             const found_emote = found_set.find(
                 (emote: ParsedEmote) => emote.emote_id == data.id,
             );
 
-            if (found_emote) {
-                found_emote.name = data.code;
-            }
+            if (found_emote) found_emote.name = data.code;
 
             return emoteData;
         });

@@ -385,6 +385,7 @@ class SevenTVWebSocket {
         id: string | number,
         type: string,
         condition: Record<string | number, any> = {},
+        silent?: boolean,
     ) {
         if (!id) throw new Error("Missing 'id' parameter");
         if (!type) throw new Error("Missing 'type' parameter");
@@ -397,8 +398,13 @@ class SevenTVWebSocket {
         )
             throw new Error("Invalid 'id' parameter");
 
-        if (this.subscriptions?.[idKey]?.[type])
-            throw new Error(`Already subscribed`);
+        if (this.subscriptions?.[idKey]?.[type]) {
+            if (!silent) {
+                throw new Error(`Already subscribed`);
+            } else {
+                return;
+            }
+        }
 
         let id_type: Record<string, any> = { id };
         const idField = id_types[type] || "id";

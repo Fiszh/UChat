@@ -185,11 +185,16 @@ class BTTVWebSocket {
      * @param {string} id - Twitch user id.
      * @param {boolean} force - Forces the client to subscribe.
      */
-    async subscribe(id: string | number, force?: boolean) {
+    async subscribe(id: string | number, force?: boolean, silent?: boolean) {
         if (!id) throw new Error("Missing 'id' parameter");
 
-        if (this.subscriptions?.includes(id) && !force)
-            throw new Error(`Already subscribed`);
+        if (this.subscriptions?.includes(id) && !force) {
+            if (!silent) {
+                throw new Error(`Already subscribed`);
+            } else {
+                return;
+            }
+        }
 
         if (this.ws && this.ws.readyState !== this.ws.OPEN)
             await new Promise<void>((resolve, reject) => {

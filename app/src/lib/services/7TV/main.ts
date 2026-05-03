@@ -18,11 +18,8 @@ interface Emote {
     };
 }
 
-async function parseSetData(
-    data: Emote[],
-    emoteSet?: string,
-): Promise<ParsedEmote[]> {
-    return data.map<ParsedEmote>((emote: Emote) => ({
+const parseSetData = (data: Emote[], emoteSet?: string): ParsedEmote[] =>
+    data.map<ParsedEmote>((emote: Emote) => ({
         name: emote?.name,
         original_name: emote?.data?.name,
         emote_id: emote?.id,
@@ -45,7 +42,6 @@ async function parseSetData(
         ),
         set: emoteSet === "global" ? "Global 7TV" : "7TV",
     }));
-}
 
 interface Stop {
     color: number;
@@ -136,7 +132,7 @@ function parseBadgeData(badge_data: Record<string, any>): SevenTVBadge {
 }
 
 async function emoteSetViaSetID(emoteSetId: string) {
-    let emote_data: any[] = [];
+    let emote_data: ParsedEmote[] = [];
 
     try {
         const response = await fetch(
@@ -156,8 +152,11 @@ async function emoteSetViaSetID(emoteSetId: string) {
     }
 }
 
-async function emoteSetViaTwitchID(twitchID: string | number) {
-    let emote_data: any[] = [];
+type SetData = SavedSevenTVSet | Record<never, never>;
+async function emoteSetViaTwitchID(
+    twitchID: string | number,
+): Promise<SetData> {
+    let set_data: SetData = {};
 
     try {
         const response = await fetch(
@@ -168,12 +167,16 @@ async function emoteSetViaTwitchID(twitchID: string | number) {
             const data = await response.json();
 
             if (data?.emote_set?.emotes)
-                emote_data = await parseSetData(data.emote_set.emotes);
+                set_data = {
+                    id: data?.emote_set_id,
+                    user_id: data.user.id,
+                    emotes: await parseSetData(data.emote_set.emotes),
+                };
         }
     } catch (error) {
         throw new Error(`Error fetching emote data: ${error}`);
     } finally {
-        return emote_data;
+        return set_data;
     }
 }
 
@@ -183,7 +186,7 @@ interface UserInfo {
     display_name: string;
     avatar_url?: string;
     emote_set_id: string;
-    emote_data: any[];
+    emote_data: ParsedEmote[];
     twitch: {
         id: string;
         username: string;

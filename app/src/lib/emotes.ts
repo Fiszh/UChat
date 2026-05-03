@@ -27,27 +27,30 @@ export async function getChannelEmotesViaTwitchID(twitchID: string) {
 
             if (SevenTV_user_data) {
                 emotes.update((emoteData) => {
-                    if ("emote_data" in SevenTV_user_data)
-                        emoteData["7TV"]["channel"][twitchID] =
-                            SevenTV_user_data?.emote_data as ParsedEmote[];
+                    if (
+                        "emote_data" in SevenTV_user_data &&
+                        "emote_set_id" in SevenTV_user_data
+                    )
+                        emoteData["7TV"]["channel"][twitchID] = {
+                            id: SevenTV_user_data.emote_set_id,
+                            user_id: SevenTV_user_data.id,
+                            emotes: SevenTV_user_data.emote_data,
+                        };
 
                     if (
                         "id" in SevenTV_user_data &&
                         SevenTV_user_data["id"] == null
                     )
-                        emoteData["7TV"]["channel"][twitchID] =
-                            [] as ParsedEmote[];
+                        emoteData["7TV"]["channel"][twitchID] = {};
 
                     return emoteData;
                 });
 
-                if (SevenTV_user_data?.id) {
+                if (SevenTV_user_data?.id)
                     globals.SevenTVID = SevenTV_user_data.id;
-                }
 
-                if ("emote_set_id" in SevenTV_user_data) {
+                if ("emote_set_id" in SevenTV_user_data)
                     globals.SevenTVemoteSetId = SevenTV_user_data.emote_set_id;
-                }
             }
         }
     } catch (e) {
@@ -155,9 +158,7 @@ export async function getChannelEmotesViaTwitchID(twitchID: string) {
 async function getAvatarViaID(user_id: string) {
     const response = await fetch(`https://api.unii.dev/avatar?id=${user_id}`);
 
-    if (!response.ok) {
-        return false;
-    }
+    if (!response.ok) return false;
 
     const data = await response.json();
 

@@ -179,11 +179,19 @@ export async function replaceWithEmotes(
             ...emote_data["FFZ"].global,
         ];
 
-        const nonGlobalEmoteData = [
-            ...(emote_data["7TV"].channel?.[originChannelID] || []),
+        let nonGlobalEmoteData = [
             ...(emote_data["BTTV"].channel?.[originChannelID] || []),
             ...(emote_data["FFZ"].channel?.[originChannelID] || []),
         ];
+
+        if (
+            emote_data["7TV"].channel[originChannelID] &&
+            "emotes" in emote_data["7TV"].channel[originChannelID]
+        )
+            nonGlobalEmoteData = [
+                ...emote_data["7TV"].channel?.[originChannelID].emotes,
+                ...nonGlobalEmoteData,
+            ];
 
         const foundPersonalSets = getPersonalSets(userstate["user-id"]);
 

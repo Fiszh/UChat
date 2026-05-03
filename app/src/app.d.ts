@@ -72,6 +72,12 @@ declare global {
     }
 
     type ParsedEmote = ParsedEmoteSingle | ParsedEmoteMultiple;
+
+    interface SavedSevenTVSet {
+        id: string;
+        user_id: string;
+        emotes: ParsedEmote[];
+    }
 }
 
 export {};

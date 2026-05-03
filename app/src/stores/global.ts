@@ -16,7 +16,7 @@ export let loadingInfo = writable<LoadingInfo>({
 interface Emotes {
     "7TV": {
         global: ParsedEmote[];
-        channel: Record<string, ParsedEmote[]>;
+        channel: Record<string, SavedSevenTVSet | Record<string, never>>;
     };
     BTTV: {
         global: ParsedEmote[];

@@ -23,21 +23,16 @@
             await getBadges();
         }
 
-        if (!$emotes["7TV"].channel["0"]?.length) {
+        if (!$emotes["7TV"]["global"].length) {
             const previewEmotes = await SevenTV_main.emoteSet.bySetID(
                 "01JGAC1F503T2852YKXC8G9VN1",
             );
 
-            emotes.update((e) => ({
-                ...e,
-                "7TV": {
-                    ...e["7TV"],
-                    channel: {
-                        ...e["7TV"].channel,
-                        ["0"]: previewEmotes,
-                    },
-                },
-            }));
+            emotes.update((e) => {
+                e["7TV"]["global"] = previewEmotes;
+
+                return e;
+            });
         }
 
         if (!$cosmetics.badges.length && !$cosmetics.paints.length) {

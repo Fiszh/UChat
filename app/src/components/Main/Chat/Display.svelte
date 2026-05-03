@@ -14,7 +14,7 @@
         settingsParams,
     } from "$stores/settings";
 
-    import { badges, icon_size } from "$stores/global";
+    import { icon_size } from "$stores/global";
     import { previewMessages } from "$stores/previewMessages";
     import { sendFakeMessage } from "$lib/preview";
 

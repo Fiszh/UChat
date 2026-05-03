@@ -50,16 +50,11 @@
             "01KQD6H6K5ZGDWX2RGM52J75Z5",
         );
 
-        emotes.update((e) => ({
-            ...e,
-            "7TV": {
-                ...e["7TV"],
-                channel: {
-                    ...e["7TV"].channel,
-                    ["0"]: previewEmotes,
-                },
-            },
-        }));
+        emotes.update((e) => {
+            e["7TV"]["global"] = previewEmotes;
+
+            return e;
+        });
 
         sendInterval = setInterval(() => {
             const msg = msgs[Math.floor(Math.random() * msgs.length)];
