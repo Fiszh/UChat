@@ -14,8 +14,9 @@
         settingsParams,
     } from "$stores/settings";
 
-    import { badges, icon_size } from "$stores/global";
+    import { icon_size } from "$stores/global";
     import { previewMessages } from "$stores/previewMessages";
+    import { sendFakeMessage } from "$lib/preview";
 
     let hex = $state("#191919");
     let urlResults: HTMLElement | undefined = undefined;
@@ -62,64 +63,14 @@
         }
     }
 
-    function pickRandomBadges(): Record<string, string>[] {
-        const count = Math.floor(Math.random() * 2) + 1;
-        const shuffled = $badges["TTV"]["global"].sort(
-            () => 0.5 - Math.random(),
-        );
-        return shuffled.slice(0, count);
-    }
-
-    function randomString(len: number) {
-        const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-        let out = "";
-        for (let i = 0; i < len; i++) {
-            out += chars[Math.floor(Math.random() * chars.length)];
-        }
-        return out;
-    }
-
-    function generateFakeTwitchTags() {
-        const username = randomString(5);
-        const displayName = username;
-        const userId = Math.floor(Math.random() * 1_000_000_000).toString();
-
-        const badgesPicked = pickRandomBadges() as Record<string, string>[];
-
-        const badgesRaw = badgesPicked
-            .map((b: Record<string, string>) => {
-                const badge_split = b.id.split("_");
-
-                return `${badge_split[0]}/${badge_split[1]}`;
-            })
-            .join(",");
-        const badges_parsed: Record<string, string> = {};
-        badgesPicked.forEach((b: Record<string, string>) => {
-            const badge_split = b.id.split("_");
-
-            badges_parsed[badge_split[0]] = badge_split[1];
-        });
-
-        return {
-            username,
-            "display-name": displayName,
-            "user-id": userId,
-            "badges-raw": badgesRaw,
-            badges,
-            color: null,
-            "room-id": "0",
-        };
-    }
-
     function addMessage() {
         if (!customMessageInput) return;
 
-        const tags = generateFakeTwitchTags();
         const message = sanitizeInput(customMessageInput.value);
 
         if (!message.length) return;
 
-        messages.update((msgs) => [...msgs, { tags, message }]);
+        sendFakeMessage(message);
     }
 </script>
 
