@@ -1,8 +1,7 @@
 <script lang="ts">
     import ChatDisplay from "$components/ChatDisplay.svelte";
-    import { messages } from "$lib/chat";
-    import { getBadges } from "$lib/preview";
-    import { badges, emotes, isMobile } from "$stores/global";
+    import { getBadges, sendFakeMessage } from "$lib/preview";
+    import { emotes, isMobile } from "$stores/global";
     import { onDestroy, onMount } from "svelte";
 
     import SevenTV_main from "$lib/services/7TV/main";
@@ -33,58 +32,6 @@
         "DIESOFCRINGE",
     ];
 
-    function randomString(len: number) {
-        const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-        let out = "";
-        for (let i = 0; i < len; i++)
-            out += chars[Math.floor(Math.random() * chars.length)];
-        return out;
-    }
-
-    function pickRandomBadges(): Record<string, string>[] {
-        const count = Math.floor(Math.random() * 2) + 1;
-        const shuffled = $badges["TTV"]["global"].sort(
-            () => 0.5 - Math.random(),
-        );
-        return shuffled.slice(0, count);
-    }
-
-    function sendFakeMessage() {
-        const username = randomString(5);
-        const displayName = username;
-        const userId = Math.floor(Math.random() * 1_000_000_000).toString();
-
-        const badgesPicked = pickRandomBadges() as Record<string, string>[];
-
-        const badgesRaw = badgesPicked
-            .map((b: Record<string, string>) => {
-                const badge_split = b.id.split("_");
-
-                return `${badge_split[0]}/${badge_split[1]}`;
-            })
-            .join(",");
-        const badges_parsed: Record<string, string> = {};
-        badgesPicked.forEach((b: Record<string, string>) => {
-            const badge_split = b.id.split("_");
-
-            badges_parsed[badge_split[0]] = badge_split[1];
-        });
-
-        const message = msgs[Math.floor(Math.random() * msgs.length)];
-
-        const tags = {
-            username,
-            "display-name": displayName,
-            "user-id": userId,
-            "badges-raw": badgesRaw,
-            badges,
-            color: null,
-            "room-id": "0",
-        };
-
-        messages.update((msgs) => [...msgs, { tags, message }]);
-    }
-
     let sendInterval: ReturnType<typeof setInterval>;
 
     onMount(async () => {
@@ -114,7 +61,11 @@
             },
         }));
 
-        sendInterval = setInterval(sendFakeMessage, 1000);
+        sendInterval = setInterval(() => {
+            const msg = msgs[Math.floor(Math.random() * msgs.length)];
+
+            sendFakeMessage(msg);
+        }, 1000);
     });
 
     onDestroy(() => clearInterval(sendInterval));
@@ -175,6 +126,18 @@
             position: relative !important;
         }
 
+        #red-dot {
+            position: absolute;
+            background-color: rgb(255, 0, 0);
+            aspect-ratio: 1/1;
+            width: 1rem;
+            border-radius: 1rem;
+            right: -0.25rem;
+            top: -0.25rem;
+
+            animation: pulse 1s ease-in-out infinite;
+        }
+
         user-select: none;
 
         #error {
@@ -192,7 +155,6 @@
 
         min-height: 0;
         border-radius: 1rem;
-        overflow: hidden;
         background-color: #5e5e5e0e;
 
         transform: perspective(1200px) rotateX(var(--chat-x))
@@ -201,6 +163,16 @@
             0 1px 2px rgba(255, 255, 255, 0.2),
             0 4px 8px rgba(0, 0, 0, 0.15),
             0 12px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    @keyframes pulse {
+        0%,
+        100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.5;
+        }
     }
 
     #buttons {
