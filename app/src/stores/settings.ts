@@ -56,6 +56,12 @@ export const configs: Setting[] = [
         param: "msgCaps",
     },
     {
+        name: "Smooth message scroll",
+        type: "boolean",
+        param: "smoothScroll",
+        value: true,
+    },
+    {
         name: "Custom chat font",
         type: "text",
         value: "Geist",

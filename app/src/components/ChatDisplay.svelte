@@ -10,6 +10,8 @@
     let chatMessages: Record<string, any>[] = [];
     let chat: HTMLElement;
 
+    let instantScroll = false;
+
     let styles: Record<string, string | number> = {};
     $: chatStyle = Object.entries(styles)
         .map(([k, v]) => `${k}: ${v}`)
@@ -134,6 +136,11 @@
                             : "white";
 
                     break;
+                case "smoothScroll":
+                    if (typeof setting.value == "boolean")
+                        instantScroll = !setting.value;
+
+                    break;
                 default:
                     if (typeof setting.value == "string")
                         setting.value = setting.value.toLowerCase();
@@ -238,7 +245,7 @@
 
                 chat?.scrollTo({
                     top: chat.scrollHeight,
-                    behavior: fast ? "instant" : "smooth",
+                    behavior: fast || instantScroll ? "instant" : "smooth",
                 });
             });
         });
