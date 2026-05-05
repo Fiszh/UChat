@@ -77,7 +77,21 @@ export const badges = writable<Badges>({
     channel: {},
 });
 
-export const globals = {
+interface Globals {
+    custom_bots: string[];
+
+    channelTwitchID: string | null;
+    channelTwitchName: string | null;
+
+    inSharedChat: boolean;
+
+    SevenTVID: string | null;
+    SevenTVemoteSetId: string | null;
+
+    userNameColor: Record<string, string>;
+}
+
+export const globals: Globals = {
     // BOT LIST
     custom_bots: [
         "poland_bot",
@@ -89,7 +103,7 @@ export const globals = {
         "soundalerts", // from speedyemperor
         "rancbot", // from fehleno
         "waga_bot", // from fehleno
-    ] as string[],
+    ],
     /*
     If you want your bot added, open a PR on the repo.
     I’ll probably accept it, but no guarantees.
@@ -97,13 +111,15 @@ export const globals = {
     */
 
     // TTV
-    channelTwitchID: null as string | null,
-    channelTwitchName: null as string | null,
+    channelTwitchID: null,
+    channelTwitchName: null,
+
+    inSharedChat: false,
 
     // 7TV
-    SevenTVID: null as string | null,
-    SevenTVemoteSetId: null as string | null,
+    SevenTVID: null,
+    SevenTVemoteSetId: null,
 
     // OTHER
-    userNameColor: {} as Record<string, string>,
+    userNameColor: {},
 };

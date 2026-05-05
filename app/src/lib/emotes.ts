@@ -2,6 +2,8 @@ import { get } from "svelte/store";
 
 import { badges, emotes, globals } from "$stores/global";
 
+import { subscribeEventAPIToSharedChatUser } from "./overlayIndex";
+
 import SevenTV_main from "$lib/services/7TV/main";
 import BTTV_main from "$lib//services/BTTV/main";
 import FFZ_main from "$lib//services/FFZ/main";
@@ -16,6 +18,8 @@ let processing_ids: string[] = [];
 export async function getChannelEmotesViaTwitchID(twitchID: string) {
     if (!twitchID || twitchID === "0" || processing_ids.includes(twitchID))
         return;
+
+    if (twitchID != globals.channelTwitchID) globals.inSharedChat = true;
 
     processing_ids.push(twitchID); // prevent API spam
 
@@ -150,6 +154,9 @@ export async function getChannelEmotesViaTwitchID(twitchID: string) {
     } catch (e) {
         console.error(`Badge error for ${twitchID}:`, e);
     }
+
+    if (twitchID != globals.channelTwitchID)
+        await subscribeEventAPIToSharedChatUser(twitchID);
 
     // remove from processing
     processing_ids = processing_ids.filter((id) => id !== twitchID);

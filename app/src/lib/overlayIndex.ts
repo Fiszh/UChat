@@ -291,14 +291,15 @@ export async function connectToWS() {
 export async function subscribeEventAPIToSharedChatUser(room_id: string) {
     if (room_id == globals.channelTwitchID) return;
 
+    // BTTV
     if (emote_data["BTTV"]["channel"][room_id])
-        services["BTTV"].ws.subscribe(room_id, false, true); // BTTV
+        services["BTTV"].ws.subscribe(room_id, false, true);
 
+    // 7TV
     services["7TV"].ws.subscribe(room_id, "entitlement.create", {}, true); // PAINTS, BADGES & PERSONAL EMOTES
 
-    if (emote_data["7TV"]["channel"][room_id]) {
-        const channel_set = emote_data["7TV"]["channel"][room_id];
-
+    const channel_set = emote_data["7TV"]["channel"][room_id];
+    if (channel_set) {
         if (channel_set["id"])
             services["7TV"].ws.subscribe(
                 channel_set["id"],
@@ -315,6 +316,80 @@ export async function subscribeEventAPIToSharedChatUser(room_id: string) {
                 true,
             );
     }
+}
+
+export async function unsubscribeEventAPISharedChatUser(room_id: string) {
+    if (room_id == globals.channelTwitchID) return;
+
+    // BTTV
+    services["BTTV"].ws.unsubscribe(room_id);
+
+    // 7TV
+    services["7TV"].ws.unsubscribe(room_id, "entitlement.create");
+
+    const channel_set = emote_data["7TV"]["channel"][room_id];
+    if (channel_set) {
+        if (channel_set["id"])
+            services["7TV"].ws.unsubscribe(
+                channel_set["id"],
+                "emote_set.update",
+            );
+
+        if (channel_set["user_id"])
+            services["7TV"].ws.unsubscribe(channel_set["user_id"], "user.*");
+    }
+}
+
+export async function cleanUpSharedChat() {
+    if (!globals.inSharedChat) return;
+
+    const room_ids_keys = [
+        ...Object.keys(emote_data["7TV"]["channel"]),
+        ...Object.keys(emote_data["BTTV"]["channel"]),
+    ];
+
+    if (!room_ids_keys.length) return;
+
+    const room_ids = room_ids_keys.reduce<string[]>((arr, key) => {
+        if (!arr.includes(key)) arr.push(key);
+
+        return arr;
+    }, []);
+
+    for (const room_id of room_ids) {
+        if (room_id == globals.channelTwitchID) continue;
+
+        await unsubscribeEventAPISharedChatUser(room_id);
+    }
+
+    if (globals.channelTwitchID) {
+        emotes.update((emotesData) => {
+            emotesData["7TV"]["channel"] = {
+                [globals.channelTwitchID as string]:
+                    emotesData["7TV"]["channel"][
+                        globals.channelTwitchID as string
+                    ],
+            };
+
+            emotesData["BTTV"]["channel"] = {
+                [globals.channelTwitchID as string]:
+                    emotesData["BTTV"]["channel"][
+                        globals.channelTwitchID as string
+                    ],
+            };
+
+            emotesData["FFZ"]["channel"] = {
+                [globals.channelTwitchID as string]:
+                    emotesData["FFZ"]["channel"][
+                        globals.channelTwitchID as string
+                    ],
+            };
+
+            return emotesData;
+        });
+    }
+
+    globals.inSharedChat = false;
 }
 
 // ANCHOR 7TV WEBSOCKET
