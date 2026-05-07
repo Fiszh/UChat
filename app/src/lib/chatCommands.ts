@@ -1,3 +1,6 @@
+import { loadingInfo } from "$stores/global";
+import { overlayVersion } from "$stores/settings";
+import { get } from "svelte/store";
 import { disconnect } from "./chat";
 import { loadChat } from "./loadChat";
 import { services } from "./services";
@@ -18,7 +21,9 @@ export function execCommand(message: string, tags: Record<string, any>) {
                 .replace(/^(!uchat\s|!)/, "")
         ) {
             case "reloadchat":
-                window.location.reload();
+                const url = new URL(window.location.href);
+                url.searchParams.set("_cb", Date.now().toString());
+                window.location.replace(url.toString());
 
                 break;
             case "refreshchat":
@@ -34,6 +39,23 @@ export function execCommand(message: string, tags: Record<string, any>) {
                 break;
             case "reconnectchat":
                 disconnect();
+
+                break;
+            case "chatversion":
+            case "version":
+                const loadInfo = get(loadingInfo);
+
+                if (loadInfo.text) {
+                    loadingInfo.set({
+                        text: undefined,
+                        type: undefined,
+                    });
+                } else {
+                    loadingInfo.set({
+                        text: "Chat Version: " + get(overlayVersion),
+                        type: "minimal",
+                    });
+                }
 
                 break;
             default:

@@ -179,9 +179,9 @@ export const config = configs;
 
 export let settings = writable<Setting[]>(configs.map((c) => ({ ...c })));
 export let savedSettings = writable<Record<string, any>>([]);
-export let channelName = writable<String>("");
-export let channelID = writable<String>("");
+export let channelName = writable<string>("");
+export let channelID = writable<string>("");
 
-export let overlayVersion = writable<String>("");
+export let overlayVersion = writable<string>("");
 
 export let settingsParams = writable<Record<string, Setting["value"]>>({});

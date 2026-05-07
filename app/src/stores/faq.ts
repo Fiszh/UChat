@@ -34,6 +34,10 @@ export const faqItems = [
                 desc: "Reconnects the 7TV and BTTV WebSockets",
             },
             { cmd: "!reconnectchat", desc: "Reconnects to Twitch IRC" },
+            {
+                cmd: "!chatversion",
+                desc: "Shows Chat Overlay Version (reuse command to disable)",
+            },
         ],
     },
     {

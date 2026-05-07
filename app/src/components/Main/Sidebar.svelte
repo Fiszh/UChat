@@ -7,6 +7,8 @@
         MessageSquareMore,
     } from "lucide-svelte";
 
+    import moment from "moment/min/moment-with-locales";
+
     import LoginButton from "$components/LoginButton.svelte";
     import GlobalSettings from "./GlobalSettings.svelte";
 
@@ -80,6 +82,8 @@
             }
         }
     }
+
+    moment.locale(navigator.language);
 </script>
 
 <aside>
@@ -137,6 +141,7 @@
             Your token is only shared to validate and never stored on the
             server.
         </p>
+
         <a href="#help-notice">[Learn more]</a>
         {#if username}
             <GlobalSettings
@@ -147,6 +152,13 @@
                 }}
             />
         {/if}
+
+        <p id="commit">
+            {moment(__BUILD_DATE).fromNow()}, commit: #{__COMMIT_HASH.slice(
+                0,
+                7,
+            )}
+        </p>
     </section>
 </aside>
 
@@ -237,6 +249,11 @@
             p {
                 margin: 0.3rem;
             }
+        }
+
+        #commit {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.35);
         }
     }
 

@@ -16,7 +16,11 @@
 {#snippet minimal()}
     <div class="loader"></div>
     <div class="info">
-        <span class="loading-text">Loading...</span>
+        {#if loading.text}
+            <span class="loading-info">{@html loading.text}</span>
+        {:else}
+            <span class="loading-text">Loading...</span>
+        {/if}
         <p class="version">{version_text}</p>
     </div>
 {/snippet}
@@ -82,7 +86,10 @@
         }
 
         &.minimal {
-            align-content: center;
+            max-width: 75%;
+            width: max-content;
+            align-items: center;
+
             bottom: 5%;
             left: 50%;
             gap: 0.5rem;
@@ -94,7 +101,8 @@
                 height: 2.5rem;
                 border: 0.4rem solid #222;
                 border-top-color: #fff;
-                border-radius: 50%;
+                border-radius: 100%;
+                aspect-ratio: 1/1;
                 animation: spin 0.8s ease-in-out infinite;
             }
 

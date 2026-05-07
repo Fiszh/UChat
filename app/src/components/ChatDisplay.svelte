@@ -70,7 +70,7 @@
 
             switch (setting.param) {
                 case "msgBold":
-                    styles["--chat-bold"] = setting.value ? "bold" : "normal";
+                    styles["--chat-bold"] = setting.value ? "900" : "normal";
 
                     break;
                 case "msgCaps":
@@ -276,7 +276,7 @@
 
 <style lang="scss">
     :global(.chat) {
-        --chat-bold: bold;
+        --chat-bold: 900;
         --chat-case: unset;
         --chat-font: "Inter";
         --chat-font-size: 20px;
@@ -297,6 +297,8 @@
         overflow-wrap: break-word;
         position: absolute;
         bottom: 0;
+
+        padding: 0.5rem;
 
         /* SETTING */
         font-weight: var(--chat-bold);

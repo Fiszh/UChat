@@ -161,3 +161,17 @@ body {
     font-weight: 700;
     font-style: normal;
 }
+
+@font-face {
+    font-family: "Geist";
+    src: url("/fonts/Geist/Geist-ExtraBold.otf") format("opentype");
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Geist";
+    src: url("/fonts/Geist/Geist-Black.otf") format("opentype");
+    font-weight: 900;
+    font-style: normal;
+}
