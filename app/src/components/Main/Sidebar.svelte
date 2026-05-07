@@ -153,12 +153,17 @@
             />
         {/if}
 
-        <p id="commit">
+        <a
+            id="commit"
+            href="https://github.com/Fiszh/UChat/commit/{__COMMIT_HASH}"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
             {moment(__BUILD_DATE).fromNow()}, commit: #{__COMMIT_HASH.slice(
                 0,
                 7,
             )}
-        </p>
+        </a>
     </section>
 </aside>
 
