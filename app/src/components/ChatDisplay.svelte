@@ -298,7 +298,8 @@
         position: absolute;
         bottom: 0;
 
-        padding: 0.5rem;
+        padding: 0.25rem 0.5rem;
+        box-sizing: border-box;
 
         /* SETTING */
         font-weight: var(--chat-bold);
