@@ -203,7 +203,7 @@
             display: inline-flex;
             line-height: normal;
             vertical-align: middle;
-            gap: 5px;
+            gap: 0.25rem;
         }
 
         &:global(.fadeOut) {
