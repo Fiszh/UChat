@@ -5,6 +5,7 @@
         Github,
         Coffee,
         MessageSquareMore,
+        ArrowLeftRight,
     } from "lucide-svelte";
 
     import moment from "moment/min/moment-with-locales";
@@ -17,6 +18,7 @@
 
     import { overlayVersion } from "$stores/settings";
     import { dev } from "$app/environment";
+    import { page } from "$app/state";
 
     $: version_text = $overlayVersion;
 
@@ -103,35 +105,41 @@
     </header>
 
     <nav>
-        <a href="/#" class="active" bind:this={navLinks["home"]["navLink"]}>
-            <House size="20" /> Home
-        </a>
-        <!-- <a href="convert/" target="_blank" rel="noopener noreferrer">
-            <RefreshCcw size="20" /> Invalid URL
-        </a> -->
-        <a
-            href="#message-creator"
-            bind:this={navLinks["msgCreator"]["navLink"]}
-        >
-            <MessageSquareMore size="20" /> Message creator
-        </a>
-        <a href="#help" bind:this={navLinks["help"]["navLink"]}>
-            <Info size="20" /> Info & Privacy
-        </a>
-        <a
-            href="https://github.com/Fiszh/UChat"
-            target="_blank"
-            rel="noopener noreferrer"
-        >
-            <Github size="20" /> GitHub
-        </a>
-        <a
-            href="https://buymeacoffee.com/jzlnkf5qgo"
-            target="_blank"
-            rel="noopener noreferrer"
-        >
-            <Coffee size="20" /> Support
-        </a>
+        {#if page.route.id == "/"}
+            <a href="/#" class="active" bind:this={navLinks["home"]["navLink"]}>
+                <House size="20" /> Home
+            </a>
+            <a
+                href="#message-creator"
+                bind:this={navLinks["msgCreator"]["navLink"]}
+            >
+                <MessageSquareMore size="20" /> Message creator
+            </a>
+            <a href="/convert">
+                <ArrowLeftRight size="20" /> Convert
+            </a>
+            <a href="#help" bind:this={navLinks["help"]["navLink"]}>
+                <Info size="20" /> Info & Privacy
+            </a>
+            <a
+                href="https://github.com/Fiszh/UChat"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <Github size="20" /> GitHub
+            </a>
+            <a
+                href="https://buymeacoffee.com/jzlnkf5qgo"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <Coffee size="20" /> Support
+            </a>
+        {:else}
+            <a href="/#">
+                <House size="20" /> Home
+            </a>
+        {/if}
     </nav>
 
     <section id="account" aria-label="User account section">

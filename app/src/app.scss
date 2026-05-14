@@ -50,6 +50,28 @@ body {
         -8px 0;
 }
 
+.note {
+    color: rgba(255, 255, 255, 0.575);
+    user-select: all;
+}
+
+a {
+    all: unset;
+    display: block;
+    color: #8b8bff;
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+a[href="#help-notice"] {
+    margin-bottom: 5px;
+    text-align: center;
+    display: block;
+}
+
 @font-face {
     font-family: "Just Sans";
     src: url("/fonts/Just-Sans/JUST-Sans-Regular.otf") format("opentype");

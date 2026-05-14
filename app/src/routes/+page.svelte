@@ -8,8 +8,6 @@
     import LoadingUI from "../components/Loading.svelte";
 
     import { icon_size, isMobile, loadingInfo } from "$stores/global";
-    import { overlayVersion } from "$stores/settings";
-    import { getVersion } from "$lib/overlayIndex";
 
     $: LoadingMsg = $loadingInfo;
 
@@ -29,10 +27,6 @@
     onMount(() => {
         const params = new URLSearchParams(window.location.search);
         hasChannel = params.has("channel") || params.has("id");
-
-        (async () => {
-            overlayVersion.set(await getVersion());
-        })();
 
         setMobile();
         window.addEventListener("resize", setMobile);
@@ -55,14 +49,14 @@
 </script>
 
 {#if mounted}
-    <LoadingUI
-        loading={{
-            text: LoadingMsg.text,
-            type: LoadingMsg.type,
-        }}
-    />
-
     {#if hasChannel}
+        <LoadingUI
+            loading={{
+                text: LoadingMsg.text,
+                type: LoadingMsg.type,
+            }}
+        />
+
         <ChatOverlay />
     {:else}
         <Main />
@@ -118,9 +112,9 @@
         }
 
         /* 
-    START
-    WHAT MAKES EMOTES WORK IN ZERO-WIDTH 
-    */
+        START
+        WHAT MAKES EMOTES WORK IN ZERO-WIDTH 
+        */
         .emote-wrapper {
             display: inline-grid;
             grid-auto-rows: 0px;
@@ -145,28 +139,6 @@
             display: inline-block;
             vertical-align: middle;
             line-height: normal;
-        }
-
-        .note {
-            color: rgba(255, 255, 255, 0.575);
-            user-select: all;
-        }
-
-        a {
-            all: unset;
-            display: block;
-            color: #8b8bff;
-            cursor: pointer;
-
-            &:hover {
-                text-decoration: underline;
-            }
-        }
-
-        a[href="#help-notice"] {
-            margin-bottom: 5px;
-            text-align: center;
-            display: block;
         }
 
         #rainbow-text {
