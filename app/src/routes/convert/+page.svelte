@@ -151,7 +151,8 @@
 <section id="layout">
     <h1>Convert your chat overlay settings to UChat</h1>
     <p>Bugs could occur, please be aware.</p>
-    <p>Not every exists in UChat.</p>
+    <p>Not every setting exists in UChat.</p>
+    <p>Currently supported: JChat & ChatIS.</p>
 
     <section id="url-input">
         <h2>Chat Overlay URL:</h2>
