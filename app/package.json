@@ -15,6 +15,7 @@
         "fmt": "bunx prettier --write ."
     },
     "devDependencies": {
+        "@socketsecurity/bun-security-scanner": "^1.1.2",
         "@sveltejs/adapter-static": "^3.0.10",
         "@sveltejs/kit": "^2.55.0",
         "@sveltejs/vite-plugin-svelte": "7.1.2",
