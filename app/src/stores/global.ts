@@ -32,9 +32,8 @@ interface Emotes {
 interface Badges {
     UChat: any[];
     TTV: {
-        sub: any[];
         global: any[];
-        bit: any[];
+        channel: any[];
     };
     BTTV: {
         global: any[];
@@ -65,7 +64,7 @@ export const emotes = writable<Emotes>({
 
 export const badges = writable<Badges>({
     UChat: [],
-    TTV: { sub: [], global: [], bit: [] },
+    TTV: { global: [], channel: [] },
     BTTV: { global: [] },
     FFZ: { global: [], user: { vip: "", mod: "", user: {} } },
     OTHER: {

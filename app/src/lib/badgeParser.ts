@@ -51,40 +51,20 @@ export function parseBadges(
         for (const Badge of badgesSplit) {
             let badgeSplit = Badge.split("/");
 
-            if (badgeSplit[0] === "subscriber" && badges_data["TTV"].sub) {
-                // SUB BADGES
-                if (userstate?.badges?.["subscriber"]) {
-                    const badge = badges_data["TTV"].sub.find(
-                        (badge: Badge) =>
-                            badge.id === userstate.badges["subscriber"],
-                    ) as Badge | undefined;
+            if (badges_data["TTV"].channel) {
+                const badge = badges_data["TTV"].channel.find(
+                    (badge: Badge) =>
+                        badge.id === `${badgeSplit[0]}_${badgeSplit[1]}`,
+                ) as Badge | undefined;
 
-                    if (badge) {
-                        user_badges.push({
-                            badge_url: badge.url,
-                            alt: badge.title,
-                            background_color: undefined,
-                        });
+                if (badge) {
+                    user_badges.push({
+                        badge_url: badge.url,
+                        alt: badge.title,
+                        background_color: undefined,
+                    });
 
-                        continue;
-                    }
-                }
-            } else if (badgeSplit[0] === "bits" && badges_data["TTV"].bit) {
-                // BIT BADGES
-                if (userstate?.badges?.["bits"]) {
-                    const badge = badges_data["TTV"].bit.find(
-                        (badge: Badge) => badge.id === userstate.badges["bits"],
-                    ) as Badge | undefined;
-
-                    if (badge) {
-                        user_badges.push({
-                            badge_url: badge.url,
-                            alt: badge.title,
-                            background_color: undefined,
-                        });
-
-                        continue;
-                    }
+                    continue;
                 }
             }
 
