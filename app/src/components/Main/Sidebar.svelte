@@ -142,37 +142,39 @@
         {/if}
     </nav>
 
-    <section id="account" aria-label="User account section">
-        <LoginButton onToken={handleToken} onLogOut={logOut} />
-        <p class="note">Login is not required.</p>
-        <p class="note">
-            Your token is only shared to validate and never stored on the
-            server.
-        </p>
+    <footer>
+        <section id="account" aria-label="User account section">
+            <LoginButton onToken={handleToken} onLogOut={logOut} />
+            <p class="note">Login is not required.</p>
+            <p class="note">
+                Your token is only shared to validate and never stored on the
+                server.
+            </p>
 
-        <a href="#help-notice">[Learn more]</a>
-        {#if username}
-            <GlobalSettings
-                user={{
-                    name: username || "",
-                    token: twitchToken || "",
-                    user_id: twitchID || "",
-                }}
-            />
-        {/if}
+            <a href="#help-notice">[Learn more]</a>
+            {#if username}
+                <GlobalSettings
+                    user={{
+                        name: username || "",
+                        token: twitchToken || "",
+                        user_id: twitchID || "",
+                    }}
+                />
+            {/if}
 
-        <a
-            id="commit"
-            href="https://github.com/Fiszh/UChat/commit/{__COMMIT_HASH}"
-            target="_blank"
-            rel="noopener noreferrer"
-        >
-            {moment(__BUILD_DATE).fromNow()}, commit: #{__COMMIT_HASH.slice(
-                0,
-                7,
-            )}
-        </a>
-    </section>
+            <a
+                id="commit"
+                href="https://github.com/Fiszh/UChat/commit/{__COMMIT_HASH}"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                {moment(__BUILD_DATE).fromNow()}, commit: #{__COMMIT_HASH.slice(
+                    0,
+                    7,
+                )}
+            </a>
+        </section>
+    </footer>
 </aside>
 
 <style lang="scss">
@@ -186,6 +188,10 @@
         width: 100%;
         position: relative;
         height: 100dvh;
+
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
 
         header {
             display: flex;
@@ -209,11 +215,14 @@
 
         nav {
             width: 100%;
+            height: 100%;
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
             padding: 0.6rem 0.7rem;
             box-sizing: border-box;
+
+            overflow-y: auto;
 
             a {
                 all: unset;
@@ -256,8 +265,6 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            position: absolute;
-            bottom: 0;
 
             p {
                 margin: 0.3rem;

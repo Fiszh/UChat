@@ -170,10 +170,7 @@
                         {#if setting.hide}
                             (Hidden)
                         {/if}
-                        {@html setting.name.replace(
-                            /\(([^)]+)\)/g,
-                            "<small>($1)</small>",
-                        )}
+                        {@html setting.name}
 
                         {#if typeof setting["previewReact"] != "undefined" && !setting["previewReact"] && !$isMobile}
                             <span
