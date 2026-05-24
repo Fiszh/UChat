@@ -5,11 +5,12 @@ on:
 
 permissions:
   pull-requests: write
+  issues: write
 
 jobs:
   check-checklist:
     runs-on: ubuntu-latest
-    if: github.actor != 'app/dependabot'
+    if: github.actor != 'dependabot[bot]'
     steps:
       - name: Check required boxes
         uses: actions/github-script@v7
