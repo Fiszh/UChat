@@ -37,3 +37,4 @@ Create a pull request.
 | <img src="https://7tv.app/favicon.svg" width="20" /> **[7TV](https://7tv.app/)**                                                    | **Emotes:** Global, Channel, Personal/Special Sets, Auto Set Updates, Zero-Width<br>**User Customization:** Paints, Badges, Personal/Special Emote Sets            |
 | <img src="https://betterttv.com/favicon.png" width="20" /> **[BTTV](https://betterttv.com/)**                                       | **Emotes:** Global, Channel, Auto Set Updates                                                                                                                      |
 | <img src="https://www.frankerfacez.com/static/images/favicon-32.png" width="20" /> **[FFZ](https://www.frankerfacez.com/)**         | **Emotes:** Global, Channel<br>**User Customization:** Global + Channel Badges                                                                                     |
+cassy is a cutie
