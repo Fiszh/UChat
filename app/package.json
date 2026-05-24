@@ -22,7 +22,7 @@
         "@types/tinycolor2": "^1.4.6",
         "moment": "^2.30.1",
         "prettier": "^3.8.1",
-        "prettier-plugin-svelte": "^3.5.1",
+        "prettier-plugin-svelte": "^4.0.1",
         "sass-embedded": "^1.98.0",
         "svelte": "^5.53.11",
         "svelte-check": "^4.4.5",
