@@ -38,3 +38,4 @@ Create a pull request.
 | <img src="https://betterttv.com/favicon.png" width="20" /> **[BTTV](https://betterttv.com/)**                                       | **Emotes:** Global, Channel, Auto Set Updates                                                                                                                      |
 | <img src="https://www.frankerfacez.com/static/images/favicon-32.png" width="20" /> **[FFZ](https://www.frankerfacez.com/)**         | **Emotes:** Global, Channel<br>**User Customization:** Global + Channel Badges                                                                                     |
 cassy is a cutie
+so this cute twink asked me to make a pr so im here in hopes an can hit on him
