@@ -2,6 +2,10 @@
 
 Describe the changes here.
 
+## Link to the API Pull request (if API change required):
+
+...
+
 ## Notes
 
 If this PR depends on the API, make sure to test it against a local build using [this repo](https://github.com/Fiszh/uniiDev) before merging.
@@ -12,18 +16,15 @@ Put an `x` in the boxes that apply. You can also fill them out later after creat
 </br> Do not remove any of the checkboxes.
 
 - [ ] I agree to the guidelines outlined in [CONTRIBUTING.md](../CONTRIBUTING.md).
-- [ ] I've looked through other files and checked how they are structured to keep the same style.
+- [ ] The code is readable and follows the existing style.
+- [ ] Any new non-first-party API endpoints do not send user data (telemetry, analytics, etc.).
+- [ ] This change could be breaking.
 
 - [ ] This PR depends on an API or backend change.
-    - [ ] I have tested it against a local build using [this repo](https://github.com/Fiszh/uniiDev).
-    - [ ] I have opened a corresponding PR in [this repo](https://github.com/Fiszh/uniiDev).
+    - [ ] I have tested it against a local build using [this repo](https://github.com/Fiszh/uniiDev) and opened a corresponding PR there.
 - [ ] This PR adds my bot to the custom bot list.
-    - [ ] My bot does not have the [Twitch bot badge](https://help.twitch.tv/s/article/chat-bot-badge-about).
-    - [ ] My bot is not on the [FFZ global bots list](https://api.frankerfacez.com/v1/badges).
+    - [ ] My bot is not recognized as a bot by [Twitch](https://help.twitch.tv/s/article/chat-bot-badge-about) or [FFZ](https://api.frankerfacez.com/v1/badges).
     - [ ] The bot is publicly accessible (not private or test-only).
-    - [ ] This PR does not send any user data to external services (telemetry, analytics, etc.).
-- [ ] This change could be breaking.
-    - [ ] It has been tested and verified.
 - [ ] This PR adds a new setting.
 - [ ] This PR adds or changes CSS.
     - [ ] Mobile only.
