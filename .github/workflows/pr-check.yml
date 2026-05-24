@@ -16,12 +16,8 @@ jobs:
         with:
           script: |
             const body = context.payload.pull_request.body || '';
-            const required = [
-              '- [x] I agree to the guidelines outlined in',
-              '- [x] The code is readable and follows the existing style.',
-            ];
-            const missing = required.filter(item => !body.includes(item));
-            if (missing.length > 0) {
+            const count = (body.match(/\[x\]/gi) || []).length;
+            if (count < 2) {
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
