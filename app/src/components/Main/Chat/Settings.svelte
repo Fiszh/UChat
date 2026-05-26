@@ -14,18 +14,33 @@
     } from "$stores/settings";
     import { CircleQuestionMark } from "lucide-svelte";
     import { isMobile } from "$stores/global";
+    import BrandButtons, { type Brands } from "$components/BrandButtons.svelte";
 
-    export let dispayChannelInput: boolean = true;
+    let { dispayChannelInput = true }: { dispayChannelInput: true } = $props();
 
-    let showHidden = false;
-    let hiddenWarning = false;
+    let brand: Brands = $state("twitch");
+
+    let showHidden = $state(false);
+    let hiddenWarning = $state(false);
+
+    let usingID = $state(false);
+
+    type ChannelInfoState = Record<
+        "twitch" | "kick",
+        { name: string; id: string }
+    >;
+
+    const createEmptyChannelInfo = (): ChannelInfoState => ({
+        twitch: { name: "", id: "" },
+        kick: { name: "", id: "" },
+    });
+
+    let channelInfo = $state<ChannelInfoState>(createEmptyChannelInfo());
 
     const showHiddenSettings = () => {
         showHidden = true;
         hiddenWarning = true;
     };
-
-    let usingID = false;
 
     const rawLocalSettings = localStorage.getItem("local-settings");
     const LocalSettings = rawLocalSettings
@@ -34,13 +49,10 @@
 
     if (LocalSettings) parseSavedSettings(LocalSettings);
 
-    let localChannelName = "";
-    let localChannelID = "";
-
-    $: if (!Object.keys($settingsParams).length) {
-        localChannelName = "";
-        localChannelID = "";
-    }
+    $effect(() => {
+        if (!Object.keys($settingsParams).length)
+            channelInfo = createEmptyChannelInfo();
+    });
 
     function setParam(key: string, value: Setting["value"]) {
         settingsParams.update((arr) => {
@@ -115,12 +127,23 @@
         return value;
     }
 
-    $: localChannelName.length && (!localChannelID.length || !usingID)
-        ? setParam("channel", String(localChannelName))
-        : removeParam("channel");
-    $: localChannelID.length && (!localChannelName.length || usingID)
-        ? setParam("id", String(localChannelID))
-        : removeParam("id");
+    $effect(() =>
+        channelInfo["twitch"]["name"].length &&
+        (!channelInfo["twitch"]["id"].length || !usingID)
+            ? setParam("channel", String(channelInfo["twitch"]["name"]))
+            : removeParam("channel"),
+    );
+    $effect(() =>
+        channelInfo["twitch"]["id"].length &&
+        (!channelInfo["twitch"]["name"].length || usingID)
+            ? setParam("id", String(channelInfo["twitch"]["id"]))
+            : removeParam("id"),
+    );
+    $effect(() =>
+        channelInfo["kick"]["name"].length
+            ? setParam("kick", String(channelInfo["kick"]["name"]))
+            : removeParam("kick"),
+    );
 </script>
 
 <Dialog name="Warming" bind:show={hiddenWarning}>
@@ -208,40 +231,56 @@
         {/each}
 
         {#if !showHidden}
-            <button id="hidden-settings" onclick={showHiddenSettings}
-                >Show hidden settings</button
-            >
+            <button id="hidden-settings" onclick={showHiddenSettings}>
+                Show hidden settings
+            </button>
         {/if}
     </section>
     {#if dispayChannelInput}
-        <p>↓ Channel Info ↓</p>
+        <span id="channel-label">
+            <p>↓ Channel Info ↓</p>
+            <BrandButtons bind:brand />
+            <p>(BETA)</p>
+        </span>
         <section id="channel">
-            <label>
-                <input
-                    type="checkbox"
-                    id="channel-id-check"
-                    bind:checked={usingID}
-                /> Use Channel ID
-            </label>
+            {#if brand == "twitch"}
+                <label>
+                    <input
+                        type="checkbox"
+                        id="channel-id-check"
+                        bind:checked={usingID}
+                    /> Use Channel ID
+                </label>
 
-            {#if usingID}
+                {#if usingID}
+                    <input
+                        placeholder="Twitch Channel ID"
+                        bind:value={channelInfo["twitch"]["id"]}
+                        oninput={(e) =>
+                            (channelInfo["twitch"]["id"] = validateInput(
+                                e.currentTarget.value,
+                                "number",
+                            ))}
+                    />
+                {:else}
+                    <input
+                        placeholder="Twitch Channel Name"
+                        bind:value={channelInfo["twitch"]["name"]}
+                        oninput={(e) =>
+                            (channelInfo["twitch"]["name"] = validateInput(
+                                e.currentTarget.value,
+                                "twitch_name",
+                            ))}
+                    />
+                {/if}
+            {:else if brand == "kick"}
                 <input
-                    placeholder="Channel ID"
-                    bind:value={localChannelID}
+                    placeholder="Kick Channel Name"
+                    bind:value={channelInfo["twitch"]["id"]}
                     oninput={(e) =>
-                        (localChannelID = validateInput(
+                        (channelInfo["twitch"]["id"] = validateInput(
                             e.currentTarget.value,
                             "number",
-                        ))}
-                />
-            {:else}
-                <input
-                    placeholder="Channel Name"
-                    bind:value={localChannelName}
-                    oninput={(e) =>
-                        (localChannelName = validateInput(
-                            e.currentTarget.value,
-                            "twitch_name",
                         ))}
                 />
             {/if}
@@ -277,10 +316,22 @@
             gap: 0.3rem;
         }
 
-        & > p {
+        #channel-label {
             margin: 0;
-            padding: 0.5rem 0rem;
+            padding: 0.5rem 0.25rem;
+            gap: 0.25rem;
             box-sizing: border-box;
+
+            display: inline-flex;
+            align-items: center;
+
+            p {
+                margin: 0;
+
+                &:is(:first-child) {
+                    width: 100%;
+                }
+            }
 
             text-align: center;
             font-weight: bold;
@@ -459,7 +510,7 @@
         }
 
         #settings {
-            & > p {
+            #channel-label {
                 font-size: 0.8rem;
             }
 

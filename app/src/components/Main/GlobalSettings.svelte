@@ -25,15 +25,10 @@
         }
     }
 
-    $: if (user.user_id) {
-        getSettings();
-    }
+    $: if (user.user_id) getSettings();
 
     async function save() {
-        if (!user.token) {
-            alert("You are not logged in");
-            return;
-        }
+        if (!user.token) return alert("You are not logged in");
 
         const mappedSettings = Object.fromEntries(
             $settings
@@ -56,10 +51,8 @@
                 }),
         );
 
-        if (!Object.keys(mappedSettings).length) {
-            alert("No settings changed");
-            return;
-        }
+        if (!Object.keys(mappedSettings).length)
+            return alert("No settings changed");
 
         const saveSettings_response = await fetch(
             "https://api.unii.dev/settings",
@@ -89,10 +82,7 @@
     }
 
     async function deleteSettings() {
-        if (!user.token) {
-            alert("You are not logged in");
-            return;
-        }
+        if (!user.token) return alert("You are not logged in");
 
         const deleteSettings_response = await fetch(
             "https://api.unii.dev/settings",
