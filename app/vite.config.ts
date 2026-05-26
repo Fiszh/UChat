@@ -9,6 +9,9 @@ export default defineConfig({
     preview: {
         allowedHosts: ["dev.unii.dev", "chat.unii.dev", "localhost"],
     },
+    server: {
+        allowedHosts: ["dev.unii.dev", "chat.unii.dev", "localhost"],
+    },
     define: {
         __COMMIT_HASH: JSON.stringify(commitHash),
         __BUILD_DATE: JSON.stringify(new Date().toISOString()),
