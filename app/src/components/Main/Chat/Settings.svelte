@@ -49,11 +49,6 @@
 
     if (LocalSettings) parseSavedSettings(LocalSettings);
 
-    $effect(() => {
-        if (!Object.keys($settingsParams).length)
-            channelInfo = createEmptyChannelInfo();
-    });
-
     function setParam(key: string, value: Setting["value"]) {
         settingsParams.update((arr) => {
             arr[key] = value;
