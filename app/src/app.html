@@ -88,7 +88,31 @@
         </script>
     </head>
 
+    <style>
+        noscript {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        noscript h1,
+        noscript p {
+            font-weight: bold;
+            margin: 0;
+        }
+    </style>
+
     <body data-sveltekit-preload-data="hover">
+        <noscript>
+            <div>
+                <h1>JavaScript is disabled</h1>
+                <p>This app requires JavaScript to work.</p>
+                <p>Enable JavaScript to use the app.</p>
+            </div>
+        </noscript>
+
         <div style="display: contents">%sveltekit.body%</div>
     </body>
 </html>

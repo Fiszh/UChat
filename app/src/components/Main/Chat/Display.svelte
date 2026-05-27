@@ -1,22 +1,16 @@
 <script lang="ts">
-    import { RotateCcw, Copy, Send } from "lucide-svelte";
+    import { Copy, Send } from "lucide-svelte";
     import ColorPicker, { ChromeVariant } from "svelte-awesome-color-picker";
 
-    import { messages, sanitizeInput } from "$lib/chat";
+    import { sanitizeInput } from "$lib/chat";
 
     import ChatDisplay from "$components/ChatDisplay.svelte";
 
-    import {
-        channelID,
-        channelName,
-        configs,
-        settings,
-        settingsParams,
-    } from "$stores/settings";
+    import { settingsParams } from "$stores/settings";
 
     import { icon_size } from "$stores/global";
-    import { previewMessages } from "$stores/previewMessages";
     import { sendFakeMessage } from "$lib/preview";
+    import ClearSettingsButton from "../ClearSettingsButton.svelte";
 
     let hex = "#191919";
     let urlResults: HTMLElement | undefined = undefined;
@@ -31,22 +25,18 @@
     );
 
     const resetSettings = () => {
-        channelName.set("");
-        channelID.set("");
-
-        settings.set(configs.map((c) => ({ ...c })));
-        settingsParams.set({});
-
         params.forEach((_, key) => params.delete(key));
-
-        messages.set(previewMessages);
 
         hex = "#191919";
     };
 
     function copyUrl() {
         if (urlResults && urlResults.textContent) {
-            if ($settingsParams["channel"] || $settingsParams["id"]) {
+            if (
+                $settingsParams["channel"] ||
+                $settingsParams["id"] ||
+                $settingsParams["kick"]
+            ) {
                 navigator.clipboard
                     .writeText(urlResults.textContent)
                     .then(() => {
@@ -82,10 +72,9 @@
     </section>
     <section id="bottom">
         <div class="header">
-            Chat Preview Settings <button
-                on:click={() => resetSettings()}
-                title="Reset Settings"><RotateCcw size={$icon_size} /></button
-            >
+            Chat Preview Settings <ClearSettingsButton
+                onReset={resetSettings}
+            />
         </div>
         <div id="color-picker">
             <small class="title">Chat Background</small>
@@ -222,18 +211,6 @@
                 align-items: center;
                 padding-bottom: 0.7rem;
                 box-sizing: border-box;
-
-                button {
-                    all: unset;
-                    cursor: pointer;
-                    transition: all 0.2s ease-in-out;
-                    display: flex;
-                    align-items: center;
-
-                    &:hover {
-                        transform: rotate(-30deg);
-                    }
-                }
             }
 
             small {

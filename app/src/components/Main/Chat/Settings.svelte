@@ -16,7 +16,7 @@
     import { isMobile } from "$stores/global";
     import BrandButtons, { type Brands } from "$components/BrandButtons.svelte";
 
-    let { dispayChannelInput = true }: { dispayChannelInput: true } = $props();
+    let { dispayChannelInput = true }: { dispayChannelInput?: true } = $props();
 
     let brand: Brands = $state("twitch");
 
@@ -30,6 +30,7 @@
         { name: string; id: string }
     >;
 
+    //TODO: MAKE THIS USE GLOBALS
     const createEmptyChannelInfo = (): ChannelInfoState => ({
         twitch: { name: "", id: "" },
         kick: { name: "", id: "" },
@@ -271,11 +272,11 @@
             {:else if brand == "kick"}
                 <input
                     placeholder="Kick Channel Name"
-                    bind:value={channelInfo["twitch"]["id"]}
+                    bind:value={channelInfo["kick"]["name"]}
                     oninput={(e) =>
-                        (channelInfo["twitch"]["id"] = validateInput(
+                        (channelInfo["kick"]["name"] = validateInput(
                             e.currentTarget.value,
-                            "number",
+                            "twitch_name",
                         ))}
                 />
             {/if}

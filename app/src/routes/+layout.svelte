@@ -41,14 +41,6 @@
     <main>Loading...</main>
 {/if}
 
-<noscript style="color:black;">
-    <div>
-        <h1>JavaScript is disabled</h1>
-        <p>This app requires JavaScript to work.</p>
-        <p>Enable JavaScript to use the app.</p>
-    </div>
-</noscript>
-
 <style>
     main {
         display: flex;
