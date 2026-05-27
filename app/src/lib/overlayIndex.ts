@@ -80,14 +80,14 @@ export async function getMainUser(channel: string | number) {
         globals.channelTwitchName = data?.channel_info?.login || null;
         const channel_color = data?.channel_info?.color || "white";
 
-        type badge = Record<string, string>;
+        type Badge = Record<string, string>;
 
         // CHANNEL BADGES
         const broadcastBadges = data?.channel_badges?.broadcastBadges || [];
         try {
             badges.update((badgeData) => {
                 badgeData["TTV"].channel = broadcastBadges.map(
-                    (badge: badge) => ({
+                    (badge: Badge) => ({
                         id: badge.setID + "_" + badge.version,
                         url:
                             badge.image4x ||
@@ -203,7 +203,7 @@ export async function getMainUser(channel: string | number) {
         try {
             badges.update((badgeData) => {
                 badgeData["TTV"].global = (data.global_badges || []).map(
-                    (badge: badge) => ({
+                    (badge: Badge) => ({
                         id: badge.setID + "_" + badge.version,
                         url:
                             badge.image4x ||
@@ -227,9 +227,8 @@ export async function getMainUser(channel: string | number) {
         });
 
         // SETTINGS
-        if (response_data["user_settings"]) {
+        if (response_data["user_settings"])
             parseSavedSettings(response_data["user_settings"]);
-        }
 
         return true;
     } catch (err) {
@@ -339,21 +338,21 @@ export async function cleanUpSharedChat() {
             emotesData["7TV"]["channel"] = {
                 [globals.channelTwitchID as string]:
                     emotesData["7TV"]["channel"][
-                    globals.channelTwitchID as string
+                        globals.channelTwitchID as string
                     ],
             };
 
             emotesData["BTTV"]["channel"] = {
                 [globals.channelTwitchID as string]:
                     emotesData["BTTV"]["channel"][
-                    globals.channelTwitchID as string
+                        globals.channelTwitchID as string
                     ],
             };
 
             emotesData["FFZ"]["channel"] = {
                 [globals.channelTwitchID as string]:
                     emotesData["FFZ"]["channel"][
-                    globals.channelTwitchID as string
+                        globals.channelTwitchID as string
                     ],
             };
 

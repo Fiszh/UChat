@@ -38,6 +38,10 @@ export const faqItems = [
                 cmd: "!chatversion",
                 desc: "Shows Chat Overlay Version (reuse command to disable)",
             },
+            {
+                cmd: "!hideLoading",
+                desc: "Hides loading UI, could be used if a service is down.",
+            },
         ],
     },
     {

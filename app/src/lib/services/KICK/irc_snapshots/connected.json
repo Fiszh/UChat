@@ -1,0 +1,4 @@
+{
+    "event": "pusher:connection_established",
+    "data": "{\"socket_id\":\"x\",\"activity_timeout\":120}"
+}

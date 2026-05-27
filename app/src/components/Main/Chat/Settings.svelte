@@ -16,7 +16,8 @@
     import { isMobile } from "$stores/global";
     import BrandButtons, { type Brands } from "$components/BrandButtons.svelte";
 
-    let { dispayChannelInput = true }: { dispayChannelInput?: true } = $props();
+    let { dispayChannelInput = true }: { dispayChannelInput?: boolean } =
+        $props();
 
     let brand: Brands = $state("twitch");
 

@@ -35,6 +35,10 @@ interface Badges {
         global: any[];
         channel: any[];
     };
+    KICK: {
+        global: any[];
+        channel: any[];
+    };
     BTTV: {
         global: any[];
     };
@@ -65,6 +69,7 @@ export const emotes = writable<Emotes>({
 export const badges = writable<Badges>({
     UChat: [],
     TTV: { global: [], channel: [] },
+    KICK: { global: [], channel: [] },
     BTTV: { global: [] },
     FFZ: { global: [], user: { vip: "", mod: "", user: {} } },
     OTHER: {
@@ -83,6 +88,9 @@ interface Globals {
     channelTwitchName: string | null;
 
     inSharedChat: boolean;
+
+    channelKickName: string | null;
+    channelKickID: string | null;
 
     SevenTVID: string | null;
     SevenTVemoteSetId: string | null;
@@ -114,6 +122,10 @@ export const globals: Globals = {
     channelTwitchName: null,
 
     inSharedChat: false,
+
+    // KICK
+    channelKickName: null,
+    channelKickID: null,
 
     // 7TV
     SevenTVID: null,

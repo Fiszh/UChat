@@ -27,6 +27,7 @@ interface ParsedMessage {
     command: string;
     channel: string;
     message: string;
+    service: "twitch";
 }
 
 export const messages = writable<Record<string, any>[]>([]);
@@ -231,7 +232,7 @@ export function sanitizeInput(input: string): string {
 
 /*NOTE PARSING MIGHT NOT WORK 100%*/
 function parseIrcLine(raw: string): ParsedMessage {
-    let parsed = {
+    let parsed: ParsedMessage = {
         raw,
         tags: {
             rawTags: {},
@@ -242,6 +243,7 @@ function parseIrcLine(raw: string): ParsedMessage {
         command: "",
         channel: "",
         message: "",
+        service: "twitch",
     };
 
     try {
@@ -398,6 +400,7 @@ function parseIrcLine(raw: string): ParsedMessage {
 
         // RETURN PARSED
         parsed = {
+            ...parsed,
             raw: line,
             tags: {
                 rawTags,

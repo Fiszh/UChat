@@ -1,0 +1,5 @@
+{
+    "event": "pusher_internal:subscription_succeeded",
+    "data": "{}",
+    "channel": "chatrooms.668.v2"
+}

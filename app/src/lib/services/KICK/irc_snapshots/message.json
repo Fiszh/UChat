@@ -1,0 +1,5 @@
+{
+    "event": "App\\Events\\ChatMessageEvent",
+    "data": "{\"id\":\"1cdbcf55-bcd0-4302-a2df-e79ff0b7c3ce\",\"chatroom_id\":1564656,\"content\":\"chubbies and cream\",\"type\":\"message\",\"created_at\":\"2026-05-27T15:08:32+00:00\",\"sender\":{\"id\":73030501,\"username\":\"dleeds75\",\"slug\":\"dleeds75\",\"identity\":{\"color\":\"#75FD46\",\"badges\":[{\"type\":\"subscriber\",\"text\":\"Subscriber\",\"count\":8}]}},\"metadata\":{\"message_ref\":\"1779894511629\"}}",
+    "channel": "chatrooms.1564656.v2"
+}

@@ -1,0 +1,154 @@
+import { messages } from "$lib/chat";
+import { execCommand } from "$lib/chatCommands";
+
+type Events = {
+    open: () => void;
+    opening: () => void;
+    close: () => void;
+    error: (data: any) => void;
+    sent: (data: any) => void;
+    send_error: (data: any) => void;
+    raw: (data: any) => void;
+    subbed: (topic: string) => void;
+};
+
+class KICKSocket {
+    url: string;
+    ws: WebSocket | null;
+    silent: boolean;
+    subscriptions: string[];
+    listeners: Record<string, Function[]>;
+
+    constructor() {
+        this.url = "wss://events.7tv.io/v3";
+        this.ws = null;
+        this.silent = false;
+        this.subscriptions = [];
+        this.listeners = {};
+    }
+
+    on<K extends keyof Events>(event: K, cb: Events[K]) {
+        if (!this.listeners[event]) this.listeners[event] = [];
+        this.listeners[event]!.push(cb);
+    }
+
+    emit<K extends keyof Events>(event: K, ...args: Parameters<Events[K]>) {
+        if (!this.listeners[event]) return;
+        for (const cb of this.listeners[event]!) cb(...args);
+    }
+
+    connect() {
+        this.ws = new WebSocket(this.url);
+
+        this.ws.addEventListener("open", () => {
+            console.log("KICK WS OPEN");
+            this.emit("opening");
+
+            //this.emit("open"); -- on event connection_established
+        });
+
+        this.ws.addEventListener("message", async (event) => {
+            let data;
+            try {
+                data = JSON.parse(event.data);
+            } catch {
+                console.error("Failed to parse JSON:", event.data);
+                return;
+            }
+
+            this.emit("raw", data);
+
+            switch (data.event) {
+                case "pusher:connection_established":
+                    // RESUB TO EVERY TOPIC
+                    for (const topic in this.subscriptions)
+                        this.subscribe(topic);
+
+                    this.emit("open");
+
+                    break;
+                case "pusher_internal:subscription_succeeded":
+                    this.emit("subbed", data.channel as string);
+
+                    break;
+                case "App\\Events\\ChatMessageEvent":
+                    let parsedMessage = JSON.parse(data.data);
+
+                    parsedMessage.content = sanitizeInput(
+                        parsedMessage.content,
+                    );
+
+                    parsedMessage = {
+                        ...parsedMessage,
+                        service: "kick",
+                    };
+
+                    messages.update((msgs) => [...msgs.slice(-99), parsedMessage]);
+
+                    break;
+                default:
+                    break;
+            }
+        });
+    }
+
+    subToChannelId(id: string | number) {
+        const topics = [
+            `channel_${id}`,
+            `channel.${id}`,
+            `chatrooms.${id}`,
+            `chatrooms.${id}.v2`,
+            `chatroom_${id}`,
+        ];
+
+        for (const topic in topics) this.subscribe(topic);
+    }
+
+    subscribe(topic: string, silent: boolean = this.silent, force?: boolean) {
+        if (!topic) throw new Error("Missing 'topic' parameter");
+
+        if (this.subscriptions.includes(topic) && !force) {
+            if (!silent) {
+                throw new Error(`Already subscribed`);
+            } else {
+                return;
+            }
+        }
+
+        const message = {
+            event: "pusher:subscribe",
+            data: { auth: "", channel: topic },
+        };
+
+        if (this.ws) this.ws.send(JSON.stringify(message));
+
+        return true;
+    }
+
+    unsubscribe(topic: string) {
+        if (!topic) throw new Error("Missing 'topic' parameter");
+        if (!this.subscriptions.includes(topic))
+            throw new Error("Not subscribed!");
+
+        const message = {
+            event: "pusher:subscribe",
+            data: { auth: "", channel: topic },
+        };
+
+        if (this.ws) this.ws.send(JSON.stringify(message));
+
+        return true;
+    }
+}
+
+export function sanitizeInput(input: string): string {
+    if (typeof input !== "string") return input;
+
+    return input
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;")
+        .replace(/\//g, "&#x2F;");
+}

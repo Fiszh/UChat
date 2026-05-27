@@ -30,10 +30,10 @@
         loadingInfo.set({ text: undefined, type: "minimal" });
 
         const params = new URLSearchParams(window.location.search);
-        const channelName = params.get("channel");
-        const channelID = params.get("id");
+        const TwitchChannelName = params.get("channel");
+        const TwitchChannelID = params.get("id");
 
-        if (channelName) connect(channelName);
+        if (TwitchChannelName) connect(TwitchChannelName);
 
         for (const [key, value] of params) {
             settings.update((list) =>
@@ -53,7 +53,7 @@
         // GET USER INFO AND IF USED CHANNEL ID CONNECT TO IRC
         (async () => {
             const successGettingUser = await getMainUser(
-                channelID ? Number(channelID) : channelName!,
+                TwitchChannelID ? Number(TwitchChannelID) : TwitchChannelName!,
             );
 
             if (
@@ -61,7 +61,7 @@
                 globals.channelTwitchName &&
                 globals.channelTwitchID
             ) {
-                if (!channelName) connect(globals.channelTwitchName);
+                if (!TwitchChannelName) connect(globals.channelTwitchName);
 
                 await loadChat();
 

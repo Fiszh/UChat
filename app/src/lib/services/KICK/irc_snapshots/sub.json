@@ -1,0 +1,4 @@
+{
+    "event": "pusher:subscribe",
+    "data": { "auth": "", "channel": "chatrooms.72173773.v2" }
+}

@@ -1,0 +1,28 @@
+{
+    "id": "43885ac0-cad6-4df8-8fdd-dae4d6187df2",
+    "chatroom_id": 72173773,
+    "content": "can I get some juice dawg",
+    "type": "reply",
+    "created_at": "2026-05-27T11:38:20+00:00",
+    "sender": {
+        "id": 24783200,
+        "username": "DxR_Psykidx420",
+        "slug": "dxr-psykidx420",
+        "identity": {
+            "color": "#BAFEA3",
+            "badges": []
+        }
+    },
+    "metadata": {
+        "original_sender": {
+            "id": 87815024,
+            "username": "stake_esports"
+        },
+        "original_message": {
+            "id": "85520687-373c-4d83-b1a5-fe98816d62d7",
+            "content": "bonus sent, check dm"
+        },
+        "message_ref": "1779881898186"
+    },
+    "thread_parent_id": "83c56bf2-34a6-4ea4-a4b7-33a3dabb6672"
+}
