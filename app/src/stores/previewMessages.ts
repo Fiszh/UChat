@@ -1,3 +1,7 @@
+const defaultTags = {
+    "room-id": "0",
+};
+
 export const previewMessages = [
     {
         tags: {
@@ -7,8 +11,9 @@ export const previewMessages = [
             "badges-raw": "broadcaster/1,twitch-recap-2024/1",
             badges: { broadcaster: "1", "twitch-recap-2024": "1" },
             color: "#ffb3ff",
-            "room-id": "0",
+            ...defaultTags,
         },
+        service: "twitch",
         message: "Alright",
     },
     {
@@ -18,8 +23,9 @@ export const previewMessages = [
             "badges-raw": null,
             badges: {},
             color: "#1dee8b",
-            "room-id": "0",
+            ...defaultTags,
         },
+        service: "twitch",
         message: "!vanish",
     },
     {
@@ -30,8 +36,9 @@ export const previewMessages = [
             "badges-raw": "subscriber/3,chatter-cs-go-2022/1",
             badges: { subscriber: "3", "chatter-cs-go-2022": "1" },
             color: "#8A3DE2",
-            "room-id": "0",
+            ...defaultTags,
         },
+        service: "twitch",
         message: "Thats a real jammer ShoulderDance RaveTime",
     },
     {
@@ -41,8 +48,9 @@ export const previewMessages = [
             "badges-raw": "moderator/1,subscriber/3003",
             badges: { moderator: "1", subscriber: "3003" },
             color: "#00FF7F",
-            "room-id": "0",
+            ...defaultTags,
         },
+        service: "twitch",
         message: "Piss is not boobs or butt Wisdom",
     },
     {
@@ -52,8 +60,9 @@ export const previewMessages = [
             "badges-raw": "vip/1,subscriber/0,sub-gift-leader/3",
             badges: { vip: "1", subscriber: "0", "sub-gift-leader": "3" },
             color: "#FF69B4",
-            "room-id": "0",
+            ...defaultTags,
         },
+        service: "twitch",
         message:
             "aga life is like a box of chocolate, you never know when im gonna eat them all catEat",
     },
@@ -64,8 +73,9 @@ export const previewMessages = [
             "badges-raw": "bot-badge/1,subscriber/2,bits/100",
             badges: { "bot-badge": "1", subscriber: "2", bits: "100" },
             color: undefined,
-            "room-id": "0",
+            ...defaultTags,
         },
+        service: "twitch",
         message:
             "Pog chat overlay with better zero width emotes catJAM WideRaveTime ALERT",
     },
@@ -77,8 +87,9 @@ export const previewMessages = [
             "badges-raw": "dragonscimmy/1",
             badges: { dragonscimmy: "1" },
             color: "#FF69B4",
-            "room-id": "0",
+            ...defaultTags,
         },
+        service: "twitch",
         message: "yugi61",
     },
     {
@@ -89,8 +100,9 @@ export const previewMessages = [
             "badges-raw": "destiny-2-the-final-shape-streamer/1",
             badges: { "destiny-2-the-final-shape-streamer": "1" },
             color: "#28A656",
-            "room-id": "0",
+            ...defaultTags,
         },
+        service: "twitch",
         message: "gżegżółka bah",
     },
     {
@@ -100,8 +112,9 @@ export const previewMessages = [
             "badges-raw": "bingbonglove/1",
             badges: { bingbonglove: "1" },
             color: "#00DDC0",
-            "room-id": "0",
+            ...defaultTags,
         },
+        service: "twitch",
         message: "I'm thinking Miku, Miku Ooh-ee-ooh",
     },
 ];

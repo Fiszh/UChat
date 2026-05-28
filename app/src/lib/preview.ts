@@ -84,5 +84,5 @@ export function sendFakeMessage(message: string) {
         "room-id": "0",
     };
 
-    messages.update((msgs) => [...msgs, { tags, message }]);
+    messages.update((msgs) => [...msgs, { tags, message, service: "twitch" }]);
 }

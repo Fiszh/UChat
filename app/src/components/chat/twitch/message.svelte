@@ -6,13 +6,14 @@
     import { parseBadges } from "$lib/badgeParser";
     import { cleanUpSharedChat, fixNameColor } from "$lib/overlayIndex";
 
-    import Badge from "./Badge.svelte";
+    import Badge from "../../Badge.svelte";
 
     import { type Setting, settings } from "$stores/settings";
     import { emotes, badges, globals } from "$stores/global";
     import { cosmetics } from "$stores/cosmetics";
     import { messages } from "$lib/chat";
     import { getChannelEmotesViaTwitchID } from "$lib/emotes";
+    import Twitch from "$components/logos/twitch.svelte";
 
     export let message: {
         user: string;
@@ -175,20 +176,25 @@
 
 {#snippet Badges()}
     <strong class="badge-wrapper">
-        {#each userBadges as badge, i (i)}
-            <Badge
-                badge={{
-                    badge_url: badge.badge_url,
-                    alt: badge.alt,
-                    background_color: badge.background_color!,
-                }}
-            />
-        {/each}
+        {#if globals.channelKickName}
+            <Twitch brandColor={true} />
+        {/if}
+        {#if userBadges.length}
+            {#each userBadges as badge, i (i)}
+                <Badge
+                    badge={{
+                        badge_url: badge.badge_url,
+                        alt: badge.alt,
+                        background_color: badge.background_color!,
+                    }}
+                />
+            {/each}
+        {/if}
     </strong>
 {/snippet}
 
 <div class="chat-message" bind:this={chatMessage}>
-    {#if userBadges.length}{@render Badges()}{/if}
+    {#if userBadges.length || globals.channelKickName}{@render Badges()}{/if}
     {@render paint()}{#if !message.tags.action}:{/if}
     <span style:color={message.tags.action ? nameColor : "defaultColor"}
         >{@html emoteText}</span

@@ -27,7 +27,7 @@ export async function getChannelEmotesViaTwitchID(twitchID: string) {
     try {
         if (!emote_data["7TV"]["channel"][twitchID]) {
             const SevenTV_user_data =
-                await SevenTV_main.getUserViaTwitchID(twitchID);
+                await SevenTV_main.user.byTwitchID(twitchID);
 
             if (SevenTV_user_data) {
                 emotes.update((emoteData) => {

@@ -17,6 +17,7 @@ interface Emotes {
     "7TV": {
         global: ParsedEmote[];
         channel: Record<string, SavedSevenTVSet | Record<string, never>>;
+        kick: ParsedEmote[] | "twitch";
     };
     BTTV: {
         global: ParsedEmote[];
@@ -32,10 +33,6 @@ interface Emotes {
 interface Badges {
     UChat: any[];
     TTV: {
-        global: any[];
-        channel: any[];
-    };
-    KICK: {
         global: any[];
         channel: any[];
     };
@@ -60,7 +57,7 @@ interface Badges {
 }
 
 export const emotes = writable<Emotes>({
-    "7TV": { global: [], channel: {} },
+    "7TV": { global: [], channel: {}, kick: [] },
     BTTV: { global: [], channel: {} },
     FFZ: { global: [], channel: {} },
     BITS: [],
@@ -69,7 +66,6 @@ export const emotes = writable<Emotes>({
 export const badges = writable<Badges>({
     UChat: [],
     TTV: { global: [], channel: [] },
-    KICK: { global: [], channel: [] },
     BTTV: { global: [] },
     FFZ: { global: [], user: { vip: "", mod: "", user: {} } },
     OTHER: {
@@ -91,6 +87,8 @@ interface Globals {
 
     channelKickName: string | null;
     channelKickID: string | null;
+    chatroomKickID: string | null;
+    userKickID: string | null;
 
     SevenTVID: string | null;
     SevenTVemoteSetId: string | null;
@@ -126,6 +124,8 @@ export const globals: Globals = {
     // KICK
     channelKickName: null,
     channelKickID: null,
+    chatroomKickID: null,
+    userKickID: null,
 
     // 7TV
     SevenTVID: null,

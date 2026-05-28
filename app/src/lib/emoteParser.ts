@@ -193,9 +193,13 @@ export async function replaceWithEmotes(
                 ...nonGlobalEmoteData,
             ];
 
-        const foundPersonalSets = getPersonalSets(userstate["user-id"]);
+        const foundPersonalSets = userstate
+            ? getPersonalSets(userstate["user-id"])
+            : [];
 
-        const TTVMessageEmoteData = parseTwitchEmotes(inputString, userstate);
+        const TTVMessageEmoteData = userstate
+            ? parseTwitchEmotes(inputString, userstate)
+            : [];
 
         const emoteData = [
             ...TTVMessageEmoteData,

@@ -1,7 +1,8 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    import ChatMessage from "./ChatMessage.svelte";
+    import TwitchChatMessage from "./chat/twitch/message.svelte";
+    import KickChatMessage from "./chat/kick/message.svelte";
 
     import { messages } from "$lib/chat";
     import { setEmoteSize, settings } from "$stores/settings";
@@ -216,19 +217,27 @@
                 ),
         )
         .map((msg) => {
-            const username = (msg.tags?.username || "").trim().toLowerCase();
-            const displayName = String(msg.tags?.["display-name"] ?? "")
+            console.log(msg);
+            const username = (msg?.tags?.username ?? msg?.sender?.slug ?? "")
+                .trim()
+                .toLowerCase();
+            const displayName = String(
+                msg?.tags?.["display-name"] ?? msg?.sender?.username ?? "",
+            )
                 .trim()
                 .toLowerCase();
 
             return {
-                id: msg.tags.id ?? generateUUID(), // THIS MAKES SURE MESSAGES WILL NOT MERGE
-                room_id: msg.tags["source-room-id"] ?? globals.channelTwitchID,
+                id: msg?.tags?.id ?? msg?.id ?? generateUUID(), // THIS MAKES SURE MESSAGES WILL NOT MERGE
+                room_id:
+                    msg?.tags?.["source-room-id"] ??
+                    msg?.["chatroom_id"] ??
+                    globals.channelTwitchID,
                 ...msg,
                 formattedUser:
                     username === displayName
-                        ? msg.tags?.["display-name"] || "Unknown"
-                        : `${msg.tags?.username || "Unknown"} (${msg.tags?.["display-name"] || "Unknown"})`,
+                        ? displayName
+                        : `${username} (${displayName})`,
             };
         }) as any;
 
@@ -262,15 +271,26 @@
 
 <div class="chat" bind:this={chat} style={chatStyle}>
     {#each filteredMessages as msg (msg.id)}
-        <ChatMessage
-            message={{
-                user: msg.formattedUser,
-                text: msg.message,
-                tags: msg.tags,
-                id: msg.id,
-                room_id: msg.room_id,
-            }}
-        />
+        {#if msg.service == "twitch"}
+            <TwitchChatMessage
+                message={{
+                    user: msg.formattedUser,
+                    text: msg.message,
+                    tags: msg.tags,
+                    id: msg.id,
+                    room_id: msg.room_id,
+                }}
+            />
+        {:else}
+            <KickChatMessage
+                message={{
+                    user: msg.formattedUser,
+                    text: msg.content,
+                    identity: msg.sender.identity,
+                    id: msg.id,
+                }}
+            />
+        {/if}
     {/each}
 </div>
 

@@ -1,2 +1,2 @@
-currently preview emotes do not load
 when clearing the settings the channel info doesnt clear
+display names dont work correctly

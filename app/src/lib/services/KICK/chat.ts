@@ -3,6 +3,7 @@ import { execCommand } from "$lib/chatCommands";
 
 type Events = {
     open: () => void;
+    first_open: () => void;
     opening: () => void;
     close: () => void;
     error: (data: any) => void;
@@ -15,13 +16,16 @@ type Events = {
 class KICKSocket {
     url: string;
     ws: WebSocket | null;
+    first_open: boolean;
     silent: boolean;
     subscriptions: string[];
     listeners: Record<string, Function[]>;
 
     constructor() {
-        this.url = "wss://events.7tv.io/v3";
+        this.url =
+            "wss://ws-us2.pusher.com/app/32cbd69e4b950bf97679?protocol=7&client=js&version=8.5.0&flash=false";
         this.ws = null;
+        this.first_open = true;
         this.silent = false;
         this.subscriptions = [];
         this.listeners = {};
@@ -64,7 +68,12 @@ class KICKSocket {
                     for (const topic in this.subscriptions)
                         this.subscribe(topic);
 
-                    this.emit("open");
+                    if (this.first_open) {
+                        this.first_open = false;
+                        this.emit("first_open");
+                    } else {
+                        this.emit("open");
+                    }
 
                     break;
                 case "pusher_internal:subscription_succeeded":
@@ -83,7 +92,10 @@ class KICKSocket {
                         service: "kick",
                     };
 
-                    messages.update((msgs) => [...msgs.slice(-99), parsedMessage]);
+                    messages.update((msgs) => [
+                        ...msgs.slice(-99),
+                        parsedMessage,
+                    ]);
 
                     break;
                 default:
@@ -92,16 +104,16 @@ class KICKSocket {
         });
     }
 
-    subToChannelId(id: string | number) {
+    subToChannelId(id: string | number, chatroom_id: string | number) {
         const topics = [
             `channel_${id}`,
             `channel.${id}`,
-            `chatrooms.${id}`,
-            `chatrooms.${id}.v2`,
-            `chatroom_${id}`,
+            `chatrooms.${chatroom_id}`,
+            `chatrooms.${chatroom_id}.v2`,
+            `chatroom_${chatroom_id}`,
         ];
 
-        for (const topic in topics) this.subscribe(topic);
+        for (const topic of topics) this.subscribe(topic);
     }
 
     subscribe(topic: string, silent: boolean = this.silent, force?: boolean) {
@@ -152,3 +164,5 @@ export function sanitizeInput(input: string): string {
         .replace(/'/g, "&#39;")
         .replace(/\//g, "&#x2F;");
 }
+
+export default KICKSocket;

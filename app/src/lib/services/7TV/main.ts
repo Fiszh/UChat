@@ -180,6 +180,31 @@ async function emoteSetViaTwitchID(
     }
 }
 
+async function emoteSetViaKickID(twitchID: string | number): Promise<SetData> {
+    let set_data: SetData = {};
+
+    try {
+        const response = await fetch(
+            `https://7tv.io/v3/users/kick/${twitchID}`,
+        );
+
+        if (response.ok) {
+            const data = await response.json();
+
+            if (data?.emote_set?.emotes)
+                set_data = {
+                    id: data?.emote_set_id,
+                    user_id: data.user.id,
+                    emotes: await parseSetData(data.emote_set.emotes),
+                };
+        }
+    } catch (error) {
+        throw new Error(`Error fetching emote data: ${error}`);
+    } finally {
+        return set_data;
+    }
+}
+
 interface UserInfo {
     id: string;
     username: string;
@@ -187,7 +212,17 @@ interface UserInfo {
     avatar_url?: string;
     emote_set_id: string;
     emote_data: ParsedEmote[];
-    twitch: {
+    connections: {
+        id: string;
+        platform: "TWITCH" | "KICK" | "DISCORD";
+        username: string;
+        display_name: string;
+        linked_at: number;
+        emote_capacity: number;
+        emote_set_id: string;
+        emote_set: null; // always null for some reason
+    }[];
+    service: {
         id: string;
         username: string;
         display_name: string;
@@ -198,8 +233,33 @@ interface UserInfoInvalid {
     id: null;
 }
 
-async function getUserViaTwitchID(twitchID: string | number) {
-    let user_info: UserInfo | UserInfoInvalid | null = null;
+const parseUserInfo = async (data: Record<string, any>): Promise<UserInfo> => {
+    const user_data = data.user;
+
+    const emote_data = await parseSetData(data?.emote_set?.emotes || []);
+
+    return {
+        id: user_data?.id,
+        username: user_data?.username,
+        display_name: user_data?.display_name,
+        avatar_url: user_data?.avatar_url,
+        emote_set_id: data?.emote_set_id,
+        emote_data,
+        connections: user_data?.connections,
+        service: {
+            id: data?.id,
+            username: data?.username,
+            display_name: data?.display_name,
+        },
+    };
+};
+
+async function getUserViaTwitchID(
+    twitchID: string | number,
+): Promise<UserInfo | UserInfoInvalid> {
+    let user_info: UserInfo | UserInfoInvalid = {
+        id: null,
+    };
 
     try {
         const response = await fetch(
@@ -209,33 +269,39 @@ async function getUserViaTwitchID(twitchID: string | number) {
         if (response.ok) {
             const data = await response.json();
 
-            if (data?.user) {
-                const user_data = data.user;
-
-                const emote_data = await parseSetData(
-                    data?.emote_set?.emotes || [],
-                );
-
-                user_info = {
-                    id: user_data?.id,
-                    username: user_data?.username,
-                    display_name: user_data?.display_name,
-                    avatar_url: user_data?.avatar_url,
-                    emote_set_id: data?.emote_set_id,
-                    emote_data,
-                    twitch: {
-                        id: data?.id,
-                        username: data?.username,
-                        display_name: data?.display_name,
-                    },
-                };
-            }
+            if (data?.user) user_info = await parseUserInfo(data);
         } else {
-            if (response.status == 404) {
+            if (response.status == 404)
                 user_info = {
                     id: null,
                 };
-            }
+        }
+    } catch (error) {
+        throw new Error(`Error fetching user data: ${error}`);
+    } finally {
+        return user_info;
+    }
+}
+
+async function getUserViaKickID(
+    kickID: string | number,
+): Promise<UserInfo | UserInfoInvalid> {
+    let user_info: UserInfo | UserInfoInvalid = {
+        id: null,
+    };
+
+    try {
+        const response = await fetch(`https://7tv.io/v3/users/kick/${kickID}`);
+
+        if (response.ok) {
+            const data = await response.json();
+
+            if (data?.user) user_info = await parseUserInfo(data);
+        } else {
+            if (response.status == 404)
+                user_info = {
+                    id: null,
+                };
         }
     } catch (error) {
         throw new Error(`Error fetching user data: ${error}`);
@@ -257,9 +323,13 @@ export default {
     parseSetData,
     parsePaintData,
     parseBadgeData,
-    getUserViaTwitchID,
+    user: {
+        byTwitchID: getUserViaTwitchID,
+        byKickID: getUserViaKickID,
+    },
     emoteSet: {
         bySetID: emoteSetViaSetID,
         byTwitchID: emoteSetViaTwitchID,
+        byKickID: emoteSetViaKickID,
     },
 };
