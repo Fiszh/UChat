@@ -12,14 +12,13 @@ If this PR depends on the API, make sure to test it against a local build using 
 
 ## Checklist
 
-Put an `x` in the boxes that apply. You can also fill them out later after creating the PR.  
-</br> Do not remove any of the checkboxes.
+Put an `x` in the boxes that apply. You can also fill them out later after creating the PR.
+</br>Do not remove any of the checkboxes.
 
 - [ ] I agree to the guidelines outlined in [CONTRIBUTING.md](../CONTRIBUTING.md).
 - [ ] The code is readable and follows the existing style.
 - [ ] Any new non-first-party API endpoints do not send user data (telemetry, analytics, etc.).
 - [ ] This change could be breaking.
-
 - [ ] This PR depends on an API or backend change.
     - [ ] I have tested it against a local build using [this repo](https://github.com/Fiszh/uniiDev) and opened a corresponding PR there.
 - [ ] This PR adds my bot to the custom bot list.
