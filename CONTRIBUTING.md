@@ -1,6 +1,8 @@
 # Contributing
 
-Contributions are welcome! If you have a feature suggestion or found a bug, feel free to open a pull request or issue.
+Contributions are welcome! 
+</br>If you have a feature suggestion or found a bug, feel free to open a pull request or issue.
+</br>Not every contribution will be awarded the contributor role and badge.
 
 ## API Usage
 
