@@ -107,6 +107,44 @@ export async function getChatterinoHomiesBadges() {
     });
 }
 
+export async function getCustomHomiesBadges() {
+    const response = await fetch("https://chatterinohomies.com/api/badges/list", {
+            method: "GET",
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error("Failed to fetch CustomHomies badges");
+    }
+
+    let data: any;
+
+    try {
+        data = await response.json();
+    } catch {
+        throw new Error("Invalid JSON from CustomHomies API");
+    }
+
+    const badgesRaw = Array.isArray(data?.badges) ? data.badges : [];
+
+    const map = badgesRaw.map((badge: any, index: number) => ({
+        id: badge.badgeId || `customhomies_${index}`,
+        url: badge.image3 || badge.image2 || badge.image1 || undefined,
+        title: badge.tooltip || "CustomHomies Badge",
+        owners: badge.userId ? [badge.userId] : [],
+        username: badge.username,
+        urls: { 1: badge.image1, 2: badge.image2, 4: badge.image3, },
+    }));
+
+    badges.update((e) => {
+        if (!e["OTHER"]) e["OTHER"] = {} as any;
+
+        e["OTHER"]["CustomHomies"] = map;
+
+        return e;
+    });
+}
+
 export async function getPolandBOTBadges() {
     const response = await fetch("https://devpoland.xyz/api/roles");
     const data = await response.json();

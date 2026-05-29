@@ -1,6 +1,7 @@
 import {
     getBTTVBadges,
     getChatterinoBadges,
+    getCustomHomiesBadges,
     getChatterinoHomiesBadges,
     getFFZBadges,
     getMainBadges,
@@ -21,6 +22,7 @@ export async function initChat() {
         getBTTVBadges(),
         getFFZBadges(),
         getChatterinoBadges(),
+        getCustomHomiesBadges(),
         getChatterinoHomiesBadges(),
         getPolandBOTBadges(),
         getTurtegBotBadges(),
