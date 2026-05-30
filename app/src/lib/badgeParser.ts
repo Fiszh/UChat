@@ -113,7 +113,8 @@ export function parseBadges(
     // CHATTERINO & CHATTERINO HOMIES
     const foundChatterinoBadges = [
         ...badges_data["OTHER"]["Chatterino"],
-        ...badges_data["OTHER"]["ChatterinoHomies"],
+        ...badges_data["OTHER"]["CustomHomies"],
+	...badges_data["OTHER"]["ChatterinoHomies"],
     ].filter((badge) => badge.owners.includes(userstate["user-id-raw"]));
 
     if (foundChatterinoBadges) {

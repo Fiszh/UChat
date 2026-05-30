@@ -107,6 +107,30 @@ export async function getChatterinoHomiesBadges() {
     });
 }
 
+export async function getCustomHomiesBadges() {
+    const response = await fetch(
+        "https://chatterinohomies.com/api/badges/list",
+    );
+    const data = await response.json();
+
+    const badgesRaw = Array.isArray(data?.badges) ? data.badges : [];
+
+    const map = badgesRaw.map((badge: any, index: number) => ({
+        id: badge.badgeId || `customhomies_${index}`,
+        url: badge.image3 || badge.image2 || badge.image1 || undefined,
+        title: badge.tooltip || "CustomHomies Badge",
+        owners: badge.userId ? [badge.userId] : [],
+        username: badge.username,
+        urls: { 1: badge.image1, 2: badge.image2, 4: badge.image3 },
+    }));
+
+    badges.update((e) => {
+        e["OTHER"]["CustomHomies"] = map;
+
+        return e;
+    });
+}
+
 export async function getPolandBOTBadges() {
     const response = await fetch("https://devpoland.xyz/api/roles");
     const data = await response.json();
