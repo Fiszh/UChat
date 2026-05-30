@@ -113,7 +113,6 @@ export function parseBadges(
     // CHATTERINO & CHATTERINO HOMIES
     const foundChatterinoBadges = [
         ...badges_data["OTHER"]["Chatterino"],
-        ...badges_data["OTHER"]["CustomHomies"],
         ...badges_data["OTHER"]["ChatterinoHomies"],
     ].filter((badge) => badge.owners.includes(userstate["user-id-raw"]));
 
@@ -126,6 +125,20 @@ export function parseBadges(
             });
         });
     }
+
+    const foundCustomHomiesBadges = (
+        Array.isArray(badges_data?.OTHER?.CustomHomies)
+            ? badges_data.OTHER.CustomHomies
+            : []
+    ).filter((badge: any) => badge?.owners?.includes(userstate["user-id-raw"]));
+
+    foundCustomHomiesBadges.forEach((badge: any) => {
+        user_badges.push({
+            badge_url: badge.url,
+            alt: badge.title,
+            background_color: undefined,
+        });
+    });
 
     // FFZ
     const foundFFZBadges = badges_data["FFZ"]["global"].filter(

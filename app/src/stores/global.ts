@@ -48,6 +48,7 @@ interface Badges {
     };
     OTHER: {
         Chatterino: any[];
+        CustomHomies: Record<string, string[]>;
         ChatterinoHomies: any[];
         PolandBOT: Record<string, string[]>;
         TurtegBot: any[];
@@ -69,6 +70,7 @@ export const badges = writable<Badges>({
     FFZ: { global: [], user: { vip: "", mod: "", user: {} } },
     OTHER: {
         Chatterino: [],
+        CustomHomies: {},
         ChatterinoHomies: [],
         PolandBOT: {},
         TurtegBot: [],
