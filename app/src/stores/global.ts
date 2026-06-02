@@ -31,16 +31,16 @@ interface Emotes {
 }
 
 interface Badges {
-    UChat: any[];
+    UChat: parsedBadge[];
     TTV: {
-        global: any[];
-        channel: any[];
+        global: parsedBadge[];
+        channel: parsedBadge[];
     };
     BTTV: {
-        global: any[];
+        global: parsedBadge[];
     };
     FFZ: {
-        global: any[];
+        global: parsedBadge[];
         user: {
             vip: string;
             mod: string;
@@ -48,10 +48,10 @@ interface Badges {
         };
     };
     OTHER: {
-        Chatterino: any[];
-        ChatterinoHomies: any[];
+        Chatterino: parsedBadge[];
+        ChatterinoHomies: parsedBadge[];
         PolandBOT: Record<string, string[]>;
-        TurtegBot: any[];
+        TurtegBot: parsedBadge[];
     };
     channel: Record<string, string>;
 }
