@@ -127,18 +127,18 @@ export function parseBadges(
     }
 
     const foundCustomHomiesBadges = (
-        Array.isArray(badges_data?.OTHER?.CustomHomies)
-            ? badges_data.OTHER.CustomHomies
-            : []
-    ).filter((badge: any) => badge?.owners?.includes(userstate["user-id-raw"]));
+        badges_data?.OTHER?.CustomHomies ?? []
+    ).filter((badge: { owners?: string[]; url?: string; title?: string }) =>
+        badge?.owners?.includes(userstate["user-id-raw"]),
+    );
 
-    foundCustomHomiesBadges.forEach((badge: any) => {
+    for (const badge of foundCustomHomiesBadges) {
         user_badges.push({
             badge_url: badge.url,
             alt: badge.title,
             background_color: undefined,
         });
-    });
+    }
 
     // FFZ
     const foundFFZBadges = badges_data["FFZ"]["global"].filter(
