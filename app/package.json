@@ -8,10 +8,10 @@
         "build": "vite build",
         "preview": "vite preview",
         "prepare": "svelte-kit sync || echo ''",
-        "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+        "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json && bunx tsc --noEmit && bunx prettier --check .",
         "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
         "dev:open": "vite dev --open --host",
-        "typecheck": "bunx tsc --noEmit && bunx prettier --check .",
+        "typecheck": "bunx tsc --noEmit",
         "fmt": "bunx prettier --write ."
     },
     "devDependencies": {
@@ -19,6 +19,7 @@
         "@sveltejs/adapter-static": "^3.0.10",
         "@sveltejs/kit": "^2.55.0",
         "@sveltejs/vite-plugin-svelte": "7.1.2",
+        "@types/node": "^25.9.1",
         "@types/tinycolor2": "^1.4.6",
         "moment": "^2.30.1",
         "prettier": "^3.8.1",

@@ -339,21 +339,21 @@ export async function cleanUpSharedChat() {
             emotesData["7TV"]["channel"] = {
                 [globals.channelTwitchID as string]:
                     emotesData["7TV"]["channel"][
-                    globals.channelTwitchID as string
+                        globals.channelTwitchID as string
                     ],
             };
 
             emotesData["BTTV"]["channel"] = {
                 [globals.channelTwitchID as string]:
                     emotesData["BTTV"]["channel"][
-                    globals.channelTwitchID as string
+                        globals.channelTwitchID as string
                     ],
             };
 
             emotesData["FFZ"]["channel"] = {
                 [globals.channelTwitchID as string]:
                     emotesData["FFZ"]["channel"][
-                    globals.channelTwitchID as string
+                        globals.channelTwitchID as string
                     ],
             };
 
