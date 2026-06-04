@@ -161,7 +161,7 @@ class SevenTVWebSocket {
             if (!data?.d?.type || !data?.d?.body) return;
 
             const message_data = data.d;
-            let message_body = message_data.body;
+            const message_body = message_data.body;
 
             switch (message_data.type as string) {
                 case "emote_set.update":

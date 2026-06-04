@@ -445,7 +445,7 @@ services["7TV"].ws.on("rename_emote", (id, actor, data) => {
             const found_set = emoteData["7TV"]["channel"][set_key];
 
             if (found_set && "emotes" in found_set) {
-                let foundEmote = found_set["emotes"].find(
+                const foundEmote = found_set["emotes"].find(
                     (emote) => emote.name === data.old.name,
                 );
 

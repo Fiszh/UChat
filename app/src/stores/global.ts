@@ -1,14 +1,14 @@
 import { writable } from "svelte/store";
 
-export let icon_size = writable<string>("1.5rem");
-export let isMobile = writable<boolean>(false);
+export const icon_size = writable<string>("1.5rem");
+export const isMobile = writable<boolean>(false);
 
 interface LoadingInfo {
     text: string | undefined;
     type: string | undefined;
 }
 
-export let loadingInfo = writable<LoadingInfo>({
+export const loadingInfo = writable<LoadingInfo>({
     text: undefined,
     type: undefined,
 });

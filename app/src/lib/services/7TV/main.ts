@@ -77,7 +77,7 @@ async function parsePaintData(paint_data: Record<string, any>): Promise<Paint> {
         gradient = `${gradientFunction}(${direction}, ${normalized})`;
     }
 
-    let paint_message: Paint = {
+    const paint_message: Paint = {
         id: paint_data.id,
         name: paint_data.name,
         style: gradientFunction,
