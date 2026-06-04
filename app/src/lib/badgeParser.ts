@@ -4,9 +4,24 @@ import { getBadge } from "$lib/services/7TV/cosmetics";
 
 import { badges } from "$stores/global";
 
+import { settings } from "$stores/settings";
+
 let BadgesData: Record<string, any> = get(badges);
 
 badges.subscribe((e: any) => (BadgesData = e));
+
+let onlyTwitchBadges = false;
+
+settings.subscribe((cfg) => {
+    const foundSetting = cfg.find(
+        (setting) => setting.param == "badgesTTV",
+    ) || {
+        value: false,
+    };
+
+    if (typeof foundSetting.value == "boolean")
+        onlyTwitchBadges = foundSetting.value;
+});
 
 export function parseBadges(
     userstate: Record<string, any>,
@@ -107,6 +122,8 @@ export function parseBadges(
                 });
         }
     }
+
+    if (onlyTwitchBadges) return user_badges as parsedBadge[];
 
     // OTHER BADGES
 

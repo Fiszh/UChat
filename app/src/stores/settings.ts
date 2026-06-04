@@ -113,6 +113,12 @@ export const configs: Setting[] = [
         param: "badges",
     },
     {
+        name: "Display only Twitch badges",
+        type: "boolean",
+        value: false,
+        param: "badgesTTV",
+    },
+    {
         name: "Display channel points redeem, sub messages, annoucements... (Redeems & USERNOTICES)",
         type: "boolean",
         value: true,

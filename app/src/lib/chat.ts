@@ -2,17 +2,25 @@ import { get, writable } from "svelte/store";
 import { settings } from "$stores/settings";
 import { execCommand } from "./chatCommands";
 
-const currentSettings = get(settings) || [];
-const modActions = (
-    currentSettings.find((setting) => setting.param == "modAction") || {
+let modActions = false;
+let usernotices = false;
+
+settings.subscribe((cfg) => {
+    const foundSetting0 = cfg.find(
+        (setting) => setting.param == "modAction",
+    ) || {
         value: true,
-    }
-).value;
-const usernotices = (
-    currentSettings.find((setting) => setting.param == "redeem") || {
+    };
+
+    const foundSetting1 = cfg.find((setting) => setting.param == "redeem") || {
         value: true,
-    }
-).value;
+    };
+
+    if (typeof foundSetting0.value == "boolean")
+        modActions = foundSetting0.value;
+    if (typeof foundSetting1.value == "boolean")
+        usernotices = foundSetting1.value;
+});
 
 interface ParsedMessage {
     raw: string;
