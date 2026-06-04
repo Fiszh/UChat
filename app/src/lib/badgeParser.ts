@@ -7,7 +7,7 @@ import { badges } from "$stores/global";
 import { settings } from "$stores/settings";
 
 let BadgesData = get(badges);
-badges.subscribe((e: any) => (BadgesData = e));
+badges.subscribe((e) => (BadgesData = e));
 
 let onlyTwitchBadges = false;
 
@@ -37,12 +37,11 @@ export function parseBadges(userstate: Record<string, any>): parsedBadge[] {
         });
 
     // SHARED CHAT BADGE
-    const foundUChatBadges = BadgesData["UChat"].filter(
-        (badge: Record<string, any>) =>
-            badge.users.includes(userstate["user-id-raw"]),
+    const foundUChatBadges = BadgesData["UChat"].filter((badge) =>
+        badge.users.includes(userstate["user-id-raw"]),
     );
 
-    foundUChatBadges.forEach((foundUChatBadge: Record<string, any>) => {
+    foundUChatBadges.forEach((foundUChatBadge) => {
         user_badges.push({
             badge_url: foundUChatBadge.urls["4x"],
             alt: foundUChatBadge.id,
@@ -139,12 +138,11 @@ export function parseBadges(userstate: Record<string, any>): parsedBadge[] {
     }
 
     // FFZ
-    const foundFFZBadges = BadgesData["FFZ"]["global"].filter(
-        (badge: Record<string, any>) =>
-            badge.owners.includes(userstate["username"]),
+    const foundFFZBadges = BadgesData["FFZ"]["global"].filter((badge) =>
+        badge.owners.includes(userstate["username"]),
     );
     const foundFFZBadge = BadgesData["FFZ"]["global"].find(
-        (badge: Record<string, any>) =>
+        (badge) =>
             badge.id == BadgesData["FFZ"]["user"]["user"][userstate["user-id"]],
     );
 
@@ -160,8 +158,7 @@ export function parseBadges(userstate: Record<string, any>): parsedBadge[] {
 
     // BTTV
     const foundBTTVBadge = BadgesData["BTTV"]["global"].find(
-        (badge: Record<string, any>) =>
-            badge.providerId == userstate?.["user-id"],
+        (badge) => badge.providerId == userstate?.["user-id"],
     );
 
     if (foundBTTVBadge) {
@@ -173,8 +170,8 @@ export function parseBadges(userstate: Record<string, any>): parsedBadge[] {
     }
 
     // TurtegBot
-    const foundTurtegBotBadge = BadgesData["OTHER"]["TurtegBot"].find(
-        (badge: any) => badge.users?.includes(userstate["user-id-raw"]),
+    const foundTurtegBotBadge = BadgesData["OTHER"]["TurtegBot"].find((badge) =>
+        badge.users?.includes(userstate["user-id-raw"]),
     );
 
     if (foundTurtegBotBadge) {
@@ -199,7 +196,7 @@ export function parseBadges(userstate: Record<string, any>): parsedBadge[] {
     // Poland_BOT
     const foundPolandBOTBadge = Object.entries(
         BadgesData["OTHER"]["PolandBOT"] as Record<string, string[]>,
-    ).find(([role, userList]) => userList.includes(userstate["user-id-raw"]));
+    ).find(([, userList]) => userList.includes(userstate["user-id-raw"]));
 
     if (foundPolandBOTBadge) {
         const [role] = foundPolandBOTBadge;
