@@ -1,4 +1,6 @@
-export const load = async ({ fetch }) => {
+import type { LoadEvent } from "@sveltejs/kit";
+
+export const load = async ({ fetch }: LoadEvent) => {
     try {
         const res = await fetch(`https://api.unii.dev/status`);
         const data = await res.json();
