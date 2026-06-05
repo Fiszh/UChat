@@ -185,9 +185,9 @@
         border-right: 1px solid #242424;
         min-width: 17rem;
         max-width: 17rem;
-        width: 100%;
         position: relative;
-        height: 100dvh;
+        height: 100%;
+        width: 100%;
 
         overflow: hidden;
         display: flex;

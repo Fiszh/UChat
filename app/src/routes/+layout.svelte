@@ -8,8 +8,9 @@
     import { page } from "$app/state";
     import { overlayVersion } from "$stores/settings";
     import { getVersion } from "$lib/overlayIndex";
+    import Banner from "$components/Banner.svelte";
 
-    let { children } = $props();
+    let { data, children } = $props();
 
     let mounted = $state<boolean>(false);
     let hasChannel = $state<boolean>(false);
@@ -28,6 +29,11 @@
 
 {#if mounted}
     {#if !hasChannel}
+        {#if data.statusMessage == null}
+            <Banner type="fail" />
+        {:else if data.statusMessage && (data.statusMessage.type || data.statusMessage.message)}
+            <Banner {...data.statusMessage} />
+        {/if}
         <main>
             {#if page.status !== 404 && page.route.id != "/auth"}
                 <Sidebar />
@@ -53,7 +59,9 @@
     main {
         display: flex;
         width: 100%;
-        height: 100dvh;
+        height: 100%;
+
+        overflow: hidden;
 
         background: linear-gradient(#080808, #000000);
     }
