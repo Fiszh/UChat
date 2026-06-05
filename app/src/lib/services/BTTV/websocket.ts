@@ -95,7 +95,7 @@ class BTTVWebSocket {
         });
 
         this.ws.addEventListener("message", async (event) => {
-            let data = JSON.parse(event.data);
+            const data = JSON.parse(event.data);
 
             this.emit("raw", data);
 

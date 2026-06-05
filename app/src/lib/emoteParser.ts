@@ -80,12 +80,12 @@ function findEntryAndTier(prefix: string, bits: number) {
 
     const emote_data = get(emotes);
 
-    for (let entry of emote_data["BITS"]) {
+    for (const entry of emote_data["BITS"]) {
         if (entry.name.toLowerCase() !== prefix) continue;
 
         for (let i = 0; i < entry.tiers.length; i++) {
-            let currentTier = entry.tiers[i];
-            let nextTier = entry.tiers[i + 1];
+            const currentTier = entry.tiers[i];
+            const nextTier = entry.tiers[i + 1];
 
             if (!nextTier && bits >= currentTier.min_bits) {
                 return { name: entry.name, tier: currentTier };
@@ -206,9 +206,9 @@ export async function replaceWithEmotes(
 
         //if (!emoteData.length) { return inputString; }; MIGHT NOT BE USEFULL ANYMORE DUE TO TWEMOJIS NOT WORKING IF NO EMOTES
 
-        let EmoteSplit = await splitTextWithTwemoji(inputString);
+        const EmoteSplit = await splitTextWithTwemoji(inputString);
 
-        let foundParts = [];
+        const foundParts = [];
         const replacedParts = [];
 
         for (const part of EmoteSplit) {
@@ -227,13 +227,13 @@ export async function replaceWithEmotes(
 
             // Detect bits
             if (!foundEmote && userstate && userstate["bits"]) {
-                let match = part.match(/^([a-zA-Z]+)(\d+)$/);
+                const match = part.match(/^([a-zA-Z]+)(\d+)$/);
 
                 if (match) {
-                    let prefix = match[1]; // Prefix
-                    let bits = match[2]; // Amount
+                    const prefix = match[1]; // Prefix
+                    const bits = match[2]; // Amount
 
-                    let result = findEntryAndTier(prefix, bits);
+                    const result = findEntryAndTier(prefix, bits);
 
                     if (result) {
                         foundEmote = {

@@ -339,21 +339,21 @@ export async function cleanUpSharedChat() {
             emotesData["7TV"]["channel"] = {
                 [globals.channelTwitchID as string]:
                     emotesData["7TV"]["channel"][
-                    globals.channelTwitchID as string
+                        globals.channelTwitchID as string
                     ],
             };
 
             emotesData["BTTV"]["channel"] = {
                 [globals.channelTwitchID as string]:
                     emotesData["BTTV"]["channel"][
-                    globals.channelTwitchID as string
+                        globals.channelTwitchID as string
                     ],
             };
 
             emotesData["FFZ"]["channel"] = {
                 [globals.channelTwitchID as string]:
                     emotesData["FFZ"]["channel"][
-                    globals.channelTwitchID as string
+                        globals.channelTwitchID as string
                     ],
             };
 
@@ -445,7 +445,7 @@ services["7TV"].ws.on("rename_emote", (id, actor, data) => {
             const found_set = emoteData["7TV"]["channel"][set_key];
 
             if (found_set && "emotes" in found_set) {
-                let foundEmote = found_set["emotes"].find(
+                const foundEmote = found_set["emotes"].find(
                     (emote) => emote.name === data.old.name,
                 );
 

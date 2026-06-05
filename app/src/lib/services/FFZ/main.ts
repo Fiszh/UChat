@@ -65,7 +65,7 @@ async function getGlobalEmotes() {
 }
 
 async function getUserData(twitchId: string | number) {
-    let user_data: { set: ParsedEmote[]; badges: any } = {
+    const user_data: { set: ParsedEmote[]; badges: any } = {
         set: [],
         badges: {},
     };

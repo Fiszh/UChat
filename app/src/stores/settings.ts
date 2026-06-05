@@ -40,7 +40,7 @@ export type Setting =
 
 const defaultEmoteSize = 25;
 
-export let setEmoteSize = writable<number>(defaultEmoteSize);
+export const setEmoteSize = writable<number>(defaultEmoteSize);
 
 export const configs: Setting[] = [
     {
@@ -113,6 +113,12 @@ export const configs: Setting[] = [
         param: "badges",
     },
     {
+        name: "Display only Twitch badges",
+        type: "boolean",
+        value: false,
+        param: "badgesTTV",
+    },
+    {
         name: "Display channel points redeem, sub messages, annoucements... (Redeems & USERNOTICES)",
         type: "boolean",
         value: true,
@@ -177,11 +183,11 @@ for (const config of configs) {
 
 export const config = configs;
 
-export let settings = writable<Setting[]>(configs.map((c) => ({ ...c })));
-export let savedSettings = writable<Record<string, any>>([]);
-export let channelName = writable<string>("");
-export let channelID = writable<string>("");
+export const settings = writable<Setting[]>(configs.map((c) => ({ ...c })));
+export const savedSettings = writable<Record<string, any>>([]);
+export const channelName = writable<string>("");
+export const channelID = writable<string>("");
 
-export let overlayVersion = writable<string>("");
+export const overlayVersion = writable<string>("");
 
-export let settingsParams = writable<Record<string, Setting["value"]>>({});
+export const settingsParams = writable<Record<string, Setting["value"]>>({});
