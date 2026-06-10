@@ -3,6 +3,7 @@ import { defineConfig } from "vite";
 import { execSync } from "node:child_process";
 
 const commitHash = execSync("git rev-parse HEAD").toString().trim();
+const repoUrl = execSync("git remote get-url origin").toString().trim();
 
 export default defineConfig({
     plugins: [sveltekit()],
@@ -12,5 +13,6 @@ export default defineConfig({
     define: {
         __COMMIT_HASH: JSON.stringify(commitHash),
         __BUILD_DATE: JSON.stringify(new Date().toISOString()),
+        __REPO_URL: JSON.stringify(repoUrl),
     },
 });

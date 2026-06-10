@@ -31,8 +31,6 @@
         setMobile();
         window.addEventListener("resize", setMobile);
 
-        mounted = true;
-
         const isFirefox = navigator.userAgent.toLowerCase().includes("firefox");
 
         if (isFirefox) {
@@ -45,6 +43,13 @@
                 "rgb(255,255,255) rgb(10,10,10)",
             );
         }
+
+        mounted = true;
+
+        const hasError = params.get("error");
+
+        if (hasError && hasError == "redirect_mismatch")
+            alert("Are you on the right site? Please log in at chat.unii.dev.");
     });
 </script>
 

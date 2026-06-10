@@ -83,6 +83,16 @@
                 }
             }
         }
+
+        const anyHash = Object.values(navLinks).filter((h) =>
+            h.hash.includes(currentHash),
+        );
+
+        if (
+            !anyHash.length &&
+            navLinks["home"]["navLink"] instanceof HTMLElement
+        )
+            navLinks["home"]["navLink"].classList.add("active");
     }
 
     moment.locale(navigator.language);
@@ -164,7 +174,7 @@
 
             <a
                 id="commit"
-                href="https://github.com/Fiszh/UChat/commit/{__COMMIT_HASH}"
+                href="{__REPO_URL}/commit/{__COMMIT_HASH}"
                 target="_blank"
                 rel="noopener noreferrer"
             >

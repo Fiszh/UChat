@@ -58,6 +58,13 @@ export function execCommand(message: string, tags: Record<string, any>) {
                 }
 
                 break;
+            case "hideloading":
+                loadingInfo.set({
+                    text: undefined,
+                    type: undefined,
+                });
+
+                break;
             default:
                 break;
         }

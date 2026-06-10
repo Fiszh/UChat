@@ -3,6 +3,7 @@
 declare global {
     const __COMMIT_HASH: string;
     const __BUILD_DATE: string;
+    const __REPO_URL: string;
 
     namespace App {
         // interface Error {}
