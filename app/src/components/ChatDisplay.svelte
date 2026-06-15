@@ -243,9 +243,19 @@
                 const fast = now - lastScrollTime < 100;
                 lastScrollTime = now;
 
+                console.log(fast);
+
+                if (fast) {
+                    const lastEl = Array.from(chat.children).at(-2);
+
+                    console.log(lastEl);
+
+                    if (lastEl) lastEl.scrollIntoView({ behavior: "instant" });
+                }
+
                 chat?.scrollTo({
                     top: chat.scrollHeight,
-                    behavior: fast || instantScroll ? "instant" : "smooth",
+                    behavior: "smooth",
                 });
             });
         });
