@@ -87,13 +87,11 @@ function findEntryAndTier(prefix: string, bits: number) {
             const currentTier = entry.tiers[i];
             const nextTier = entry.tiers[i + 1];
 
-            if (!nextTier && bits >= currentTier.min_bits) {
+            if (!nextTier && bits >= currentTier.min_bits)
                 return { name: entry.name, tier: currentTier };
-            }
 
-            if (bits >= currentTier.min_bits && bits < nextTier.min_bits) {
+            if (bits >= currentTier.min_bits && bits < nextTier.min_bits)
                 return { name: entry.name, tier: currentTier };
-            }
         }
     }
 

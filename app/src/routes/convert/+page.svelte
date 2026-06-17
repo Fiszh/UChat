@@ -117,16 +117,12 @@
                 {},
             );
 
-            console.log(values);
-
             values = Object.fromEntries(
                 Object.entries(values).filter(
                     ([param, value]) =>
                         param != "undefined" && !isDefault(param, value),
                 ),
             );
-
-            console.log(values);
 
             const result_url = new URL("https://chat.unii.dev/");
             const result_params = new URLSearchParams(values);

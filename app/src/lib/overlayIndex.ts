@@ -21,28 +21,13 @@ export const fixNameColor = (name_color: string): string =>
         ? tinycolor(name_color).lighten(30).toString()
         : name_color;
 
-export async function getVersion(): Promise<string> {
-    try {
-        const response_version = await fetch("/manifest.json");
-        const data_version = await response_version.json();
-
-        return data_version.version;
-    } catch (err) {
-        console.error(err);
-
-        return "Unknown version";
-    }
-}
-
 export async function getMainUser(channel: string | number) {
     try {
-        const version = await getVersion();
-
         const response = await fetch(
             `https://api.unii.dev/channel?${typeof channel == "string" ? `name=` : `id=`}${channel}`,
             {
                 headers: {
-                    version: version,
+                    version: __APP_VERSION,
                 },
             },
         );

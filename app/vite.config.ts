@@ -1,6 +1,7 @@
 import { sveltekit } from "@sveltejs/kit/vite";
 import { defineConfig } from "vite";
 import { execSync } from "node:child_process";
+import pkg from "./package.json" with { type: "json" };
 
 const commitHash = execSync("git rev-parse HEAD").toString().trim();
 const repoUrl = execSync("git remote get-url origin").toString().trim();
@@ -14,5 +15,6 @@ export default defineConfig({
         __COMMIT_HASH: JSON.stringify(commitHash),
         __BUILD_DATE: JSON.stringify(new Date().toISOString()),
         __REPO_URL: JSON.stringify(repoUrl),
+        __APP_VERSION: JSON.stringify(pkg.version),
     },
 });

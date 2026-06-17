@@ -1,5 +1,4 @@
 import { loadingInfo } from "$stores/global";
-import { overlayVersion } from "$stores/settings";
 import { get } from "svelte/store";
 import { disconnect } from "./chat";
 import { loadChat } from "./loadChat";
@@ -52,7 +51,7 @@ export function execCommand(message: string, tags: Record<string, any>) {
                     });
                 } else {
                     loadingInfo.set({
-                        text: "Chat Version: " + get(overlayVersion),
+                        text: "Chat Version: " + __APP_VERSION,
                         type: "minimal",
                     });
                 }

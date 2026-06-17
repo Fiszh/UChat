@@ -6,8 +6,6 @@
     import "app.scss";
 
     import { page } from "$app/state";
-    import { overlayVersion } from "$stores/settings";
-    import { getVersion } from "$lib/overlayIndex";
     import Banner from "$components/Banner.svelte";
 
     let { data, children } = $props();
@@ -18,10 +16,6 @@
     onMount(() => {
         const params = new URLSearchParams(window.location.search);
         hasChannel = params.has("channel") || params.has("id");
-
-        (async () => {
-            overlayVersion.set(await getVersion());
-        })();
 
         mounted = true;
     });
@@ -35,7 +29,7 @@
             <Banner {...data.statusMessage} />
         {/if}
         <main>
-            {#if page.status !== 404 && page.route.id != "/auth"}
+            {#if page.status == 200 && !["/auth"].includes(page.route.id ?? "")}
                 <Sidebar />
             {/if}
             {@render children()}

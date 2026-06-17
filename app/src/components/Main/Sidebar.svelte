@@ -16,11 +16,8 @@
     import { valideToken } from "$lib/services/twitch";
     import { delCookie, getCookie, setCookie } from "$lib/cookie";
 
-    import { overlayVersion } from "$stores/settings";
     import { dev } from "$app/environment";
     import { page } from "$app/state";
-
-    $: version_text = $overlayVersion;
 
     let currentHash = window.location.hash || "#";
 
@@ -110,7 +107,7 @@
             <h1 style="font-size:0.8rem; line-height: 1px;">
                 UChat Chat Overlay for Twitch
             </h1>
-            <small id="version_text">{version_text} {dev ? "DEV" : ""}</small>
+            <small id="version_text">{__APP_VERSION} {dev ? "DEV" : ""}</small>
         </div>
     </header>
 

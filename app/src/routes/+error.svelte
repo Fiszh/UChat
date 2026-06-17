@@ -5,8 +5,41 @@
     import { onDestroy, onMount } from "svelte";
 
     import SevenTV_main from "$lib/services/7TV/main";
+    import { page } from "$app/state";
+    import { Dot, DotIcon } from "lucide-svelte";
 
     let loaded = $state(false);
+    let isAbleToGoBack = $state(true);
+
+    function statusTitle(status: number): string {
+        if (status === 401) {
+            return "unauthorized!";
+        } else if (status === 403) {
+            return "no permission!";
+        } else if (status === 404) {
+            return "page not found!";
+        } else if (status === 500) {
+            return "unexpected error.";
+        } else if (status === 418) {
+            return "I'm a teapot!";
+        } else {
+            return "an error occurred.";
+        }
+    }
+
+    function statusMessage(status: number): string {
+        if (status === 401) {
+            return "You are unauthorized to view this page.";
+        } else if (status === 403) {
+            return "You do not have permission to view this page.";
+        } else if (status === 404) {
+            return "Looks like the page you're trying to reach doesn't exist or was moved.";
+        } else if (status === 418) {
+            return "Sorry, I refuse to brew coffee because I'm, permanently, a teapot.";
+        } else {
+            return "Please refresh or try again. If the issue persists, contact us.";
+        }
+    }
 
     let chatRotation = $state({
         x: 0,
@@ -14,11 +47,11 @@
     });
 
     const msgs = [
-        "404 OMEGADANCE",
+        page.status + " OMEGADANCE",
         "F",
         "chat where is the page PauseChamp",
         "bro the page is gone NOOOO",
-        "404 Pepega",
+        page.status + " Pepega",
         "who broke the site RAGEY",
         "COPIUM",
         "NOOOO",
@@ -36,6 +69,8 @@
 
     onMount(async () => {
         loaded = true;
+
+        if (window.history.length <= 1) isAbleToGoBack = false;
 
         getBadges();
 
@@ -56,11 +91,11 @@
             return e;
         });
 
-        sendInterval = setInterval(() => {
-            const msg = msgs[Math.floor(Math.random() * msgs.length)];
-
-            sendFakeMessage(msg);
-        }, 1000);
+        sendInterval = setInterval(
+            () =>
+                sendFakeMessage(msgs[Math.floor(Math.random() * msgs.length)]),
+            1000,
+        );
     });
 
     onDestroy(() => clearInterval(sendInterval));
@@ -69,25 +104,46 @@
 </script>
 
 <main style="--chat-x: {chatRotation.x}deg; --chat-y: {chatRotation.y}deg;">
-    <div>
-        <h1>Oops, page not found</h1>
+    <div id="message">
+        <h1>Oops, {statusTitle(page.status)}</h1>
         <p>
-            Looks like the page you're trying to reach doesn't exist or was
-            moved. <br />
+            {statusMessage(page.status)}
+            <br />
             Check the URL or try one of the options below.
         </p>
+        <p id="additional-info">
+            Version: {__APP_VERSION}
+            <Dot /> Code: {page.status}
+        </p>
         <div id="buttons">
-            <button onclick={goBack}>Go back a page</button>
+            {#if isAbleToGoBack}
+                <button onclick={goBack}>Go back a page</button>
+            {/if}
             <a href="/" data-sveltekit-preload-data="off">Go back homepage</a>
         </div>
     </div>
 
-    {#if loaded}
-        <section id="chat-display">
-            <ChatDisplay />
-            <p id="error">ERROR: channel not found</p>
-            <div id="red-dot"></div>
-        </section>
+    {#if page.status !== 418}
+        {#if loaded}
+            <section id="chat-display">
+                <ChatDisplay />
+                <p id="error">ERROR: channel not found</p>
+                <div id="red-dot"></div>
+            </section>
+        {/if}
+    {:else}
+        <pre>
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⣤⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀(
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣘⣿⣿⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀)
+⠀⠀⠀⣀⣀⡀⠀⠀⠀⢀⣀⠘⠛⠛⠛⠛⠛⠛⠁⣀⠀⠀⠀⠀⠀⠀⠀⠀(
+⠀⢠⡿⠋⠉⠛⠃⣠⣤⣈⣉⡛⠛⠛⠛⠛⠛⠛⢛⣉⣁⣤⣄⠀⠀⣾⣿⡿⠗⠀
+⠀⢸⡇⠀⠀⠀⣰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣆⠀⣿⣿⠀⠀⠀
+⠀⢸⣇⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⢉⣉⣠⣿⣿⡀⠀⠀
+⠀⠀⠙⠷⡆⠘⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⢰⣿⣿⣿⣿⣿⡇⠀⠀
+⠀⠀⠀⠀⠀⠀⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡄⠸⣿⣿⣿⣿⠟⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠙⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠄⠈⠉⠁⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⢄⣉⠉⠛⠛⠛⠛⠛⠋⢉⣉⡠⠀⠀⠀⠀⠀⠀⠀⠀⠀
+            ⠙⠻⠿⠿⠿⠿⠿⠿⠛⠋</pre>
     {/if}
 </main>
 
@@ -100,6 +156,21 @@
         box-sizing: border-box;
         justify-content: space-between;
         align-items: center;
+    }
+
+    #message {
+        p {
+            margin: 0;
+        }
+
+        #additional-info {
+            margin-block: 0.25rem 0.5rem;
+
+            display: inline-flex;
+            align-items: center;
+
+            color: rgba(255, 255, 255, 0.25);
+        }
     }
 
     h1 {
@@ -158,6 +229,15 @@
             0 1px 2px rgba(255, 255, 255, 0.2),
             0 4px 8px rgba(0, 0, 0, 0.15),
             0 12px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    pre {
+        transform: perspective(1200px) rotateX(var(--chat-x))
+            rotateY(var(--chat-y));
+
+        font-size: 1.5rem;
+
+        user-select: none;
     }
 
     @keyframes pulse {
