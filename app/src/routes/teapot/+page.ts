@@ -1,5 +1,6 @@
 import { error } from "@sveltejs/kit";
+import type { PageLoad } from "./$types";
 
-export function load({ params }) {
+export const load: PageLoad = ({ params }) => {
     error(418, "I'm a teapot ☕");
-}
+};
