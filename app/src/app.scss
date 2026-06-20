@@ -19,6 +19,7 @@ body {
 * {
     scrollbar-width: var(--scrollbar-width, auto);
     scrollbar-color: var(--scrollbar-color, auto);
+    -webkit-tap-highlight-color: transparent;
 }
 
 *::-webkit-scrollbar {

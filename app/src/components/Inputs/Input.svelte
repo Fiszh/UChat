@@ -1,10 +1,12 @@
 <script lang="ts">
-    import { onMount } from "svelte";
     import type { Snippet } from "svelte";
     import type {
         HTMLInputAttributes,
         HTMLAnchorAttributes,
     } from "svelte/elements";
+
+    import { X, Ban } from "lucide-svelte";
+    import { fade } from "svelte/transition";
 
     type Props = {
         icon?: Snippet;
@@ -27,9 +29,8 @@
 
     const clear = () => {
         value = "";
+        invalid = false;
     };
-
-    import { X, Ban } from "lucide-svelte";
 </script>
 
 <label class:disabled class:invalid>
@@ -44,12 +45,14 @@
         {disabled}
         placeholder={disabled ? "Disabled" : restProps.placeholder}
     />
-    {#if !disabled && iconRight}
-        {#if !value.length}
-            {@render iconRight()}
-        {:else}
-            <button title="Clear" onclick={clear}><X size="1rem" /></button>
-        {/if}
+    {#if !disabled}
+        <span id="rightIcon" transition:fade>
+            {#if iconRight && !value.length && !invalid}
+                {@render iconRight()}
+            {:else if value.length || invalid}
+                <button title="Clear" onclick={clear}><X size="1rem" /></button>
+            {/if}
+        </span>
     {/if}
 </label>
 
@@ -92,6 +95,7 @@
             }
         }
 
+        span,
         button {
             background-color: transparent;
             border: none;
@@ -99,6 +103,11 @@
             cursor: pointer;
             padding: 0rem;
             display: inline-flex;
+        }
+
+        span {
+            height: 1rem;
+            aspect-ratio: 1;
         }
 
         input {

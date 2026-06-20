@@ -6,14 +6,15 @@
     import Color from "$components/Inputs/Color.svelte";
     import SegmentedControl from "$components/Inputs/Segmented-control.svelte";
     import Selector from "$components/Inputs/Selector.svelte";
+    import Dropdown from "$components/Inputs/Dropdown.svelte";
     import { House, ChevronRight, Search } from "lucide-svelte";
 
     //FIXME MAKE SELECTOR WAY BETTER WITHOUT THE NEED OF THIS
     let selectorOptions = $state([
-        { enabled: true, label: "Twitch" },
-        { enabled: true, label: "Kick" },
-        { enabled: true, label: "YouTube" },
-        { enabled: true, label: "TikTok" },
+        { enabled: true, label: "Lorem" },
+        { enabled: true, label: "ipsum" },
+        { enabled: true, label: "dolor" },
+        { enabled: true, label: "sit" },
     ]);
 </script>
 
@@ -30,11 +31,27 @@
         <Search size="1rem" />
     {/snippet}
 
+    {#snippet dropdown()}
+        <Button>Lorem</Button>
+        <Button>ipsum</Button>
+        <Button>dolor</Button>
+    {/snippet}
+
     <section>
         <p>Buttons</p>
-        <Button {icon}>Test Button</Button>
-        <Button {iconRight}>Test Button</Button>
-        <Button>Test Button</Button>
+        <Button {icon}>Lorem ipsum</Button>
+        <Button {iconRight}>Lorem ipsum</Button>
+        <Button>Lorem ipsum</Button>
+    </section>
+
+    <section>
+        <p>Dropdown</p>
+        <Dropdown {dropdown}>Lorem</Dropdown>
+    </section>
+
+    <section>
+        <p>Dropdown Reversed</p>
+        <Dropdown {dropdown} reversed>Lorem</Dropdown>
     </section>
 
     <section>
@@ -54,6 +71,7 @@
         <p>Inputs</p>
         <Input icon={iconSearch} {iconRight} placeholder="Search..." />
         <Input disabled />
+        <Input />
         <Input placeholder="Invalid Input" invalid />
     </section>
 
@@ -66,10 +84,10 @@
         <p>Segment Control</p>
         <SegmentedControl
             options={[
-                { id: "twitch", label: "Twitch", icon },
-                { id: "kick", label: "Kick" },
-                { id: "yt", label: "YouTube" },
-                { id: "tt", label: "TikTok" },
+                { id: "1", label: "Lorem", icon },
+                { id: "2", label: "ipsum" },
+                { id: "3", label: "dolor" },
+                { id: "4", label: "sit" },
             ]}
         />
     </section>
