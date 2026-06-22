@@ -4,7 +4,10 @@ import { execSync } from "node:child_process";
 import pkg from "./package.json" with { type: "json" };
 
 const commitHash = execSync("git rev-parse HEAD").toString().trim();
-const repoUrl = execSync("git remote get-url origin").toString().trim().replace(/\.git$/, "");
+const repoUrl = execSync("git remote get-url origin")
+    .toString()
+    .trim()
+    .replace(/\.git$/, "");
 
 export default defineConfig({
     plugins: [sveltekit()],
