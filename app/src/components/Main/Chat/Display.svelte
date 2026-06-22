@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { RotateCcw, Copy, Send } from "lucide-svelte";
+    import { RotateCcw, Copy, Send } from "@lucide/svelte";
     import ColorPicker, { ChromeVariant } from "svelte-awesome-color-picker";
 
     import { messages, sanitizeInput } from "$lib/chat";

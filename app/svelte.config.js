@@ -17,7 +17,7 @@ const config = {
             $components: path.resolve("./src/components"),
             $types: path.resolve("./src/types"),
             $lib: path.resolve("./src/lib"),
-            "app.scss": path.resolve("./src/app.scss"),
+            $styles: path.resolve("./src/styles/"),
         },
     },
     // compilerOptions: {

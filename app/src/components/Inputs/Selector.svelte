@@ -42,7 +42,7 @@
 
     section {
         display: flex;
-        background-color: #1b1b1b;
+        background-color: var(--secondary);
 
         gap: 0.25rem;
         padding: 0.35rem;
@@ -52,13 +52,13 @@
 
         label {
             border: none;
-            color: white;
+            color: currentColor;
             position: relative;
 
             gap: 0.25rem;
 
             opacity: 0.5;
-            background-color: #262626;
+            background-color: var(--secondary-active);
 
             &.enabled {
                 opacity: 1;

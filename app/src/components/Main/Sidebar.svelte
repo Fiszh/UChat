@@ -2,11 +2,10 @@
     import {
         House,
         Info,
-        Github,
         Coffee,
         MessageSquareMore,
         ArrowLeftRight,
-    } from "lucide-svelte";
+    } from "@lucide/svelte";
 
     import moment from "moment/min/moment-with-locales";
 
@@ -18,6 +17,8 @@
 
     import { dev } from "$app/environment";
     import { page } from "$app/state";
+    import Github from "$components/logos/github.svelte";
+    import Button from "$components/Inputs/Button.svelte";
 
     let currentHash = window.location.hash || "#";
 
@@ -113,35 +114,47 @@
 
     <nav>
         {#if page.route.id == "/"}
-            <a href="/#" class="active" bind:this={navLinks["home"]["navLink"]}>
+            <Button
+                secondary
+                href="/#"
+                class="active"
+                bind:element={navLinks["home"]["navLink"]}
+            >
                 <House size="20" /> Home
-            </a>
-            <a
+            </Button>
+            <Button
+                secondary
                 href="#message-creator"
-                bind:this={navLinks["msgCreator"]["navLink"]}
+                bind:element={navLinks["msgCreator"]["navLink"]}
             >
                 <MessageSquareMore size="20" /> Message creator
-            </a>
-            <a href="/convert">
+            </Button>
+            <Button secondary href="/convert">
                 <ArrowLeftRight size="20" /> Convert
-            </a>
-            <a href="#help" bind:this={navLinks["help"]["navLink"]}>
+            </Button>
+            <Button
+                secondary
+                href="#help"
+                bind:element={navLinks["help"]["navLink"]}
+            >
                 <Info size="20" /> Info & Privacy
-            </a>
-            <a
+            </Button>
+            <Button
+                secondary
                 href="https://github.com/Fiszh/UChat"
                 target="_blank"
                 rel="noopener noreferrer"
             >
-                <Github size="20" /> GitHub
-            </a>
-            <a
+                <Github size={20} /> GitHub
+            </Button>
+            <Button
+                secondary
                 href="https://buymeacoffee.com/jzlnkf5qgo"
                 target="_blank"
                 rel="noopener noreferrer"
             >
                 <Coffee size="20" /> Support
-            </a>
+            </Button>
         {:else}
             <a href="/#">
                 <House size="20" /> Home

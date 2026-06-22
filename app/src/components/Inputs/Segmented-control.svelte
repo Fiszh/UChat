@@ -9,7 +9,8 @@
     interface Option {
         id: string;
         label?: string;
-        icon?: Snippet;
+        disabled?: boolean;
+        icon?: Snippet<[boolean]>;
     }
 
     type Props = {
@@ -30,13 +31,14 @@
 </script>
 
 <section>
-    {#each options as { id, label, icon }}
+    {#each options as { id, label, disabled, icon }}
         <button
             data-id={id}
             class:selected={value == id}
             onclick={() => (value = id)}
+            {disabled}
         >
-            {@render icon?.()}
+            {@render icon?.(value == id && !disabled)}
             {#if label}
                 <p>{label}</p>
             {/if}
@@ -54,7 +56,7 @@
 <style lang="scss">
     section {
         display: flex;
-        background-color: #1b1b1b;
+        background-color: var(--secondary);
 
         gap: 0.25rem;
         padding: 0.35rem;
@@ -65,8 +67,16 @@
         button {
             background: none;
             border: none;
-            color: white;
+            color: currentColor;
             position: relative;
+
+            &:hover {
+                background-color: var(--secondary-hover);
+            }
+
+            &[disabled] {
+                opacity: 0.1;
+            }
 
             font-weight: bold;
 
@@ -89,16 +99,14 @@
 
             cursor: pointer;
 
-            p {
-                margin: 0;
-            }
+            transition: background-color 0.3s ease;
         }
     }
 
     .slider {
         position: absolute;
         inset: 0;
-        background-color: #262626;
+        background-color: var(--secondary-active);
         border-radius: 0.25rem;
         z-index: -1;
     }

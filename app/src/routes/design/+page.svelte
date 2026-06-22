@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import Button from "$components/Inputs/Button.svelte";
     import Toggle from "$components/Inputs/Toggle.svelte";
     import Checkbox from "$components/Inputs/Checkbox.svelte";
@@ -7,7 +7,11 @@
     import SegmentedControl from "$components/Inputs/Segmented-control.svelte";
     import Selector from "$components/Inputs/Selector.svelte";
     import Dropdown from "$components/Inputs/Dropdown.svelte";
-    import { House, ChevronRight, Search } from "lucide-svelte";
+    import { House, ChevronRight, Search } from "@lucide/svelte";
+    import Twitch from "$components/logos/twitch.svelte";
+    import Kick from "$components/logos/kick.svelte";
+    import Youtube from "$components/logos/youtube.svelte";
+    import Dialog from "$components/Dialog.svelte";
 
     //FIXME MAKE SELECTOR WAY BETTER WITHOUT THE NEED OF THIS
     let selectorOptions = $state([
@@ -16,7 +20,27 @@
         { enabled: true, label: "dolor" },
         { enabled: true, label: "sit" },
     ]);
+
+    let showTestDialog = $state(false);
 </script>
+
+{#snippet buttons()}
+    <Button danger>Lorem</Button>
+    <section>
+        <Button>Ipsum</Button>
+        <Button secondary>Dolor</Button>
+    </section>
+{/snippet}
+
+<Dialog bind:show={showTestDialog} name="Lorem" {buttons}>
+    <section id="layout">
+        <h2>Lorem ipsum</h2>
+        <small>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore
+        </small>
+    </section>
+</Dialog>
 
 <main>
     <h1>UChat Design Page</h1>
@@ -31,17 +55,60 @@
         <Search size="1rem" />
     {/snippet}
 
+    {#snippet logoTwitch(chosen: boolean)}
+        <Twitch brandColor={chosen} />
+    {/snippet}
+    {#snippet logoKick(chosen: boolean)}
+        <Kick brandColor={chosen} />
+    {/snippet}
+    {#snippet logoYouTube(chosen: boolean)}
+        <Youtube brandColor={chosen} />
+    {/snippet}
+
     {#snippet dropdown()}
-        <Button>Lorem</Button>
-        <Button>ipsum</Button>
-        <Button>dolor</Button>
+        <Button secondary>Lorem</Button>
+        <Button secondary>ipsum</Button>
+        <Button secondary>dolor</Button>
     {/snippet}
 
     <section>
-        <p>Buttons</p>
+        <p>Buttons Primary</p>
         <Button {icon}>Lorem ipsum</Button>
         <Button {iconRight}>Lorem ipsum</Button>
         <Button>Lorem ipsum</Button>
+        <Button disabled>Lorem ipsum</Button>
+    </section>
+
+    <section>
+        <p>Buttons Secondary</p>
+        <Button secondary {icon}>Lorem ipsum</Button>
+        <Button secondary {iconRight}>Lorem ipsum</Button>
+        <Button secondary>Lorem ipsum</Button>
+        <Button secondary disabled>Lorem ipsum</Button>
+    </section>
+
+    <section>
+        <p>Buttons Ghost</p>
+        <Button ghost {icon}>Lorem ipsum</Button>
+        <Button ghost {iconRight}>Lorem ipsum</Button>
+        <Button ghost>Lorem ipsum</Button>
+        <Button ghost disabled>Lorem ipsum</Button>
+    </section>
+
+    <section>
+        <p>Buttons Danger</p>
+        <Button danger {icon}>Lorem ipsum</Button>
+        <Button danger {iconRight}>Lorem ipsum</Button>
+        <Button danger>Lorem ipsum</Button>
+        <Button danger disabled>Lorem ipsum</Button>
+    </section>
+
+    <section>
+        <p>Buttons Approve</p>
+        <Button approve {icon}>Lorem ipsum</Button>
+        <Button approve {iconRight}>Lorem ipsum</Button>
+        <Button approve>Lorem ipsum</Button>
+        <Button approve disabled>Lorem ipsum</Button>
     </section>
 
     <section>
@@ -84,10 +151,14 @@
         <p>Segment Control</p>
         <SegmentedControl
             options={[
-                { id: "1", label: "Lorem", icon },
-                { id: "2", label: "ipsum" },
-                { id: "3", label: "dolor" },
-                { id: "4", label: "sit" },
+                { id: "1", label: "Twitch", icon: logoTwitch },
+                { id: "2", label: "Kick", icon: logoKick },
+                {
+                    id: "3",
+                    label: "YouTube",
+                    disabled: true,
+                    icon: logoYouTube,
+                },
             ]}
         />
     </section>
@@ -95,6 +166,11 @@
     <section>
         <p>Selector</p>
         <Selector options={selectorOptions} />
+    </section>
+
+    <section>
+        <p>Dialog</p>
+        <Button onclick={() => (showTestDialog = true)}>Show Dialog</Button>
     </section>
 </main>
 

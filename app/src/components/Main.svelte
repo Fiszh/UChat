@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Coffee, Github, Home, Info } from "lucide-svelte";
+    import { Coffee, Home, Info } from "@lucide/svelte";
 
     import MainDisplay from "./Main/Chat/Main.svelte";
 
@@ -8,6 +8,7 @@
     import MessageCreatorMain from "./Main/MessageCreator/Main.svelte";
 
     import { icon_size, isMobile } from "$stores/global";
+    import Github from "./logos/github.svelte";
 
     let hash = window.location.hash;
 
@@ -40,7 +41,7 @@
             target="_blank"
             rel="noopener noreferrer"
         >
-            <Github size={$icon_size} /> GitHub
+            <Github /> GitHub
         </a>
         <a
             class="hide-on-small"

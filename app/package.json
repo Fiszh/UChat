@@ -31,8 +31,8 @@
         "vite": "^8.0.0"
     },
     "dependencies": {
+        "@lucide/svelte": "^1.18.0",
         "html-to-image": "^1.11.13",
-        "lucide-svelte": "^0.577.0",
         "svelte-awesome-color-picker": "^4.1.1",
         "tinycolor2": "^1.6.0",
         "twemoji": "^14.0.2"

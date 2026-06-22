@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    import { LogIn, LogOut } from "lucide-svelte";
+    import { LogIn, LogOut } from "@lucide/svelte";
 
     import { delCookie, getCookie, setCookie } from "$lib/cookie";
 

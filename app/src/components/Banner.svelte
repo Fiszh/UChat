@@ -5,7 +5,7 @@
         CloudAlert,
         ServerOff,
         Wrench,
-    } from "lucide-svelte";
+    } from "@lucide/svelte";
 
     const {
         type = "fail",

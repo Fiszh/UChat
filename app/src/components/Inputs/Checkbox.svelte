@@ -11,7 +11,7 @@
     label {
         display: inline-flex;
         align-items: center;
-        gap: 0.05rem;
+        gap: 0.25rem;
         cursor: pointer;
 
         & > * {
@@ -19,22 +19,22 @@
         }
 
         &:hover input {
-            background-color: #5c5c5c;
+            background-color: var(--secondary-hover);
         }
 
         input {
             appearance: none;
             width: 1rem;
             aspect-ratio: 1;
-            background-color: #474747;
+            background-color: var(--secondary);
 
-            border: 0.15rem #535353 solid;
+            border: 0.15rem var(--secondary-active) solid;
             border-radius: 0.25rem;
             transition: background-color 0.2s ease;
 
             &:checked {
-                background-color: #7c5cfc;
-                border-color: #544b7b;
+                background-color: var(--accent);
+                border-color: var(--secondary-active);
             }
         }
     }

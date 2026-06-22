@@ -5,7 +5,7 @@
         HTMLAnchorAttributes,
     } from "svelte/elements";
 
-    import { X, Ban } from "lucide-svelte";
+    import { X, Ban } from "@lucide/svelte";
     import { fade } from "svelte/transition";
 
     type Props = {
@@ -62,44 +62,32 @@
         align-items: center;
         gap: 0.25rem;
 
-        background-color: #1b1b1b;
+        background-color: var(--secondary);
 
-        border: 0.15rem #242424 solid;
+        border: 0.15rem var(--secondary-active) solid;
         border-radius: 0.25rem;
         padding: 0.25rem;
 
         cursor: text;
 
         &:hover {
-            background-color: #282828;
-            border-color: #5c5c5c;
+            background-color: var(--secondary-active);
+            border-color: var(--text-light);
         }
 
         &:focus-within {
-            border-color: #cfcfcf;
+            border-color: var(--text-light);
         }
 
         &.invalid {
-            border-color: #e23636;
-        }
-
-        &.disabled {
-            background-color: #1d1d1d;
-            border-color: #151515;
-            color: #363636;
-
-            cursor: not-allowed;
-
-            &::placeholder {
-                color: #363636;
-            }
+            border-color: var(--danger-hover);
         }
 
         span,
         button {
             background-color: transparent;
             border: none;
-            color: white;
+            color: currentColor;
             cursor: pointer;
             padding: 0rem;
             display: inline-flex;
@@ -114,7 +102,7 @@
         input {
             background-color: transparent;
             border: none;
-            color: white;
+            color: currentColor;
 
             overflow: hidden;
             text-overflow: ellipsis;

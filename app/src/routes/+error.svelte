@@ -6,7 +6,7 @@
 
     import SevenTV_main from "$lib/services/7TV/main";
     import { page } from "$app/state";
-    import { Dot, DotIcon } from "lucide-svelte";
+    import { Dot, DotIcon } from "@lucide/svelte";
 
     let loaded = $state(false);
     let isAbleToGoBack = $state(true);

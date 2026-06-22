@@ -14,7 +14,7 @@
         position: relative;
         width: calc(var(--size) * 2);
         height: var(--size);
-        background-color: #272727;
+        background-color: var(--secondary-active);
         border-radius: 100rem;
         cursor: pointer;
         transition: background-color 0.2s ease;
@@ -24,7 +24,7 @@
             position: absolute;
             width: calc(var(--size) - 4px);
             height: calc(var(--size) - 4px);
-            background: #737373;
+            background: var(--text-light);
             border-radius: 50%;
             top: 50%;
             left: 2px;
@@ -35,20 +35,11 @@
         }
 
         &:checked {
-            background-color: #3d8445;
+            background-color: var(--approve-hover);
 
             &::after {
-                background: white;
+                background: var(--text);
                 left: calc(100% - var(--size) + 2px);
-            }
-        }
-
-        &[disabled] {
-            cursor: not-allowed;
-            background-color: #1c1c1c;
-
-            &::after {
-                background-color: #414141;
             }
         }
     }

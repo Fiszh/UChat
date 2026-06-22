@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    import { CircleQuestionMark, ShieldCheck } from "lucide-svelte";
+    import { CircleQuestionMark, ShieldCheck } from "@lucide/svelte";
 
     import { faqItems, privacyItems } from "$stores/faq";
 

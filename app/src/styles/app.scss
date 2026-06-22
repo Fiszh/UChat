@@ -3,7 +3,7 @@ body {
     flex-direction: column;
     overflow: hidden;
     font-family: "Geist", system-ui, sans-serif;
-    color: white;
+    color: var(--text);
     margin: 0;
     padding: 0;
 
@@ -13,7 +13,7 @@ body {
     width: 100dvw;
     height: 100dvh;
 
-    background: rgb(17, 17, 17);
+    background: #0a0a0a;
 }
 
 * {
@@ -42,6 +42,12 @@ body {
     font-variant-ligatures: none;
 }
 
+*.disabled,
+*[disabled] {
+    cursor: not-allowed !important;
+    opacity: 0.5;
+}
+
 .bg-grid {
     background-color: #1e1e1e;
     background-image:
@@ -62,6 +68,13 @@ body {
     user-select: all;
 }
 
+hr {
+    width: 100%;
+    border: 1px solid #191919;
+    margin: 0;
+    padding: 0;
+}
+
 a {
     all: unset;
     display: block;
@@ -71,12 +84,12 @@ a {
     &:hover {
         text-decoration: underline;
     }
-}
 
-a[href="#help-notice"] {
-    margin-bottom: 5px;
-    text-align: center;
-    display: block;
+    &[href="#help-notice"] {
+        margin-bottom: 5px;
+        text-align: center;
+        display: block;
+    }
 }
 
 @font-face {

@@ -1,16 +1,32 @@
 <script lang="ts">
-    import { X } from "lucide-svelte";
+    import { X } from "@lucide/svelte";
+    import type { Snippet } from "svelte";
+    import Button from "./Inputs/Button.svelte";
 
-    let { name, show = $bindable(false), children } = $props();
+    type Props = {
+        name: string;
+        show: boolean;
+        buttons?: Snippet;
+        children: Snippet;
+    };
+
+    let { name, show = $bindable(false), buttons, children }: Props = $props();
 
     const close = () => (show = false);
 </script>
 
 {#if show}
     <section class="dialog">
-        <h3>{name} <button onclick={close}><X /></button></h3>
-
-        {@render children()}
+        <span id="header">
+            <p>{name}</p>
+            <Button ghost onclick={close}><X /></Button>
+        </span>
+        <hr />
+        <section id="content">{@render children()}</section>
+        {#if typeof buttons != "undefined"}
+            <hr />
+            <section id="buttons">{@render buttons()}</section>
+        {/if}
     </section>
     <section id="site-blackout"></section>
 {/if}
@@ -20,7 +36,7 @@
         position: absolute;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.25);
+        background-color: rgba(0, 0, 0, 0.5);
         z-index: 999;
     }
 
@@ -30,46 +46,53 @@
         left: 50%;
         transform: translate(-50%, -50%);
         z-index: 100000;
-        background-color: rgb(17, 17, 17);
+        background-color: #0a0a0a;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+
+        // overflow: hidden;
 
         display: flex;
         flex-direction: column;
-
-        gap: 0.7rem;
-
         max-width: 30rem;
         max-height: 25rem;
 
-        padding: 0.4rem 0.7rem;
+        border-radius: 1rem;
 
-        border-radius: 0.5rem;
+        & > *:not(hr) {
+            padding: 0.75rem;
+            // outline: 1px red solid;
+        }
 
-        h3 {
+        #header {
             margin: 0;
-            display: flex;
+            display: inline-flex;
+            align-items: center;
             justify-content: space-between;
             user-select: none;
-            padding-bottom: 0.2rem;
+        }
 
-            border-bottom: 1px #242424 solid;
+        #buttons {
+            display: inline-flex;
+            justify-content: space-between;
 
-            button {
-                background: none;
-                border: none;
-                cursor: pointer;
+            padding-block: 0.5rem;
 
-                color: white;
-
-                &:hover {
-                    color: rgba(255, 255, 255, 0.75);
-                }
+            & > :global(*) {
+                display: inline-flex;
+                gap: 0.5rem;
             }
         }
     }
 
     @media (max-width: 768px) {
         .dialog {
-            width: 80%;
+            max-width: unset;
+            max-height: unset;
+
+            border-radius: unset;
+
+            width: 100%;
+            height: 100%;
         }
     }
 </style>

@@ -28,7 +28,8 @@
     label {
         display: inline-flex;
         align-items: center;
-        background-color: #1b1b1b;
+        gap: 0.15rem;
+        background-color: var(--secondary);
         padding: 0.25rem 0.5rem;
         border-radius: 0.25rem;
 

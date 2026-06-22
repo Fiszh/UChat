@@ -1,7 +1,7 @@
 <script lang="ts">
     import ChatDisplay from "$components/ChatDisplay.svelte";
     import { messages } from "$lib/chat";
-    import { Download, RefreshCcw } from "lucide-svelte";
+    import { Download, RefreshCcw } from "@lucide/svelte";
     import Settings from "$components/Main/Chat/Settings.svelte";
 
     import { toPng } from "html-to-image";

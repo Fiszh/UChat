@@ -12,7 +12,7 @@
         settings,
         settingsParams,
     } from "$stores/settings";
-    import { CircleQuestionMark } from "lucide-svelte";
+    import { CircleQuestionMark } from "@lucide/svelte";
     import { isMobile } from "$stores/global";
 
     export let dispayChannelInput: boolean = true;

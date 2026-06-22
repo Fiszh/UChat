@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { HTMLAttributes } from "svelte/elements";
     import type { Snippet } from "svelte";
-    import { ChevronDown, ChevronUp } from "lucide-svelte";
+    import { ChevronDown, ChevronUp } from "@lucide/svelte";
 
     type Props = {
         dropdown?: Snippet;
@@ -40,15 +40,13 @@
 >
     <button id="top">
         {@render children?.()}
-        {#if (!expanded && !reversed) || (expanded && reversed)}
+        {#if !expanded}
             <ChevronDown size="1rem" />
         {:else}
             <ChevronUp size="1rem" />
         {/if}
     </button>
-    <!-- svelte-ignore a11y_click_events_have_key_events -->
-    <!-- svelte-ignore a11y_no_static_element_interactions -->
-    <span id="dropdown" onclick={() => expanded && close}>
+    <span id="dropdown">
         {@render dropdown?.()}
     </span>
 </div>
@@ -57,8 +55,7 @@
     div {
         display: flex;
         flex-direction: column;
-        background-color: #1b1b1b;
-        padding: 0.5rem;
+        background-color: var(--secondary);
 
         border-radius: 10px;
 
@@ -66,11 +63,12 @@
 
         cursor: pointer;
 
+        white-space: nowrap;
+
         #dropdown {
             display: flex;
             flex-direction: column;
 
-            padding-inline: 0.5rem;
             box-sizing: border-box;
 
             z-index: 9999;
@@ -78,45 +76,29 @@
             max-height: 0px;
             overflow: hidden;
 
-            position: absolute;
-            left: 0;
-
             border-radius: 0px 0px 10px 10px;
 
-            background-color: #1b1b1b;
+            position: relative;
+
+            min-width: fit-content;
+
+            background-color: var(--secondary);
 
             width: 100%;
-        }
 
-        &:not(.reversed) #dropdown {
-            top: 100%;
-        }
-
-        &.reversed #dropdown {
-            bottom: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
 
         &.expanded {
-            &:not(.reversed) {
-                border-radius: 10px 10px 0px 0px;
+            #dropdown {
+                border-top: var(--secondary-active) 2px solid;
 
-                #dropdown {
-                    border-top: #1f1f1f 2px solid;
-
-                    max-height: unset;
-                }
+                max-height: 20vh;
+                max-height: 20dvh;
             }
-
-            &.reversed {
-                border-radius: 0px 0px 10px 10px;
-
-                #dropdown {
-                    border-radius: 10px 10px 0px 0px;
-
-                    border-bottom: #1f1f1f 2px solid;
-
-                    max-height: unset;
-                }
+            &.reversed #dropdown {
+                flex-direction: column-reverse;
             }
         }
     }
@@ -124,11 +106,12 @@
     #top {
         background: none;
         border: none;
-        color: white;
+        color: currentColor;
         display: inline-flex;
         align-items: center;
         font-size: inherit;
         cursor: inherit;
         gap: 0.5rem;
+        padding: 0.5rem;
     }
 </style>
