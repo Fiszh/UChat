@@ -3,7 +3,7 @@
     import Dropdown from "$components/Inputs/Dropdown.svelte";
     import { queryLocalFonts, type LocalFontData } from "$lib/fonts";
 
-    let fonts: LocalFontData[] = [];
+    let fonts: LocalFontData[] = $state([]);
 
     async function loadFonts() {
         const fontData = await queryLocalFonts();
@@ -13,7 +13,7 @@
 </script>
 
 <main>
-    <button on:click={loadFonts}> Load My Local Fonts </button>
+    <Button onclick={loadFonts}>Load My Local Fonts</Button>
 
     {#if Array.isArray(fonts) && fonts.length}
         {#snippet dropdown()}

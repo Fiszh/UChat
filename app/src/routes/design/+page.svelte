@@ -66,17 +66,17 @@
     {/snippet}
 
     {#snippet dropdown()}
-        <Button secondary>Lorem</Button>
-        <Button secondary>ipsum</Button>
-        <Button secondary>dolor</Button>
+        <Button>Lorem</Button>
+        <Button>ipsum</Button>
+        <Button>dolor</Button>
     {/snippet}
 
     <section>
         <p>Buttons Primary</p>
-        <Button {icon}>Lorem ipsum</Button>
-        <Button {iconRight}>Lorem ipsum</Button>
-        <Button>Lorem ipsum</Button>
-        <Button disabled>Lorem ipsum</Button>
+        <Button primary {icon}>Lorem ipsum</Button>
+        <Button primary {iconRight}>Lorem ipsum</Button>
+        <Button primary>Lorem ipsum</Button>
+        <Button primary disabled>Lorem ipsum</Button>
     </section>
 
     <section>

@@ -19,7 +19,7 @@
     <section class="dialog">
         <span id="header">
             <p>{name}</p>
-            <Button ghost onclick={close}><X /></Button>
+            <Button onclick={close}><X /></Button>
         </span>
         <hr />
         <section id="content">{@render children()}</section>

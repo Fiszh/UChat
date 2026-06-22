@@ -11,8 +11,8 @@
         iconRight?: Snippet;
         element?: HTMLElement;
         disabled?: boolean;
+        primary?: boolean;
         secondary?: boolean;
-        ghost?: boolean;
         danger?: boolean;
         approve?: boolean;
         children?: Snippet;
@@ -25,8 +25,8 @@
         iconRight,
         element = $bindable(),
         disabled = false,
+        primary = false,
         secondary = false,
-        ghost = false,
         danger = false,
         approve = false,
         children,
@@ -39,8 +39,8 @@
         bind:this={element}
         {href}
         {...restProps}
+        class:primary
         class:secondary
-        class:ghost
         class:danger
         class:disabled
         class:approve
@@ -55,7 +55,7 @@
         {...restProps}
         {disabled}
         class:secondary
-        class:ghost
+        class:primary
         class:danger
         class:disabled
         class:approve
@@ -69,9 +69,9 @@
 <style lang="scss">
     a,
     button {
-        background-color: var(--primary);
-        color: var(--primary-text);
-        border: var(--primary-border);
+        background-color: var(--ghost);
+        color: var(--ghost-text);
+        border: var(--ghost-border);
         border-radius: 10px;
         padding: 0.5rem;
         cursor: pointer;
@@ -83,18 +83,33 @@
         text-decoration: none !important;
 
         transition:
-            background-color 0.2s ease,
-            border-radius 0.2s ease;
+            background-color 0.3s ease,
+            border-radius 0.3s ease;
 
         &:active,
         &:hover {
-            background-color: var(--primary-hover);
+            background-color: var(--ghost-hover);
             border-radius: 7px;
         }
 
         &.active {
-            background-color: var(--primary-active);
             border-radius: 5px;
+            background-color: var(--ghost-active);
+        }
+
+        &.primary {
+            background-color: var(--primary);
+            color: var(--primary-text);
+            border: var(--primary-border);
+
+            &:active,
+            &:hover {
+                background-color: var(--primary-hover);
+            }
+
+            &.active {
+                background-color: var(--primary-active);
+            }
         }
 
         &.secondary {
@@ -109,21 +124,6 @@
 
             &.active {
                 background-color: var(--secondary-active);
-            }
-        }
-
-        &.ghost {
-            background-color: var(--ghost);
-            color: var(--ghost-text);
-            border: var(--ghost-border);
-
-            &:active,
-            &:hover {
-                background-color: var(--ghost-hover);
-            }
-
-            &.active {
-                background-color: var(--ghost-active);
             }
         }
 
