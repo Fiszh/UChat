@@ -108,6 +108,7 @@
         span {
             height: 1rem;
             aspect-ratio: 1;
+            cursor: unset;
         }
 
         input {
