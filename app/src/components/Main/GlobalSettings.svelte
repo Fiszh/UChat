@@ -118,8 +118,8 @@
 
 <p id="settings_text" transition:slide>{name} Settings</p>
 <div id="settingsButtons" transition:slide>
-    <Button approve wide onclick={save}>Save</Button>
-    <Button danger wide onclick={deleteSettings}>Delete</Button>
+    <Button approve wide center onclick={save}>Save</Button>
+    <Button danger wide center onclick={deleteSettings}>Delete</Button>
 </div>
 
 <style>

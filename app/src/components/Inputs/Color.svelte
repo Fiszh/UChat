@@ -21,7 +21,7 @@
 </script>
 
 <label>
-    <span style="background-color: {value};"></span>
+    <span id="display" style="background-color: {value};"></span>
     <input
         type="color"
         bind:value
@@ -47,6 +47,10 @@
         border-radius: 0.25rem;
 
         cursor: pointer;
+
+        #display {
+            border: #ffffff2c 1px solid;
+        }
 
         & > * {
             cursor: pointer;

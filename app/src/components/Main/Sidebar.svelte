@@ -5,6 +5,7 @@
         Coffee,
         MessageSquareMore,
         ArrowLeftRight,
+        Lightbulb,
     } from "@lucide/svelte";
 
     import moment from "moment/min/moment-with-locales";
@@ -108,6 +109,9 @@
 {#snippet InfoIcon()}
     <Info size="20" />
 {/snippet}
+{#snippet SuggetsionsIcon()}
+    <Lightbulb size={20} />
+{/snippet}
 {#snippet GithubIcon()}
     <Github size={20} />
 {/snippet}
@@ -155,6 +159,14 @@
                 icon={InfoIcon}
             >
                 Info & Privacy
+            </Button>
+            <Button
+                href="https://github.com/Fiszh/UChat/issues/new"
+                target="_blank"
+                rel="noopener noreferrer"
+                icon={SuggetsionsIcon}
+            >
+                Suggestions
             </Button>
             <Button
                 href="https://github.com/Fiszh/UChat"

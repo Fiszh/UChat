@@ -103,6 +103,7 @@
                 title="Reset Settings"
             ></Button>
         </span>
+        <hr />
         <section id="color-picker">
             <small class="title">Chat Background</small>
 
@@ -110,6 +111,7 @@
                 <Color bind:value={hex} />
             </div>
         </section>
+        <hr />
         <section>
             <small class="title">Custom Message</small>
 
@@ -127,6 +129,7 @@
                 <Button secondary onclick={addMessage} {icon}>Send</Button>
             </div>
         </section>
+        <hr />
         <section id="overlay-url">
             <small class="title">Overlay URL</small>
 
@@ -164,7 +167,7 @@
 
         user-select: none;
 
-        background-color: rgba(255, 255, 255, 0.048);
+        background-color: rgba(255, 255, 255, 0.01);
 
         #chat-display {
             display: flex;
@@ -182,8 +185,6 @@
         }
 
         #top {
-            background-color: rgba(0, 0, 0, 0.5);
-
             border-bottom: #242424 1px solid;
             display: flex;
             flex-direction: column;

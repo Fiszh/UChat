@@ -38,15 +38,17 @@
 </script>
 
 <div id="faq-container">
-    <h2>Info & Privacy</h2>
-    <h3>All the info you need to get started with UChat</h3>
+    <section>
+        <h2>Info & Privacy</h2>
+        <h3>All the info you need to get started with UChat</h3>
+    </section>
 
     <h5>
         <CircleQuestionMark size="2rem" /> FAQ
     </h5>
 
     <section id="help-items" class="faq-items">
-        {#each faqItems as faqItem}
+        {#each faqItems as faqItem, i}
             <div class="faq-item">
                 <h4>{faqItem.question}</h4>
                 <p>
@@ -71,6 +73,9 @@
                     </ul>
                 {/if}
             </div>
+            {#if i < faqItems.length - 1}
+                <hr />
+            {/if}
         {/each}
     </section>
 
@@ -92,26 +97,21 @@
 <style lang="scss">
     #faq-container {
         overflow-y: auto;
-        box-sizing: border-box;
-        padding: 0.3rem 10rem 2.5rem 10rem;
+
+        padding-inline: 5rem;
+        padding-block: 1rem 2.5rem;
         box-sizing: border-box;
 
         width: 100%;
         height: 100%;
 
-        justify-content: center;
+        align-items: center;
         text-align: center;
 
-        h2 {
-            font-size: 2.5rem;
-            line-height: 0;
-            text-align: center;
-        }
+        display: flex;
+        flex-direction: column;
 
-        h3 {
-            font-size: 1rem;
-            text-align: center;
-        }
+        gap: 1.5rem;
 
         h5 {
             display: flex;
@@ -124,55 +124,17 @@
         }
 
         #help-items {
-            padding: 0.3rem 2rem;
-            box-sizing: border-box;
-
             border: #161616 1px solid;
-
             background-color: rgba(255, 255, 255, 0.014);
-
-            .faq-item {
-                padding-bottom: 1rem;
-            }
         }
 
         #help-notice {
-            background-color: #001307;
-            border: 1px solid #006b22;
-            padding: 1rem 2rem;
-
-            & > *:first-child {
-                padding-top: 0rem;
-            }
-
-            & > * {
-                padding-top: 0.5rem;
-                padding-bottom: 0.5rem;
-            }
-
-            & > *:last-child {
-                padding-bottom: 0rem;
-            }
+            border: 1px solid var(--approve-hover);
+            background-color: rgba(255, 255, 255, 0.025);
         }
 
         .faq-items {
             border-radius: 1rem;
-
-            & > * {
-                border-bottom: 1px solid;
-                border-image: linear-gradient(
-                        to right,
-                        #33333300 2.5%,
-                        #161616 10%,
-                        #161616 90%,
-                        #33333300 97.5%
-                    )
-                    1;
-            }
-
-            & > *:last-child {
-                border-bottom: 0;
-            }
         }
 
         .faq-item {
@@ -181,12 +143,11 @@
             display: flex;
             flex-direction: column;
 
-            p {
-                margin: 0;
+            padding: 1rem 2.5rem;
+            box-sizing: border-box;
 
-                :global(a) {
-                    display: inline;
-                }
+            :global(a) {
+                display: inline;
             }
 
             .commands {

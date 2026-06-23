@@ -6,6 +6,8 @@
         name: string;
         onChange: (value: boolean) => void;
         description?: string;
+
+        hidden?: boolean;
         value: boolean;
     };
 
@@ -16,9 +18,9 @@
             onChange(e.currentTarget.checked);
     }
 
-    let { name, onChange, description, value }: Props = $props();
+    let { name, onChange, description, hidden, value }: Props = $props();
 </script>
 
-<SettingsWrapper {name} {description}>
+<SettingsWrapper {name} {description} {hidden}>
     <Toggle onChange={handleChange} bind:checked={value} />
 </SettingsWrapper>

@@ -16,4 +16,4 @@
     });
 </script>
 
-<p>Logging in...</p>
+<p style="color: white;">Logging in...</p>

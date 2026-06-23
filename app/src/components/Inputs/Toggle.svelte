@@ -17,6 +17,10 @@
 </label>
 
 <style lang="scss">
+    label {
+        display: contents;
+    }
+
     input {
         --size: 2rem;
 

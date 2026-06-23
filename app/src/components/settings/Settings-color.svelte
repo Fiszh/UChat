@@ -6,6 +6,7 @@
         name: string;
         onChange: (hex: string) => void;
         description?: string;
+        hidden?: boolean;
         value: string;
     };
 
@@ -13,9 +14,9 @@
         if (typeof onChange != "undefined") return onChange(hex);
     };
 
-    let { name, onChange, description, value }: Props = $props();
+    let { name, onChange, description, hidden, value }: Props = $props();
 </script>
 
-<SettingsWrapper {name} {description}>
+<SettingsWrapper {name} {description} {hidden}>
     <Color onChange={handleChange} bind:value />
 </SettingsWrapper>

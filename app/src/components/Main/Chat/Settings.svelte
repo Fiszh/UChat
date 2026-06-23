@@ -18,6 +18,8 @@
     import SettingsToggle from "$components/settings/Settings-toggle.svelte";
     import SettingsText from "$components/settings/Settings-text.svelte";
     import SettingsColor from "$components/settings/Settings-color.svelte";
+    import Input from "$components/Inputs/Input.svelte";
+    import Checkbox from "$components/Inputs/Checkbox.svelte";
 
     export let dispayChannelInput: boolean = true;
 
@@ -167,6 +169,8 @@
                 {#if setting.type == "boolean"}
                     <SettingsToggle
                         name={setting.name}
+                        description={setting.description}
+                        hidden={setting.hide}
                         value={setting.value}
                         onChange={(checked) =>
                             handleInput(setting.param, checked)}
@@ -174,6 +178,9 @@
                 {:else if setting.type == "text" || setting.type == "number"}
                     <SettingsText
                         name={setting.name}
+                        description={setting.description}
+                        hidden={setting.hide}
+                        defaultValue={setting["default"] || ""}
                         value={setting["default"] != setting.value
                             ? setting.value
                             : ""}
@@ -187,6 +194,8 @@
                 {:else if setting.type == "color-picker"}
                     <SettingsColor
                         name={setting.name}
+                        description={setting.description}
+                        hidden={setting.hide}
                         value={setting["default"] != setting.value
                             ? setting.value
                             : setting["default"]}
@@ -213,31 +222,29 @@
     {#if dispayChannelInput}
         <p>↓ Channel Info ↓</p>
         <section id="channel">
-            <label>
-                <input
-                    type="checkbox"
-                    id="channel-id-check"
-                    bind:checked={usingID}
-                /> Use Channel ID
-            </label>
+            <span>
+                <Checkbox bind:checked={usingID}>Use Channel ID</Checkbox>
+            </span>
 
             {#if usingID}
-                <input
+                <Input
                     placeholder="Channel ID"
+                    wide
                     bind:value={localChannelID}
                     oninput={(e) =>
                         (localChannelID = validateInput(
-                            e.currentTarget.value,
+                            (e.currentTarget as HTMLInputElement).value,
                             "number",
                         ))}
                 />
             {:else}
-                <input
+                <Input
                     placeholder="Channel Name"
+                    wide
                     bind:value={localChannelName}
-                    oninput={(e) =>
+                    onChange={(e) =>
                         (localChannelName = validateInput(
-                            e.currentTarget.value,
+                            (e.currentTarget as HTMLInputElement).value,
                             "twitch_name",
                         ))}
                 />
@@ -268,7 +275,6 @@
             overflow-y: auto;
             overflow-x: hidden;
 
-            padding: 0.5rem 0.7rem;
             box-sizing: border-box;
 
             gap: 0.3rem;
@@ -276,11 +282,10 @@
 
         & > p {
             margin: 0;
-            padding: 0.5rem 0rem;
+            padding-block: 0.25rem;
             box-sizing: border-box;
 
             text-align: center;
-            font-weight: bold;
 
             border-top: #242424 1px solid;
             background-color: rgba(255, 255, 255, 0.05);
@@ -290,198 +295,23 @@
             width: 100%;
             font-size: 2rem;
             font-weight: bold;
-            padding: 1rem 0.7rem;
             box-sizing: border-box;
             position: relative;
             background-color: rgba(255, 255, 255, 0.014);
             border-top: #242424 1px solid;
 
-            label {
+            span {
                 user-select: none;
                 font-size: 1rem;
                 top: 0;
                 right: 0;
                 position: absolute;
-                background-color: #0e0e0e;
-                padding: 0.3rem 0.2rem;
+                background-color: #0e0e0e33;
+                padding: 0.25rem 0.5rem;
                 box-sizing: border-box;
                 border-bottom: 1px solid #202020;
                 border-left: 1px solid #202020;
             }
-
-            & > input {
-                all: unset;
-                width: 100%;
-                height: 100%;
-            }
         }
-    }
-
-    .setting-display {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0rem 0.7rem;
-        box-sizing: border-box;
-
-        border-bottom: 1px solid;
-        border-image: linear-gradient(
-                to right,
-                #33333300 5%,
-                #161616 20%,
-                #161616 80%,
-                #33333300 95%
-            )
-            1;
-
-        &.hidden {
-            color: rgb(255, 118, 118);
-        }
-
-        &:last-child {
-            border: none;
-        }
-
-        .setting-name {
-            gap: 0.3rem;
-            display: inline-flex;
-
-            .warning {
-                cursor: pointer;
-            }
-        }
-
-        input[type="text"] {
-            color: white;
-            width: 25%;
-            border-radius: 0.5rem;
-            border: none;
-            background-color: rgba(255, 255, 255, 0.05);
-            font-size: 1.7rem;
-            text-align: center;
-
-            outline: transparent 1px solid;
-            transition: outline-color 0.3s ease;
-
-            &:hover,
-            &:active,
-            &:focus-within {
-                outline-color: #242424;
-            }
-        }
-
-        input[type="checkbox"] {
-            --size: 2rem;
-
-            appearance: none;
-            position: relative;
-            width: calc(var(--size) * 2);
-            height: var(--size);
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 999px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-
-            &::after {
-                content: "";
-                position: absolute;
-                width: calc(var(--size) - 4px);
-                height: calc(var(--size) - 4px);
-                background: rgb(212, 212, 212);
-                border-radius: 50%;
-                top: 50%;
-                left: 2px;
-                transform: translateY(-50%);
-                transition: left 0.2s;
-            }
-
-            &.active {
-                background-color: #4a994d;
-
-                &::after {
-                    background: white;
-                    left: calc(100% - var(--size) + 2px);
-                }
-            }
-        }
-    }
-
-    #hidden-settings {
-        background: none;
-        border: none;
-        color: white;
-        font-size: 1rem;
-        padding-block: 0.5rem;
-        cursor: pointer;
-
-        &:hover {
-            color: rgba(255, 255, 255, 0.85);
-        }
-    }
-
-    @media (max-width: 768px) {
-        .setting-display:has(input[type="text"]) {
-            flex-direction: column;
-            padding-bottom: 0.5rem;
-            box-sizing: border-box;
-
-            .setting-name {
-                width: 100%;
-            }
-
-            input {
-                width: 100%;
-            }
-        }
-
-        .setting-display {
-            .setting-name {
-                font-size: 0.7rem;
-            }
-
-            input[type="text"] {
-                font-size: 1rem;
-            }
-
-            input[type="checkbox"] {
-                --after-size: 15px;
-
-                min-width: 30px;
-                aspect-ratio: 2/1;
-
-                &::after {
-                    border-radius: 50%;
-                }
-            }
-        }
-
-        #settings {
-            & > p {
-                font-size: 0.8rem;
-            }
-
-            #channel {
-                font-size: 0.8rem;
-
-                label {
-                    font-size: 0.7rem;
-                    padding: 0.1rem 0.05rem;
-                    align-items: center;
-                    display: flex;
-
-                    input {
-                        width: 0.7rem;
-                        height: 0.7rem;
-                    }
-                }
-            }
-        }
-    }
-
-    #preview-warning {
-        margin: 0;
-        font-size: 0.5rem;
-        text-align: center;
-        color: rgb(255, 215, 215);
     }
 </style>

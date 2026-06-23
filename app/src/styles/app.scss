@@ -70,9 +70,10 @@ body {
 
 hr {
     width: 100%;
-    border: 1px solid #191919;
-    margin: 0;
-    padding: 0;
+    border: 1px solid #ffffff07;
+    margin: 0 !important;
+    padding: 0 !important;
+    max-height: 1px !important;
 }
 
 a {
@@ -90,6 +91,10 @@ a {
         text-align: center;
         display: block;
     }
+}
+
+img {
+    display: unset;
 }
 
 @font-face {
