@@ -12,9 +12,12 @@
         icon?: Snippet;
         iconRight?: Snippet;
         children?: Snippet;
-        value?: string;
+        value?: string | number;
         disabled?: boolean;
+        wide?: boolean;
         invalid?: boolean;
+        readonly?: boolean;
+        onChange?: (e: Event) => void;
     } & HTMLInputAttributes &
         HTMLAnchorAttributes;
 
@@ -23,7 +26,10 @@
         iconRight,
         value = $bindable(""),
         disabled = false,
+        wide = false,
         invalid = false,
+        readonly = false,
+        onChange,
         ...restProps
     }: Props = $props();
 
@@ -33,23 +39,25 @@
     };
 </script>
 
-<label class:disabled class:invalid>
+<label class:disabled class:wide class:invalid class:readonly>
     {#if !disabled}
         {@render icon?.()}
     {:else}
         <Ban size="1rem" color="currentColor" />
     {/if}
     <input
-        {...restProps}
         bind:value
         {disabled}
+        {readonly}
+        oninput={onChange}
+        {...restProps}
         placeholder={disabled ? "Disabled" : restProps.placeholder}
     />
     {#if !disabled}
         <span id="rightIcon" transition:fade>
             {#if iconRight && !value.length && !invalid}
                 {@render iconRight()}
-            {:else if value.length || invalid}
+            {:else if (value.length || invalid) && !readonly}
                 <button title="Clear" onclick={clear}><X size="1rem" /></button>
             {/if}
         </span>
@@ -70,13 +78,23 @@
 
         cursor: text;
 
-        &:hover {
-            background-color: var(--secondary-active);
-            border-color: var(--text-light);
+        &.wide {
+            width: 100%;
+
+            input {
+                width: 100%;
+            }
         }
 
-        &:focus-within {
-            border-color: var(--text-light);
+        &:not(.readonly) {
+            &:hover {
+                background-color: var(--secondary-active);
+                border-color: var(--text-light);
+            }
+
+            &:focus-within {
+                border-color: var(--text-light);
+            }
         }
 
         &.invalid {

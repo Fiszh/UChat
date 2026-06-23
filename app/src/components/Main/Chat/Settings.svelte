@@ -14,6 +14,10 @@
     } from "$stores/settings";
     import { CircleQuestionMark } from "@lucide/svelte";
     import { isMobile } from "$stores/global";
+    import Button from "$components/Inputs/Button.svelte";
+    import SettingsToggle from "$components/settings/Settings-toggle.svelte";
+    import SettingsText from "$components/settings/Settings-text.svelte";
+    import SettingsColor from "$components/settings/Settings-color.svelte";
 
     export let dispayChannelInput: boolean = true;
 
@@ -160,57 +164,50 @@
     <section id="config">
         {#each $settings as setting, i (i)}
             {#if !setting.hide || (setting.hide && showHidden)}
-                <div class="setting-display" class:hidden={setting.hide}>
-                    {#if typeof setting["previewReact"] != "undefined" && !setting["previewReact"] && $isMobile}
-                        <p id="preview-warning">
-                            This setting does not effect the chat preview.
-                        </p>
-                    {/if}
-                    <p class="setting-name">
-                        {#if setting.hide}
-                            (Hidden)
-                        {/if}
-                        {@html setting.name}
+                {#if setting.type == "boolean"}
+                    <SettingsToggle
+                        name={setting.name}
+                        value={setting.value}
+                        onChange={(checked) =>
+                            handleInput(setting.param, checked)}
+                    />
+                {:else if setting.type == "text" || setting.type == "number"}
+                    <SettingsText
+                        name={setting.name}
+                        value={setting["default"] != setting.value
+                            ? setting.value
+                            : ""}
+                        onChange={(value) =>
+                            handleInput(
+                                setting.param,
+                                value,
+                                typeof setting["default"],
+                            )}
+                    />
+                {:else if setting.type == "color-picker"}
+                    <SettingsColor
+                        name={setting.name}
+                        value={setting["default"] != setting.value
+                            ? setting.value
+                            : setting["default"]}
+                        onChange={(value) =>
+                            handleInput(setting.param, value, "color-picker")}
+                    />
+                {/if}
 
-                        {#if typeof setting["previewReact"] != "undefined" && !setting["previewReact"] && !$isMobile}
-                            <span
-                                class="warning"
-                                title="This setting does not effect the chat preview."
-                            >
-                                <CircleQuestionMark size="1rem" />
-                            </span>
-                        {/if}
-                    </p>
-
-                    {#if setting.type == "boolean"}
-                        {@render booleanSetting(
-                            setting.param,
-                            setting.default as boolean,
-                            setting.value as boolean,
-                        )}
-                    {:else if setting.type == "number" || setting.type == "text"}
-                        {@render textSetting(
-                            setting.param,
-                            setting.default as number,
-                            setting.value as number,
-                        )}
-                    {:else if setting.type == "color-picker"}
-                        {@render colorPickerSetting(
-                            setting.param,
-                            setting.value,
-                        )}
-                    {:else}
-                        <strong>{(setting as any).type}</strong>
-                        {@html "is a unknown type"}
-                    {/if}
-                </div>
+                <hr />
             {/if}
         {/each}
 
         {#if !showHidden}
-            <button id="hidden-settings" onclick={showHiddenSettings}
-                >Show hidden settings</button
+            <Button
+                id="hidden-settings"
+                center
+                danger
+                onclick={showHiddenSettings}
             >
+                Show hidden settings
+            </Button>
         {/if}
     </section>
     {#if dispayChannelInput}

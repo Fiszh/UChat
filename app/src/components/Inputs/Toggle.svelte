@@ -1,9 +1,19 @@
 <script lang="ts">
-    let { checked = $bindable(false), disabled = false } = $props();
+    type Props = {
+        checked?: boolean;
+        onChange?: (e: Event) => void;
+        disabled?: boolean;
+    };
+
+    let {
+        checked = $bindable(false),
+        onChange,
+        disabled = false,
+    }: Props = $props();
 </script>
 
 <label>
-    <input type="checkbox" bind:checked {disabled} />
+    <input type="checkbox" bind:checked {disabled} onchange={onChange} />
 </label>
 
 <style lang="scss">

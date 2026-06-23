@@ -4,11 +4,13 @@
     import { LogIn, LogOut } from "@lucide/svelte";
 
     import { delCookie, getCookie, setCookie } from "$lib/cookie";
+    import Button from "./Inputs/Button.svelte";
 
-    export let onToken: (token: string) => void;
-    export let onLogOut: () => void;
+    type Props = { onToken: (token: string) => void; onLogOut: () => void };
 
-    $: hasToken = getCookie("twitchToken");
+    const { onToken, onLogOut }: Props = $props();
+
+    let hasToken = $derived(getCookie("twitchToken"));
 
     const clientId = "11pghkhf9gq7dke49sw1pmumjcthma";
     const redirectUri = `${window.location.origin}/auth`;
@@ -18,8 +20,7 @@
         if (hasToken) {
             hasToken = "";
             delCookie("twitchToken");
-            onLogOut();
-            return;
+            return onLogOut();
         }
 
         const oauthUrl = `https://id.twitch.tv/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=${encodeURIComponent(scope)}`;
@@ -50,45 +51,24 @@
     });
 </script>
 
-<button id="login-button" aria-label="Login" on:click={openTwitchPopup}
-    >{#if hasToken}
-        <LogOut size="17" />
+{#snippet LogInIcon()}
+    <LogIn size="17" />
+{/snippet}
+{#snippet LogOutIcon()}
+    <LogOut size="17" />
+{/snippet}
+
+<Button
+    icon={hasToken ? LogOutIcon : LogInIcon}
+    secondary
+    wide
+    center
+    aria-label="Login"
+    onclick={openTwitchPopup}
+>
+    {#if hasToken}
         Logout
     {:else}
-        <LogIn size="17" />
         Login
-    {/if}</button
->
-
-<style lang="scss">
-    @use "sass:color";
-
-    button {
-        $background: #141414;
-        $border: #242424;
-
-        all: unset;
-        cursor: pointer;
-        width: 95%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.3rem;
-        padding: 0.6rem 0.7rem;
-        box-sizing: border-box;
-        background-color: $background;
-        transition: all 0.1s ease-in-out;
-        border-radius: 0.7rem;
-        border: 1px solid $border;
-
-        &:hover {
-            background-color: color.adjust($background, $lightness: 5%);
-            border-radius: 0.5rem;
-        }
-
-        &:hover:not(.settingsButton) {
-            width: 100%;
-            border-color: color.adjust($border, $lightness: 5%);
-        }
-    }
-</style>
+    {/if}
+</Button>

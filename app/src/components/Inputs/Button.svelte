@@ -11,6 +11,8 @@
         iconRight?: Snippet;
         element?: HTMLElement;
         disabled?: boolean;
+        wide?: boolean;
+        center?: boolean;
         primary?: boolean;
         secondary?: boolean;
         danger?: boolean;
@@ -25,6 +27,8 @@
         iconRight,
         element = $bindable(),
         disabled = false,
+        wide = false,
+        center = false,
         primary = false,
         secondary = false,
         danger = false,
@@ -39,14 +43,16 @@
         bind:this={element}
         {href}
         {...restProps}
+        class:disabled
+        class:wide
+        class:center
         class:primary
         class:secondary
         class:danger
-        class:disabled
         class:approve
     >
         {@render icon?.()}
-        {@render children?.()}
+        <span>{@render children?.()}</span>
         {@render iconRight?.()}
     </a>
 {:else}
@@ -54,14 +60,16 @@
         bind:this={element}
         {...restProps}
         {disabled}
+        class:disabled
+        class:wide
+        class:center
         class:secondary
         class:primary
         class:danger
-        class:disabled
         class:approve
     >
         {@render icon?.()}
-        {@render children?.()}
+        <span>{@render children?.()}</span>
         {@render iconRight?.()}
     </button>
 {/if}
@@ -78,13 +86,26 @@
         font-size: 1rem;
         display: inline-flex;
         align-items: center;
-        gap: 0.25rem;
+        text-align: center;
+        gap: 0.5rem;
+
+        white-space: nowrap;
+        user-select: none;
+        flex-wrap: nowrap;
 
         text-decoration: none !important;
 
         transition:
             background-color 0.3s ease,
             border-radius 0.3s ease;
+
+        &.center {
+            justify-content: center;
+        }
+
+        &.wide {
+            width: 100%;
+        }
 
         &:active,
         &:hover {

@@ -89,10 +89,10 @@
 
     <section>
         <p>Buttons Ghost</p>
-        <Button ghost {icon}>Lorem ipsum</Button>
-        <Button ghost {iconRight}>Lorem ipsum</Button>
-        <Button ghost>Lorem ipsum</Button>
-        <Button ghost disabled>Lorem ipsum</Button>
+        <Button {icon}>Lorem ipsum</Button>
+        <Button {iconRight}>Lorem ipsum</Button>
+        <Button>Lorem ipsum</Button>
+        <Button disabled>Lorem ipsum</Button>
     </section>
 
     <section>

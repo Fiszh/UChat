@@ -13,6 +13,8 @@
     import { getBadges } from "$lib/preview";
 
     import SevenTV_main from "$lib/services/7TV/main";
+    import Button from "$components/Inputs/Button.svelte";
+    import Input from "$components/Inputs/Input.svelte";
 
     let messageDisplay: HTMLElement;
 
@@ -106,7 +108,7 @@
 
 <Settings dispayChannelInput={false} />
 <main>
-    <h2>UChat Message Creator</h2>
+    <h1>UChat Message Creator</h1>
     <section id="message" class="bg-grid" bind:this={messageDisplay}>
         <ChatDisplay />
     </section>
@@ -115,45 +117,49 @@
     <section id="inputs">
         <label>
             <p>Username:</p>
-            <input
+            <Input
                 type="text"
                 placeholder="Username"
                 bind:value={message["tags"]["display-name"]}
-            /></label
-        >
+            />
+        </label>
         <label>
             <p>Message:</p>
-            <input
+            <Input
                 type="text"
                 placeholder="Message"
                 bind:value={message["message"]}
-            /></label
-        >
+            />
+        </label>
         <label>
             <p>Channel:</p>
-            <input
+            <Input
                 type="text"
                 placeholder="Channel"
                 bind:value={channel["name"]}
-            /></label
-        >
+            />
+        </label>
     </section>
 
-    <button onclick={() => loadChatInfo()}
-        ><RefreshCcw /> Fetch Channel & User</button
+    {#snippet LoadIcon()}
+        <RefreshCcw />
+    {/snippet}
+    {#snippet DownloadIcon()}
+        <Download />
+    {/snippet}
+
+    <Button secondary icon={LoadIcon} onclick={loadChatInfo}>
+        Fetch Channel & User
+    </Button>
+    <Button primary icon={DownloadIcon} onclick={downloadImage}
+        >Download image</Button
     >
-    <button onclick={() => downloadImage()}><Download /> Download image</button>
 </main>
 
 <style lang="scss">
     @use "sass:color";
 
-    h2 {
-        font-size: 2rem;
-    }
-
     p {
-        margin: 0;
         user-select: none;
     }
 
@@ -163,7 +169,6 @@
         align-items: center;
         width: 100%;
         gap: 1rem;
-        font-weight: bold;
     }
 
     #message {
@@ -185,39 +190,5 @@
 
     label {
         font-size: 1.3rem;
-
-        input {
-            all: unset;
-            font-size: 1.2rem;
-            color: #c0c0c0;
-            background-color: rgba(255, 255, 255, 0.05);
-            padding: 0.5rem 1rem;
-            box-sizing: border-box;
-            cursor: text;
-            border: 1px #242424 solid;
-        }
-    }
-
-    button {
-        $background: #141414;
-        $border: #242424;
-
-        all: unset;
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.3rem;
-        padding: 0.6rem 0.7rem;
-        box-sizing: border-box;
-        background-color: $background;
-        transition: all 0.1s ease-in-out;
-        border-radius: 0.7rem;
-        border: 1px solid $border;
-
-        &:hover {
-            background-color: color.adjust($background, $lightness: 5%);
-            border-radius: 0.5rem;
-        }
     }
 </style>

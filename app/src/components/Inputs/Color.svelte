@@ -6,15 +6,28 @@
 
     let { value = $bindable("#FFFFFF"), onChange }: Props = $props();
 
+    const timeoutMS = 25;
+
+    let timeout: ReturnType<typeof setTimeout> | undefined = $state();
+
     function handleChange(event: Event) {
-        const target = event.target as HTMLInputElement;
-        onChange?.(target.value);
+        if (timeout) clearTimeout(timeout);
+
+        timeout = setTimeout(() => {
+            const target = event.target as HTMLInputElement;
+            onChange?.(target.value);
+        }, timeoutMS);
     }
 </script>
 
 <label>
     <span style="background-color: {value};"></span>
-    <input type="color" bind:value onchange={handleChange} />
+    <input
+        type="color"
+        bind:value
+        oninput={handleChange}
+        onchange={handleChange}
+    />
     <span class="value">{value}</span>
 </label>
 

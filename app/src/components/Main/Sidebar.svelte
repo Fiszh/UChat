@@ -96,6 +96,25 @@
     moment.locale(navigator.language);
 </script>
 
+{#snippet HouseIcon()}
+    <House size="20" />
+{/snippet}
+{#snippet MessageSquareMoreIcon()}
+    <MessageSquareMore size="20" />
+{/snippet}
+{#snippet ArrowLeftRightIcon()}
+    <ArrowLeftRight size="20" />
+{/snippet}
+{#snippet InfoIcon()}
+    <Info size="20" />
+{/snippet}
+{#snippet GithubIcon()}
+    <Github size={20} />
+{/snippet}
+{#snippet CoffeeIcon()}
+    <Coffee size="20" />
+{/snippet}
+
 <aside>
     <header id="topbar">
         <img
@@ -115,50 +134,46 @@
     <nav>
         {#if page.route.id == "/"}
             <Button
-                secondary
                 href="/#"
                 class="active"
                 bind:element={navLinks["home"]["navLink"]}
+                icon={HouseIcon}
             >
-                <House size="20" /> Home
+                Home
             </Button>
             <Button
-                secondary
                 href="#message-creator"
                 bind:element={navLinks["msgCreator"]["navLink"]}
+                icon={MessageSquareMoreIcon}
             >
-                <MessageSquareMore size="20" /> Message creator
+                Message creator
             </Button>
-            <Button secondary href="/convert">
-                <ArrowLeftRight size="20" /> Convert
-            </Button>
+            <Button href="/convert" icon={ArrowLeftRightIcon}>Convert</Button>
             <Button
-                secondary
                 href="#help"
                 bind:element={navLinks["help"]["navLink"]}
+                icon={InfoIcon}
             >
-                <Info size="20" /> Info & Privacy
+                Info & Privacy
             </Button>
             <Button
-                secondary
                 href="https://github.com/Fiszh/UChat"
                 target="_blank"
                 rel="noopener noreferrer"
+                icon={GithubIcon}
             >
-                <Github size={20} /> GitHub
+                GitHub
             </Button>
             <Button
-                secondary
                 href="https://buymeacoffee.com/jzlnkf5qgo"
                 target="_blank"
                 rel="noopener noreferrer"
+                icon={CoffeeIcon}
             >
-                <Coffee size="20" /> Support
+                Support
             </Button>
         {:else}
-            <a href="/#">
-                <House size="20" /> Home
-            </a>
+            <Button href="/#" icon={HouseIcon}>Home</Button>
         {/if}
     </nav>
 
@@ -172,13 +187,11 @@
             </p>
 
             <a href="#help-notice">[Learn more]</a>
-            {#if username}
+            {#if username && twitchToken && twitchID}
                 <GlobalSettings
-                    user={{
-                        name: username || "",
-                        token: twitchToken || "",
-                        user_id: twitchID || "",
-                    }}
+                    name={username}
+                    token={twitchToken}
+                    user_id={twitchID}
                 />
             {/if}
 
