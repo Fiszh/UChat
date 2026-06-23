@@ -60,7 +60,7 @@ let heartbeatTimeout: ReturnType<typeof setTimeout> | undefined = undefined;
 
 export function clearChat(obs?: boolean) {
     if (obs && clearChatWhenGoingLive) return messages.set([]);
-    if (!obs) return messages.set([]);
+    return messages.set([]);
 }
 
 function assignMessage(parsed: ReturnType<typeof parseIrcLine>) {
