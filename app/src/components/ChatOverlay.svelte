@@ -4,7 +4,7 @@
     import ChatDisplay from "./ChatDisplay.svelte";
 
     import { globals, loadingInfo } from "$stores/global";
-    import { connect } from "$lib/chat";
+    import { clearChat, connect } from "$lib/chat";
 
     import { getMainUser, connectToWS } from "$lib/overlayIndex";
     import { settings } from "$stores/settings";
@@ -72,6 +72,11 @@
 
             console.log(globals);
         })();
+
+        if (window.obsstudio)
+            window.addEventListener("obsStreamingStarting", () =>
+                clearChat(true),
+            );
 
         setInterval(handleImageRetries, 10000);
     });

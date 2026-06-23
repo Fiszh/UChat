@@ -6,6 +6,10 @@ declare global {
     const __REPO_URL: string;
     const __APP_VERSION: string;
 
+    interface Window {
+        obsstudio?: boolean;
+    }
+
     namespace App {
         // interface Error {}
         // interface Locals {}

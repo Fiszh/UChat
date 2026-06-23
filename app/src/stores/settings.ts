@@ -175,6 +175,13 @@ export const configs: Setting[] = [
         hide: true,
         param: "lastMsg",
     },
+    {
+        name: "Clear chat when going live (OBS ONLY)",
+        type: "boolean",
+        value: false,
+        hide: true,
+        param: "clearLive",
+    },
 ];
 
 for (const config of configs) {

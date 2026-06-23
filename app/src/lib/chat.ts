@@ -1,9 +1,10 @@
-import { get, writable } from "svelte/store";
+import { writable } from "svelte/store";
 import { settings } from "$stores/settings";
 import { execCommand } from "./chatCommands";
 
 let modActions = false;
 let usernotices = false;
+let clearChatWhenGoingLive = false;
 
 settings.subscribe((cfg) => {
     const foundSetting0 = cfg.find(
@@ -16,10 +17,18 @@ settings.subscribe((cfg) => {
         value: true,
     };
 
+    const foundSetting2 = cfg.find(
+        (setting) => setting.param == "clearLive",
+    ) || {
+        value: false,
+    };
+
     if (typeof foundSetting0.value == "boolean")
         modActions = foundSetting0.value;
     if (typeof foundSetting1.value == "boolean")
         usernotices = foundSetting1.value;
+    if (typeof foundSetting2.value == "boolean")
+        clearChatWhenGoingLive = foundSetting2.value;
 });
 
 interface ParsedMessage {
@@ -48,6 +57,11 @@ const MAX_RECONNECTS = 10;
 
 let heartbeatInterval: ReturnType<typeof setTimeout> | undefined = undefined;
 let heartbeatTimeout: ReturnType<typeof setTimeout> | undefined = undefined;
+
+export function clearChat(obs?: boolean) {
+    if (obs && clearChatWhenGoingLive) return messages.set([]);
+    if (!obs) return messages.set([]);
+}
 
 function assignMessage(parsed: ReturnType<typeof parseIrcLine>) {
     switch (parsed.command) {
@@ -87,6 +101,7 @@ function assignMessage(parsed: ReturnType<typeof parseIrcLine>) {
                 );
             } else {
                 messages.set([]);
+                clearChat();
             }
 
             break;
