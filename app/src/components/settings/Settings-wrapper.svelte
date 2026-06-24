@@ -52,19 +52,16 @@
         &.hidden {
             border: 1px solid red;
 
-            &::after {
+            aside p::before {
                 content: "hidden";
-                position: absolute;
-                right: 0;
-                bottom: 0;
-                z-index: 1000000;
                 padding-inline: 0.25rem;
-                border-radius: 0.25rem 0 0 0;
+                border-radius: 0.25rem;
+
+                margin-right: 0.25rem;
 
                 font-size: 0.75rem;
 
-                border-top: 1px solid red;
-                border-left: 1px solid red;
+                border: 1px solid red;
                 background-color: rgba(255, 0, 0, 0.151);
             }
         }

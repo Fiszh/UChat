@@ -215,6 +215,7 @@ export const configs: Setting[] = [
         value: false,
         hide: true,
         param: "clearLive",
+        description: "Clear the chat automatically when the channel goes live",
     },
 ];
 

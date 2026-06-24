@@ -17,6 +17,7 @@
         secondary?: boolean;
         danger?: boolean;
         approve?: boolean;
+        layout?: "row" | "column";
         children?: Snippet;
     } & HTMLButtonAttributes &
         HTMLAnchorAttributes;
@@ -33,6 +34,7 @@
         secondary = false,
         danger = false,
         approve = false,
+        layout = "row",
         children,
         ...restProps
     }: Props = $props();
@@ -50,6 +52,7 @@
         class:secondary
         class:danger
         class:approve
+        class:column={layout == "column"}
     >
         {@render icon?.()}
         <span>{@render children?.()}</span>
@@ -67,6 +70,7 @@
         class:primary
         class:danger
         class:approve
+        class:column={layout == "column"}
     >
         {@render icon?.()}
         <span>{@render children?.()}</span>
@@ -83,7 +87,7 @@
         border-radius: 10px;
         padding: 0.5rem;
         cursor: pointer;
-        font-size: 1rem;
+        font-size: inherit;
         display: inline-flex;
         align-items: center;
         text-align: center;
@@ -92,6 +96,10 @@
         white-space: nowrap;
         user-select: none;
         flex-wrap: nowrap;
+
+        &.column {
+            flex-direction: column;
+        }
 
         text-decoration: none !important;
 

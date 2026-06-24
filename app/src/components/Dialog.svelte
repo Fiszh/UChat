@@ -59,7 +59,8 @@
         border-radius: 1rem;
 
         & > *:not(hr) {
-            padding: 0.75rem;
+            padding: 0.5rem 1rem;
+            box-sizing: border-box;
             // outline: 1px red solid;
         }
 

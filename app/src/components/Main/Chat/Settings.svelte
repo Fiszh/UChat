@@ -129,9 +129,10 @@
         : removeParam("id");
 </script>
 
-<Dialog name="Warming" bind:show={hiddenWarning}>
+<Dialog name="Warning" bind:show={hiddenWarning}>
     Hidden settings are not meant to be used regularly, please keep that in mind
-    when enabling them.
+    when enabling them. They can go away any day and may be hidden because they
+    are old features or are being replaced.
 </Dialog>
 
 {#snippet booleanSetting(param: string, defaultValue: boolean, value: boolean)}

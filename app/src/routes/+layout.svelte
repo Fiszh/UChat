@@ -64,7 +64,7 @@
 
     @media (max-width: 768px) {
         main {
-            flex-direction: column;
+            flex-direction: column-reverse;
             overflow: hidden;
         }
     }

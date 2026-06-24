@@ -123,18 +123,11 @@
             line-height: 0;
         }
 
-        #help-items {
-            border: #161616 1px solid;
-            background-color: rgba(255, 255, 255, 0.014);
-        }
-
-        #help-notice {
-            border: 1px solid var(--approve-hover);
-            background-color: rgba(255, 255, 255, 0.025);
-        }
-
         .faq-items {
             border-radius: 1rem;
+            border: #161616 1px solid;
+            background-color: rgba(255, 255, 255, 0.014);
+            width: 100%;
         }
 
         .faq-item {
@@ -142,8 +135,9 @@
 
             display: flex;
             flex-direction: column;
+            gap: 0.5rem;
 
-            padding: 1rem 2.5rem;
+            padding: 1rem 1.25rem;
             box-sizing: border-box;
 
             :global(a) {

@@ -20,6 +20,7 @@
     import { page } from "$app/state";
     import Github from "$components/logos/github.svelte";
     import Button from "$components/Inputs/Button.svelte";
+    import { isMobile } from "$stores/global";
 
     let currentHash = window.location.hash || "#";
 
@@ -98,25 +99,25 @@
 </script>
 
 {#snippet HouseIcon()}
-    <House size="20" />
+    <House size={$isMobile ? "15" : "20"} />
 {/snippet}
 {#snippet MessageSquareMoreIcon()}
-    <MessageSquareMore size="20" />
+    <MessageSquareMore size={$isMobile ? "15" : "20"} />
 {/snippet}
 {#snippet ArrowLeftRightIcon()}
-    <ArrowLeftRight size="20" />
+    <ArrowLeftRight size={$isMobile ? "15" : "20"} />
 {/snippet}
 {#snippet InfoIcon()}
-    <Info size="20" />
+    <Info size={$isMobile ? "15" : "20"} />
 {/snippet}
 {#snippet SuggetsionsIcon()}
-    <Lightbulb size={20} />
+    <Lightbulb size={$isMobile ? "15" : "20"} />
 {/snippet}
 {#snippet GithubIcon()}
-    <Github size={20} />
+    <Github size={$isMobile ? 15 : 20} />
 {/snippet}
 {#snippet CoffeeIcon()}
-    <Coffee size="20" />
+    <Coffee size={$isMobile ? "15" : "20"} />
 {/snippet}
 
 <aside>
@@ -142,6 +143,7 @@
                 class="active"
                 bind:element={navLinks["home"]["navLink"]}
                 icon={HouseIcon}
+                layout={$isMobile ? "column" : "row"}
             >
                 Home
             </Button>
@@ -149,30 +151,40 @@
                 href="#message-creator"
                 bind:element={navLinks["msgCreator"]["navLink"]}
                 icon={MessageSquareMoreIcon}
+                layout={$isMobile ? "column" : "row"}
             >
-                Message creator
+                {$isMobile ? "Create" : "Message creator"}
             </Button>
-            <Button href="/convert" icon={ArrowLeftRightIcon}>Convert</Button>
+            <Button
+                href="/convert"
+                icon={ArrowLeftRightIcon}
+                layout={$isMobile ? "column" : "row"}
+            >
+                Convert
+            </Button>
             <Button
                 href="#help"
                 bind:element={navLinks["help"]["navLink"]}
                 icon={InfoIcon}
+                layout={$isMobile ? "column" : "row"}
             >
-                Info & Privacy
+                {$isMobile ? "Info" : "Info & Privacy"}
             </Button>
             <Button
                 href="https://github.com/Fiszh/UChat/issues/new"
                 target="_blank"
                 rel="noopener noreferrer"
                 icon={SuggetsionsIcon}
+                layout={$isMobile ? "column" : "row"}
             >
-                Suggestions
+                {$isMobile ? "Ideas" : "Suggestions"}
             </Button>
             <Button
                 href="https://github.com/Fiszh/UChat"
                 target="_blank"
                 rel="noopener noreferrer"
                 icon={GithubIcon}
+                layout={$isMobile ? "column" : "row"}
             >
                 GitHub
             </Button>
@@ -181,11 +193,18 @@
                 target="_blank"
                 rel="noopener noreferrer"
                 icon={CoffeeIcon}
+                layout={$isMobile ? "column" : "row"}
             >
                 Support
             </Button>
         {:else}
-            <Button href="/#" icon={HouseIcon}>Home</Button>
+            <Button
+                href="/#"
+                icon={HouseIcon}
+                layout={$isMobile ? "column" : "row"}
+            >
+                Home
+            </Button>
         {/if}
     </nav>
 
@@ -256,6 +275,12 @@
             small {
                 font-size: 0.7rem;
             }
+
+            #name {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
         }
 
         nav {
@@ -291,9 +316,24 @@
     }
 
     @media (max-width: 768px) {
-        aside {
-            position: absolute;
+        aside > *:not(nav) {
             display: none;
+        }
+
+        aside {
+            width: 100vw;
+            width: 100dvw;
+            max-width: unset;
+            height: unset;
+
+            min-height: fit-content;
+
+            nav {
+                flex-direction: row;
+                font-size: 0.75rem;
+                gap: unset;
+                justify-content: center;
+            }
         }
     }
 </style>
