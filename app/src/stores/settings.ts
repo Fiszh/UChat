@@ -230,16 +230,3 @@ export const channelName = writable<string>("");
 export const channelID = writable<string>("");
 
 export const settingsParams = writable<Record<string, Setting["value"]>>({});
-
-// Initialize emote size store from default and keep it in sync with settings
-setEmoteSize.set(
-    (configs.find((c) => c.param === "emoteSize") as NumberSetting)?.value ??
-        defaultEmoteSize,
-);
-
-settings.subscribe((list) => {
-    const em = list.find((c) => c.param === "emoteSize") as
-        | NumberSetting
-        | undefined;
-    if (em && typeof em.value === "number") setEmoteSize.set(em.value);
-});
