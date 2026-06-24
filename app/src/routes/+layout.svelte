@@ -3,7 +3,9 @@
 
     import Sidebar from "$components/Main/Sidebar.svelte";
 
-    import "app.scss";
+    import "$styles/variables.scss";
+    import "$styles/reset.css";
+    import "$styles/app.scss";
 
     import { page } from "$app/state";
     import Banner from "$components/Banner.svelte";
@@ -57,12 +59,12 @@
 
         overflow: hidden;
 
-        background: linear-gradient(#080808, #000000);
+        background: #0a0a0a;
     }
 
     @media (max-width: 768px) {
         main {
-            flex-direction: column;
+            flex-direction: column-reverse;
             overflow: hidden;
         }
     }

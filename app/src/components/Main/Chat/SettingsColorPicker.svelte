@@ -1,6 +1,6 @@
 <script lang="ts">
     import ColorPicker, { ChromeVariant } from "svelte-awesome-color-picker";
-    import { RotateCcw } from "lucide-svelte";
+    import { RotateCcw } from "@lucide/svelte";
 
     export let hex = "#FFFFFF";
     export let onChange: ((hex: string) => void) | null = null;

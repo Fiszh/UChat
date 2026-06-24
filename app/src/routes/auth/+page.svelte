@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    import "app.scss";
+    import "$styles/app.scss";
 
     onMount(() => {
         const hash = new URLSearchParams(window.location.hash.slice(1));
@@ -16,4 +16,4 @@
     });
 </script>
 
-<p>Logging in...</p>
+<p style="color: white;">Logging in...</p>

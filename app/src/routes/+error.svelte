@@ -6,7 +6,8 @@
 
     import SevenTV_main from "$lib/services/7TV/main";
     import { page } from "$app/state";
-    import { Dot, DotIcon } from "lucide-svelte";
+    import { Dot, DotIcon } from "@lucide/svelte";
+    import Button from "$components/Inputs/Button.svelte";
 
     let loaded = $state(false);
     let isAbleToGoBack = $state(true);
@@ -117,9 +118,11 @@
         </p>
         <div id="buttons">
             {#if isAbleToGoBack}
-                <button onclick={goBack}>Go back a page</button>
+                <Button secondary onclick={goBack}>Go back a page</Button>
             {/if}
-            <a href="/" data-sveltekit-preload-data="off">Go back homepage</a>
+            <Button primary href="/" data-sveltekit-preload-data="off"
+                >Go back homepage</Button
+            >
         </div>
     </div>
 
@@ -156,6 +159,13 @@
         box-sizing: border-box;
         justify-content: space-between;
         align-items: center;
+    }
+
+    #buttons {
+        display: flex;
+        flex-wrap: wrap;
+
+        gap: 0.75rem;
     }
 
     #message {
@@ -250,30 +260,6 @@
         }
     }
 
-    #buttons {
-        display: flex;
-        gap: 25px;
-
-        & > * {
-            all: unset;
-            transition: all 0.3s;
-            padding: 0.75rem 2rem;
-            background: rgba(255 255 255 / 0.1);
-            border: 1px solid #555;
-            border-radius: 12px;
-            color: #eee;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 1rem;
-
-            &:hover {
-                background-color: rgba(255, 255, 255, 0.068);
-                border-radius: 10px;
-                border: 1px white solid;
-            }
-        }
-    }
-
     @media (max-width: 768px) {
         main {
             padding: 5rem 1.5rem;
@@ -283,6 +269,11 @@
             align-items: center;
             gap: 5rem;
             text-align: center;
+        }
+
+        #buttons,
+        #additional-info {
+            justify-content: center;
         }
 
         #chat-display {
@@ -299,13 +290,8 @@
             width: 100%;
         }
 
-        #buttons {
-            justify-content: center;
-            & > * {
-                font-size: 1rem;
-                padding: 0.5rem 1rem;
-                border-radius: 7px;
-            }
+        pre {
+            font-size: 1rem;
         }
     }
 </style>

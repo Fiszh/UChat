@@ -1,0 +1,41 @@
+:root {
+    --accent: #7c5cfc;
+
+    --text: #ffffff;
+    --text-light: #9c9c9c;
+
+    // BUTTONS
+    --primary: white;
+    --primary-text: black;
+    --primary-hover: #cccccc;
+    --primary-active: #d4d4d4;
+    --primary-border: transparent;
+
+    --secondary: #191919;
+    --secondary-text: #ffffff;
+    --secondary-hover: #1c1c1c;
+    --secondary-active: #252525;
+    --secondary-border: transparent;
+
+    --ghost: transparent;
+    --ghost-text: #ffffff;
+    --ghost-hover: #1a1a1a;
+    --ghost-active: #262626;
+    --ghost-border: transparent;
+
+    --danger: transparent;
+    --danger-text: #ff4545;
+    --danger-hover: #b23131;
+    --danger-text-hover: #ffffff;
+    --danger-active: #ae4747;
+    --danger-text-active: #ffffff;
+    --danger-border: transparent;
+
+    --approve: transparent;
+    --approve-text: #70d46d;
+    --approve-hover: #3f9944;
+    --approve-text-hover: #ffffff;
+    --approve-active: #63c756;
+    --approve-text-active: #ffffff;
+    --approve-border: transparent;
+}

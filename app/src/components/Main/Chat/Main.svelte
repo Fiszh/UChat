@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { MessageSquare, Settings } from "lucide-svelte";
+    import { MessageSquare, Settings } from "@lucide/svelte";
 
     import SettingsDisplay from "./Settings.svelte";
     import ChatDisplay from "./Display.svelte";

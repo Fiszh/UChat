@@ -1,4 +1,6 @@
 <script lang="ts">
+    import Button from "$components/Inputs/Button.svelte";
+    import Input from "$components/Inputs/Input.svelte";
     import chatis from "$stores/convert/chatis";
     import { config } from "$stores/settings";
     import type { Converter } from "$types/converter";
@@ -152,9 +154,9 @@
 
     <section id="url-input">
         <h2>Chat Overlay URL:</h2>
-        <input type="text" bind:value={input} />
+        <Input type="text" bind:value={input} />
 
-        <button onclick={convertURL}>Convert & Copy</button>
+        <Button primary onclick={convertURL}>Convert & Copy</Button>
     </section>
 </section>
 
@@ -167,63 +169,11 @@
 
         padding-block: 2.5rem;
 
-        p,
-        h2,
-        h1 {
-            margin: 0;
-        }
-
         #url-input {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 0.5rem;
-        }
-
-        input[type="text"] {
-            color: white;
-            width: 25rem;
-            height: 3rem;
-            border-radius: 0.5rem;
-            border: none;
-            background-color: rgba(255, 255, 255, 0.05);
-            font-size: 1.7rem;
-            text-align: center;
-
-            outline: transparent 1px solid;
-            transition: outline-color 0.3s ease;
-
-            &:hover,
-            &:active,
-            &:focus-within {
-                outline-color: #242424;
-            }
-        }
-
-        button {
-            $background: #141414;
-            $border: #242424;
-
-            all: unset;
-            cursor: pointer;
-            width: 95%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.3rem;
-            padding: 0.6rem 0.7rem;
-            box-sizing: border-box;
-            background-color: $background;
-            transition: all 0.1s ease-in-out;
-            border-radius: 0.7rem;
-            border: 1px solid $border;
-
-            &:hover {
-                background-color: color.adjust($background, $lightness: 5%);
-                border-radius: 0.5rem;
-                width: 100%;
-                border-color: color.adjust($border, $lightness: 5%);
-            }
         }
 
         text-align: center;

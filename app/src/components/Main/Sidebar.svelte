@@ -2,11 +2,11 @@
     import {
         House,
         Info,
-        Github,
         Coffee,
         MessageSquareMore,
         ArrowLeftRight,
-    } from "lucide-svelte";
+        Lightbulb,
+    } from "@lucide/svelte";
 
     import moment from "moment/min/moment-with-locales";
 
@@ -18,6 +18,9 @@
 
     import { dev } from "$app/environment";
     import { page } from "$app/state";
+    import Github from "$components/logos/github.svelte";
+    import Button from "$components/Inputs/Button.svelte";
+    import { isMobile } from "$stores/global";
 
     let currentHash = window.location.hash || "#";
 
@@ -95,6 +98,28 @@
     moment.locale(navigator.language);
 </script>
 
+{#snippet HouseIcon()}
+    <House size={$isMobile ? "15" : "20"} />
+{/snippet}
+{#snippet MessageSquareMoreIcon()}
+    <MessageSquareMore size={$isMobile ? "15" : "20"} />
+{/snippet}
+{#snippet ArrowLeftRightIcon()}
+    <ArrowLeftRight size={$isMobile ? "15" : "20"} />
+{/snippet}
+{#snippet InfoIcon()}
+    <Info size={$isMobile ? "15" : "20"} />
+{/snippet}
+{#snippet SuggetsionsIcon()}
+    <Lightbulb size={$isMobile ? "15" : "20"} />
+{/snippet}
+{#snippet GithubIcon()}
+    <Github size={$isMobile ? 15 : 20} />
+{/snippet}
+{#snippet CoffeeIcon()}
+    <Coffee size={$isMobile ? "15" : "20"} />
+{/snippet}
+
 <aside>
     <header id="topbar">
         <img
@@ -113,39 +138,73 @@
 
     <nav>
         {#if page.route.id == "/"}
-            <a href="/#" class="active" bind:this={navLinks["home"]["navLink"]}>
-                <House size="20" /> Home
-            </a>
-            <a
-                href="#message-creator"
-                bind:this={navLinks["msgCreator"]["navLink"]}
+            <Button
+                href="/#"
+                class="active"
+                bind:element={navLinks["home"]["navLink"]}
+                icon={HouseIcon}
+                layout={$isMobile ? "column" : "row"}
             >
-                <MessageSquareMore size="20" /> Message creator
-            </a>
-            <a href="/convert">
-                <ArrowLeftRight size="20" /> Convert
-            </a>
-            <a href="#help" bind:this={navLinks["help"]["navLink"]}>
-                <Info size="20" /> Info & Privacy
-            </a>
-            <a
+                Home
+            </Button>
+            <Button
+                href="#message-creator"
+                bind:element={navLinks["msgCreator"]["navLink"]}
+                icon={MessageSquareMoreIcon}
+                layout={$isMobile ? "column" : "row"}
+            >
+                {$isMobile ? "Create" : "Message creator"}
+            </Button>
+            <Button
+                href="/convert"
+                icon={ArrowLeftRightIcon}
+                layout={$isMobile ? "column" : "row"}
+            >
+                Convert
+            </Button>
+            <Button
+                href="#help"
+                bind:element={navLinks["help"]["navLink"]}
+                icon={InfoIcon}
+                layout={$isMobile ? "column" : "row"}
+            >
+                {$isMobile ? "Info" : "Info & Privacy"}
+            </Button>
+            <Button
+                href="https://github.com/Fiszh/UChat/issues/new"
+                target="_blank"
+                rel="noopener noreferrer"
+                icon={SuggetsionsIcon}
+                layout={$isMobile ? "column" : "row"}
+            >
+                {$isMobile ? "Ideas" : "Suggestions"}
+            </Button>
+            <Button
                 href="https://github.com/Fiszh/UChat"
                 target="_blank"
                 rel="noopener noreferrer"
+                icon={GithubIcon}
+                layout={$isMobile ? "column" : "row"}
             >
-                <Github size="20" /> GitHub
-            </a>
-            <a
+                GitHub
+            </Button>
+            <Button
                 href="https://buymeacoffee.com/jzlnkf5qgo"
                 target="_blank"
                 rel="noopener noreferrer"
+                icon={CoffeeIcon}
+                layout={$isMobile ? "column" : "row"}
             >
-                <Coffee size="20" /> Support
-            </a>
+                Support
+            </Button>
         {:else}
-            <a href="/#">
-                <House size="20" /> Home
-            </a>
+            <Button
+                href="/#"
+                icon={HouseIcon}
+                layout={$isMobile ? "column" : "row"}
+            >
+                Home
+            </Button>
         {/if}
     </nav>
 
@@ -159,13 +218,11 @@
             </p>
 
             <a href="#help-notice">[Learn more]</a>
-            {#if username}
+            {#if username && twitchToken && twitchID}
                 <GlobalSettings
-                    user={{
-                        name: username || "",
-                        token: twitchToken || "",
-                        user_id: twitchID || "",
-                    }}
+                    name={username}
+                    token={twitchToken}
+                    user_id={twitchID}
                 />
             {/if}
 
@@ -218,6 +275,12 @@
             small {
                 font-size: 0.7rem;
             }
+
+            #name {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
         }
 
         nav {
@@ -230,38 +293,6 @@
             box-sizing: border-box;
 
             overflow-y: auto;
-
-            a {
-                all: unset;
-                font-weight: bold;
-                font-size: 1.3rem;
-                cursor: pointer;
-
-                width: 100%;
-                display: flex;
-                line-height: normal;
-                align-items: center;
-
-                gap: 0.5rem;
-                padding: 0.6rem 0.7rem;
-                box-sizing: border-box;
-                transition: all 0.1s ease-in-out;
-
-                border-radius: 0.7rem;
-
-                border: transparent 1px solid;
-
-                &:hover {
-                    transform: scale(1.05);
-                    background-color: rgb(20, 20, 20);
-                }
-
-                &.active {
-                    transform: scale(1.05);
-                    background-color: rgb(24, 24, 24);
-                    border-color: #2c2c2c;
-                }
-            }
         }
 
         #account {
@@ -285,9 +316,24 @@
     }
 
     @media (max-width: 768px) {
-        aside {
-            position: absolute;
+        aside > *:not(nav) {
             display: none;
+        }
+
+        aside {
+            width: 100vw;
+            width: 100dvw;
+            max-width: unset;
+            height: unset;
+
+            min-height: fit-content;
+
+            nav {
+                flex-direction: row;
+                font-size: 0.75rem;
+                gap: unset;
+                justify-content: center;
+            }
         }
     }
 </style>

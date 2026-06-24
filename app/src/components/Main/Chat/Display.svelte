@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { RotateCcw, Copy, Send } from "lucide-svelte";
+    import { RotateCcw, Copy, Send } from "@lucide/svelte";
     import ColorPicker, { ChromeVariant } from "svelte-awesome-color-picker";
 
     import { messages, sanitizeInput } from "$lib/chat";
@@ -14,20 +14,29 @@
         settingsParams,
     } from "$stores/settings";
 
-    import { icon_size } from "$stores/global";
     import { previewMessages } from "$stores/previewMessages";
     import { sendFakeMessage } from "$lib/preview";
+    import Button from "$components/Inputs/Button.svelte";
+    import Input from "$components/Inputs/Input.svelte";
+    import Color from "$components/Inputs/Color.svelte";
 
-    let hex = "#191919";
-    let urlResults: HTMLElement | undefined = undefined;
+    let hex = $state("#191919");
+    let customMessageValue = $state("");
 
-    let customMessageInput: HTMLInputElement;
+    const params = $derived(
+        new URLSearchParams(
+            Object.entries($settingsParams).map(([k, v]) => [
+                k,
+                String(typeof v == "boolean" ? Number(v) : v),
+            ]),
+        ),
+    );
 
-    $: params = new URLSearchParams(
-        Object.entries($settingsParams).map(([k, v]) => [
-            k,
-            String(typeof v == "boolean" ? Number(v) : v),
-        ]),
+    let urlResults: string = $derived(
+        window.location.origin +
+            "/" +
+            (params.toString().length ? "?" : "") +
+            params,
     );
 
     const resetSettings = () => {
@@ -45,10 +54,10 @@
     };
 
     function copyUrl() {
-        if (urlResults && urlResults.textContent) {
+        if (urlResults) {
             if ($settingsParams["channel"] || $settingsParams["id"]) {
                 navigator.clipboard
-                    .writeText(urlResults.textContent)
+                    .writeText(urlResults)
                     .then(() => {
                         alert("Overlay URL has been copied!");
                     })
@@ -62,9 +71,9 @@
     }
 
     function addMessage() {
-        if (!customMessageInput) return;
+        if (!customMessageValue.trim().length) return;
 
-        const message = sanitizeInput(customMessageInput.value);
+        const message = sanitizeInput(customMessageValue);
 
         if (!message.length) return;
 
@@ -73,62 +82,66 @@
 </script>
 
 <div id="chat-preview" style="--chat-background: {hex}">
-    <p>
-        <span>Chat Preview</span>
+    <section id="top">
+        <h4>Chat Preview</h4>
         <small>Live preview of your settings</small>
-    </p>
+    </section>
     <section id="chat-display" class="bg-grid">
         <ChatDisplay />
     </section>
     <section id="bottom">
-        <div class="header">
-            Chat Preview Settings <button
-                on:click={() => resetSettings()}
-                title="Reset Settings"><RotateCcw size={$icon_size} /></button
-            >
-        </div>
-        <div id="color-picker">
+        <span class="header">
+            {#snippet icon()}
+                <RotateCcw size="20" />
+            {/snippet}
+
+            <p>Chat Preview Settings</p>
+
+            <Button
+                {icon}
+                onclick={() => resetSettings()}
+                title="Reset Settings"
+            ></Button>
+        </span>
+        <hr />
+        <section id="color-picker">
             <small class="title">Chat Background</small>
+
             <div class="display">
-                <ColorPicker
-                    bind:hex
-                    components={ChromeVariant}
-                    label=""
-                    sliderDirection="horizontal"
-                    isTextInput={false}
-                />
-                <p class="bottom-input">{hex}</p>
+                <Color bind:value={hex} />
             </div>
-        </div>
-        <div id="custom-message">
+        </section>
+        <hr />
+        <section>
             <small class="title">Custom Message</small>
 
             <div class="display">
-                <input
-                    id="message-input"
-                    class="bottom-input"
-                    bind:this={customMessageInput}
+                {#snippet icon()}
+                    <Send size="2rem" />
+                {/snippet}
+
+                <Input
+                    wide
+                    bind:value={customMessageValue}
                     placeholder="Message to display..."
                 />
-                <button id="send" class="bottom-button" on:click={addMessage}
-                    ><Send size={$icon_size} /> Send</button
-                >
+
+                <Button secondary onclick={addMessage} {icon}>Send</Button>
             </div>
-        </div>
-        <div id="overlay-url">
+        </section>
+        <hr />
+        <section id="overlay-url">
             <small class="title">Overlay URL</small>
 
             <div class="display">
-                <p id="url-results" class="bottom-input" bind:this={urlResults}>
-                    {window.location.origin}/{params.toString().length
-                        ? "?"
-                        : ""}{params}
-                </p>
-                <button id="copy" class="bottom-button" on:click={copyUrl}
-                    ><Copy size={$icon_size} /> Copy</button
-                >
+                {#snippet icon()}
+                    <Copy size="2rem" />
+                {/snippet}
+
+                <Input wide readonly bind:value={urlResults} />
+                <Button primary onclick={copyUrl} {icon}>Copy</Button>
             </div>
-        </div>
+        </section>
     </section>
     <span class="note">
         We log IP addresses for abuse prevention.
@@ -154,7 +167,7 @@
 
         user-select: none;
 
-        background-color: rgba(255, 255, 255, 0.048);
+        background-color: rgba(255, 255, 255, 0.01);
 
         #chat-display {
             display: flex;
@@ -171,9 +184,7 @@
             background-color: var(--chat-background);
         }
 
-        & > p {
-            background-color: rgba(0, 0, 0, 0.5);
-
+        #top {
             border-bottom: #242424 1px solid;
             display: flex;
             flex-direction: column;
@@ -181,39 +192,36 @@
 
             padding: 1rem;
             box-sizing: border-box;
-
-            span {
-                font-weight: bold;
-            }
         }
 
         .note {
             text-align: center;
-            gap: 0.3rem;
         }
 
         #bottom {
-            padding: 0.7rem 1rem;
-            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
 
             border-top: #242424 1px solid;
 
             bottom: 0;
 
             & > * {
-                border-bottom: 1px solid;
-                border-image: linear-gradient(
-                        to right,
-                        #33333300 2.5%,
-                        #161616 10%,
-                        #161616 90%,
-                        #33333300 97.5%
-                    )
-                    1;
+                padding: 0.7rem 1rem;
+                box-sizing: border-box;
             }
 
-            & > *:last-child {
-                border-bottom: 0;
+            section {
+                display: flex;
+                flex-direction: column;
+                gap: 0.25rem;
+                width: 100%;
+
+                .display {
+                    display: inline-flex;
+                    gap: 0.25rem;
+                    width: 100%;
+                }
             }
 
             .header {
@@ -222,71 +230,6 @@
                 align-items: center;
                 padding-bottom: 0.7rem;
                 box-sizing: border-box;
-
-                button {
-                    all: unset;
-                    cursor: pointer;
-                    transition: all 0.2s ease-in-out;
-                    display: flex;
-                    align-items: center;
-
-                    &:hover {
-                        transform: rotate(-30deg);
-                    }
-                }
-            }
-
-            small {
-                color: rgb(156, 156, 156);
-            }
-
-            .display {
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-
-                padding-bottom: 1rem;
-                padding-top: 0.4rem;
-                box-sizing: border-box;
-
-                .bottom-input {
-                    margin: 0;
-                    background-color: rgba(255, 255, 255, 0.075);
-                    border: #333 1px solid;
-                    width: 100%;
-                    padding: 0.5rem 0.7rem;
-                    box-sizing: border-box;
-                    border-radius: 0.5rem;
-                    gap: 1px;
-                    font-size: 1.15rem;
-                    color: white;
-                }
-            }
-
-            #overlay-url {
-                #url-results {
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }
-            }
-
-            .bottom-button {
-                $border: #333;
-
-                all: unset;
-                align-items: center;
-                display: flex;
-                gap: 0.3rem;
-                border: $border 1px solid;
-                padding: 0.5rem 0.7rem;
-                box-sizing: border-box;
-                border-radius: 0.7rem;
-                cursor: pointer;
-
-                &:hover {
-                    border-color: color.adjust($border, $lightness: 15%);
-                }
             }
         }
     }
@@ -302,10 +245,6 @@
 
             height: 100%;
             width: 100dvw;
-
-            #bottom .display .bottom-input {
-                font-size: 0.7rem;
-            }
         }
     }
 </style>
