@@ -268,38 +268,6 @@
             box-sizing: border-box;
 
             overflow-y: auto;
-
-            a {
-                all: unset;
-                font-weight: bold;
-                font-size: 1.3rem;
-                cursor: pointer;
-
-                width: 100%;
-                display: flex;
-                line-height: normal;
-                align-items: center;
-
-                gap: 0.5rem;
-                padding: 0.6rem 0.7rem;
-                box-sizing: border-box;
-                transition: all 0.1s ease-in-out;
-
-                border-radius: 0.7rem;
-
-                border: transparent 1px solid;
-
-                &:hover {
-                    transform: scale(1.05);
-                    background-color: rgb(20, 20, 20);
-                }
-
-                &.active {
-                    transform: scale(1.05);
-                    background-color: rgb(24, 24, 24);
-                    border-color: #2c2c2c;
-                }
-            }
         }
 
         #account {
