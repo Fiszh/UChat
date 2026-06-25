@@ -144,6 +144,7 @@
                 bind:element={navLinks["home"]["navLink"]}
                 icon={HouseIcon}
                 layout={$isMobile ? "column" : "row"}
+                noHover={$isMobile}
             >
                 Home
             </Button>
@@ -152,6 +153,7 @@
                 bind:element={navLinks["msgCreator"]["navLink"]}
                 icon={MessageSquareMoreIcon}
                 layout={$isMobile ? "column" : "row"}
+                noHover={$isMobile}
             >
                 {$isMobile ? "Create" : "Message creator"}
             </Button>
@@ -159,6 +161,7 @@
                 href="/convert"
                 icon={ArrowLeftRightIcon}
                 layout={$isMobile ? "column" : "row"}
+                noHover={$isMobile}
             >
                 Convert
             </Button>
@@ -167,6 +170,7 @@
                 bind:element={navLinks["help"]["navLink"]}
                 icon={InfoIcon}
                 layout={$isMobile ? "column" : "row"}
+                noHover={$isMobile}
             >
                 {$isMobile ? "Info" : "Info & Privacy"}
             </Button>
@@ -176,6 +180,7 @@
                 rel="noopener noreferrer"
                 icon={SuggetsionsIcon}
                 layout={$isMobile ? "column" : "row"}
+                noHover={$isMobile}
             >
                 {$isMobile ? "Ideas" : "Suggestions"}
             </Button>
@@ -185,6 +190,7 @@
                 rel="noopener noreferrer"
                 icon={GithubIcon}
                 layout={$isMobile ? "column" : "row"}
+                noHover={$isMobile}
             >
                 GitHub
             </Button>
@@ -194,6 +200,7 @@
                 rel="noopener noreferrer"
                 icon={CoffeeIcon}
                 layout={$isMobile ? "column" : "row"}
+                noHover={$isMobile}
             >
                 Support
             </Button>
@@ -202,6 +209,7 @@
                 href="/#"
                 icon={HouseIcon}
                 layout={$isMobile ? "column" : "row"}
+                noHover={$isMobile}
             >
                 Home
             </Button>
@@ -322,8 +330,7 @@
 
         aside {
             border-top: 1px #161616 solid;
-            width: 100vw;
-            width: 100dvw;
+            width: 100%;
             max-width: unset;
             height: unset;
 
@@ -334,6 +341,8 @@
                 font-size: 0.75rem;
                 gap: unset;
                 justify-content: space-evenly;
+                overflow-y: hidden;
+                overflow-x: auto;
             }
         }
     }
