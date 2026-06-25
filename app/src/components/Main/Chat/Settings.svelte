@@ -3,35 +3,22 @@
 
     import { parseSavedSettings } from "$lib/overlayIndex";
 
-    import SettingsColorPicker from "./SettingsColorPicker.svelte";
     import Dialog from "$components/Dialog.svelte";
 
-    import {
-        savedSettings,
-        type Setting,
-        settings,
-        settingsParams,
-    } from "$stores/settings";
-    import { CircleQuestionMark } from "@lucide/svelte";
-    import { isMobile } from "$stores/global";
+    import { savedSettings, type Setting, settings } from "$stores/settings";
     import Button from "$components/Inputs/Button.svelte";
     import SettingsToggle from "$components/settings/Settings-toggle.svelte";
     import SettingsText from "$components/settings/Settings-text.svelte";
     import SettingsColor from "$components/settings/Settings-color.svelte";
-    import Input from "$components/Inputs/Input.svelte";
-    import Checkbox from "$components/Inputs/Checkbox.svelte";
+    import { removeParam, setParam } from "$lib/params";
 
-    export let dispayChannelInput: boolean = true;
-
-    let showHidden = false;
-    let hiddenWarning = false;
+    let showHidden = $state(false);
+    let hiddenWarning = $state(false);
 
     const showHiddenSettings = () => {
         showHidden = true;
         hiddenWarning = true;
     };
-
-    let usingID = false;
 
     const rawLocalSettings = localStorage.getItem("local-settings");
     const LocalSettings = rawLocalSettings
@@ -39,30 +26,6 @@
         : null;
 
     if (LocalSettings) parseSavedSettings(LocalSettings);
-
-    let localChannelName = "";
-    let localChannelID = "";
-
-    $: if (!Object.keys($settingsParams).length) {
-        localChannelName = "";
-        localChannelID = "";
-    }
-
-    function setParam(key: string, value: Setting["value"]) {
-        settingsParams.update((arr) => {
-            arr[key] = value;
-
-            return arr;
-        });
-    }
-
-    function removeParam(key: string) {
-        settingsParams.update((arr) => {
-            const { [key]: _, ...rest } = arr;
-
-            return rest;
-        });
-    }
 
     function handleInput(
         param: string,
@@ -111,22 +74,6 @@
             }
         }
     });
-
-    function validateInput(value: string, type: string) {
-        if (type == "number") {
-            return value.replace(/[^0-9]+/g, "");
-        } else if (type == "twitch_name") {
-            return value.replace(/[^a-zA-Z0-9_]+/g, "");
-        }
-        return value;
-    }
-
-    $: localChannelName.length && (!localChannelID.length || !usingID)
-        ? setParam("channel", String(localChannelName))
-        : removeParam("channel");
-    $: localChannelID.length && (!localChannelName.length || usingID)
-        ? setParam("id", String(localChannelID))
-        : removeParam("id");
 </script>
 
 <Dialog name="Warning" bind:show={hiddenWarning}>
@@ -134,34 +81,6 @@
     when enabling them. They can go away any day and may be hidden because they
     are old features or are being replaced.
 </Dialog>
-
-{#snippet booleanSetting(param: string, defaultValue: boolean, value: boolean)}
-    <input
-        type="checkbox"
-        checked={defaultValue != value ? value : defaultValue}
-        class:active={value}
-        onchange={(e) => handleInput(param, e.currentTarget.checked)}
-    />
-{/snippet}
-
-{#snippet textSetting(param: string, defaultValue: number, value: number)}
-    <input
-        type="text"
-        placeholder={String(defaultValue)}
-        value={defaultValue != value ? value : ""}
-        oninput={(e) =>
-            handleInput(param, e.currentTarget.value, typeof defaultValue)}
-    />
-{/snippet}
-
-{#snippet colorPickerSetting(param: string, value: string)}
-    <p style="all:unset; display:flex; align-items:center;">
-        {value}
-        <SettingsColorPicker
-            onChange={(newHex) => handleInput(param, newHex, "color-picker")}
-        />
-    </p>
-{/snippet}
 
 <div id="settings">
     <section id="config">
@@ -220,38 +139,6 @@
             </Button>
         {/if}
     </section>
-    {#if dispayChannelInput}
-        <p>↓ Channel Info ↓</p>
-        <section id="channel">
-            <span>
-                <Checkbox bind:checked={usingID}>Use Channel ID</Checkbox>
-            </span>
-
-            {#if usingID}
-                <Input
-                    placeholder="Channel ID"
-                    wide
-                    bind:value={localChannelID}
-                    oninput={(e) =>
-                        (localChannelID = validateInput(
-                            (e.currentTarget as HTMLInputElement).value,
-                            "number",
-                        ))}
-                />
-            {:else}
-                <Input
-                    placeholder="Channel Name"
-                    wide
-                    bind:value={localChannelName}
-                    onChange={(e) =>
-                        (localChannelName = validateInput(
-                            (e.currentTarget as HTMLInputElement).value,
-                            "twitch_name",
-                        ))}
-                />
-            {/if}
-        </section>
-    {/if}
 </div>
 
 <style lang="scss">
@@ -279,40 +166,6 @@
             box-sizing: border-box;
 
             gap: 0.3rem;
-        }
-
-        & > p {
-            margin: 0;
-            padding-block: 0.25rem;
-            box-sizing: border-box;
-
-            text-align: center;
-
-            border-top: #242424 1px solid;
-            background-color: rgba(255, 255, 255, 0.05);
-        }
-
-        #channel {
-            width: 100%;
-            font-size: 2rem;
-            font-weight: bold;
-            box-sizing: border-box;
-            position: relative;
-            background-color: rgba(255, 255, 255, 0.014);
-            border-top: #242424 1px solid;
-
-            span {
-                user-select: none;
-                font-size: 1rem;
-                top: 0;
-                right: 0;
-                position: absolute;
-                background-color: #0e0e0e33;
-                padding: 0.25rem 0.5rem;
-                box-sizing: border-box;
-                border-bottom: 1px solid #202020;
-                border-left: 1px solid #202020;
-            }
         }
     }
 </style>

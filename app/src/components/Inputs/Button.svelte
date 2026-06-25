@@ -190,4 +190,11 @@
             }
         }
     }
+
+    @media (max-width: 768px) {
+        a,
+        button {
+            padding: 0.25rem 0.5rem;
+        }
+    }
 </style>

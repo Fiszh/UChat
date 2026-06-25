@@ -321,6 +321,7 @@
         }
 
         aside {
+            border-top: 1px #161616 solid;
             width: 100vw;
             width: 100dvw;
             max-width: unset;
@@ -332,7 +333,7 @@
                 flex-direction: row;
                 font-size: 0.75rem;
                 gap: unset;
-                justify-content: center;
+                justify-content: space-evenly;
             }
         }
     }
