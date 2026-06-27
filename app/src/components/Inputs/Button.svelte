@@ -18,6 +18,7 @@
         danger?: boolean;
         approve?: boolean;
         layout?: "row" | "column";
+        noHover?: boolean;
         children?: Snippet;
     } & HTMLButtonAttributes &
         HTMLAnchorAttributes;
@@ -35,6 +36,7 @@
         danger = false,
         approve = false,
         layout = "row",
+        noHover = false,
         children,
         ...restProps
     }: Props = $props();
@@ -52,6 +54,7 @@
         class:secondary
         class:danger
         class:approve
+        class:noHover
         class:column={layout == "column"}
     >
         {@render icon?.()}
@@ -70,6 +73,7 @@
         class:primary
         class:danger
         class:approve
+        class:noHover
         class:column={layout == "column"}
     >
         {@render icon?.()}
@@ -115,15 +119,17 @@
             width: 100%;
         }
 
-        &:active,
-        &:hover {
-            background-color: var(--ghost-hover);
-            border-radius: 7px;
-        }
+        &:not(.noHover) {
+            &:active,
+            &:hover {
+                background-color: var(--ghost-hover);
+                border-radius: 7px;
+            }
 
-        &.active {
-            border-radius: 5px;
-            background-color: var(--ghost-active);
+            &.active {
+                border-radius: 5px;
+                background-color: var(--ghost-active);
+            }
         }
 
         &.primary {
@@ -131,13 +137,15 @@
             color: var(--primary-text);
             border: var(--primary-border);
 
-            &:active,
-            &:hover {
-                background-color: var(--primary-hover);
-            }
+            &:not(.noHover) {
+                &:active,
+                &:hover {
+                    background-color: var(--primary-hover);
+                }
 
-            &.active {
-                background-color: var(--primary-active);
+                &.active {
+                    background-color: var(--primary-active);
+                }
             }
         }
 
@@ -146,13 +154,15 @@
             color: var(--secondary-text);
             border: var(--secondary-border);
 
-            &:active,
-            &:hover {
-                background-color: var(--secondary-hover);
-            }
+            &:not(.noHover) {
+                &:active,
+                &:hover {
+                    background-color: var(--secondary-hover);
+                }
 
-            &.active {
-                background-color: var(--secondary-active);
+                &.active {
+                    background-color: var(--secondary-active);
+                }
             }
         }
 
@@ -161,15 +171,17 @@
             color: var(--danger-text);
             border: var(--danger-border);
 
-            &:active,
-            &:hover {
-                background-color: var(--danger-hover);
-                color: var(--danger-text-hover);
-            }
+            &:not(.noHover) {
+                &:active,
+                &:hover {
+                    background-color: var(--danger-hover);
+                    color: var(--danger-text-hover);
+                }
 
-            &.active {
-                background-color: var(--danger-active);
-                color: var(--danger-text-active);
+                &.active {
+                    background-color: var(--danger-active);
+                    color: var(--danger-text-active);
+                }
             }
         }
 
@@ -178,16 +190,25 @@
             color: var(--approve-text);
             border: var(--approve-border);
 
-            &:active,
-            &:hover {
-                background-color: var(--approve-hover);
-                color: var(--approve-text-hover);
-            }
+            &:not(.noHover) {
+                &:active,
+                &:hover {
+                    background-color: var(--approve-hover);
+                    color: var(--approve-text-hover);
+                }
 
-            &.active {
-                background-color: var(--approve-active);
-                color: var(--approve-text-active);
+                &.active {
+                    background-color: var(--approve-active);
+                    color: var(--approve-text-active);
+                }
             }
+        }
+    }
+
+    @media (max-width: 768px) {
+        a,
+        button {
+            padding: 0.25rem 0.5rem;
         }
     }
 </style>

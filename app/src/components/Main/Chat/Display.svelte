@@ -19,9 +19,16 @@
     import Button from "$components/Inputs/Button.svelte";
     import Input from "$components/Inputs/Input.svelte";
     import Color from "$components/Inputs/Color.svelte";
+    import Checkbox from "$components/Inputs/Checkbox.svelte";
+    import { removeParam, setParam } from "$lib/params";
+    import { isMobile } from "$stores/global";
 
     let hex = $state("#191919");
     let customMessageValue = $state("");
+    let usingChannelID = $state(false);
+
+    let localChannelName = $state("");
+    let localChannelID = $state("");
 
     const params = $derived(
         new URLSearchParams(
@@ -42,6 +49,9 @@
     const resetSettings = () => {
         channelName.set("");
         channelID.set("");
+
+        localChannelName = "";
+        localChannelID = "";
 
         settings.set(configs.map((c) => ({ ...c })));
         settingsParams.set({});
@@ -79,6 +89,27 @@
 
         sendFakeMessage(message);
     }
+
+    function validateInput(value: string, type: string) {
+        if (type == "number") {
+            return value.replace(/[^0-9]+/g, "");
+        } else if (type == "twitch_name") {
+            return value.replace(/[^a-zA-Z0-9_]+/g, "");
+        }
+        return value;
+    }
+
+    $effect(() =>
+        localChannelName.length && (!localChannelID.length || !usingChannelID)
+            ? setParam("channel", String(localChannelName))
+            : removeParam("channel"),
+    );
+
+    $effect(() =>
+        localChannelID.length && (!localChannelName.length || usingChannelID)
+            ? setParam("id", String(localChannelID))
+            : removeParam("id"),
+    );
 </script>
 
 <div id="chat-preview" style="--chat-background: {hex}">
@@ -87,21 +118,19 @@
         <small>Live preview of your settings</small>
     </section>
     <section id="chat-display" class="bg-grid">
-        <ChatDisplay />
+        {#if !$isMobile}
+            <ChatDisplay />
+        {:else}
+            <ChatDisplay customStyle="--chat-font-size: 15px;" />
+        {/if}
     </section>
     <section id="bottom">
         <span class="header">
-            {#snippet icon()}
-                <RotateCcw size="20" />
-            {/snippet}
-
             <p>Chat Preview Settings</p>
 
-            <Button
-                {icon}
-                onclick={() => resetSettings()}
-                title="Reset Settings"
-            ></Button>
+            <Button onclick={() => resetSettings()} title="Reset Settings">
+                <RotateCcw size="20" />
+            </Button>
         </span>
         <hr />
         <section id="color-picker">
@@ -130,18 +159,58 @@
             </div>
         </section>
         <hr />
-        <section id="overlay-url">
-            <small class="title">Overlay URL</small>
+        <form onsubmit={copyUrl}>
+            <section>
+                <small class="title">
+                    Channel Info
+                    <Checkbox bind:checked={usingChannelID}>
+                        Use Channel ID
+                    </Checkbox>
+                </small>
+                <div class="display">
+                    {#if !usingChannelID}
+                        <Input
+                            wide
+                            required
+                            placeholder="Channel Name"
+                            bind:value={localChannelName}
+                            invalid={!localChannelName.length}
+                            onChange={(e) =>
+                                (localChannelName = validateInput(
+                                    (e.currentTarget as HTMLInputElement).value,
+                                    "twitch_name",
+                                ))}
+                        />
+                    {:else}
+                        <Input
+                            wide
+                            required
+                            placeholder="Channel ID"
+                            bind:value={localChannelID}
+                            invalid={!localChannelID.length}
+                            onChange={(e: Event) =>
+                                (localChannelID = validateInput(
+                                    (e.currentTarget as HTMLInputElement).value,
+                                    "number",
+                                ))}
+                        />
+                    {/if}
+                </div>
+            </section>
+            <hr />
+            <section id="overlay-url">
+                <small class="title">Overlay URL</small>
 
-            <div class="display">
-                {#snippet icon()}
-                    <Copy size="2rem" />
-                {/snippet}
+                <div class="display">
+                    {#snippet icon()}
+                        <Copy size="2rem" />
+                    {/snippet}
 
-                <Input wide readonly bind:value={urlResults} />
-                <Button primary onclick={copyUrl} {icon}>Copy</Button>
-            </div>
-        </section>
+                    <Input wide readonly bind:value={urlResults} />
+                    <Button primary type="submit" {icon}>Copy</Button>
+                </div>
+            </section>
+        </form>
     </section>
     <span class="note">
         We log IP addresses for abuse prevention.
@@ -206,7 +275,8 @@
 
             bottom: 0;
 
-            & > * {
+            span,
+            section {
                 padding: 0.7rem 1rem;
                 box-sizing: border-box;
             }
@@ -216,6 +286,11 @@
                 flex-direction: column;
                 gap: 0.25rem;
                 width: 100%;
+
+                small {
+                    display: inline-flex;
+                    gap: 0.25rem;
+                }
 
                 .display {
                     display: inline-flex;
@@ -241,10 +316,19 @@
 
             overflow-y: auto;
 
-            font-size: 0.7rem;
+            font-size: 0.4rem;
 
             height: 100%;
             width: 100dvw;
+        }
+
+        #top,
+        #bottom {
+            font-size: 0.7rem;
+        }
+
+        #chat-preview #bottom section {
+            padding: 0.1rem 0.5rem;
         }
     }
 </style>

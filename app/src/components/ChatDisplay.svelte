@@ -7,15 +7,23 @@
     import { setEmoteSize, settings } from "$stores/settings";
     import { badges, globals } from "$stores/global";
 
-    let chatMessages: Record<string, any>[] = [];
-    let chat: HTMLElement;
+    type Props = {
+        customStyle?: string;
+    };
 
-    let instantScroll = false;
+    const { customStyle, ...restProps }: Props = $props();
 
-    let styles: Record<string, string | number> = {};
-    $: chatStyle = Object.entries(styles)
-        .map(([k, v]) => `${k}: ${v}`)
-        .join("; ");
+    let chatMessages: Record<string, any>[] = $state([]);
+    let chat: HTMLElement | undefined = $state();
+
+    let instantScroll = $state(false);
+
+    let styles: Record<string, string | number> = $state({});
+    const chatStyle = $derived(
+        Object.entries(styles)
+            .map(([k, v]) => `${k}: ${v}`)
+            .join("; "),
+    );
 
     const unsubscribeMessages = messages.subscribe(
         (msgs) => (chatMessages = msgs),
@@ -26,7 +34,7 @@
         Record<string, boolean | string | number | string[] | undefined>
     >;
 
-    let chatSettings: ChatSettings = {};
+    let chatSettings: ChatSettings = $state({});
 
     const unsubscribeSettings = settings.subscribe((config) => {
         chatSettings = config.reduce<ChatSettings>((acc, setting) => {
@@ -204,33 +212,38 @@
         }
     }
 
-    $: filteredMessages = chatMessages
-        .filter(
-            (msg) =>
-                chatSettings &&
-                validateMessage(
-                    msg.tags?.username,
-                    msg.message,
-                    msg.tags?.badges,
-                    msg.tags,
-                ),
-        )
-        .map((msg) => {
-            const username = (msg.tags?.username || "").trim().toLowerCase();
-            const displayName = String(msg.tags?.["display-name"] ?? "")
-                .trim()
-                .toLowerCase();
+    let filteredMessages = $derived(
+        chatMessages
+            .filter(
+                (msg) =>
+                    chatSettings &&
+                    validateMessage(
+                        msg.tags?.username,
+                        msg.message,
+                        msg.tags?.badges,
+                        msg.tags,
+                    ),
+            )
+            .map((msg) => {
+                const username = (msg.tags?.username || "")
+                    .trim()
+                    .toLowerCase();
+                const displayName = String(msg.tags?.["display-name"] ?? "")
+                    .trim()
+                    .toLowerCase();
 
-            return {
-                id: msg.tags.id ?? generateUUID(), // THIS MAKES SURE MESSAGES WILL NOT MERGE
-                room_id: msg.tags["source-room-id"] ?? globals.channelTwitchID,
-                ...msg,
-                formattedUser:
-                    username === displayName
-                        ? msg.tags?.["display-name"] || "Unknown"
-                        : `${msg.tags?.username || "Unknown"} (${msg.tags?.["display-name"] || "Unknown"})`,
-            };
-        }) as any;
+                return {
+                    id: msg.tags.id ?? generateUUID(), // THIS MAKES SURE MESSAGES WILL NOT MERGE
+                    room_id:
+                        msg.tags["source-room-id"] ?? globals.channelTwitchID,
+                    ...msg,
+                    formattedUser:
+                        username === displayName
+                            ? msg.tags?.["display-name"] || "Unknown"
+                            : `${msg.tags?.username || "Unknown"} (${msg.tags?.["display-name"] || "Unknown"})`,
+                };
+            }) as any,
+    );
 
     onMount(() => {
         let lastScrollTime = 0;
@@ -250,7 +263,7 @@
             });
         });
 
-        observer.observe(chat, { childList: true });
+        if (chat) observer.observe(chat, { childList: true });
 
         return () => {
             unsubscribeMessages();
@@ -260,7 +273,12 @@
     });
 </script>
 
-<div class="chat" bind:this={chat} style={chatStyle}>
+<div
+    class="chat"
+    bind:this={chat}
+    style="{chatStyle}; {customStyle}"
+    {...restProps}
+>
     {#each filteredMessages as msg (msg.id)}
         <ChatMessage
             message={{

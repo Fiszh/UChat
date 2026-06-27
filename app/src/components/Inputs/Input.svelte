@@ -35,7 +35,6 @@
 
     const clear = () => {
         value = "";
-        invalid = false;
     };
 </script>
 
@@ -55,9 +54,9 @@
     />
     {#if !disabled}
         <span id="rightIcon" transition:fade>
-            {#if iconRight && !value.length && !invalid}
+            {#if iconRight && !value.length}
                 {@render iconRight()}
-            {:else if (value.length || invalid) && !readonly}
+            {:else if value.length && !readonly}
                 <button title="Clear" onclick={clear}><X size="1rem" /></button>
             {/if}
         </span>
