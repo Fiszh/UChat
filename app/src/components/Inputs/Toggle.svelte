@@ -57,4 +57,10 @@
             }
         }
     }
+
+    @media (max-width: 768px) {
+        input {
+            --size: 1.5rem;
+        }
+    }
 </style>

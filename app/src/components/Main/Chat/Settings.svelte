@@ -168,4 +168,10 @@
             gap: 0.3rem;
         }
     }
+
+    @media (max-width: 768px) {
+        #settings {
+            font-size: 0.75rem;
+        }
+    }
 </style>

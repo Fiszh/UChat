@@ -316,7 +316,7 @@
 
             overflow-y: auto;
 
-            font-size: 0.7rem;
+            font-size: 0.4rem;
 
             height: 100%;
             width: 100dvw;
@@ -324,7 +324,11 @@
 
         #top,
         #bottom {
-            font-size: 1rem;
+            font-size: 0.7rem;
+        }
+
+        #chat-preview #bottom section {
+            padding: 0.1rem 0.5rem;
         }
     }
 </style>
