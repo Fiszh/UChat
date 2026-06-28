@@ -214,7 +214,7 @@
     </section>
     <span class="note">
         We log IP addresses for abuse prevention.
-        <a href="#help-notice">[Learn more]</a>
+        <a href="/help#notice">[Learn more]</a>
     </span>
 </div>
 

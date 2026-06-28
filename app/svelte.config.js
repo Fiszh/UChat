@@ -20,9 +20,9 @@ const config = {
             $styles: path.resolve("./src/styles/"),
         },
     },
-    // compilerOptions: {
-    //     runes: true,
-    // },
+    compilerOptions: {
+        runes: true,
+    },
 };
 
 export default config;

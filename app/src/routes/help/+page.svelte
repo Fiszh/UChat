@@ -5,7 +5,7 @@
 
     import { faqItems, privacyItems } from "$stores/faq";
 
-    let helpNotice: HTMLElement | undefined = undefined;
+    let helpNotice: HTMLElement;
 
     function replaceLinks(
         answer: string,
@@ -26,14 +26,11 @@
         return Answer;
     }
 
-    function copy(text: string) {
-        navigator.clipboard.writeText(text);
-    }
+    const copy = (text: string) => navigator.clipboard.writeText(text);
 
     onMount(() => {
-        if (window.location.hash == "#help-notice") {
+        if (window.location.hash == "#notice")
             helpNotice?.scrollIntoView({ behavior: "smooth" });
-        }
     });
 </script>
 
@@ -64,7 +61,7 @@
                             <li>
                                 <!-- svelte-ignore a11y_click_events_have_key_events -->
                                 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-                                <code on:click={() => copy(command.cmd)}
+                                <code onclick={() => copy(command.cmd)}
                                     >{command.cmd}</code
                                 >
                                 - {command.desc}

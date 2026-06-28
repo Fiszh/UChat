@@ -281,13 +281,11 @@
 >
     {#each filteredMessages as msg (msg.id)}
         <ChatMessage
-            message={{
-                user: msg.formattedUser,
-                text: msg.message,
-                tags: msg.tags,
-                id: msg.id,
-                room_id: msg.room_id,
-            }}
+            user={msg.formattedUser}
+            text={msg.message}
+            tags={msg.tags}
+            id={msg.id}
+            room_id={msg.room_id}
         />
     {/each}
 </div>

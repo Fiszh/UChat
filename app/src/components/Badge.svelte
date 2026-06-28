@@ -1,16 +1,18 @@
 <script lang="ts">
-    export let badge: {
+    type Props = {
         badge_url: string;
         alt: string;
         background_color: string;
     };
+
+    const { badge_url, alt, background_color } = $props();
 </script>
 
 <img
     class="badge"
-    style="background-color: {badge.background_color || 'transparent'};"
-    src={badge.badge_url}
-    alt={badge.alt}
+    style="background-color: {background_color || 'transparent'};"
+    src={badge_url}
+    {alt}
     loading="lazy"
 />
 

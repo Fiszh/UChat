@@ -22,15 +22,13 @@
     import Button from "$components/Inputs/Button.svelte";
     import { isMobile } from "$stores/global";
 
-    let currentHash = window.location.hash || "#";
-
-    const onHashChange = () => (currentHash = window.location.hash || "#");
-
-    window.addEventListener("hashchange", onHashChange);
-
-    $: username = getCookie("twitchUsername") || ("" as string | undefined);
-    $: twitchID = getCookie("twitchId") || ("" as string | undefined);
-    $: twitchToken = getCookie("twitchToken") || ("" as string | undefined);
+    let username = $state(
+        getCookie("twitchUsername") || ("" as string | undefined),
+    );
+    let twitchID = $state(getCookie("twitchId") || ("" as string | undefined));
+    let twitchToken = $state(
+        getCookie("twitchToken") || ("" as string | undefined),
+    );
 
     async function handleToken(token: string) {
         const user_info = await valideToken(token);
@@ -54,45 +52,6 @@
         username = undefined;
         twitchID = undefined;
         twitchToken = undefined;
-    }
-
-    const navLinks = {
-        home: {
-            navLink: undefined as HTMLElement | undefined,
-            hash: ["", "#"],
-        },
-        msgCreator: {
-            navLink: undefined as HTMLElement | undefined,
-            hash: ["#message-creator"],
-        },
-        help: {
-            navLink: undefined as HTMLElement | undefined,
-            hash: ["#help", "#help-notice"],
-        },
-    };
-
-    $: {
-        for (const navLink of Object.values(navLinks)) {
-            const hasHash = navLink.hash.some((h) => h === currentHash);
-
-            if (navLink.navLink instanceof HTMLElement) {
-                if (hasHash) {
-                    navLink.navLink.classList.add("active");
-                } else {
-                    navLink.navLink.classList.remove("active");
-                }
-            }
-        }
-
-        const anyHash = Object.values(navLinks).filter((h) =>
-            h.hash.includes(currentHash),
-        );
-
-        if (
-            !anyHash.length &&
-            navLinks["home"]["navLink"] instanceof HTMLElement
-        )
-            navLinks["home"]["navLink"].classList.add("active");
     }
 
     moment.locale(navigator.language);
@@ -137,83 +96,72 @@
     </header>
 
     <nav>
-        {#if page.route.id == "/"}
-            <Button
-                href="/#"
-                class="active"
-                bind:element={navLinks["home"]["navLink"]}
-                icon={HouseIcon}
-                layout={$isMobile ? "column" : "row"}
-                noHover={$isMobile}
-            >
-                Home
-            </Button>
-            <Button
-                href="#message-creator"
-                bind:element={navLinks["msgCreator"]["navLink"]}
-                icon={MessageSquareMoreIcon}
-                layout={$isMobile ? "column" : "row"}
-                noHover={$isMobile}
-            >
-                {$isMobile ? "Create" : "Message creator"}
-            </Button>
-            <Button
-                href="/convert"
-                icon={ArrowLeftRightIcon}
-                layout={$isMobile ? "column" : "row"}
-                noHover={$isMobile}
-            >
-                Convert
-            </Button>
-            <Button
-                href="#help"
-                bind:element={navLinks["help"]["navLink"]}
-                icon={InfoIcon}
-                layout={$isMobile ? "column" : "row"}
-                noHover={$isMobile}
-            >
-                {$isMobile ? "Info" : "Info & Privacy"}
-            </Button>
-            <Button
-                href="https://github.com/Fiszh/UChat/issues/new"
-                target="_blank"
-                rel="noopener noreferrer"
-                icon={SuggetsionsIcon}
-                layout={$isMobile ? "column" : "row"}
-                noHover={$isMobile}
-            >
-                {$isMobile ? "Ideas" : "Suggestions"}
-            </Button>
-            <Button
-                href="https://github.com/Fiszh/UChat"
-                target="_blank"
-                rel="noopener noreferrer"
-                icon={GithubIcon}
-                layout={$isMobile ? "column" : "row"}
-                noHover={$isMobile}
-            >
-                GitHub
-            </Button>
-            <Button
-                href="https://buymeacoffee.com/jzlnkf5qgo"
-                target="_blank"
-                rel="noopener noreferrer"
-                icon={CoffeeIcon}
-                layout={$isMobile ? "column" : "row"}
-                noHover={$isMobile}
-            >
-                Support
-            </Button>
-        {:else}
-            <Button
-                href="/#"
-                icon={HouseIcon}
-                layout={$isMobile ? "column" : "row"}
-                noHover={$isMobile}
-            >
-                Home
-            </Button>
-        {/if}
+        <Button
+            href="/"
+            class={page.route.id == "/" ? "active" : ""}
+            icon={HouseIcon}
+            layout={$isMobile ? "column" : "row"}
+            noHover={$isMobile}
+        >
+            Home
+        </Button>
+        <Button
+            href="/message-creator"
+            class={page.route.id == "/message-creator" ? "active" : ""}
+            icon={MessageSquareMoreIcon}
+            layout={$isMobile ? "column" : "row"}
+            noHover={$isMobile}
+        >
+            {$isMobile ? "Create" : "Message creator"}
+        </Button>
+        <Button
+            href="/convert"
+            class={page.route.id == "/convert" ? "active" : ""}
+            icon={ArrowLeftRightIcon}
+            layout={$isMobile ? "column" : "row"}
+            noHover={$isMobile}
+        >
+            Convert
+        </Button>
+        <Button
+            href="/help"
+            class={page.route.id == "/help" ? "active" : ""}
+            icon={InfoIcon}
+            layout={$isMobile ? "column" : "row"}
+            noHover={$isMobile}
+        >
+            {$isMobile ? "Info" : "Info & Privacy"}
+        </Button>
+        <Button
+            href="https://github.com/Fiszh/UChat/issues/new"
+            target="_blank"
+            rel="noopener noreferrer"
+            icon={SuggetsionsIcon}
+            layout={$isMobile ? "column" : "row"}
+            noHover={$isMobile}
+        >
+            {$isMobile ? "Ideas" : "Suggestions"}
+        </Button>
+        <Button
+            href="https://github.com/Fiszh/UChat"
+            target="_blank"
+            rel="noopener noreferrer"
+            icon={GithubIcon}
+            layout={$isMobile ? "column" : "row"}
+            noHover={$isMobile}
+        >
+            GitHub
+        </Button>
+        <Button
+            href="https://buymeacoffee.com/jzlnkf5qgo"
+            target="_blank"
+            rel="noopener noreferrer"
+            icon={CoffeeIcon}
+            layout={$isMobile ? "column" : "row"}
+            noHover={$isMobile}
+        >
+            Support
+        </Button>
     </nav>
 
     <footer>
@@ -225,7 +173,7 @@
                 server.
             </p>
 
-            <a href="#help-notice">[Learn more]</a>
+            <a href="/help#notice">[Learn more]</a>
             {#if username && twitchToken && twitchID}
                 <GlobalSettings
                     name={username}

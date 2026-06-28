@@ -13,8 +13,9 @@
     import { cosmetics } from "$stores/cosmetics";
     import { messages } from "$lib/chat";
     import { getChannelEmotesViaTwitchID } from "$lib/emotes";
+    import { ListStart } from "@lucide/svelte";
 
-    export let message: {
+    type Props = {
         user: string;
         text: string;
         tags: Record<string, any>;
@@ -22,54 +23,67 @@
         room_id: number;
     };
 
-    const tags = message.tags;
-    const username = tags?.username.toLowerCase().trim() || "";
-    const nameColor = message.tags.color
-        ? fixNameColor(message.tags.color)
-        : usernameColor(username);
+    let { user, text, tags, id, room_id }: Props = $props();
 
-    if (message.room_id) {
-        if (String(message.room_id) != globals.channelTwitchID) {
-            getChannelEmotesViaTwitchID(String(message.room_id));
-        } else if (
-            !message.tags["source-room-id"] &&
-            String(message.room_id) == globals.channelTwitchID
-        ) {
-            cleanUpSharedChat();
-        }
-    }
+    let username = $state<Lowercase<string>>("");
+    let nameColor = $state<string>();
+
+    let userPaint = $state<Paint>();
+
+    let parsedBadges = $state<parsedBadge[]>();
 
     let chatMessage: HTMLElement;
 
-    globals.userNameColor[username] = nameColor;
+    let chatSettings: Record<string, Setting["value"]> = $state({});
 
-    let chatSettings: Record<string, Setting["value"]> = {};
-
-    $: if (chatSettings?.fadeOut && window.location.search) {
-        const delay = Number(chatSettings.fadeOut) * 1000;
-
-        setTimeout(() => {
-            if (!chatMessage) return;
-            chatMessage.classList.add("fadeOut");
+    onMount(() => {
+        if (chatSettings?.fadeOut && window.location.search) {
+            const delay = Number(chatSettings.fadeOut) * 1000;
 
             setTimeout(() => {
                 if (!chatMessage) return;
-                chatMessage.remove();
-                chatMessage = undefined as unknown as HTMLElement;
+                chatMessage.classList.add("fadeOut");
 
-                messages.update((e) =>
-                    e.filter((msg) => msg.tags.id != message.tags.id),
-                );
-            }, 2600);
-        }, delay);
-    }
+                setTimeout(() => {
+                    if (!chatMessage) return;
+                    chatMessage.remove();
+                    chatMessage = undefined as unknown as HTMLElement;
 
-    let userPaint: Paint | undefined;
-    $: paintHTML = userPaint
-        ? getPaintHTML(userPaint)
-        : ({ paint: "", shadow: "" } as { paint: string; shadow: string });
+                    messages.update((e) =>
+                        e.filter((msg) => msg.tags.id != tags.id),
+                    );
+                }, 2600);
+            }, delay);
+        }
 
-    $: paintStyle =
+        username = tags?.username.toLowerCase().trim() || "";
+        nameColor = tags.color
+            ? fixNameColor(tags.color)
+            : usernameColor(username);
+        parsedBadges = parseBadges(tags);
+        userPaint = getPaint(username);
+
+        globals.userNameColor[username] = nameColor;
+
+        if (room_id) {
+            if (String(room_id) != globals.channelTwitchID) {
+                getChannelEmotesViaTwitchID(String(room_id));
+            } else if (
+                !tags["source-room-id"] &&
+                String(room_id) == globals.channelTwitchID
+            ) {
+                cleanUpSharedChat();
+            }
+        }
+    });
+
+    const paintHTML = $derived(
+        userPaint
+            ? getPaintHTML(userPaint)
+            : ({ paint: "", shadow: "" } as { paint: string; shadow: string }),
+    );
+
+    const paintStyle = $derived(
         userPaint && chatSettings["paints"]
             ? (() => {
                   let style = `background-color: ${nameColor};`;
@@ -87,24 +101,22 @@
 
                   return style;
               })()
-            : `color: ${nameColor};`;
+            : `color: ${nameColor};`,
+    );
 
-    userPaint = getPaint(username);
-
-    let parsedBadges = parseBadges(tags);
-
-    $: userBadges =
+    const userBadges = $derived(
         typeof chatSettings?.["badges"] == "undefined" ||
-        chatSettings?.["badges"]
+            chatSettings?.["badges"]
             ? parsedBadges
-            : ([] as parsedBadge[]);
-    let emoteText = message.text;
+            : ([] as parsedBadge[]),
+    );
 
+    let parsedMessage = $state();
     const parse = async () =>
-        (emoteText = await replaceWithEmotes(
-            message.text,
-            message.tags,
-            message.tags["source-room-id"] ?? message.tags["room-id"],
+        (parsedMessage = await replaceWithEmotes(
+            text,
+            tags,
+            tags["source-room-id"] ?? tags["room-id"],
             chatSettings,
         ));
 
@@ -169,7 +181,7 @@
         class:paint={chatSettings["paints"] && userPaint}
         style={paintStyle}
     >
-        {@html message.user}
+        {@html user}
     </strong>
 {/snippet}
 
@@ -177,21 +189,19 @@
     <strong class="badge-wrapper">
         {#each userBadges as badge, i (i)}
             <Badge
-                badge={{
-                    badge_url: badge.badge_url,
-                    alt: badge.alt,
-                    background_color: badge.background_color!,
-                }}
+                badge_url={badge.badge_url}
+                alt={badge.alt}
+                background_color={badge.background_color}
             />
         {/each}
     </strong>
 {/snippet}
 
 <div class="chat-message" bind:this={chatMessage}>
-    {#if userBadges.length}{@render Badges()}{/if}
-    {@render paint()}{#if !message.tags.action}:{/if}
-    <span style:color={message.tags.action ? nameColor : "defaultColor"}
-        >{@html emoteText}</span
+    {#if userBadges && userBadges.length}{@render Badges()}{/if}
+    {@render paint()}{#if !tags.action}:{/if}
+    <span style:color={tags.action ? nameColor : "defaultColor"}
+        >{@html parsedMessage ?? text}</span
     >
 </div>
 

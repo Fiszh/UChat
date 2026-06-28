@@ -2,10 +2,18 @@
     import ColorPicker, { ChromeVariant } from "svelte-awesome-color-picker";
     import { RotateCcw } from "@lucide/svelte";
 
-    export let hex = "#FFFFFF";
-    export let onChange: ((hex: string) => void) | null = null;
+    import { onMount } from "svelte";
 
-    const defaultHex = hex;
+    type Props = {
+        hex: string;
+        onChange: (hex: string) => void;
+    };
+
+    let { hex = "#FFFFFF", onChange }: Props = $props();
+
+    let defaultHex: string;
+
+    onMount(() => (defaultHex = hex));
 
     let debounceTimeout: ReturnType<typeof setTimeout>;
 
@@ -33,7 +41,7 @@
     dir="rtl"
     onInput={handleInput}
 />
-<button title="Reset" on:click={resetColor}><RotateCcw /></button>
+<button title="Reset" onclick={resetColor}><RotateCcw /></button>
 
 <style lang="scss">
     button {
