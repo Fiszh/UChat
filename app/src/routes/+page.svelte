@@ -8,7 +8,7 @@
     import { icon_size, isMobile, loadingInfo } from "$stores/global";
     import Main from "$components/Main/Chat/Main.svelte";
 
-    $: LoadingMsg = $loadingInfo;
+    const LoadingMsg = $loadingInfo;
 
     function setMobile() {
         isMobile.set(window.innerWidth <= 768);
@@ -20,8 +20,8 @@
         }
     }
 
-    let mounted = false;
-    let hasChannel = false;
+    let mounted = $state(false);
+    let hasChannel = $state(false);
 
     onMount(() => {
         const params = new URLSearchParams(window.location.search);
@@ -54,12 +54,7 @@
 
 {#if mounted}
     {#if hasChannel}
-        <LoadingUI
-            loading={{
-                text: LoadingMsg.text,
-                type: LoadingMsg.type,
-            }}
-        />
+        <LoadingUI text={LoadingMsg.text} type={LoadingMsg.type} />
 
         <ChatOverlay />
     {:else}

@@ -14,7 +14,7 @@
     import { cosmetics } from "$stores/cosmetics";
     import { previewMessages } from "$stores/previewMessages";
 
-    let tab: string = "settings";
+    let tab: string = $state("settings");
 
     onMount(async () => {
         messages.set(previewMessages);
@@ -59,11 +59,11 @@
         {/if}
 
         <footer>
-            <button on:click={() => changeTab("settings")}>
+            <button onclick={() => changeTab("settings")}>
                 <Settings size={$icon_size} />
                 Settings
             </button>
-            <button on:click={() => changeTab("preview")}>
+            <button onclick={() => changeTab("preview")}>
                 <MessageSquare size={$icon_size} />
                 Preview
             </button>

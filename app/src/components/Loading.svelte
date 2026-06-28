@@ -3,17 +3,19 @@
 
     const availableStyles: string[] = ["minimal", "big"];
 
-    export let loading: {
-        text: string | undefined;
-        type: string | undefined;
+    type Props = {
+        text?: string;
+        type?: string;
     };
+
+    const { text, type }: Props = $props();
 </script>
 
 {#snippet minimal()}
     <div class="loader"></div>
     <div class="info">
-        {#if loading.text}
-            <span class="loading-info">{@html loading.text}</span>
+        {#if text}
+            <span class="loading-info">{@html text}</span>
         {:else}
             <span class="loading-text">Loading...</span>
         {/if}
@@ -25,20 +27,18 @@
     <img class="loader" src={LoadingAnimation} alt="Loading..." />
     <div class="info">
         <span class="loading-text">Loading...</span>
-        <span class="loading-info">{@html loading.text}</span>
+        <span class="loading-info">{@html text}</span>
         <p class="version">{__APP_VERSION}</p>
     </div>
 {/snippet}
 
 <div
-    class="loading {loading.type}"
-    style="display: {loading.type && availableStyles.includes(loading.type)
-        ? 'flex'
-        : 'none'}"
+    class="loading {type}"
+    style="display: {type && availableStyles.includes(type) ? 'flex' : 'none'}"
 >
-    {#if loading.type == "minimal"}
+    {#if type == "minimal"}
         {@render minimal()}
-    {:else if loading.type == "big"}
+    {:else if type == "big"}
         {@render big()}
     {/if}
 </div>

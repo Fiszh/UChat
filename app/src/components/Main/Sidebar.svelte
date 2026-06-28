@@ -22,9 +22,13 @@
     import Button from "$components/Inputs/Button.svelte";
     import { isMobile } from "$stores/global";
 
-    $: username = getCookie("twitchUsername") || ("" as string | undefined);
-    $: twitchID = getCookie("twitchId") || ("" as string | undefined);
-    $: twitchToken = getCookie("twitchToken") || ("" as string | undefined);
+    let username = $state(
+        getCookie("twitchUsername") || ("" as string | undefined),
+    );
+    let twitchID = $state(getCookie("twitchId") || ("" as string | undefined));
+    let twitchToken = $state(
+        getCookie("twitchToken") || ("" as string | undefined),
+    );
 
     async function handleToken(token: string) {
         const user_info = await valideToken(token);
