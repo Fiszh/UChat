@@ -3,11 +3,10 @@
 
     import ChatOverlay from "../components/ChatOverlay.svelte";
 
-    import Main from "../components/Main.svelte";
-
     import LoadingUI from "../components/Loading.svelte";
 
     import { icon_size, isMobile, loadingInfo } from "$stores/global";
+    import Main from "$components/Main/Chat/Main.svelte";
 
     $: LoadingMsg = $loadingInfo;
 

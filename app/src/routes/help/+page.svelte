@@ -31,9 +31,8 @@
     }
 
     onMount(() => {
-        if (window.location.hash == "#help-notice") {
+        if (window.location.hash == "#notice")
             helpNotice?.scrollIntoView({ behavior: "smooth" });
-        }
     });
 </script>
 
