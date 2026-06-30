@@ -6,6 +6,8 @@
         MessageSquareMore,
         ArrowLeftRight,
         Lightbulb,
+        Bold,
+        Brush,
     } from "@lucide/svelte";
 
     import moment from "moment/min/moment-with-locales";
@@ -21,6 +23,8 @@
     import Github from "$components/logos/github.svelte";
     import Button from "$components/Inputs/Button.svelte";
     import { isMobile } from "$stores/global";
+    import type { Snippet } from "svelte";
+    import UChat from "$components/logos/uchat.svelte";
 
     let username = $state(
         getCookie("twitchUsername") || ("" as string | undefined),
@@ -78,14 +82,32 @@
 {#snippet CoffeeIcon()}
     <Coffee size={$isMobile ? "15" : "20"} />
 {/snippet}
+{#snippet DesignIcon()}
+    <Brush size={$isMobile ? "15" : "20"} />
+{/snippet}
+
+{#snippet sideBarButton(
+    href: string,
+    icon: Snippet,
+    name: string,
+    newTab?: boolean,
+)}
+    <Button
+        {href}
+        target={newTab ? "_blank" : ""}
+        rel={newTab ? "noopener noreferrer" : ""}
+        class={page.route.id == href ? "active" : ""}
+        {icon}
+        layout={$isMobile ? "column" : "row"}
+        noHover={$isMobile}
+    >
+        {name}
+    </Button>
+{/snippet}
 
 <aside>
     <header id="topbar">
-        <img
-            class="logo"
-            src="https://chat.unii.dev/images/logo.avif"
-            alt="UChat Logo"
-        />
+        <UChat size={50} brandColor />
         <div id="name">
             <strong>UChat</strong>
             <h1 style="font-size:0.8rem; line-height: 1px;">
@@ -96,72 +118,40 @@
     </header>
 
     <nav>
-        <Button
-            href="/"
-            class={page.route.id == "/" ? "active" : ""}
-            icon={HouseIcon}
-            layout={$isMobile ? "column" : "row"}
-            noHover={$isMobile}
-        >
-            Home
-        </Button>
-        <Button
-            href="/message-creator"
-            class={page.route.id == "/message-creator" ? "active" : ""}
-            icon={MessageSquareMoreIcon}
-            layout={$isMobile ? "column" : "row"}
-            noHover={$isMobile}
-        >
-            {$isMobile ? "Create" : "Message creator"}
-        </Button>
-        <Button
-            href="/convert"
-            class={page.route.id == "/convert" ? "active" : ""}
-            icon={ArrowLeftRightIcon}
-            layout={$isMobile ? "column" : "row"}
-            noHover={$isMobile}
-        >
-            Convert
-        </Button>
-        <Button
-            href="/help"
-            class={page.route.id == "/help" ? "active" : ""}
-            icon={InfoIcon}
-            layout={$isMobile ? "column" : "row"}
-            noHover={$isMobile}
-        >
-            {$isMobile ? "Info" : "Info & Privacy"}
-        </Button>
-        <Button
-            href="https://github.com/Fiszh/UChat/issues/new"
-            target="_blank"
-            rel="noopener noreferrer"
-            icon={SuggetsionsIcon}
-            layout={$isMobile ? "column" : "row"}
-            noHover={$isMobile}
-        >
-            {$isMobile ? "Ideas" : "Suggestions"}
-        </Button>
-        <Button
-            href="https://github.com/Fiszh/UChat"
-            target="_blank"
-            rel="noopener noreferrer"
-            icon={GithubIcon}
-            layout={$isMobile ? "column" : "row"}
-            noHover={$isMobile}
-        >
-            GitHub
-        </Button>
-        <Button
-            href="https://buymeacoffee.com/jzlnkf5qgo"
-            target="_blank"
-            rel="noopener noreferrer"
-            icon={CoffeeIcon}
-            layout={$isMobile ? "column" : "row"}
-            noHover={$isMobile}
-        >
-            Support
-        </Button>
+        {@render sideBarButton("/", HouseIcon, "Home")}
+        {@render sideBarButton(
+            "/message-creator",
+            MessageSquareMoreIcon,
+            $isMobile ? "Create" : "Message creator",
+        )}
+        {@render sideBarButton("/convert", ArrowLeftRightIcon, "Convert")}
+        {#if dev}
+            {@render sideBarButton("/design", DesignIcon, "Design")}
+            {@render sideBarButton("/teapot", CoffeeIcon, "Teapot")}
+        {/if}
+        {@render sideBarButton(
+            "/help",
+            InfoIcon,
+            $isMobile ? "Info" : "Info & Privacy",
+        )}
+        {@render sideBarButton(
+            "https://github.com/Fiszh/UChat/issues/new",
+            SuggetsionsIcon,
+            $isMobile ? "Ideas" : "Suggestions & Bugs",
+            true,
+        )}
+        {@render sideBarButton(
+            "https://github.com/Fiszh/UChat",
+            GithubIcon,
+            "GitHub",
+            true,
+        )}
+        {@render sideBarButton(
+            "https://buymeacoffee.com/jzlnkf5qgo",
+            CoffeeIcon,
+            "Support",
+            true,
+        )}
     </nav>
 
     <footer>
@@ -218,15 +208,13 @@
             align-items: center;
             justify-content: space-between;
 
-            padding: 0.7rem 1rem;
+            gap: 0.25rem;
+
+            padding: 0.75rem;
             box-sizing: border-box;
 
             border-bottom: 1px solid #242424;
             background-color: rgba(0, 0, 0);
-
-            img {
-                max-height: 2.5rem;
-            }
 
             small {
                 font-size: 0.7rem;

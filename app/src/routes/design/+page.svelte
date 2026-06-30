@@ -7,11 +7,14 @@
     import SegmentedControl from "$components/Inputs/Segmented-control.svelte";
     import Selector from "$components/Inputs/Selector.svelte";
     import Dropdown from "$components/Inputs/Dropdown.svelte";
-    import { House, ChevronRight, Search } from "@lucide/svelte";
+    import { House, ChevronRight, Search, Brush } from "@lucide/svelte";
     import Twitch from "$components/logos/twitch.svelte";
     import Kick from "$components/logos/kick.svelte";
     import Youtube from "$components/logos/youtube.svelte";
     import Dialog from "$components/Dialog.svelte";
+    import UChat from "$components/logos/uchat.svelte";
+    import Loading from "$components/Loading.svelte";
+    import Slider from "$components/Inputs/Slider.svelte";
 
     //FIXME MAKE SELECTOR WAY BETTER WITHOUT THE NEED OF THIS
     let selectorOptions = $state([
@@ -22,6 +25,7 @@
     ]);
 
     let showTestDialog = $state(false);
+    let areLoadingRelative = $state(true);
 </script>
 
 {#snippet buttons()}
@@ -43,7 +47,10 @@
 </Dialog>
 
 <main>
-    <h1>UChat Design Page</h1>
+    <section>
+        <h1><Brush /> UChat Design</h1>
+        <p>Test and preview design components here.</p>
+    </section>
 
     {#snippet icon()}
         <House size="1rem" />
@@ -63,6 +70,9 @@
     {/snippet}
     {#snippet logoYouTube(chosen: boolean)}
         <Youtube brandColor={chosen} />
+    {/snippet}
+    {#snippet logoUChat(chosen: boolean)}
+        <UChat brandColor={chosen} />
     {/snippet}
 
     {#snippet dropdown()}
@@ -153,8 +163,9 @@
             options={[
                 { id: "1", label: "Twitch", icon: logoTwitch },
                 { id: "2", label: "Kick", icon: logoKick },
+                { id: "3", label: "UChat", icon: logoUChat },
                 {
-                    id: "3",
+                    id: "4",
                     label: "YouTube",
                     disabled: true,
                     icon: logoYouTube,
@@ -172,15 +183,34 @@
         <p>Dialog</p>
         <Button onclick={() => (showTestDialog = true)}>Show Dialog</Button>
     </section>
+
+    <section>
+        <p>Slider</p>
+        <Slider max="100" value={"25"} />
+        <Slider max="100" displayValue value={"25"} />
+    </section>
+
+    <section>
+        <p>
+            Loading
+            <Checkbox bind:checked={areLoadingRelative}>Relative</Checkbox>
+        </p>
+        <Loading type="big" relative={areLoadingRelative} />
+        <Loading type="minimal" relative={areLoadingRelative} />
+        <Loading type="small" relative={areLoadingRelative} />
+    </section>
 </main>
 
 <style>
     p,
     h1 {
         margin: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
     }
 
-    h1 {
+    main > *:nth-child(1) {
         width: 100%;
     }
 

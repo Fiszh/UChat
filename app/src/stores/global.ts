@@ -1,6 +1,5 @@
 import { writable } from "svelte/store";
 
-export const icon_size = writable<string>("1.5rem");
 export const isMobile = writable<boolean>(false);
 
 interface LoadingInfo {

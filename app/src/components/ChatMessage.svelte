@@ -37,7 +37,7 @@
     let chatSettings: Record<string, Setting["value"]> = $state({});
 
     onMount(() => {
-        if (chatSettings?.fadeOut && window.location.search) {
+        if (Number(chatSettings?.fadeOut) && window.location.search) {
             const delay = Number(chatSettings.fadeOut) * 1000;
 
             setTimeout(() => {

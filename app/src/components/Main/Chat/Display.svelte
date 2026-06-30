@@ -53,7 +53,16 @@
         localChannelName = "";
         localChannelID = "";
 
-        settings.set(configs.map((c) => ({ ...c })));
+        settings.set(
+            configs.map((c) => {
+                if (c["type"] == "text" || c["type"] == "number") {
+                    c["value"] = "";
+                    return c;
+                } else {
+                    return c;
+                }
+            }),
+        );
         settingsParams.set({});
 
         params.forEach((_, key) => params.delete(key));
@@ -128,7 +137,7 @@
         <span class="header">
             <p>Chat Preview Settings</p>
 
-            <Button onclick={() => resetSettings()} title="Reset Settings">
+            <Button onclick={resetSettings} title="Reset Settings">
                 <RotateCcw size="20" />
             </Button>
         </span>

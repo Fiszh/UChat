@@ -1,4 +1,4 @@
-# ![UChat Logo](app/static/images/favicon.ico) UChat | Custom Twitch Overlay
+# ![UChat Logo](app/static/images/logo.svg) UChat | Custom Twitch Overlay
 
 Project is currently deployed at: https://chat.unii.dev/
 

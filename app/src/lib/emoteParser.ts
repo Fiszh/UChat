@@ -11,8 +11,8 @@ import {
 import { emotes, globals } from "$stores/global";
 import { setEmoteSize } from "$stores/settings";
 
-let emoteSize = get(setEmoteSize);
-setEmoteSize.subscribe((value) => (emoteSize = value));
+let emoteSize = Number(get(setEmoteSize));
+setEmoteSize.subscribe((value) => (emoteSize = Number(value)));
 
 function splitTextWithTwemoji(text: string) {
     const parsedText = twemoji.parse(text, {

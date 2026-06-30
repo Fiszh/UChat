@@ -10,6 +10,7 @@
     import SettingsToggle from "$components/settings/Settings-toggle.svelte";
     import SettingsText from "$components/settings/Settings-text.svelte";
     import SettingsColor from "$components/settings/Settings-color.svelte";
+    import SettingsSlider from "$components/settings/Settings-slider.svelte";
     import { removeParam, setParam } from "$lib/params";
 
     let showHidden = $state(false);
@@ -41,7 +42,7 @@
                     typeof value == "string" &&
                     value.length
                 ) {
-                    found.value = Number(String(value).replace(/[^0-9]+/g, ""));
+                    found.value = String(value).replace(/[^0-9]+/g, "");
                 } else if (
                     typeof value == "boolean" ||
                     typeof value == "string"
@@ -92,6 +93,7 @@
                         description={setting.description}
                         hidden={setting.hide}
                         value={setting.value}
+                        defaultValue={setting["default"]}
                         onChange={(checked) =>
                             handleInput(setting.param, checked)}
                     />
@@ -100,10 +102,8 @@
                         name={setting.name}
                         description={setting.description}
                         hidden={setting.hide}
-                        defaultValue={setting["default"] || ""}
-                        value={setting["default"] != setting.value
-                            ? setting.value
-                            : ""}
+                        defaultValue={setting["default"]}
+                        value={setting.value}
                         onChange={(value) =>
                             handleInput(
                                 setting.param,
@@ -116,11 +116,22 @@
                         name={setting.name}
                         description={setting.description}
                         hidden={setting.hide}
-                        value={setting["default"] != setting.value
-                            ? setting.value
-                            : setting["default"]}
+                        value={setting.value}
+                        defaultValue={setting["default"]}
                         onChange={(value) =>
                             handleInput(setting.param, value, "color-picker")}
+                    />
+                {:else if setting.type == "slider"}
+                    <SettingsSlider
+                        name={setting.name}
+                        description={setting.description}
+                        hidden={setting.hide}
+                        value={setting.value}
+                        min={setting["min"]}
+                        max={setting["max"]}
+                        defaultValue={setting["default"]}
+                        onChange={(value) =>
+                            handleInput(setting.param, value, "slider")}
                     />
                 {/if}
 

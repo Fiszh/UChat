@@ -1,10 +1,14 @@
 <script lang="ts">
+    import Button from "$components/Inputs/Button.svelte";
     import type { Setting } from "$stores/settings";
+    import { RotateCcw } from "@lucide/svelte";
     import type { Snippet } from "svelte";
 
     type Props = {
         name: string;
         description?: string;
+        onReset?: () => void;
+        value?: Setting["value"];
         settingsDefault?: Setting["default"];
         column?: boolean;
         hidden?: boolean;
@@ -14,6 +18,8 @@
     const {
         name,
         description,
+        onReset,
+        value,
         settingsDefault,
         column,
         hidden,
@@ -23,7 +29,17 @@
 
 <div class:column class:hidden>
     <aside>
-        <p>{@html name}</p>
+        <span>
+            <p>
+                {@html name}
+            </p>
+
+            {#if settingsDefault != value}
+                <button onclick={onReset} title="Reset">
+                    <RotateCcw size="1rem" />
+                </button>
+            {/if}
+        </span>
         {#if description?.trim()?.length}
             <small>{@html description}</small>
         {/if}
@@ -44,9 +60,19 @@
 
         gap: 0.5rem;
 
+        button {
+            color: white;
+        }
+
         &.column {
             flex-direction: column;
             align-items: flex-start;
+        }
+
+        span {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
         }
 
         &.hidden {

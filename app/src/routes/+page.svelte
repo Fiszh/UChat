@@ -5,20 +5,10 @@
 
     import LoadingUI from "../components/Loading.svelte";
 
-    import { icon_size, isMobile, loadingInfo } from "$stores/global";
+    import { loadingInfo } from "$stores/global";
     import Main from "$components/Main/Chat/Main.svelte";
 
     const LoadingMsg = $loadingInfo;
-
-    function setMobile() {
-        isMobile.set(window.innerWidth <= 768);
-
-        if ($isMobile) {
-            icon_size.set("1rem");
-        } else {
-            icon_size.set("1.5rem");
-        }
-    }
 
     let mounted = $state(false);
     let hasChannel = $state(false);
@@ -26,9 +16,6 @@
     onMount(() => {
         const params = new URLSearchParams(window.location.search);
         hasChannel = params.has("channel") || params.has("id");
-
-        setMobile();
-        window.addEventListener("resize", setMobile);
 
         const isFirefox = navigator.userAgent.toLowerCase().includes("firefox");
 
@@ -125,6 +112,7 @@
 
             .emote {
                 justify-self: center;
+                height: 100vh;
             }
 
             .emote.emoji {

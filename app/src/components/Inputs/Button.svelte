@@ -1,5 +1,7 @@
 <script lang="ts">
-    import type { Snippet } from "svelte";
+    import { isMobile } from "$stores/global";
+    import { ExternalLink } from "@lucide/svelte";
+    import { onMount, type Snippet } from "svelte";
     import type {
         HTMLButtonAttributes,
         HTMLAnchorAttributes,
@@ -40,6 +42,24 @@
         children,
         ...restProps
     }: Props = $props();
+
+    let isOffSite = $state(false);
+
+    onMount(() => {
+        if (
+            href &&
+            !href.startsWith(window.location.origin) &&
+            href.startsWith("https")
+        ) {
+            isOffSite = true;
+
+            const HREF_URL = new URL(href);
+
+            HREF_URL.searchParams.append("referrer", window.location.hostname);
+
+            href = HREF_URL.toString();
+        }
+    });
 </script>
 
 {#if href}
@@ -57,9 +77,15 @@
         class:noHover
         class:column={layout == "column"}
     >
-        {@render icon?.()}
+        <span>{@render icon?.()}</span>
         <span>{@render children?.()}</span>
-        {@render iconRight?.()}
+        <span>
+            {#if !iconRight && isOffSite && !$isMobile}
+                <ExternalLink />
+            {:else}
+                {@render iconRight?.()}
+            {/if}
+        </span>
     </a>
 {:else}
     <button
@@ -76,9 +102,9 @@
         class:noHover
         class:column={layout == "column"}
     >
-        {@render icon?.()}
+        <span>{@render icon?.()}</span>
         <span>{@render children?.()}</span>
-        {@render iconRight?.()}
+        <span>{@render iconRight?.()}</span>
     </button>
 {/if}
 
@@ -101,8 +127,17 @@
         user-select: none;
         flex-wrap: nowrap;
 
+        &:not(.center):has(> *:nth-child(3)) > *:nth-child(2) {
+            width: 100%;
+            text-align: left;
+        }
+
         &.column {
             flex-direction: column;
+        }
+
+        span:empty {
+            display: none;
         }
 
         text-decoration: none !important;

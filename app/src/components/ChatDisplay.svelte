@@ -114,8 +114,8 @@
                     break;
                 case "fontShadow":
                     styles["--chat-shadow"] =
-                        (typeof setting.value == "number"
-                            ? setting.value
+                        (typeof setting.value == "string"
+                            ? Number(setting.value)
                             : 10) / 10;
 
                     break;
@@ -128,13 +128,13 @@
                         fontSize.value != fontSize.default &&
                         typeof fontSize.value == "number"
                     )
-                        emoteSize = fontSize.value + 5;
+                        emoteSize = String(Number(fontSize.value) + 5);
 
                     styles["--chat-emote-size"] = emoteSize
                         ? `${emoteSize}px`
                         : "25px";
 
-                    setEmoteSize.set(emoteSize as number);
+                    setEmoteSize.set(emoteSize as string);
 
                     break;
                 case "fontColor":

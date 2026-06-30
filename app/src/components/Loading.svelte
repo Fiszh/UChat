@@ -1,19 +1,34 @@
 <script lang="ts">
     import LoadingAnimation from "$lib/assets/loading.avif";
+    import UChat from "$components/logos/uchat.svelte";
 
-    const availableStyles: string[] = ["minimal", "big"];
+    const availableStyles: string[] = ["minimal", "big", "small"];
 
     type Props = {
         text?: string;
         type?: string;
+        relative?: boolean;
     };
 
-    const { text, type }: Props = $props();
+    const { text, type, relative }: Props = $props();
 </script>
 
-{#snippet minimal()}
-    <div class="loader"></div>
+{#snippet small()}
+    <UChat brandColor size="1.5rem" />
     <div class="info">
+        {#if text}
+            <span class="loading-info">{@html text}</span>
+        {:else}
+            <span class="loading-text">Loading...</span>
+        {/if}
+    </div>
+    <div class="loader"></div>
+{/snippet}
+
+{#snippet minimal()}
+    <UChat brandColor size="4rem" />
+    <div class="info">
+        <span class="loading-info app-title">UChat</span>
         {#if text}
             <span class="loading-info">{@html text}</span>
         {:else}
@@ -21,12 +36,17 @@
         {/if}
         <p class="version">{__APP_VERSION}</p>
     </div>
+    <div class="loader"></div>
 {/snippet}
 
 {#snippet big()}
-    <img class="loader" src={LoadingAnimation} alt="Loading..." />
+    <UChat brandColor size="10rem" />
     <div class="info">
-        <span class="loading-text">Loading...</span>
+        <span class="loading-info app-title">UChat</span>
+        <span class="loading-text"
+            ><div class="loader"></div>
+            Loading...</span
+        >
         <span class="loading-info">{@html text}</span>
         <p class="version">{__APP_VERSION}</p>
     </div>
@@ -34,27 +54,46 @@
 
 <div
     class="loading {type}"
+    class:relative
     style="display: {type && availableStyles.includes(type) ? 'flex' : 'none'}"
 >
     {#if type == "minimal"}
         {@render minimal()}
     {:else if type == "big"}
         {@render big()}
+    {:else if type == "small"}
+        {@render small()}
     {/if}
 </div>
 
 <style lang="scss">
+    .loader {
+        --size: 2.5rem;
+
+        height: var(--size);
+        width: var(--size);
+        aspect-ratio: 1/1;
+
+        border: calc(var(--size) * 0.15) solid #222;
+        border-top-color: #fff;
+        border-radius: 100%;
+        animation: spin 0.8s ease-in-out infinite;
+    }
+
     .loading {
         display: flex;
-        position: absolute;
-        transform: translate(-50%, -50%);
         font-weight: bold;
 
         box-sizing: border-box;
         padding: 1.1rem 1.5rem;
         background-color: rgba(0, 0, 0, 0.25);
 
-        z-index: 99999999;
+        z-index: 999;
+
+        &:not(.relative) {
+            position: absolute;
+            transform: translate(-50%, -50%);
+        }
 
         .info {
             align-self: center;
@@ -65,6 +104,10 @@
             }
 
             .loading-text {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+
                 background: linear-gradient(
                     90deg,
                     #ffffff 0%,
@@ -78,28 +121,28 @@
                 -webkit-background-clip: text;
                 color: transparent;
                 animation: bulletTextShine 2s linear infinite;
+
+                .loader {
+                    --size: 1.75rem;
+                }
             }
         }
 
         &.minimal {
-            max-width: 75%;
             width: max-content;
             align-items: center;
+            flex-direction: row;
 
             bottom: 5%;
             left: 50%;
-            gap: 0.5rem;
-            border-radius: 5rem;
-            font-size: 1.5rem;
+            gap: 1rem;
+            border-radius: 2.5rem;
+            font-size: 1rem;
+            padding-inline: 1rem;
 
-            .loader {
-                width: 2.5rem;
-                height: 2.5rem;
-                border: 0.4rem solid #222;
-                border-top-color: #fff;
-                border-radius: 100%;
-                aspect-ratio: 1/1;
-                animation: spin 0.8s ease-in-out infinite;
+            .info {
+                display: flex;
+                flex-direction: column;
             }
 
             .version {
@@ -113,15 +156,11 @@
             left: 50%;
             font-size: 1.2rem;
             border-radius: 1rem;
+            padding-inline: 3rem;
 
             flex-direction: column;
 
             gap: 1rem;
-
-            img {
-                max-height: 10rem;
-                object-fit: contain;
-            }
 
             .info {
                 display: flex;
@@ -137,9 +176,25 @@
                     font-size: 1.5rem;
                 }
 
+                .app-title {
+                    font-size: 2.5rem;
+                }
+
                 .version {
                     font-size: 0.9rem;
                 }
+            }
+        }
+
+        &.small {
+            gap: 0.5rem;
+
+            bottom: 8%;
+            left: 50%;
+
+            border-radius: 50rem;
+            .loader {
+                --size: 1.5rem;
             }
         }
     }

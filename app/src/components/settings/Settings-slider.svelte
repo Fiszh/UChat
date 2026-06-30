@@ -1,8 +1,8 @@
 <script lang="ts">
     import SettingsWrapper from "./Settings-wrapper.svelte";
-    import Input from "$components/Inputs/Input.svelte";
-    import { isMobile } from "$stores/global";
     import { onMount } from "svelte";
+    import Slider from "$components/Inputs/Slider.svelte";
+    import { isMobile } from "$stores/global";
 
     type Props = {
         name: string;
@@ -10,6 +10,8 @@
         description?: string;
         hidden?: boolean;
         value: string;
+        min?: string;
+        max: string;
         defaultValue?: Props["value"];
     };
 
@@ -20,21 +22,24 @@
             onChange(e.currentTarget.value);
     }
 
-    let { name, onChange, description, value, hidden, defaultValue }: Props =
-        $props();
+    let {
+        name,
+        onChange,
+        description,
+        hidden,
+        value = $bindable(),
+        defaultValue,
+        min,
+        max,
+    }: Props = $props();
 
     // default will be set to starter value if not set in props
     const handleReset = () => {
         value = defaultValue!;
-        onChange(String(defaultValue));
+        onChange(defaultValue!);
     };
     onMount(() => {
         if (!typeof defaultValue) defaultValue = value;
-
-        if (defaultValue == value) {
-            value = "";
-            onChange(value);
-        }
     });
 </script>
 
@@ -42,15 +47,17 @@
     {name}
     {description}
     {hidden}
-    column={$isMobile}
     {value}
-    settingsDefault={""}
+    settingsDefault={defaultValue}
     onReset={handleReset}
+    column={$isMobile}
 >
-    <Input
+    <Slider
+        {min}
+        {max}
         onChange={handleChange}
-        bind:value
+        {value}
         wide={$isMobile}
-        placeholder={String(defaultValue)}
+        displayValue
     />
 </SettingsWrapper>

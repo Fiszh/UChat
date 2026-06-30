@@ -9,15 +9,21 @@
 
     import { page } from "$app/state";
     import Banner from "$components/Banner.svelte";
+    import { isMobile } from "$stores/global.js";
 
     let { data, children } = $props();
 
     let mounted = $state<boolean>(false);
     let hasChannel = $state<boolean>(false);
 
+    const setMobile = () => isMobile.set(window.innerWidth <= 768);
+
     onMount(() => {
         const params = new URLSearchParams(window.location.search);
         hasChannel = params.has("channel") || params.has("id");
+
+        setMobile();
+        window.addEventListener("resize", setMobile);
 
         mounted = true;
     });

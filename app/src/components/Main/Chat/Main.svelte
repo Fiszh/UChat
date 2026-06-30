@@ -10,7 +10,7 @@
     import { pushUsersInfoViaGQL } from "$lib/services/7TV/cosmetics";
     import { messages } from "$lib/chat";
 
-    import { emotes, badges, icon_size, isMobile } from "$stores/global";
+    import { emotes, badges, isMobile } from "$stores/global";
     import { cosmetics } from "$stores/cosmetics";
     import { previewMessages } from "$stores/previewMessages";
 
@@ -60,11 +60,11 @@
 
         <footer>
             <button onclick={() => changeTab("settings")}>
-                <Settings size={$icon_size} />
+                <Settings size="15" />
                 Settings
             </button>
             <button onclick={() => changeTab("preview")}>
-                <MessageSquare size={$icon_size} />
+                <MessageSquare size="15" />
                 Preview
             </button>
         </footer>

@@ -10,8 +10,8 @@ export interface DefaultSetting {
 
 interface NumberSetting extends DefaultSetting {
     type: "number";
-    value: number;
-    default?: number;
+    value: string;
+    default?: string;
 }
 
 interface TextSetting extends DefaultSetting {
@@ -33,15 +33,24 @@ interface ColorPickerSetting extends DefaultSetting {
     default?: string;
 }
 
+interface SliderSetting extends DefaultSetting {
+    type: "slider";
+    value: string;
+    min: string;
+    max: string;
+    default?: string;
+}
+
 export type Setting =
     | NumberSetting
     | TextSetting
     | BooleanSetting
-    | ColorPickerSetting;
+    | ColorPickerSetting
+    | SliderSetting;
 
-const defaultEmoteSize = 25;
+const defaultEmoteSize = "25";
 
-export const setEmoteSize = writable<number>(defaultEmoteSize);
+export const setEmoteSize = writable<string>(defaultEmoteSize);
 
 export const configs: Setting[] = [
     {
@@ -84,7 +93,7 @@ export const configs: Setting[] = [
         name: "Font & Badge size (px)",
         type: "number",
         param: "fontSize",
-        value: 20,
+        value: "20",
         previewReact: false,
         description:
             "Set the size of message text and badges in pixels, changing this will also automatically scale emotes",
@@ -98,10 +107,12 @@ export const configs: Setting[] = [
             "Enable an outline stroke around chat text for readability (note: outline does not apply to 7TV paints)",
     },
     {
-        name: "Message shadow (0-10)",
-        type: "number",
+        name: "Message shadow",
+        type: "slider",
         param: "fontShadow",
-        value: 10,
+        value: "10",
+        min: "0",
+        max: "10",
         description: "Add a shadow behind message",
     },
     {
@@ -117,7 +128,7 @@ export const configs: Setting[] = [
         name: "Text fade out (seconds)",
         type: "number",
         param: "fadeOut",
-        value: 0,
+        value: "0",
         previewReact: false,
         description:
             "Automatically fade out messages after the specified number of seconds",
