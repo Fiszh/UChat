@@ -7,8 +7,11 @@
 
     import { loadingInfo } from "$stores/global";
     import Main from "$components/Main/Chat/Main.svelte";
+    import { get } from "svelte/store";
 
-    const LoadingMsg = $loadingInfo;
+    let LoadingMsg = $state(get(loadingInfo));
+
+    loadingInfo.subscribe((value) => (LoadingMsg = value));
 
     let mounted = $state(false);
     let hasChannel = $state(false);
