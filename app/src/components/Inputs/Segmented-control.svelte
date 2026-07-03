@@ -23,11 +23,9 @@
         easing: cubicInOut,
     });
 
-    let { value = "", options = [] }: Props = $props();
+    let { value = $bindable(""), options = [] }: Props = $props();
 
-    onMount(() => {
-        value = options[0]["id"];
-    });
+    onMount(() => (value = options[0]["id"]));
 </script>
 
 <section>

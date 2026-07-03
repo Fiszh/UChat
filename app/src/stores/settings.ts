@@ -238,7 +238,6 @@ export const config = configs;
 
 export const settings = writable<Setting[]>(configs.map((c) => ({ ...c })));
 export const savedSettings = writable<Record<string, any>>([]);
-export const channelName = writable<string>("");
 export const channelID = writable<string>("");
 
 export const settingsParams = writable<Record<string, Setting["value"]>>({});
