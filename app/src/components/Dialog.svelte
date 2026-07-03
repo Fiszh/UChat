@@ -8,11 +8,22 @@
         show: boolean;
         buttons?: Snippet;
         children: Snippet;
+        onClose?: () => void;
     };
 
-    let { name, show = $bindable(false), buttons, children }: Props = $props();
+    let {
+        name,
+        show = $bindable(false),
+        buttons,
+        onClose,
+        children,
+    }: Props = $props();
 
-    const close = () => (show = false);
+    const close = () => {
+        show = false;
+
+        onClose?.();
+    };
 </script>
 
 {#if show}

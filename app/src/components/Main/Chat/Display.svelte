@@ -6,13 +6,7 @@
 
     import ChatDisplay from "$components/ChatDisplay.svelte";
 
-    import {
-        channelID,
-        channelName,
-        configs,
-        settings,
-        settingsParams,
-    } from "$stores/settings";
+    import { configs, settings, settingsParams } from "$stores/settings";
 
     import { previewMessages } from "$stores/previewMessages";
     import { sendFakeMessage } from "$lib/preview";
@@ -22,13 +16,28 @@
     import Checkbox from "$components/Inputs/Checkbox.svelte";
     import { removeParam, setParam } from "$lib/params";
     import { isMobile } from "$stores/global";
+    import Twitch from "$components/logos/twitch.svelte";
+    import Kick from "$components/logos/kick.svelte";
+    import SegmentedControl from "$components/Inputs/Segmented-control.svelte";
+    import Dialog from "$components/Dialog.svelte";
 
     let hex = $state("#191919");
     let customMessageValue = $state("");
     let usingChannelID = $state(false);
 
-    let localChannelName = $state("");
-    let localChannelID = $state("");
+    let channelInfo = $state({
+        twitch: {
+            name: "",
+            id: "",
+        },
+        kick: {
+            name: "",
+        },
+    });
+
+    let channelSelect = $state("Twitch");
+
+    let pastedName = $state("");
 
     const params = $derived(
         new URLSearchParams(
@@ -47,11 +56,10 @@
     );
 
     const resetSettings = () => {
-        channelName.set("");
-        channelID.set("");
+        channelInfo["twitch"]["name"] = "";
+        channelInfo["twitch"]["id"] = "";
 
-        localChannelName = "";
-        localChannelID = "";
+        channelInfo["kick"]["name"] = "";
 
         settings.set(
             configs.map((c) => {
@@ -74,7 +82,11 @@
 
     function copyUrl() {
         if (urlResults) {
-            if ($settingsParams["channel"] || $settingsParams["id"]) {
+            if (
+                $settingsParams["channel"] ||
+                $settingsParams["id"] ||
+                $settingsParams["kick"]
+            ) {
                 navigator.clipboard
                     .writeText(urlResults)
                     .then(() => {
@@ -108,18 +120,63 @@
         return value;
     }
 
+    function checkForChannelLink(e: ClipboardEvent) {
+        if (e.clipboardData) {
+            const pasted_url = new URL(e.clipboardData.getData("text"));
+
+            if (pasted_url.host.endsWith("twitch.tv"))
+                pastedName = pasted_url.pathname.split("/").filter(Boolean)[0];
+        }
+    }
+
+    function setPastedName() {
+        channelInfo["twitch"]["name"] = pastedName;
+        pastedName = "";
+    }
+
     $effect(() =>
-        localChannelName.length && (!localChannelID.length || !usingChannelID)
-            ? setParam("channel", String(localChannelName))
+        channelInfo["twitch"]["name"].length &&
+        (!channelInfo["twitch"]["id"].length || !usingChannelID)
+            ? setParam("channel", String(channelInfo["twitch"]["name"]))
             : removeParam("channel"),
     );
 
     $effect(() =>
-        localChannelID.length && (!localChannelName.length || usingChannelID)
-            ? setParam("id", String(localChannelID))
+        channelInfo["twitch"]["id"].length &&
+        (!channelInfo["twitch"]["name"].length || usingChannelID)
+            ? setParam("id", String(channelInfo["twitch"]["id"]))
             : removeParam("id"),
     );
+
+    $effect(() =>
+        channelInfo["kick"]["name"].length
+            ? setParam("kick", String(channelInfo["kick"]["name"]))
+            : removeParam("kick"),
+    );
 </script>
+
+{#snippet logoTwitch(chosen: boolean)}
+    <Twitch brandColor={chosen} />
+{/snippet}
+{#snippet logoKick(chosen: boolean)}
+    <Kick brandColor={chosen} />
+{/snippet}
+
+{#snippet channelLinkButtons()}
+    <Button onclick={() => (pastedName = "")}>Cancel</Button>
+
+    <Button primary onclick={setPastedName}>Confirm</Button>
+{/snippet}
+
+<Dialog
+    name="Link Detected"
+    show={pastedName.length > 0}
+    buttons={channelLinkButtons}
+    onClose={() => (pastedName = "")}
+>
+    <h3>Looks like you pasted a Twitch channel link</h3>
+    <p>Want to use <strong>{pastedName}</strong> as your channel?</p>
+</Dialog>
 
 <div id="chat-preview" style="--chat-background: {hex}">
     <section id="top">
@@ -172,38 +229,69 @@
             <section>
                 <small class="title">
                     Channel Info
-                    <Checkbox bind:checked={usingChannelID}>
-                        Use Channel ID
-                    </Checkbox>
+                    {#if channelSelect == "Twitch"}
+                        <Checkbox bind:checked={usingChannelID}>
+                            Use Channel ID
+                        </Checkbox>
+                    {/if}
                 </small>
                 <div class="display">
-                    {#if !usingChannelID}
+                    {#if channelSelect == "Twitch"}
+                        {#if !usingChannelID}
+                            <Input
+                                wide
+                                required
+                                placeholder="Twitch Channel Name"
+                                bind:value={channelInfo["twitch"]["name"]}
+                                invalid={!channelInfo["twitch"]["name"].length}
+                                onChange={(e) =>
+                                    (channelInfo["twitch"]["name"] =
+                                        validateInput(
+                                            (
+                                                e.currentTarget as HTMLInputElement
+                                            ).value,
+                                            "twitch_name",
+                                        ))}
+                                onPaste={checkForChannelLink}
+                            />
+                        {:else}
+                            <Input
+                                wide
+                                required
+                                placeholder="Twitch Channel ID"
+                                bind:value={channelInfo["twitch"]["id"]}
+                                invalid={!channelInfo["twitch"]["id"].length}
+                                onChange={(e: Event) =>
+                                    (channelInfo["twitch"]["id"] =
+                                        validateInput(
+                                            (
+                                                e.currentTarget as HTMLInputElement
+                                            ).value,
+                                            "number",
+                                        ))}
+                            />
+                        {/if}
+                    {:else if channelSelect == "Kick"}
                         <Input
                             wide
                             required
-                            placeholder="Channel Name"
-                            bind:value={localChannelName}
-                            invalid={!localChannelName.length}
+                            placeholder="Kick Channel Name"
+                            bind:value={channelInfo["kick"]["name"]}
+                            invalid={!channelInfo["kick"]["name"].length}
                             onChange={(e) =>
-                                (localChannelName = validateInput(
+                                (channelInfo["kick"]["name"] = validateInput(
                                     (e.currentTarget as HTMLInputElement).value,
                                     "twitch_name",
                                 ))}
                         />
-                    {:else}
-                        <Input
-                            wide
-                            required
-                            placeholder="Channel ID"
-                            bind:value={localChannelID}
-                            invalid={!localChannelID.length}
-                            onChange={(e: Event) =>
-                                (localChannelID = validateInput(
-                                    (e.currentTarget as HTMLInputElement).value,
-                                    "number",
-                                ))}
-                        />
                     {/if}
+                    <SegmentedControl
+                        options={[
+                            { id: "Twitch", icon: logoTwitch },
+                            { id: "Kick", icon: logoKick },
+                        ]}
+                        bind:value={channelSelect}
+                    />
                 </div>
             </section>
             <hr />
