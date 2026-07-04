@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    import ChatMessage from "./ChatMessage.svelte";
+    import TwitchChatMessage from "$components/chat/twitch/message.svelte";
 
     import { messages } from "$lib/chat";
     import { setEmoteSize, settings } from "$stores/settings";
@@ -280,7 +280,7 @@
     {...restProps}
 >
     {#each filteredMessages as msg (msg.id)}
-        <ChatMessage
+        <TwitchChatMessage
             user={msg.formattedUser}
             text={msg.message}
             tags={msg.tags}

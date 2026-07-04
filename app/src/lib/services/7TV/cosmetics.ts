@@ -22,17 +22,17 @@ interface Owner {
 export function getPaint(username: Lowercase<string>): Paint | undefined {
     const currentCosmetics = get(cosmetics);
 
-    return Object.values(currentCosmetics.paints).find((paint: Paint) =>
+    return Object.values(currentCosmetics.paints).find((paint) =>
         paint.owner.find((o: Owner) => o.username === username),
-    ) as Paint | undefined;
+    );
 }
 
-export function getBadge(twitchID: string): Badge | undefined {
+export function getBadge(twitchID: string): SevenTVBadge | undefined {
     const currentCosmetics = get(cosmetics);
 
-    return Object.values(currentCosmetics.badges).find((badge: any) =>
+    return Object.values(currentCosmetics.badges).find((badge) =>
         badge.owner.find((o: Owner) => o.id === String(twitchID)),
-    ) as Badge | undefined;
+    );
 }
 
 export function getPersonalSets(twitchID: string): any | undefined {
@@ -40,7 +40,7 @@ export function getPersonalSets(twitchID: string): any | undefined {
 
     return Object.values(currentCosmetics.sets).filter((set: any) =>
         set.owner.some((o: Owner) => o.id === String(twitchID)),
-    ) as any | undefined;
+    );
 }
 
 export const getPaintHTML = (paint_data: Paint): Record<string, string> => ({

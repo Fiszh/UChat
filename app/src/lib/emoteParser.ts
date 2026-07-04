@@ -76,26 +76,27 @@ function sanitizeInput(input: string) {
 }
 
 function findEntryAndTier(prefix: string, bits: number) {
-    prefix = prefix.toLowerCase();
-
-    const emote_data = get(emotes);
-
-    for (const entry of emote_data["BITS"]) {
-        if (entry.name.toLowerCase() !== prefix) continue;
-
-        for (let i = 0; i < entry.tiers.length; i++) {
-            const currentTier = entry.tiers[i];
-            const nextTier = entry.tiers[i + 1];
-
-            if (!nextTier && bits >= currentTier.min_bits)
-                return { name: entry.name, tier: currentTier };
-
-            if (bits >= currentTier.min_bits && bits < nextTier.min_bits)
-                return { name: entry.name, tier: currentTier };
-        }
-    }
-
     return null;
+    // prefix = prefix.toLowerCase();
+
+    // const emote_data = get(emotes);
+
+    // for (const entry of emote_data["BITS"]) {
+    //     if (entry.name.toLowerCase() !== prefix) continue;
+
+    //     for (let i = 0; i < entry.tiers.length; i++) {
+    //         const currentTier = entry.tiers[i];
+    //         const nextTier = entry.tiers[i + 1];
+
+    //         if (!nextTier && bits >= currentTier.min_bits)
+    //             return { name: entry.name, tier: currentTier };
+
+    //         if (bits >= currentTier.min_bits && bits < nextTier.min_bits)
+    //             return { name: entry.name, tier: currentTier };
+    //     }
+    // }
+
+    // return null;
 }
 
 interface FoundEmote {
@@ -233,15 +234,15 @@ export async function replaceWithEmotes(
 
                     const result = findEntryAndTier(prefix, bits);
 
-                    if (result) {
-                        foundEmote = {
-                            name: result.name,
-                            url: result.tier.url,
-                            site: "TTV",
-                            color: result.tier.color,
-                            bits: `<span class="bits-number">${bits}</span>`,
-                        };
-                    }
+                    // if (result) {
+                    //     foundEmote = {
+                    //         name: result.name,
+                    //         url: result.tier.url,
+                    //         site: "TTV",
+                    //         color: result.tier.color,
+                    //         bits: `<span class="bits-number">${bits}</span>`,
+                    //     };
+                    // }
                 }
             }
 

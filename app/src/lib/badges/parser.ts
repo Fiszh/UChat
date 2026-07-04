@@ -23,7 +23,7 @@ settings.subscribe((cfg) => {
 });
 
 export function parseBadges(userstate: Record<string, any>): parsedBadge[] {
-    const user_badges = [];
+    const user_badges: parsedBadge[] = [];
 
     // SHARED CHAT BADGE
     const foundAvatarBadge =
@@ -37,12 +37,11 @@ export function parseBadges(userstate: Record<string, any>): parsedBadge[] {
         });
 
     // SHARED CHAT BADGE
-    const foundUChatBadges = BadgesData["UChat"].filter(
-        (badge: Record<string, any>) =>
-            badge.users.includes(userstate["user-id-raw"]),
+    const foundUChatBadges = BadgesData["UChat"].filter((badge) =>
+        badge.users.includes(userstate["user-id-raw"]),
     );
 
-    foundUChatBadges.forEach((foundUChatBadge: Record<string, any>) => {
+    foundUChatBadges.forEach((foundUChatBadge) => {
         user_badges.push({
             badge_url: foundUChatBadge.urls["4x"],
             alt: foundUChatBadge.id,
@@ -63,9 +62,8 @@ export function parseBadges(userstate: Record<string, any>): parsedBadge[] {
 
             if (BadgesData["TTV"].channel) {
                 const badge = BadgesData["TTV"].channel.find(
-                    (badge: Badge) =>
-                        badge.id === `${badgeSplit[0]}_${badgeSplit[1]}`,
-                ) as Badge | undefined;
+                    (badge) => badge.id === `${badgeSplit[0]}_${badgeSplit[1]}`,
+                );
 
                 if (badge) {
                     user_badges.push({
@@ -80,9 +78,8 @@ export function parseBadges(userstate: Record<string, any>): parsedBadge[] {
 
             // SEARCH IN GLOBAL IF NO CHANNEL BADGE FOUND
             const badge = BadgesData["TTV"].global.find(
-                (badge: Badge) =>
-                    badge.id === `${badgeSplit[0]}_${badgeSplit[1]}`,
-            ) as Badge | undefined;
+                (badge) => badge.id === `${badgeSplit[0]}_${badgeSplit[1]}`,
+            );
 
             if (badge && badge.id) {
                 if (
@@ -118,7 +115,7 @@ export function parseBadges(userstate: Record<string, any>): parsedBadge[] {
         }
     }
 
-    if (onlyTwitchBadges) return user_badges as parsedBadge[];
+    if (onlyTwitchBadges) return user_badges;
 
     // OTHER BADGES
 
@@ -126,31 +123,34 @@ export function parseBadges(userstate: Record<string, any>): parsedBadge[] {
     const foundChatterinoBadges = [
         ...BadgesData["OTHER"]["Chatterino"],
         ...BadgesData["OTHER"]["ChatterinoHomies"],
-    ].filter((badge) => badge.owners.includes(userstate["user-id-raw"]));
+    ].filter((badge) => badge.users.includes(userstate["user-id-raw"]));
 
     if (foundChatterinoBadges) {
-        foundChatterinoBadges.forEach((foundChatterinoBadge: Badge) => {
+        foundChatterinoBadges.forEach((foundChatterinoBadge) => {
             user_badges.push({
-                badge_url: foundChatterinoBadge.url,
-                alt: foundChatterinoBadge.title,
+                badge_url:
+                    foundChatterinoBadge.image3 ||
+                    foundChatterinoBadge.image2 ||
+                    foundChatterinoBadge.image1,
+                alt: foundChatterinoBadge.tooltip,
                 background_color: undefined,
             });
         });
     }
 
     // FFZ
-    const foundFFZBadges = BadgesData["FFZ"]["global"].filter(
-        (badge: Record<string, any>) =>
-            badge.owners.includes(userstate["username"]),
+    const foundFFZBadges = BadgesData["FFZ"]["global"].filter((badge) =>
+        badge.owners.includes(userstate["username"]),
     );
+
     const foundFFZBadge = BadgesData["FFZ"]["global"].find(
-        (badge: Record<string, any>) =>
+        (badge) =>
             badge.id == BadgesData["FFZ"]["user"]["user"][userstate["user-id"]],
     );
 
     if (foundFFZBadge) foundFFZBadges.push(foundFFZBadge);
 
-    foundFFZBadges.forEach((foundFFZBadge: Badge) => {
+    foundFFZBadges.forEach((foundFFZBadge) => {
         user_badges.push({
             badge_url: foundFFZBadge.urls[foundFFZBadge.urls.length - 1].url,
             alt: foundFFZBadge.title,
@@ -159,22 +159,21 @@ export function parseBadges(userstate: Record<string, any>): parsedBadge[] {
     });
 
     // BTTV
-    const foundBTTVBadge = BadgesData["BTTV"]["global"].find(
-        (badge: Record<string, any>) =>
-            badge.providerId == userstate?.["user-id"],
+    const foundBTTVBadge = BadgesData["BTTV"]["global"].find((badge) =>
+        badge.owners.includes(userstate?.["user-id"]),
     );
 
     if (foundBTTVBadge) {
         user_badges.push({
-            badge_url: foundBTTVBadge?.badge?.svg,
-            alt: foundBTTVBadge?.badge?.description,
+            badge_url: foundBTTVBadge.url,
+            alt: foundBTTVBadge.title,
             background_color: undefined,
         });
     }
 
     // TurtegBot
-    const foundTurtegBotBadge = BadgesData["OTHER"]["TurtegBot"].find(
-        (badge: any) => badge.users?.includes(userstate["user-id-raw"]),
+    const foundTurtegBotBadge = BadgesData["OTHER"]["TurtegBot"].find((badge) =>
+        badge.users?.includes(userstate["user-id-raw"]),
     );
 
     if (foundTurtegBotBadge) {
@@ -198,7 +197,7 @@ export function parseBadges(userstate: Record<string, any>): parsedBadge[] {
 
     // Poland_BOT
     const foundPolandBOTBadge = Object.entries(
-        BadgesData["OTHER"]["PolandBOT"] as Record<string, string[]>,
+        BadgesData["OTHER"]["PolandBOT"],
     ).find(([role, userList]) => userList.includes(userstate["user-id-raw"]));
 
     if (foundPolandBOTBadge) {
@@ -211,5 +210,5 @@ export function parseBadges(userstate: Record<string, any>): parsedBadge[] {
         });
     }
 
-    return user_badges as parsedBadge[];
+    return user_badges;
 }

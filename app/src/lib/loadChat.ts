@@ -6,7 +6,7 @@ import {
     getMainBadges,
     getPolandBOTBadges,
     getTurtegBotBadges,
-} from "$lib/badges";
+} from "$lib/badges/main";
 import { getChannelEmotesViaTwitchID, getGlobalEmotes } from "$lib/emotes";
 import { globals, loadingInfo } from "$stores/global";
 import { settings } from "$stores/settings";

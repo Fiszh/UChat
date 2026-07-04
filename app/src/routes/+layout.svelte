@@ -9,7 +9,7 @@
 
     import { page } from "$app/state";
     import Banner from "$components/Banner.svelte";
-    import { isMobile } from "$stores/global.js";
+    import { isMobile } from "$stores/global";
 
     let { data, children } = $props();
 
@@ -20,7 +20,8 @@
 
     onMount(() => {
         const params = new URLSearchParams(window.location.search);
-        hasChannel = params.has("channel") || params.has("id");
+        hasChannel =
+            params.has("channel") || params.has("id") || params.has("kick");
 
         setMobile();
         window.addEventListener("resize", setMobile);
