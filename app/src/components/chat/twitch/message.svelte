@@ -3,17 +3,17 @@
 
     import { getPaint, getPaintHTML } from "$lib/services/7TV/cosmetics";
     import { replaceWithEmotes } from "$lib/emoteParser";
-    import { parseBadges } from "$lib/badgeParser";
+    import { parseBadges } from "$lib/badges/parser";
     import { cleanUpSharedChat, fixNameColor } from "$lib/overlayIndex";
 
-    import Badge from "./Badge.svelte";
+    import Badge from "../../Badge.svelte";
 
     import { type Setting, settings } from "$stores/settings";
     import { emotes, badges, globals } from "$stores/global";
     import { cosmetics } from "$stores/cosmetics";
     import { messages } from "$lib/chat";
     import { getChannelEmotesViaTwitchID } from "$lib/emotes";
-    import { ListStart } from "@lucide/svelte";
+    import Twitch from "../../logos/twitch.svelte";
 
     type Props = {
         user: string;
@@ -187,18 +187,23 @@
 
 {#snippet Badges()}
     <strong class="badge-wrapper">
-        {#each userBadges as badge, i (i)}
-            <Badge
-                badge_url={badge.badge_url}
-                alt={badge.alt}
-                background_color={badge.background_color}
-            />
-        {/each}
+        {#if globals.channelKickName}
+            <Twitch brandColor={true} />
+        {/if}
+        {#if userBadges && userBadges.length}
+            {#each userBadges as badge, i (i)}
+                <Badge
+                    badge_url={badge.badge_url}
+                    alt={badge.alt}
+                    background_color={badge.background_color}
+                />
+            {/each}
+        {/if}
     </strong>
 {/snippet}
 
 <div class="chat-message" bind:this={chatMessage}>
-    {#if userBadges && userBadges.length}{@render Badges()}{/if}
+    {#if (userBadges && userBadges.length) || globals.channelKickName}{@render Badges()}{/if}
     {@render paint()}{#if !tags.action}:{/if}
     <span style:color={tags.action ? nameColor : "defaultColor"}
         >{@html parsedMessage ?? text}</span

@@ -1,3 +1,4 @@
+import type { Badges } from "$types/badges";
 import { writable } from "svelte/store";
 
 export const isMobile = writable<boolean>(false);
@@ -25,20 +26,21 @@ interface Emotes {
         global: ParsedEmote[];
         channel: Record<string, ParsedEmote[]>;
     };
-    BITS: any[];
+    BITS: ParsedEmote[];
 }
 
-interface Badges {
-    UChat: any[];
+interface GlobalBadges {
+    UChat: Badges.UChat[];
     TTV: {
-        global: any[];
-        channel: any[];
+        global: Badges.Twitch[];
+        channel: Badges.Twitch[];
     };
+    KICK: Badge[];
     BTTV: {
-        global: any[];
+        global: Badges.BTTV[];
     };
     FFZ: {
-        global: any[];
+        global: Badges.FFZ[];
         user: {
             vip: string;
             mod: string;
@@ -46,10 +48,10 @@ interface Badges {
         };
     };
     OTHER: {
-        Chatterino: any[];
-        ChatterinoHomies: any[];
+        Chatterino: Badges.Chatterino[];
+        ChatterinoHomies: Badges.Chatterino[];
         PolandBOT: Record<string, string[]>;
-        TurtegBot: any[];
+        TurtegBot: Badges.TurtegBadge[];
     };
     channel: Record<string, string>;
 }
@@ -61,9 +63,10 @@ export const emotes = writable<Emotes>({
     BITS: [],
 });
 
-export const badges = writable<Badges>({
+export const badges = writable<GlobalBadges>({
     UChat: [],
     TTV: { global: [], channel: [] },
+    KICK: [],
     BTTV: { global: [] },
     FFZ: { global: [], user: { vip: "", mod: "", user: {} } },
     OTHER: {
@@ -82,6 +85,11 @@ interface Globals {
     channelTwitchName: string | null;
 
     inSharedChat: boolean;
+
+    channelKickName: string | null;
+    channelKickID: string | null;
+    chatroomKickID: string | null;
+    userKickID: string | null;
 
     SevenTVID: string | null;
     SevenTVemoteSetId: string | null;
@@ -113,6 +121,12 @@ export const globals: Globals = {
     channelTwitchName: null,
 
     inSharedChat: false,
+
+    // KICK
+    channelKickName: null,
+    channelKickID: null,
+    chatroomKickID: null,
+    userKickID: null,
 
     // 7TV
     SevenTVID: null,

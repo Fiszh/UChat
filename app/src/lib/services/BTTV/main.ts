@@ -1,3 +1,5 @@
+import type { Badges } from "$types/badges";
+
 const BTTVZeroWidth = [
     "SoSnowy",
     "IceCold",
@@ -95,8 +97,20 @@ async function getEmoteData(twitchID: string | number) {
     }
 }
 
-async function getBadgeData() {
-    let badge_data: any[] = [];
+interface unparsedBadge {
+    id: string;
+    name: string;
+    displayName: string;
+    providerId: string;
+    badge: {
+        type: number;
+        description: string;
+        svg: string;
+    };
+}
+
+async function getBadgeData(): Promise<Badges.BTTV[]> {
+    let badge_data: Badges.BTTV[] = [];
 
     try {
         const response = await fetch(
@@ -104,22 +118,24 @@ async function getBadgeData() {
         );
 
         if (response.ok) {
-            const data = await response.json();
+            const data: unparsedBadge[] = await response.json();
 
             badge_data = Object.values(
-                data.reduce((acc: Record<string, any>, user: BadgeUser) => {
-                    const svg = user.badge.svg;
-                    if (!acc[svg]) {
-                        acc[svg] = {
+                data.reduce((acc: Record<string, any>, user) => {
+                    const badgeType = String(user.badge.type);
+                    if (!acc[badgeType]) {
+                        acc[badgeType] = {
                             id: user.badge.description
                                 .toLowerCase()
                                 .replace(/\s+/g, "_"),
                             title: user.badge.description,
-                            urls: [{ url: svg, scale: "4x" }],
+                            url: user.badge.svg,
                             owners: [],
                         };
                     }
-                    acc[svg].owners.push(user.providerId);
+
+                    acc[badgeType].owners.push(user.providerId);
+
                     return acc;
                 }, {}),
             );
