@@ -1,13 +1,8 @@
 export namespace Badges {
     interface Twitch {
         id: string;
-        title: string;
-        name?: string;
-        color?: string;
-        tooltip?: string;
-        urls: ScaleUrls[];
         url: string;
-        owner?: any[];
+        title: string;
     }
 
     interface parsed {

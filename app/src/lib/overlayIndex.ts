@@ -37,11 +37,11 @@ export async function getMainUser(channel: string | number) {
             return false;
         }
 
-        const response_data = await response.json();
+        const response_data: UChat.ChannelResponse = await response.json();
 
         if (
-            !response_data?.channel?.data ||
-            Object.keys(response_data?.channel?.data)?.length < 5
+            "error" in response_data ||
+            Object.keys(response_data.channel.data).length < 5
         ) {
             console.error(
                 "Invalid or incomplete data structure:",
@@ -53,35 +53,31 @@ export async function getMainUser(channel: string | number) {
         const channel_data = response_data.channel.data;
 
         const data = {
-            channel_info: channel_data?.["channel_info"],
-            channel_badges: channel_data?.["channel_badges"],
-            channel_bits: channel_data?.["channel_cheer_emotes"],
-            global_badges: channel_data?.["global_badges"],
-            global_bits: channel_data?.["global_cheer_emotes"],
+            channel_info: channel_data["channel_info"],
+            channel_badges: channel_data["channel_badges"],
+            channel_bits: channel_data["channel_cheer_emotes"],
+            global_badges: channel_data["global_badges"],
+            global_bits: channel_data["global_cheer_emotes"],
         };
 
         // CHANNEL INFO LOGIN
-        globals.channelTwitchID = data?.channel_info?.id || null;
-        globals.channelTwitchName = data?.channel_info?.login || null;
-        const channel_color = data?.channel_info?.color || "white";
-
-        type badge = Record<string, string>;
+        globals.channelTwitchID = data.channel_info.id ?? null;
+        globals.channelTwitchName = data.channel_info.login ?? null;
+        const channel_color = data.channel_info.chatColor ?? "white";
 
         // CHANNEL BADGES
-        const broadcastBadges = data?.channel_badges?.broadcastBadges || [];
+        const broadcastBadges = data.channel_badges.broadcastBadges ?? [];
         try {
             badges.update((badgeData) => {
-                badgeData["TTV"].channel = broadcastBadges.map(
-                    (badge: badge) => ({
-                        id: badge.setID + "_" + badge.version,
-                        url:
-                            badge.image4x ||
-                            badge.image3x ||
-                            badge.image2x ||
-                            badge.image1x,
-                        title: badge.title,
-                    }),
-                );
+                badgeData["TTV"].channel = broadcastBadges.map((badge) => ({
+                    id: badge.setID + "_" + badge.version,
+                    url:
+                        badge.image4x ||
+                        badge.image3x ||
+                        badge.image2x ||
+                        badge.image1x,
+                    title: badge.title,
+                }));
 
                 return badgeData;
             });
@@ -90,91 +86,95 @@ export async function getMainUser(channel: string | number) {
         }
 
         // CHANNEL BITS EMOTES
-        let channel_bit_emotes = [];
+        let channel_bit_emotes: Emotes.Bits[] = [];
         try {
-            const cheerGroups = data?.channel_bits?.cheer?.cheerGroups || [];
-            channel_bit_emotes = cheerGroups.map(
-                (group: Record<string, any>) => {
-                    const node = group.nodes?.[0];
-                    const prefix = node?.prefix?.toLowerCase() || "prefix";
-                    const templateURL =
-                        group.templateURL ||
-                        "https://d3aqoihi2n8ty8.cloudfront.net/actions/PREFIX/BACKGROUND/ANIMATION/TIER/SCALE.EXTENSION";
+            const cheerGroups = data.channel_bits.cheer?.cheerGroups ?? [];
+            channel_bit_emotes = cheerGroups.map<Emotes.Bits>((group) => {
+                const node = group.nodes[0];
+                const prefix = (node.prefix ?? "prefix").toLowerCase();
+                const templateURL =
+                    group.templateURL ||
+                    "https://d3aqoihi2n8ty8.cloudfront.net/actions/PREFIX/BACKGROUND/ANIMATION/TIER/SCALE.EXTENSION";
 
-                    return {
-                        name: prefix,
-                        tiers:
-                            node?.tiers?.map((tier: Record<string, any>) => {
-                                const replacements = {
-                                    PREFIX: prefix,
-                                    BACKGROUND: "dark",
-                                    ANIMATION: "animated",
-                                    TIER: tier?.bits || "TIER",
-                                    "SCALE.EXTENSION": "4.gif",
-                                } as const;
+                return {
+                    name: prefix,
+                    tiers:
+                        node.tiers.map((tier) => {
+                            const replacements = {
+                                PREFIX: prefix,
+                                BACKGROUND: "dark",
+                                ANIMATION: "animated",
+                                TIER: tier.bits ?? "TIER",
+                                "SCALE.EXTENSION": "4.gif",
+                            };
 
-                                const tierURL = templateURL.replace(
-                                    /PREFIX|BACKGROUND|ANIMATION|TIER|SCALE\.EXTENSION/g,
-                                    (match: keyof typeof replacements) =>
-                                        replacements[match],
-                                );
+                            const tierURL = templateURL.replace(
+                                /PREFIX|BACKGROUND|ANIMATION|TIER|SCALE\.EXTENSION/g,
+                                (match) =>
+                                    String(
+                                        replacements[
+                                            match as keyof typeof replacements
+                                        ],
+                                    ),
+                            );
 
-                                return {
-                                    min_bits: tier?.bits,
-                                    url: tierURL,
-                                    emote_link: tierURL,
-                                    color: channel_color,
-                                };
-                            }) || [],
-                        site: "TTV",
-                    };
-                },
-            );
+                            return {
+                                min_bits: tier.bits,
+                                url: "tierURL",
+                                emote_link: tierURL,
+                                color: channel_color,
+                            };
+                        }) || [],
+                    site: "TTV",
+                };
+            });
         } catch (err) {
             console.error("Error loading channel bit emotes:", err);
         }
 
         // GLOBAL BITS EMOTES
-        let global_bit_emotes = [];
+        let global_bit_emotes: Emotes.Bits[] = [];
         try {
-            const global_groups = data?.global_bits?.groups || [];
-            const displayConfig =
-                data?.global_bits?.displayConfig?.colors || [];
+            const global_groups = data.global_bits.groups;
+            const displayConfig = data.global_bits.displayConfig.colors;
 
             global_bit_emotes =
-                global_groups[0]?.nodes?.map((group: Record<string, any>) => {
-                    const prefix = group?.prefix?.toLowerCase() || "prefix";
+                global_groups[0].nodes.map((group) => {
+                    const prefix = (group.prefix ?? "prefix").toLowerCase();
                     const templateURL =
-                        global_groups[0]?.templateURL ||
+                        global_groups[0].templateURL ||
                         "https://d3aqoihi2n8ty8.cloudfront.net/actions/PREFIX/BACKGROUND/ANIMATION/TIER/SCALE.EXTENSION";
 
                     return {
                         name: prefix,
                         tiers:
-                            group?.tiers?.map((tier: Record<string, any>) => {
+                            group.tiers.map((tier) => {
                                 const replacements = {
                                     PREFIX: prefix,
                                     BACKGROUND: "dark",
                                     ANIMATION: "animated",
-                                    TIER: tier?.bits || "TIER",
+                                    TIER: tier.bits || "TIER",
                                     "SCALE.EXTENSION": "4.gif",
-                                } as const;
+                                };
 
                                 const tierURL = templateURL.replace(
                                     /PREFIX|BACKGROUND|ANIMATION|TIER|SCALE\.EXTENSION/g,
-                                    (match: keyof typeof replacements) =>
-                                        replacements[match],
+                                    (match) =>
+                                        String(
+                                            replacements[
+                                                match as keyof typeof replacements
+                                            ],
+                                        ),
                                 );
 
                                 return {
-                                    min_bits: tier?.bits,
+                                    min_bits: tier.bits,
                                     url: tierURL,
                                     emote_link: tierURL,
                                     color:
                                         displayConfig.find(
-                                            (color: Record<string, string>) =>
-                                                color.bits === tier?.bits,
-                                        )?.color || "white",
+                                            (color) => color.bits === tier.bits,
+                                        )?.color ?? "white",
                                 };
                             }) || [],
                         site: "TTV",
@@ -187,17 +187,15 @@ export async function getMainUser(channel: string | number) {
         // GLOBAL BADGES
         try {
             badges.update((badgeData) => {
-                badgeData["TTV"].global = (data.global_badges || []).map(
-                    (badge: badge) => ({
-                        id: badge.setID + "_" + badge.version,
-                        url:
-                            badge.image4x ||
-                            badge.image3x ||
-                            badge.image2x ||
-                            badge.image1x,
-                        title: badge.title,
-                    }),
-                );
+                badgeData["TTV"].global = data.global_badges.map((badge) => ({
+                    id: badge.setID + "_" + badge.version,
+                    url:
+                        badge.image4x ||
+                        badge.image3x ||
+                        badge.image2x ||
+                        badge.image1x,
+                    title: badge.title,
+                }));
 
                 return badgeData;
             });
@@ -212,9 +210,8 @@ export async function getMainUser(channel: string | number) {
         });
 
         // SETTINGS
-        if (response_data["user_settings"]) {
+        if (response_data["user_settings"])
             parseSavedSettings(response_data["user_settings"]);
-        }
 
         return true;
     } catch (err) {
@@ -222,7 +219,9 @@ export async function getMainUser(channel: string | number) {
     }
 }
 
-export function parseSavedSettings(saved_settings: Setting) {
+export function parseSavedSettings(
+    saved_settings: NonNullable<UChat.Channel["user_settings"]>,
+) {
     for (const [key, value] of Object.entries(saved_settings)) {
         settings.update((arr) => {
             const foundSetting = arr.find((setting) => setting.param == key);

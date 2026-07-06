@@ -13,7 +13,7 @@ export const loadingInfo = writable<LoadingInfo>({
     type: undefined,
 });
 
-interface Emotes {
+interface GlobalEmotes {
     "7TV": {
         global: ParsedEmote[];
         channel: Record<string, SavedSevenTVSet | Record<string, never>>;
@@ -26,7 +26,7 @@ interface Emotes {
         global: ParsedEmote[];
         channel: Record<string, ParsedEmote[]>;
     };
-    BITS: ParsedEmote[];
+    BITS: Emotes.Bits[];
 }
 
 interface GlobalBadges {
@@ -56,7 +56,7 @@ interface GlobalBadges {
     channel: Record<string, string>;
 }
 
-export const emotes = writable<Emotes>({
+export const emotes = writable<GlobalEmotes>({
     "7TV": { global: [], channel: {} },
     BTTV: { global: [], channel: {} },
     FFZ: { global: [], channel: {} },

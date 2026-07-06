@@ -1,6 +1,21 @@
 import { badges } from "$stores/global";
 import { get } from "svelte/store";
 import { messages } from "./chat";
+import type { Badges } from "$types/badges";
+
+interface IVRBadge {
+    set_id: string;
+    versions: {
+        id: string;
+        image_url_1x: string;
+        image_url_2x: string;
+        image_url_4x: string;
+        title: string;
+        description: string;
+        click_action: null;
+        click_url: null;
+    }[];
+}
 
 export async function getBadges() {
     const response = await fetch(`https://api.ivr.fi/v2/twitch/badges/global`, {
@@ -11,10 +26,10 @@ export async function getBadges() {
 
     if (!response.ok) throw new Error("Network response was not ok");
 
-    const data = await response.json();
+    const data: IVRBadge[] = await response.json();
 
-    const previewData = data.flatMap((badge: Record<string, any>) => {
-        return badge?.version.flatMap((version: Record<string, any>) => ({
+    const previewData = data.flatMap((badge) => {
+        return badge.versions.flatMap((version) => ({
             id: badge.set_id + "_" + version.id,
             url:
                 version.image_url_4x ||
@@ -42,7 +57,7 @@ function randomString(len: number) {
     return out;
 }
 
-function pickRandomBadges(): Badge[] {
+function pickRandomBadges(): Badges.Twitch[] {
     const count = Math.floor(Math.random() * 2) + 1;
     const badges_data = get(badges);
     const shuffled = badges_data["TTV"]["global"].sort(

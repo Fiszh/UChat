@@ -8,8 +8,8 @@ import SevenTV_main from "$lib/services/7TV/main";
 import BTTV_main from "$lib//services/BTTV/main";
 import FFZ_main from "$lib//services/FFZ/main";
 
-let emote_data: any = get(emotes);
-let badge_data: any = get(badges);
+let emote_data = get(emotes);
+let badge_data = get(badges);
 
 emotes.subscribe((data) => (emote_data = data));
 badges.subscribe((data) => (badge_data = data));
@@ -64,9 +64,7 @@ export async function getChannelEmotesViaTwitchID(twitchID: string) {
     // BTTV
     try {
         if (!emote_data["BTTV"]["channel"][twitchID]) {
-            const bttvData = (await BTTV_main.getEmoteData(
-                twitchID,
-            )) as ParsedEmote[];
+            const bttvData = await BTTV_main.getEmoteData(twitchID);
 
             emotes.update((emoteData) => {
                 emoteData["BTTV"]["channel"][twitchID] = bttvData;

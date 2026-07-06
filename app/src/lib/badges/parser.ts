@@ -22,23 +22,35 @@ settings.subscribe((cfg) => {
         onlyTwitchBadges = foundSetting.value;
 });
 
-export function parseBadges(userstate: Record<string, any>): parsedBadge[] {
+interface MessageInfo {
+    username: string;
+    user_id: string;
+    room_id?: string;
+}
+
+export function parseBadges(
+    userstate: Record<string, any>,
+    messageInfo?: MessageInfo,
+): parsedBadge[] {
     const user_badges: parsedBadge[] = [];
 
     // SHARED CHAT BADGE
     const foundAvatarBadge =
         BadgesData["channel"]?.[userstate["source-room-id"]];
 
-    if (foundAvatarBadge)
+    if (foundAvatarBadge) {
         user_badges.push({
             badge_url: foundAvatarBadge,
             alt: "Shared Chat",
             background_color: undefined,
         });
+    }
 
     // SHARED CHAT BADGE
     const foundUChatBadges = BadgesData["UChat"].filter((badge) =>
-        badge.users.includes(userstate["user-id-raw"]),
+        badge.users.includes(
+            userstate["user-id-raw"] ?? messageInfo?.["user_id"],
+        ),
     );
 
     foundUChatBadges.forEach((foundUChatBadge) => {
@@ -185,7 +197,9 @@ export function parseBadges(userstate: Record<string, any>): parsedBadge[] {
     }
 
     // 7TV
-    const found7TVBadge = getBadge(userstate["user-id"]);
+    const found7TVBadge = getBadge(
+        userstate["user-id"] ?? messageInfo?.["user_id"],
+    );
 
     if (found7TVBadge) {
         user_badges.push({
