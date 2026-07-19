@@ -1,31 +1,26 @@
+import { API_URL } from "./global";
+
 export const faqItems = [
     {
         question: "What is UChat?",
-        answer: "UChat is a custom Twitch chat overlay that supports 7TV BetterTTV and FrankerFaceZ emotes",
+        answer: "UChat is a custom Twitch chat overlay that supports 7TV, BetterTTV, and FrankerFaceZ emotes.",
     },
     {
         question: "How do I get my overlay URL?",
-        answer: "After entering your channel name and customizing your settings the overlay URL will appear in the 'Overlay URL' section where you can copy it using the copy button",
+        answer: "After entering your channel name and customizing your settings, the overlay URL will appear in the 'Overlay URL' section where you can copy it using the copy button.",
     },
     {
         question: "Who made UChat?",
-        answer: "UChat was made by uniiDev with the help of ftk789 & creepycode",
+        answer: "UChat was made by uniiDev with the help of ftk789 & creepycode.",
         links: [
             { name: "uniiDev", url: "https://api.unii.dev/twitch/528761326" },
             { name: "ftk789", url: "https://api.unii.dev/twitch/166427338" },
-            {
-                name: "creepycode",
-                url: "https://api.unii.dev/twitch/404660262",
-            },
+            { name: "creepycode", url: "https://api.unii.dev/twitch/404660262" },
         ],
     },
     {
-        question: "Why do my settings stay after refreshing?",
-        answer: "Theyre saved in your browser Click Reset Settings to reset",
-    },
-    {
         question: "What chat commands are available?",
-        answer: "Commands can only be used by the broadcaster or a mod, you can also use commands with !uchat <command>. Click to copy a command.",
+        answer: "Commands can only be used by the broadcaster or a mod; you can also use commands with !uchat <command>. Click to copy a command.",
         commands: [
             { cmd: "!reloadchat", desc: "Reloads the overlay" },
             { cmd: "!refreshchat", desc: "Refreshes the overlay" },
@@ -45,33 +40,54 @@ export const faqItems = [
         ],
     },
     {
-        question: "How do the Save and Delete buttons work for testers?",
-        answer: "Pressing Save updates only the settings you’ve changed on the server linked to your user ID Delete removes all your saved global settings from the server Local browser settings arent affected by Delete",
+        question: "What is YAUTO?",
+        answer: 'YAUTO, short for "Yet Another Useless Twitch Overlay," was the former name of this project. It was renamed to UChat on 02/08/2025 for a cleaner and more recognizable name.',
     },
     {
         question: "Is Twitch login required?",
-        answer: "No",
+        answer: "No.",
     },
     {
         question: "Why is there a login button?",
-        answer: "Early testers of UChat can log in to save their settings globally This way they only need to enter their channel name without using a long overlay URL",
+        answer: "Early testers of UChat can log in to save their settings globally. This way, they only need to enter their channel name without using a long overlay URL.",
     },
     {
-        question: "Is my Twitch token safe?",
-        answer: "Your token is only used for validation and is never stored on our servers",
+        question: "How do the Save and Delete buttons work for testers?",
+        answer: "Pressing Save updates only the settings you’ve changed on the server linked to your user ID. Delete removes all your saved global settings from the server. Local browser settings aren't affected by Delete.",
     },
     {
         question: "What are the chances of becoming a tester?",
-        answer: "The testing phase is over Currently no new testers are being accepted",
+        answer: "The testing phase is over. Currently, no new testers are being accepted.",
+    },
+    {
+        question: "Why do my settings stay after refreshing?",
+        answer: "They are saved in your browser. Click 'Reset Settings' to reset.",
     },
     {
         question: "Where can I find the API?",
-        answer: "You can access the API documentation here",
+        answer: "You can access the public API documentation here.",
         links: [{ name: "here", url: "https://api.unii.dev/docs/" }],
     },
     {
+        question: "Can I use this overlay or its API for my own project?",
+        answer: "You may use the public API endpoints, but the overlay is strictly proprietary. Unauthorized usage or attempts to bypass restrictions (such as CORS) will result in an immediate, indefinite ban.",
+    },
+    {
+        question: "Where can I find the source code?",
+        answer: "You can find the source code on GitHub.",
+        links: [{ name: "GitHub", url: "https://github.com/Fiszh/UChat" }],
+    },
+    {
+        question: "Is my Twitch token safe?",
+        answer: "Your token is only used for validation and is never stored on our servers.",
+    },
+    {
+        question: "Will the overlay support Kick?",
+        answer: "Yes, we are currently looking into adding Kick support.",
+    },
+    {
         question: "What if my question isn't listed here?",
-        answer: "For more information you can reach out via Twitch or Discord",
+        answer: "For more information, you can reach out via Twitch or Discord.",
         links: [
             { name: "Twitch", url: "https://api.unii.dev/twitch/528761326" },
             {
@@ -79,19 +95,6 @@ export const faqItems = [
                 url: "https://discord.com/users/703639905691238490",
             },
         ],
-    },
-    {
-        question: "Where can I find the source code?",
-        answer: "You can find the source code on GitHub",
-        links: [{ name: "GitHub", url: "https://github.com/Fiszh/UChat" }],
-    },
-    {
-        question: "What is YAUTO?",
-        answer: 'YAUTO short for "Yet Another Useless Twitch Overlay" was the former name of this project It was renamed to UChat on 02/08/2025 for a cleaner and more recognizable name',
-    },
-    {
-        question: "Will the overlay support Kick?",
-        answer: "Yes, we are currently looking into adding kick support.",
     },
 ];
 
