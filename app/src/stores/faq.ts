@@ -1,5 +1,3 @@
-import { API_URL } from "./global";
-
 export const faqItems = [
     {
         question: "What is UChat?",
