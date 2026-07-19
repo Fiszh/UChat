@@ -13,7 +13,10 @@ export const faqItems = [
         links: [
             { name: "uniiDev", url: "https://api.unii.dev/twitch/528761326" },
             { name: "ftk789", url: "https://api.unii.dev/twitch/166427338" },
-            { name: "creepycode", url: "https://api.unii.dev/twitch/404660262" },
+            {
+                name: "creepycode",
+                url: "https://api.unii.dev/twitch/404660262",
+            },
         ],
     },
     {
