@@ -101,6 +101,7 @@ export const globals: Globals = {
         "soundalerts", // from speedyemperor
         "rancbot", // from fehleno
         "waga_bot", // from fehleno
+        "tangiabot,
     ],
     /*
     If you want your bot added, open a PR on the repo.
