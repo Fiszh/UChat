@@ -4,8 +4,7 @@ Contributions are welcome!
 </br>If you have a feature suggestion or found a bug, feel free to open a pull request or issue.
 </br>Not every contribution will be awarded the contributor role and badge.
 
-## API Usage
-
+> [!WARNING]
 > This repo does not include a backend. If you need API functionality, build it using the [main site repo](https://github.com/Fiszh/uniiDev).  
 > The backend/API used by this site is not for personal or public use.  
 > Please do not ask for API code.
