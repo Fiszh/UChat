@@ -82,10 +82,6 @@ export const faqItems = [
         answer: "Your token is only used for validation and is never stored on our servers.",
     },
     {
-        question: "Will the overlay support Kick?",
-        answer: "Yes, we are currently looking into adding Kick support.",
-    },
-    {
         question: "What if my question isn't listed here?",
         answer: "For more information, you can reach out via Twitch or Discord.",
         links: [

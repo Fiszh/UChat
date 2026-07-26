@@ -69,7 +69,9 @@
             <button onclick={() => toggleAll(true)}>
                 <small>{$t("labels.enable_all")}</small>
             </button>
-            <small>{bitmap}</small>
+            {#if dev}
+                <small>{bitmap}</small>
+            {/if}
             <button onclick={() => toggleAll(false)}>
                 <small>{$t("labels.disable_all")}</small>
             </button>

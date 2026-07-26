@@ -6,7 +6,6 @@
         MessageSquareMore,
         ArrowLeftRight,
         Lightbulb,
-        Bold,
         Brush,
     } from "@lucide/svelte";
 
@@ -111,8 +110,8 @@
         <UChat size={50} brandColor />
         <div id="name">
             <strong>UChat</strong>
-            <h1 style="font-size:0.8rem; line-height: 1px;">
-                UChat Chat Overlay for Twitch
+            <h1 style="font-size:0.6em; line-height: 1px;">
+                UChat Chat Overlay for Twitch & Kick
             </h1>
             <small id="version_text"
                 >{__APP_VERSION}
