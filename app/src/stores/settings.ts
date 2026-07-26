@@ -1,6 +1,9 @@
-import { logos } from "$components/logos.svelte";
-import { flags } from "$lib/bitmap";
+import * as logosModule from "$components/logos.svelte";
 import type { Snippet } from "svelte";
+const logos: Record<string, Snippet<[boolean]>> = (logosModule as any).logos ??
+(logosModule as any).default?.logos ??
+{};
+import { flags } from "$lib/bitmap";
 import { writable } from "svelte/store";
 
 export interface DefaultSetting {

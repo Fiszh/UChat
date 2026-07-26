@@ -18,6 +18,7 @@
     import Banner from "$components/Banner.svelte";
     import { isFirefox, isSafari } from "$lib/browser";
     import { addToast } from "$lib/toast";
+    import { previewMessages } from "$stores/previewMessages";
 
     let messageDisplay: HTMLElement;
 
@@ -42,6 +43,7 @@
             }
 
             message["tags"]["user-id"] = user_info[0]["id"];
+            message["tags"]["user-id-raw"] = String(user_info[0]["id"]);
             message["tags"]["color"] = user_info[0]["chatColor"];
 
             const sevenTV_user = await SevenTV_main.user.byTwitchID(
@@ -57,7 +59,10 @@
         if (user_info)
             message = {
                 ...message,
-                tags: { ...message.tags, "badges-raw": mappedBadges },
+                tags: {
+                    ...message.tags,
+                    "badges-raw": mappedBadges,
+                } as typeof message.tags,
             };
 
         getChannelEmotesViaTwitchID(channel.id);
@@ -100,14 +105,7 @@
     }
 
     let message = $state({
-        tags: {
-            username: "uniidev",
-            "display-name": "uniiDev",
-            "user-id": "528761326",
-            "badges-raw": "broadcaster/1,twitch-recap-2024/1",
-            color: "#ffb3ff",
-            "room-id": "0",
-        },
+        ...previewMessages[0],
         message: "Hello from UChat!",
     });
 

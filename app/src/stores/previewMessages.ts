@@ -109,4 +109,5 @@ export const previewMessages = [
         "user-id-raw": String(m.tags["user-id"]),
         "room-id": "0",
     },
+    service: "TWITCH",
 }));
