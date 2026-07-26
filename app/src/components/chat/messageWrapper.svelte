@@ -43,8 +43,6 @@
     let chatMessage: HTMLElement;
 
     onMount(() => {
-        //console.log(user, text, tags, message_id, room_id, platform);
-
         if (Number(chatSettings["fadeOut"]) && window.location.search) {
             const delay = Number(chatSettings["fadeOut"]) * 1000;
 

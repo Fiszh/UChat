@@ -153,6 +153,7 @@ export function connect(channel_name: string) {
         );
         TTV_IRC_WS?.send(`NICK justinfan${Math.floor(Math.random() * 9999)}`);
         TTV_IRC_WS?.send(`JOIN #${channel_name}`);
+
         console.log("Connected to Twitch IRC WebSocket");
 
         connectionStatus.set("open");

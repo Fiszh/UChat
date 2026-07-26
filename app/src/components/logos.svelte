@@ -29,25 +29,25 @@
     };
 </script>
 
-{#snippet SevenTV(brandColor: boolean)}<SevenTVComponent
-        {brandColor}
-    />{/snippet}
+{#snippet SevenTV(brandColor: boolean)}
+    <SevenTVComponent {brandColor} />
+{/snippet}
 {#snippet BTTV(brandColor: boolean)}<BTTVComponent {brandColor} />{/snippet}
-{#snippet ChatterinoHomies(brandColor: boolean)}<ChatterinoHomiesComponent
-        {brandColor}
-    />{/snippet}
-{#snippet Chatterino(brandColor: boolean)}<ChatterinoComponent
-        {brandColor}
-    />{/snippet}
+{#snippet ChatterinoHomies(brandColor: boolean)}
+    <ChatterinoHomiesComponent {brandColor} />
+{/snippet}
+{#snippet Chatterino(brandColor: boolean)}
+    <ChatterinoComponent {brandColor} />
+{/snippet}
 {#snippet FFZ(brandColor: boolean)}<FFZComponent {brandColor} />{/snippet}
 {#snippet GitHub(brandColor: boolean)}<GitHubComponent {brandColor} />{/snippet}
 {#snippet Kick(brandColor: boolean)}<KickComponent {brandColor} />{/snippet}
-{#snippet PolandBot(brandColor: boolean)}<PolandBotComponent
-        {brandColor}
-    />{/snippet}
+{#snippet PolandBot(brandColor: boolean)}
+    <PolandBotComponent {brandColor} />
+{/snippet}
 {#snippet Turteg(brandColor: boolean)}<TurtegComponent {brandColor} />{/snippet}
 {#snippet Twitch(brandColor: boolean)}<TwitchComponent {brandColor} />{/snippet}
 {#snippet UChat(brandColor: boolean)}<UChatComponent {brandColor} />{/snippet}
-{#snippet YouTube(brandColor: boolean)}<YouTubeComponent
-        {brandColor}
-    />{/snippet}
+{#snippet YouTube(brandColor: boolean)}
+    <YouTubeComponent {brandColor} />
+{/snippet}

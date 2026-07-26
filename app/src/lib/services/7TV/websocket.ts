@@ -391,8 +391,6 @@ class SevenTVWebSocket {
 
         const sub_condition = { ...condition, ...id_type };
 
-        console.log(id, type, condition, silent);
-
         const message = {
             op: 35,
             t: Date.now(),

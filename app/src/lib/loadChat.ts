@@ -60,8 +60,6 @@ export async function loadChat(displayLoading?: boolean) {
                 globals.userKickID,
             );
 
-            console.log(stv_user);
-
             if (stv_user["id"]) {
                 emotes.update((emoteData) => {
                     emoteData["7TV"]["channel"] = [

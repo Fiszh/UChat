@@ -54,8 +54,6 @@ export async function getMainBadges() {
             urls: badge["imgs"]["animated"] ?? badge["imgs"]["static"],
         }));
 
-    console.log(response, data, map);
-
     badges.update((e) => {
         e["UChat"] = map;
 

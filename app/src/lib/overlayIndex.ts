@@ -432,8 +432,6 @@ services["7TV"].ws.on("open", () => {
         }); // 7TV account not needed to recieve cosmetic info
     }
 
-    console.log(emote_data);
-
     const unique7TVIDs = [
         ...new Set(emote_data["7TV"]["channel"].map((s) => s["id"])),
     ];
@@ -445,8 +443,6 @@ services["7TV"].ws.on("open", () => {
             ),
         ),
     ];
-
-    console.log(unique7TVIDs, unique7TVSetIDs);
 
     for (const id of unique7TVSetIDs)
         services["7TV"].ws.subscribe(id, "user.*"); // SET CHANGES
