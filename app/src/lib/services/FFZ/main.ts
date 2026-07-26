@@ -22,20 +22,18 @@ async function parseSetData(
         original_name: emote?.name,
         emote_id: emote?.id,
         flags: emote?.data?.modifier_flags,
-        urls: Object.entries(emote.animated || emote.urls).reduce<
-            Record<string, ParsedEmotesUrls>
-        >((acc, [scale, url]) => {
+        urls: Object.entries(
+            emote.animated || emote.urls,
+        ).map<ParsedEmotesUrls>(([scale, url]) => {
             const numberScale = Number(scale);
 
-            acc[scale] = {
+            return {
                 scale,
                 url,
                 width: emote.width * numberScale,
                 height: emote.height * numberScale,
             };
-
-            return acc;
-        }, {}),
+        }),
         set: emoteSet === "global" ? "Global FFZ" : "FFZ",
     }));
 }

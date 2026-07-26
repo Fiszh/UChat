@@ -9,38 +9,55 @@ import { cosmetics } from "$stores/cosmetics";
 import cosmetics_single from "./GQL/cosmetics/single.gql?raw";
 import cosmetics_multiple from "./GQL/cosmetics/multiple.gql?raw";
 
-interface Owner {
-    id: string;
-    platform: string;
-    username: string;
-    display_name: string;
-    linked_at: number;
-    emote_capacity: number;
-    emote_set_id: string;
-}
-
-export function getPaint(username: Lowercase<string>): Paint | undefined {
+export function getPaint(
+    platform: Types7TV.Connection["platform"],
+    platformID: string,
+): Paint | undefined {
     const currentCosmetics = get(cosmetics);
 
-    return Object.values(currentCosmetics.paints).find((paint: Paint) =>
-        paint.owner.find((o: Owner) => o.username === username),
-    ) as Paint | undefined;
+    return Object.values(currentCosmetics.paints).find((paint) =>
+        paint.owner.find(
+            (c) =>
+                (c.id === platformID ||
+                    c.username == platformID ||
+                    c.display_name == platformID) &&
+                c.platform == platform,
+        ),
+    );
 }
 
-export function getBadge(twitchID: string): Badge | undefined {
+export function getBadge(
+    platform: Types7TV.Connection["platform"],
+    platformID: string,
+): SevenTVBadge | undefined {
     const currentCosmetics = get(cosmetics);
 
-    return Object.values(currentCosmetics.badges).find((badge: any) =>
-        badge.owner.find((o: Owner) => o.id === String(twitchID)),
-    ) as Badge | undefined;
+    return Object.values(currentCosmetics.badges).find((badge) =>
+        badge.owner.find(
+            (c) =>
+                (c.id === platformID ||
+                    c.username == platformID ||
+                    c.display_name == platformID) &&
+                c.platform == platform,
+        ),
+    );
 }
 
-export function getPersonalSets(twitchID: string): any | undefined {
+export function getPersonalSets(
+    platform: Types7TV.Connection["platform"],
+    platformID: string,
+): Types7TV.Set[] | undefined {
     const currentCosmetics = get(cosmetics);
 
-    return Object.values(currentCosmetics.sets).filter((set: any) =>
-        set.owner.some((o: Owner) => o.id === String(twitchID)),
-    ) as any | undefined;
+    return Object.values(currentCosmetics.sets).filter((set) =>
+        set.owner.find(
+            (c) =>
+                (c.id === platformID ||
+                    c.username == platformID ||
+                    c.display_name == platformID) &&
+                c.platform == platform,
+        ),
+    );
 }
 
 export const getPaintHTML = (paint_data: Paint): Record<string, string> => ({

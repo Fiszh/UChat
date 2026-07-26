@@ -25,7 +25,7 @@
         onChange(defaultValue!);
     };
     onMount(() => {
-        if (!typeof defaultValue) defaultValue = value;
+        if (typeof defaultValue == "undefined") defaultValue = value;
     });
 </script>
 

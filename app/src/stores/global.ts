@@ -1,3 +1,4 @@
+import type { Badges } from "$types/badges";
 import { writable } from "svelte/store";
 
 export const isMobile = writable<boolean>(false);
@@ -12,10 +13,10 @@ export const loadingInfo = writable<LoadingInfo>({
     type: undefined,
 });
 
-interface Emotes {
+export interface GlobalEmotes {
     "7TV": {
         global: ParsedEmote[];
-        channel: Record<string, SavedSevenTVSet | Record<string, never>>;
+        channel: SavedSevenTVSet[] | never[];
     };
     BTTV: {
         global: ParsedEmote[];
@@ -25,20 +26,21 @@ interface Emotes {
         global: ParsedEmote[];
         channel: Record<string, ParsedEmote[]>;
     };
-    BITS: any[];
+    BITS: Emotes.Bits[];
 }
 
-interface Badges {
-    UChat: any[];
+export interface GlobalBadges {
+    UChat: Badges.UChat[];
     TTV: {
-        global: any[];
-        channel: any[];
+        global: Badges.Twitch[];
+        channel: Badges.Twitch[];
     };
+    KICK: Badges.Kick[];
     BTTV: {
-        global: any[];
+        global: Badges.BTTV[];
     };
     FFZ: {
-        global: any[];
+        global: Badges.FFZ[];
         user: {
             vip: string;
             mod: string;
@@ -46,29 +48,32 @@ interface Badges {
         };
     };
     OTHER: {
-        Chatterino: any[];
-        ChatterinoHomies: any[];
+        Chatterino: Badges.Chatterino[];
+        ChatterinoHomies: Badges.Chatterino[];
+        ChatterinoHomiesCustom: Badges.ChatterinoHomiesCustom[];
         PolandBOT: Record<string, string[]>;
-        TurtegBot: any[];
+        TurtegBot: Badges.TurtegBadge[];
     };
     channel: Record<string, string>;
 }
 
-export const emotes = writable<Emotes>({
-    "7TV": { global: [], channel: {} },
+export const emotes = writable<GlobalEmotes>({
+    "7TV": { global: [], channel: [] },
     BTTV: { global: [], channel: {} },
     FFZ: { global: [], channel: {} },
     BITS: [],
 });
 
-export const badges = writable<Badges>({
+export const badges = writable<GlobalBadges>({
     UChat: [],
     TTV: { global: [], channel: [] },
+    KICK: [],
     BTTV: { global: [] },
     FFZ: { global: [], user: { vip: "", mod: "", user: {} } },
     OTHER: {
         Chatterino: [],
         ChatterinoHomies: [],
+        ChatterinoHomiesCustom: [],
         PolandBOT: {},
         TurtegBot: [],
     },
@@ -83,8 +88,10 @@ interface Globals {
 
     inSharedChat: boolean;
 
-    SevenTVID: string | null;
-    SevenTVemoteSetId: string | null;
+    channelKickName: string | null;
+    channelKickID: string | null;
+    chatroomKickID: string | null;
+    userKickID: string | null;
 
     userNameColor: Record<string, string>;
 }
@@ -115,10 +122,13 @@ export const globals: Globals = {
 
     inSharedChat: false,
 
-    // 7TV
-    SevenTVID: null,
-    SevenTVemoteSetId: null,
-
+    // KICK
+    channelKickName: null,
+    channelKickID: null,
+    chatroomKickID: null,
+    userKickID: null,
     // OTHER
     userNameColor: {},
 };
+
+export const API_URL = import.meta.env.API_URL;

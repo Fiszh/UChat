@@ -15,6 +15,15 @@
     import UChat from "$components/logos/uchat.svelte";
     import Loading from "$components/Loading.svelte";
     import Slider from "$components/Inputs/Slider.svelte";
+    import Chatterino from "$components/logos/chatterino.svelte";
+    import Turteg from "$components/logos/turteg.svelte";
+    import Ffz from "$components/logos/ffz.svelte";
+    import Bttv from "$components/logos/bttv.svelte";
+    import ChatterinoHomies from "$components/logos/chatterino-homies.svelte";
+    import Stv from "$components/logos/7tv.svelte";
+    import Polandbot from "$components/logos/polandbot.svelte";
+    import { addToast } from "$lib/toast";
+    import { t } from "svelte-i18n";
 
     //FIXME MAKE SELECTOR WAY BETTER WITHOUT THE NEED OF THIS
     let selectorOptions = $state([
@@ -26,6 +35,24 @@
 
     let showTestDialog = $state(false);
     let areLoadingRelative = $state(true);
+    let disableToastTimeout = $state(true);
+
+    function displayTestToast() {
+        addToast({
+            msg: "Test message toast",
+            timeout: disableToastTimeout ? 0 : undefined,
+        });
+        addToast({
+            msg: "Test success toast",
+            type: "success",
+            timeout: disableToastTimeout ? 0 : undefined,
+        });
+        addToast({
+            msg: "Test error toast",
+            type: "error",
+            timeout: disableToastTimeout ? 0 : undefined,
+        });
+    }
 </script>
 
 {#snippet buttons()}
@@ -52,6 +79,8 @@
         <p>Test and preview design components here.</p>
     </section>
 
+    <p>{$t("hello", { values: { name: "i18n" } })}</p>
+
     {#snippet icon()}
         <House size="1rem" />
     {/snippet}
@@ -73,6 +102,22 @@
     {/snippet}
     {#snippet logoUChat(chosen: boolean)}
         <UChat brandColor={chosen} />
+    {/snippet}
+    {#snippet logoPolandbot(chosen: boolean)}
+        <Polandbot brandColor={chosen} />
+    {/snippet}
+
+    {#snippet brandLogos(brandColor: boolean)}
+        <UChat {brandColor} />
+        <Twitch {brandColor} />
+        <Kick {brandColor} />
+        <Chatterino {brandColor} />
+        <ChatterinoHomies {brandColor} />
+        <Turteg {brandColor} />
+        <Polandbot {brandColor} />
+        <Stv {brandColor} />
+        <Bttv {brandColor} />
+        <Ffz {brandColor} />
     {/snippet}
 
     {#snippet dropdown()}
@@ -164,8 +209,9 @@
                 { id: "1", label: "Twitch", icon: logoTwitch },
                 { id: "2", label: "Kick", icon: logoKick },
                 { id: "3", label: "UChat", icon: logoUChat },
+                { id: "4", label: "PolandBot", icon: logoPolandbot },
                 {
-                    id: "4",
+                    id: "15",
                     label: "YouTube",
                     disabled: true,
                     icon: logoYouTube,
@@ -191,6 +237,16 @@
     </section>
 
     <section>
+        <p>Logos - No Color</p>
+        {@render brandLogos(false)}
+    </section>
+
+    <section>
+        <p>Logos - Color</p>
+        {@render brandLogos(true)}
+    </section>
+
+    <section>
         <p>
             Loading
             <Checkbox bind:checked={areLoadingRelative}>Relative</Checkbox>
@@ -198,6 +254,16 @@
         <Loading type="big" relative={areLoadingRelative} />
         <Loading type="minimal" relative={areLoadingRelative} />
         <Loading type="small" relative={areLoadingRelative} />
+    </section>
+
+    <section>
+        <p>
+            Toast
+            <Checkbox bind:checked={disableToastTimeout}>
+                No Hide Timeout
+            </Checkbox>
+        </p>
+        <Button secondary onclick={displayTestToast}>Display Toasts</Button>
     </section>
 </main>
 

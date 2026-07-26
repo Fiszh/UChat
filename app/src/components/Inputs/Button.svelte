@@ -155,12 +155,14 @@
         }
 
         &:not(.noHover) {
-            &:active,
-            &:hover {
-                background-color: var(--ghost-hover);
-                border-radius: 7px;
+            @media (hover: hover) and (pointer: fine) {
+                &:hover {
+                    background-color: var(--ghost-hover);
+                    border-radius: 7px;
+                }
             }
 
+            &:active,
             &.active {
                 border-radius: 5px;
                 background-color: var(--ghost-active);
@@ -173,11 +175,13 @@
             border: var(--primary-border);
 
             &:not(.noHover) {
-                &:active,
-                &:hover {
-                    background-color: var(--primary-hover);
+                @media (hover: hover) and (pointer: fine) {
+                    &:hover {
+                        background-color: var(--primary-hover);
+                    }
                 }
 
+                &:active,
                 &.active {
                     background-color: var(--primary-active);
                 }
@@ -190,11 +194,13 @@
             border: var(--secondary-border);
 
             &:not(.noHover) {
-                &:active,
-                &:hover {
-                    background-color: var(--secondary-hover);
+                @media (hover: hover) and (pointer: fine) {
+                    &:hover {
+                        background-color: var(--secondary-hover);
+                    }
                 }
 
+                &:active,
                 &.active {
                     background-color: var(--secondary-active);
                 }
@@ -207,12 +213,14 @@
             border: var(--danger-border);
 
             &:not(.noHover) {
-                &:active,
-                &:hover {
-                    background-color: var(--danger-hover);
-                    color: var(--danger-text-hover);
+                @media (hover: hover) and (pointer: fine) {
+                    &:hover {
+                        background-color: var(--danger-hover);
+                        color: var(--danger-text-hover);
+                    }
                 }
 
+                &:active,
                 &.active {
                     background-color: var(--danger-active);
                     color: var(--danger-text-active);
@@ -226,12 +234,14 @@
             border: var(--approve-border);
 
             &:not(.noHover) {
-                &:active,
-                &:hover {
-                    background-color: var(--approve-hover);
-                    color: var(--approve-text-hover);
+                @media (hover: hover) and (pointer: fine) {
+                    &:hover {
+                        background-color: var(--approve-hover);
+                        color: var(--approve-text-hover);
+                    }
                 }
 
+                &:active,
                 &.active {
                     background-color: var(--approve-active);
                     color: var(--approve-text-active);

@@ -8,13 +8,17 @@
 
     import { initChat } from "$lib/loadChat";
     import { getUser } from "$lib/services/twitch";
-    import { getChannelEmotesViaTwitchID } from "$lib/emotes";
+    import { getChannelEmotesViaTwitchID } from "$lib/emotes/main";
     import { pushUserInfoViaGQL } from "$lib/services/7TV/cosmetics";
     import { getBadges } from "$lib/preview";
 
     import SevenTV_main from "$lib/services/7TV/main";
     import Button from "$components/Inputs/Button.svelte";
     import Input from "$components/Inputs/Input.svelte";
+    import Banner from "$components/Banner.svelte";
+    import { isFirefox, isSafari } from "$lib/browser";
+    import { addToast } from "$lib/toast";
+    import { previewMessages } from "$stores/previewMessages";
 
     let messageDisplay: HTMLElement;
 
@@ -39,9 +43,10 @@
             }
 
             message["tags"]["user-id"] = user_info[0]["id"];
+            message["tags"]["user-id-raw"] = String(user_info[0]["id"]);
             message["tags"]["color"] = user_info[0]["chatColor"];
 
-            const sevenTV_user = await SevenTV_main.getUserViaTwitchID(
+            const sevenTV_user = await SevenTV_main.user.byTwitchID(
                 user_info[0]["id"],
             );
 
@@ -54,10 +59,31 @@
         if (user_info)
             message = {
                 ...message,
-                tags: { ...message.tags, "badges-raw": mappedBadges },
+                tags: {
+                    ...message.tags,
+                    "badges-raw": mappedBadges,
+                } as typeof message.tags,
             };
 
         getChannelEmotesViaTwitchID(channel.id);
+    }
+
+    function loadUserInfo() {
+        addToast({ msg: "Loading user & channel info..." });
+
+        loadChatInfo()
+            .then(() =>
+                addToast({
+                    msg: "Loaded user & channel info",
+                    type: "success",
+                }),
+            )
+            .catch(() =>
+                addToast({
+                    msg: "Failed loading user & channel info!",
+                    type: "error",
+                }),
+            );
     }
 
     function downloadImage() {
@@ -79,14 +105,7 @@
     }
 
     let message = $state({
-        tags: {
-            username: "uniidev",
-            "display-name": "uniiDev",
-            "user-id": "528761326",
-            "badges-raw": "broadcaster/1,twitch-recap-2024/1",
-            color: "#ffb3ff",
-            "room-id": "0",
-        },
+        ...previewMessages[0],
         message: "Hello from UChat!",
     });
 
@@ -108,6 +127,14 @@
 
 <Settings />
 <main>
+    {#if isFirefox() || isSafari()}
+        <Banner
+            type="outage"
+            message="The message creator might be buggy on {isFirefox()
+                ? 'Firefox'
+                : 'Safari'}"
+        />
+    {/if}
     <h1>UChat Message Creator</h1>
     <section id="message" class="bg-grid" bind:this={messageDisplay}>
         <ChatDisplay />
@@ -148,12 +175,12 @@
         <Download />
     {/snippet}
 
-    <Button secondary icon={LoadIcon} onclick={loadChatInfo}>
+    <Button secondary icon={LoadIcon} onclick={loadUserInfo}>
         Fetch Channel & User
     </Button>
-    <Button primary icon={DownloadIcon} onclick={downloadImage}
-        >Download image</Button
-    >
+    <Button primary icon={DownloadIcon} onclick={downloadImage}>
+        Download image
+    </Button>
 </main>
 
 <style lang="scss">

@@ -1,7 +1,9 @@
 <script lang="ts">
     import Button from "$components/Inputs/Button.svelte";
     import { parseSavedSettings } from "$lib/overlayIndex";
+    import { API_URL } from "$stores/global";
     import { savedSettings, settings } from "$stores/settings";
+    import { t } from "svelte-i18n";
     import { slide } from "svelte/transition";
 
     type Props = {
@@ -13,9 +15,7 @@
     let { name, token, user_id }: Props = $props();
 
     async function getSettings() {
-        const response = await fetch(
-            `https://api.unii.dev/settings/${user_id}`,
-        );
+        const response = await fetch(API_URL + `/settings/${user_id}`);
 
         if (response.ok) {
             const data = await response.json();
@@ -59,17 +59,14 @@
         if (!Object.keys(mappedSettings).length)
             return alert("No settings changed");
 
-        const saveSettings_response = await fetch(
-            "https://api.unii.dev/settings",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "x-auth-token": `Bearer ${token}`,
-                },
-                body: JSON.stringify(mappedSettings),
+        const saveSettings_response = await fetch(API_URL + "/settings", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "x-auth-token": `Bearer ${token}`,
             },
-        );
+            body: JSON.stringify(mappedSettings),
+        });
 
         if (!saveSettings_response.ok) {
             alert("There was a error saving your settings");
@@ -89,15 +86,12 @@
     async function deleteSettings() {
         if (!token) return alert("You are not logged in");
 
-        const deleteSettings_response = await fetch(
-            "https://api.unii.dev/settings",
-            {
-                method: "DELETE",
-                headers: {
-                    "x-auth-token": `Bearer ${token}`,
-                },
+        const deleteSettings_response = await fetch(API_URL + "/settings", {
+            method: "DELETE",
+            headers: {
+                "x-auth-token": `Bearer ${token}`,
             },
-        );
+        });
 
         if (!deleteSettings_response.ok) {
             alert("There was a error deleting your settings");
@@ -118,8 +112,12 @@
 
 <p id="settings_text" transition:slide>{name} Settings</p>
 <div id="settingsButtons" transition:slide>
-    <Button approve wide center onclick={save}>Save</Button>
-    <Button danger wide center onclick={deleteSettings}>Delete</Button>
+    <Button approve wide center onclick={save}>
+        {$t("labels.save")}
+    </Button>
+    <Button danger wide center onclick={deleteSettings}>
+        {$t("labels.delete")}
+    </Button>
 </div>
 
 <style>

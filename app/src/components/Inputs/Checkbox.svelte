@@ -38,4 +38,11 @@
             }
         }
     }
+
+    @media (max-width: 768px) {
+        label input {
+            width: 0.75rem;
+            border-radius: 0.15rem;
+        }
+    }
 </style>

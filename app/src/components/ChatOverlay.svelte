@@ -10,6 +10,9 @@
     import { settings } from "$stores/settings";
     import { loadChat } from "$lib/loadChat";
 
+    import { getKickUser } from "$lib/services/KICK/user";
+    import KICKSocket from "$lib/services/KICK/chat";
+
     // REFRESH IMAGES IF FAILED
     function handleImageRetries(): void {
         document
@@ -30,10 +33,20 @@
         loadingInfo.set({ text: undefined, type: "minimal" });
 
         const params = new URLSearchParams(window.location.search);
-        const channelName = params.get("channel");
-        const channelID = params.get("id");
+        const TwitchChannelName = params.get("channel");
+        const TwitchChannelID = params.get("id");
+        const KickChannelName = params.get("kick");
 
-        if (channelName) connect(channelName);
+        let loadedIn = $state({
+            twitch: TwitchChannelName || TwitchChannelID ? false : null,
+            kick: KickChannelName ? false : null,
+        });
+
+        let allChannelsLoaded = $derived(
+            Object.values(loadedIn).every((c) => c === null || c === true),
+        );
+
+        if (TwitchChannelName) connect(TwitchChannelName);
 
         for (const [key, value] of params) {
             settings.update((list) =>
@@ -52,21 +65,63 @@
 
         // GET USER INFO AND IF USED CHANNEL ID CONNECT TO IRC
         (async () => {
-            const successGettingUser = await getMainUser(
-                channelID ? Number(channelID) : channelName!,
-            );
+            if (TwitchChannelName || TwitchChannelName) {
+                const successGettingUser = await getMainUser(
+                    TwitchChannelID
+                        ? Number(TwitchChannelID)
+                        : TwitchChannelName!,
+                );
 
-            if (
-                successGettingUser &&
-                globals.channelTwitchName &&
-                globals.channelTwitchID
-            ) {
-                if (!channelName) connect(globals.channelTwitchName);
+                if (successGettingUser) {
+                    loadedIn["twitch"] = true;
 
-                await loadChat();
-
-                await connectToWS();
+                    if (!TwitchChannelName && globals.channelTwitchName)
+                        connect(globals.channelTwitchName);
+                }
             }
+
+            if (KickChannelName) {
+                const successGettingUser = await getKickUser(KickChannelName);
+
+                if (successGettingUser) {
+                    loadedIn["kick"] = true;
+
+                    const KickClient = new KICKSocket();
+
+                    KickClient.on("first_open", () => {
+                        if (globals.channelKickID && globals.chatroomKickID)
+                            KickClient.subToChannelId(
+                                globals.channelKickID,
+                                globals.chatroomKickID,
+                            );
+                    });
+
+                    KickClient.connect();
+                }
+            }
+
+            await new Promise((resolve) => {
+                let cleanup: () => void;
+
+                const timeout = setTimeout(() => {
+                    if (cleanup) cleanup();
+                    resolve(false);
+                }, 60000);
+
+                cleanup = $effect.root(() => {
+                    $effect(() => {
+                        if (allChannelsLoaded) {
+                            clearTimeout(timeout);
+                            cleanup();
+                            resolve(true);
+                        }
+                    });
+                });
+            });
+
+            await loadChat();
+
+            await connectToWS();
 
             loadingInfo.set({ text: undefined, type: undefined });
 
@@ -84,7 +139,7 @@
 
 <ChatDisplay />
 
-<style lang="scss">
+<style>
     :global(body, html) {
         background-color: rgba(0, 0, 0, 0) !important;
     }

@@ -64,9 +64,23 @@
     }
 
     .value {
-        display: inline-block;
+        display: inline-flex;
         min-width: 7ch;
         max-width: 12ch;
         font-family: monospace;
+        align-items: center;
+    }
+
+    @media (max-width: 768px) {
+        label {
+            #display {
+                height: 0.75rem;
+                border-radius: 0.15rem;
+            }
+
+            .value {
+                font-size: 0.5rem;
+            }
+        }
     }
 </style>

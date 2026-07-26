@@ -44,6 +44,7 @@ interface ParsedMessage {
     command: string;
     channel: string;
     message: string;
+    service: "TWITCH";
 }
 
 export const messages = writable<Record<string, any>[]>([]);
@@ -81,10 +82,11 @@ function assignMessage(parsed: ReturnType<typeof parseIrcLine>) {
             if (!modActions) break;
 
             messages.update((arr) =>
-                arr.filter(
-                    (item) =>
-                        item.tags["id"] !== parsed.tags.merged["target-msg-id"],
-                ),
+                arr.filter((item) => {
+                    if (item["service"] != "TWITCH") return item;
+                    if (item.tags["id"] != parsed.tags.merged["target-msg-id"])
+                        return item;
+                }),
             );
 
             break;
@@ -93,15 +95,19 @@ function assignMessage(parsed: ReturnType<typeof parseIrcLine>) {
 
             if (parsed.tags.merged["target-user-id"]) {
                 messages.update((arr) =>
-                    arr.filter(
-                        (item) =>
-                            item.tags["user-id"] !==
-                            parsed.tags.merged["target-user-id"],
-                    ),
+                    arr.filter((item) => {
+                        if (item["service"] != "TWITCH") return item;
+                        if (
+                            item.tags["user-id"] !=
+                            parsed.tags.merged["target-user-id"]
+                        )
+                            return item;
+                    }),
                 );
             } else {
-                messages.set([]);
-                clearChat();
+                messages.update((arr) =>
+                    arr.filter((item) => item["service"] != "TWITCH"),
+                );
             }
 
             break;
@@ -147,6 +153,7 @@ export function connect(channel_name: string) {
         );
         TTV_IRC_WS?.send(`NICK justinfan${Math.floor(Math.random() * 9999)}`);
         TTV_IRC_WS?.send(`JOIN #${channel_name}`);
+
         console.log("Connected to Twitch IRC WebSocket");
 
         connectionStatus.set("open");
@@ -254,7 +261,7 @@ export function sanitizeInput(input: string): string {
 
 /*NOTE PARSING MIGHT NOT WORK 100%*/
 function parseIrcLine(raw: string): ParsedMessage {
-    let parsed = {
+    let parsed: ParsedMessage = {
         raw,
         tags: {
             rawTags: {},
@@ -265,6 +272,7 @@ function parseIrcLine(raw: string): ParsedMessage {
         command: "",
         channel: "",
         message: "",
+        service: "TWITCH",
     };
 
     try {
@@ -421,6 +429,7 @@ function parseIrcLine(raw: string): ParsedMessage {
 
         // RETURN PARSED
         parsed = {
+            ...parsed,
             raw: line,
             tags: {
                 rawTags,

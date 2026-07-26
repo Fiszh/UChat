@@ -3,7 +3,13 @@ import { get } from "svelte/store";
 import tinycolor from "tinycolor2";
 
 import { cosmetics } from "$stores/cosmetics";
-import { badges, emotes, globals } from "$stores/global";
+import {
+    API_URL,
+    badges,
+    emotes,
+    globals,
+    type GlobalEmotes,
+} from "$stores/global";
 
 import { services } from "$lib/services";
 import { settings, type Setting } from "$stores/settings";
@@ -15,6 +21,23 @@ let emote_data = get(emotes);
 cosmetics.subscribe((data) => (cosmetic_data = data));
 emotes.subscribe((data) => (emote_data = data));
 
+export function generateUUID(): string {
+    let UUID: string = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx";
+
+    try {
+        UUID = window.crypto.randomUUID();
+    } catch {
+        // fallback
+        UUID = UUID.replace(/[xy]/g, (c) => {
+            const r = (Math.random() * 16) | 0;
+            const v = c === "x" ? r : (r & 0x3) | 0x8;
+            return v.toString(16);
+        });
+    } finally {
+        return UUID;
+    }
+}
+
 // ANCHOR FUNCTIONS
 export const fixNameColor = (name_color: string): string =>
     tinycolor(name_color).getBrightness() <= 50
@@ -24,7 +47,8 @@ export const fixNameColor = (name_color: string): string =>
 export async function getMainUser(channel: string | number) {
     try {
         const response = await fetch(
-            `https://api.unii.dev/channel?${typeof channel == "string" ? `name=` : `id=`}${channel}`,
+            API_URL +
+                `/channel?${typeof channel == "string" ? `name=` : `id=`}${channel}`,
             {
                 headers: {
                     version: __APP_VERSION,
@@ -37,11 +61,11 @@ export async function getMainUser(channel: string | number) {
             return false;
         }
 
-        const response_data = await response.json();
+        const response_data: UChat.ChannelResponse = await response.json();
 
         if (
-            !response_data?.channel?.data ||
-            Object.keys(response_data?.channel?.data)?.length < 5
+            "error" in response_data ||
+            Object.keys(response_data.channel.data).length < 5
         ) {
             console.error(
                 "Invalid or incomplete data structure:",
@@ -53,35 +77,31 @@ export async function getMainUser(channel: string | number) {
         const channel_data = response_data.channel.data;
 
         const data = {
-            channel_info: channel_data?.["channel_info"],
-            channel_badges: channel_data?.["channel_badges"],
-            channel_bits: channel_data?.["channel_cheer_emotes"],
-            global_badges: channel_data?.["global_badges"],
-            global_bits: channel_data?.["global_cheer_emotes"],
+            channel_info: channel_data["channel_info"],
+            channel_badges: channel_data["channel_badges"],
+            channel_bits: channel_data["channel_cheer_emotes"],
+            global_badges: channel_data["global_badges"],
+            global_bits: channel_data["global_cheer_emotes"],
         };
 
         // CHANNEL INFO LOGIN
-        globals.channelTwitchID = data?.channel_info?.id || null;
-        globals.channelTwitchName = data?.channel_info?.login || null;
-        const channel_color = data?.channel_info?.color || "white";
-
-        type badge = Record<string, string>;
+        globals.channelTwitchID = data.channel_info.id ?? null;
+        globals.channelTwitchName = data.channel_info.login ?? null;
+        const channel_color = data.channel_info.chatColor ?? "white";
 
         // CHANNEL BADGES
-        const broadcastBadges = data?.channel_badges?.broadcastBadges || [];
+        const broadcastBadges = data.channel_badges.broadcastBadges ?? [];
         try {
             badges.update((badgeData) => {
-                badgeData["TTV"].channel = broadcastBadges.map(
-                    (badge: badge) => ({
-                        id: badge.setID + "_" + badge.version,
-                        url:
-                            badge.image4x ||
-                            badge.image3x ||
-                            badge.image2x ||
-                            badge.image1x,
-                        title: badge.title,
-                    }),
-                );
+                badgeData["TTV"].channel = broadcastBadges.map((badge) => ({
+                    id: badge.setID + "_" + badge.version,
+                    url:
+                        badge.image4x ||
+                        badge.image3x ||
+                        badge.image2x ||
+                        badge.image1x,
+                    title: badge.title,
+                }));
 
                 return badgeData;
             });
@@ -90,91 +110,95 @@ export async function getMainUser(channel: string | number) {
         }
 
         // CHANNEL BITS EMOTES
-        let channel_bit_emotes = [];
+        let channel_bit_emotes: Emotes.Bits[] = [];
         try {
-            const cheerGroups = data?.channel_bits?.cheer?.cheerGroups || [];
-            channel_bit_emotes = cheerGroups.map(
-                (group: Record<string, any>) => {
-                    const node = group.nodes?.[0];
-                    const prefix = node?.prefix?.toLowerCase() || "prefix";
-                    const templateURL =
-                        group.templateURL ||
-                        "https://d3aqoihi2n8ty8.cloudfront.net/actions/PREFIX/BACKGROUND/ANIMATION/TIER/SCALE.EXTENSION";
+            const cheerGroups = data.channel_bits.cheer?.cheerGroups ?? [];
+            channel_bit_emotes = cheerGroups.map<Emotes.Bits>((group) => {
+                const node = group.nodes[0];
+                const prefix = (node.prefix ?? "prefix").toLowerCase();
+                const templateURL =
+                    group.templateURL ||
+                    "https://d3aqoihi2n8ty8.cloudfront.net/actions/PREFIX/BACKGROUND/ANIMATION/TIER/SCALE.EXTENSION";
 
-                    return {
-                        name: prefix,
-                        tiers:
-                            node?.tiers?.map((tier: Record<string, any>) => {
-                                const replacements = {
-                                    PREFIX: prefix,
-                                    BACKGROUND: "dark",
-                                    ANIMATION: "animated",
-                                    TIER: tier?.bits || "TIER",
-                                    "SCALE.EXTENSION": "4.gif",
-                                } as const;
+                return {
+                    name: prefix,
+                    tiers:
+                        node.tiers.map((tier) => {
+                            const replacements = {
+                                PREFIX: prefix,
+                                BACKGROUND: "dark",
+                                ANIMATION: "animated",
+                                TIER: tier.bits ?? "TIER",
+                                "SCALE.EXTENSION": "4.gif",
+                            };
 
-                                const tierURL = templateURL.replace(
-                                    /PREFIX|BACKGROUND|ANIMATION|TIER|SCALE\.EXTENSION/g,
-                                    (match: keyof typeof replacements) =>
-                                        replacements[match],
-                                );
+                            const tierURL = templateURL.replace(
+                                /PREFIX|BACKGROUND|ANIMATION|TIER|SCALE\.EXTENSION/g,
+                                (match) =>
+                                    String(
+                                        replacements[
+                                            match as keyof typeof replacements
+                                        ],
+                                    ),
+                            );
 
-                                return {
-                                    min_bits: tier?.bits,
-                                    url: tierURL,
-                                    emote_link: tierURL,
-                                    color: channel_color,
-                                };
-                            }) || [],
-                        site: "TTV",
-                    };
-                },
-            );
+                            return {
+                                min_bits: tier.bits,
+                                url: "tierURL",
+                                emote_link: tierURL,
+                                color: channel_color,
+                            };
+                        }) || [],
+                    site: "TTV",
+                };
+            });
         } catch (err) {
             console.error("Error loading channel bit emotes:", err);
         }
 
         // GLOBAL BITS EMOTES
-        let global_bit_emotes = [];
+        let global_bit_emotes: Emotes.Bits[] = [];
         try {
-            const global_groups = data?.global_bits?.groups || [];
-            const displayConfig =
-                data?.global_bits?.displayConfig?.colors || [];
+            const global_groups = data.global_bits.groups;
+            const displayConfig = data.global_bits.displayConfig.colors;
 
             global_bit_emotes =
-                global_groups[0]?.nodes?.map((group: Record<string, any>) => {
-                    const prefix = group?.prefix?.toLowerCase() || "prefix";
+                global_groups[0].nodes.map((group) => {
+                    const prefix = (group.prefix ?? "prefix").toLowerCase();
                     const templateURL =
-                        global_groups[0]?.templateURL ||
+                        global_groups[0].templateURL ||
                         "https://d3aqoihi2n8ty8.cloudfront.net/actions/PREFIX/BACKGROUND/ANIMATION/TIER/SCALE.EXTENSION";
 
                     return {
                         name: prefix,
                         tiers:
-                            group?.tiers?.map((tier: Record<string, any>) => {
+                            group.tiers.map((tier) => {
                                 const replacements = {
                                     PREFIX: prefix,
                                     BACKGROUND: "dark",
                                     ANIMATION: "animated",
-                                    TIER: tier?.bits || "TIER",
+                                    TIER: tier.bits || "TIER",
                                     "SCALE.EXTENSION": "4.gif",
-                                } as const;
+                                };
 
                                 const tierURL = templateURL.replace(
                                     /PREFIX|BACKGROUND|ANIMATION|TIER|SCALE\.EXTENSION/g,
-                                    (match: keyof typeof replacements) =>
-                                        replacements[match],
+                                    (match) =>
+                                        String(
+                                            replacements[
+                                                match as keyof typeof replacements
+                                            ],
+                                        ),
                                 );
 
                                 return {
-                                    min_bits: tier?.bits,
+                                    min_bits: tier.bits,
                                     url: tierURL,
                                     emote_link: tierURL,
                                     color:
                                         displayConfig.find(
-                                            (color: Record<string, string>) =>
-                                                color.bits === tier?.bits,
-                                        )?.color || "white",
+                                            (color) => color.bits === tier.bits,
+                                        )?.color ?? "white",
                                 };
                             }) || [],
                         site: "TTV",
@@ -187,17 +211,15 @@ export async function getMainUser(channel: string | number) {
         // GLOBAL BADGES
         try {
             badges.update((badgeData) => {
-                badgeData["TTV"].global = (data.global_badges || []).map(
-                    (badge: badge) => ({
-                        id: badge.setID + "_" + badge.version,
-                        url:
-                            badge.image4x ||
-                            badge.image3x ||
-                            badge.image2x ||
-                            badge.image1x,
-                        title: badge.title,
-                    }),
-                );
+                badgeData["TTV"].global = data.global_badges.map((badge) => ({
+                    id: badge.setID + "_" + badge.version,
+                    url:
+                        badge.image4x ||
+                        badge.image3x ||
+                        badge.image2x ||
+                        badge.image1x,
+                    title: badge.title,
+                }));
 
                 return badgeData;
             });
@@ -212,9 +234,8 @@ export async function getMainUser(channel: string | number) {
         });
 
         // SETTINGS
-        if (response_data["user_settings"]) {
+        if (response_data["user_settings"])
             parseSavedSettings(response_data["user_settings"]);
-        }
 
         return true;
     } catch (err) {
@@ -222,7 +243,9 @@ export async function getMainUser(channel: string | number) {
     }
 }
 
-export function parseSavedSettings(saved_settings: Setting) {
+export function parseSavedSettings(
+    saved_settings: NonNullable<UChat.Channel["user_settings"]>,
+) {
     for (const [key, value] of Object.entries(saved_settings)) {
         settings.update((arr) => {
             const foundSetting = arr.find((setting) => setting.param == key);
@@ -240,9 +263,40 @@ export function parseSavedSettings(saved_settings: Setting) {
     }
 }
 
+export function getSavedSet(
+    id: string,
+    platform?: Platforms,
+    emoteData: GlobalEmotes = emote_data,
+): {
+    set: SavedSevenTVSet;
+    owner?: Types7TV.UserInfo["connections"][0] | never;
+} | null {
+    if (!platform) {
+        const set = emoteData["7TV"].channel.find((s) => s["id"] == id);
+
+        if (!set) return null;
+
+        return { set };
+    }
+
+    const set = emoteData["7TV"].channel.find((s) =>
+        s["owners"].find((o) => o["id"] == id && o["platform"] == platform),
+    );
+
+    if (!set) return null;
+
+    const owner = set["owners"].find(
+        (o) => o["id"] == id && o["platform"] == platform,
+    );
+
+    if (!owner) return null;
+
+    return { set, owner };
+}
+
 export async function connectToWS() {
     services["7TV"].ws.connect();
-    services["BTTV"].ws.connect();
+    if (globals.channelTwitchID) services["BTTV"].ws.connect();
 }
 
 export async function subscribeEventAPIToSharedChatUser(room_id: string) {
@@ -253,21 +307,29 @@ export async function subscribeEventAPIToSharedChatUser(room_id: string) {
         services["BTTV"].ws.subscribe(room_id, false, true);
 
     // 7TV
-    services["7TV"].ws.subscribe(room_id, "entitlement.create", {}, true); // PAINTS, BADGES & PERSONAL EMOTES
+    services["7TV"].ws.subscribe(
+        room_id,
+        "entitlement.create",
+        {
+            platform: "TWITCH",
+            ctx: "channel",
+        },
+        true,
+    ); // PAINTS, BADGES & PERSONAL EMOTES
 
-    const channel_set = emote_data["7TV"]["channel"][room_id];
+    const channel_set = getSavedSet(room_id, "TWITCH");
     if (channel_set) {
-        if (channel_set["id"])
+        if (channel_set["set"]["id"])
             services["7TV"].ws.subscribe(
-                channel_set["id"],
+                channel_set["set"]["id"],
                 "emote_set.update",
                 {},
                 true,
             );
 
-        if (channel_set["user_id"])
+        if (channel_set["owner"] && channel_set["owner"]["user_id"])
             services["7TV"].ws.subscribe(
-                channel_set["user_id"],
+                channel_set["owner"]["user_id"],
                 "user.*",
                 {},
                 true,
@@ -284,16 +346,19 @@ export async function unsubscribeEventAPISharedChatUser(room_id: string) {
     // 7TV
     services["7TV"].ws.unsubscribe(room_id, "entitlement.create");
 
-    const channel_set = emote_data["7TV"]["channel"][room_id];
+    const channel_set = getSavedSet(room_id, "TWITCH");
     if (channel_set) {
-        if (channel_set["id"])
+        if (channel_set["set"]["id"])
             services["7TV"].ws.unsubscribe(
-                channel_set["id"],
+                channel_set["set"]["id"],
                 "emote_set.update",
             );
 
-        if (channel_set["user_id"])
-            services["7TV"].ws.unsubscribe(channel_set["user_id"], "user.*");
+        if (channel_set["owner"] && channel_set["owner"]["user_id"])
+            services["7TV"].ws.unsubscribe(
+                channel_set["owner"]["user_id"],
+                "user.*",
+            );
     }
 }
 
@@ -321,12 +386,10 @@ export async function cleanUpSharedChat() {
 
     if (globals.channelTwitchID) {
         emotes.update((emotesData) => {
-            emotesData["7TV"]["channel"] = {
-                [globals.channelTwitchID as string]:
-                    emotesData["7TV"]["channel"][
-                        globals.channelTwitchID as string
-                    ],
-            };
+            emotesData["7TV"]["channel"] = emotesData["7TV"]["channel"].filter(
+                (s) =>
+                    s["owners"].some((o) => o["id"] == globals.channelTwitchID),
+            );
 
             emotesData["BTTV"]["channel"] = {
                 [globals.channelTwitchID as string]:
@@ -355,26 +418,38 @@ services["7TV"].ws.on("open", () => {
         services["7TV"].ws.subscribe(
             globals.channelTwitchID,
             "entitlement.create",
+            {
+                platform: "TWITCH",
+                ctx: "channel",
+            },
         ); // 7TV account not needed to recieve cosmetic info
-
-        if (globals.SevenTVID) {
-            services["7TV"].ws.subscribe(globals.SevenTVID, "user.*"); // SET CHANGES
-            if (globals.SevenTVemoteSetId)
-                services["7TV"].ws.subscribe(
-                    globals.SevenTVemoteSetId,
-                    "emote_set.update",
-                );
-            // EMOTE CHANGES
-        }
     }
-});
 
-const getSetKey = (set_id: string) =>
-    Object.keys(emote_data["7TV"]["channel"]).find(
-        (k) =>
-            "id" in emote_data["7TV"]["channel"][k] &&
-            emote_data["7TV"]["channel"][k].id == set_id,
-    );
+    if (globals.userKickID) {
+        services["7TV"].ws.subscribe(globals.userKickID, "entitlement.create", {
+            platform: "KICK",
+            ctx: "channel",
+        }); // 7TV account not needed to recieve cosmetic info
+    }
+
+    const unique7TVIDs = [
+        ...new Set(emote_data["7TV"]["channel"].map((s) => s["id"])),
+    ];
+
+    const unique7TVSetIDs = [
+        ...new Set(
+            emote_data["7TV"]["channel"].flatMap((s) =>
+                s["owners"].map((c) => c["user_id"]),
+            ),
+        ),
+    ];
+
+    for (const id of unique7TVSetIDs)
+        services["7TV"].ws.subscribe(id, "user.*"); // SET CHANGES
+
+    for (const id of unique7TVIDs)
+        services["7TV"].ws.subscribe(id, "emote_set.update"); // EMOTE CHANGES
+});
 
 services["7TV"].ws.on("add_emote", (id, actor, data) => {
     if (cosmetic_data.sets[id]) {
@@ -386,85 +461,100 @@ services["7TV"].ws.on("add_emote", (id, actor, data) => {
         });
     } else {
         // CHANNEL SET
-        const set_key = getSetKey(id);
+        emotes.update((emoteData) => {
+            const found_set = getSavedSet(id, undefined, emoteData);
 
-        if (typeof set_key == "string") {
-            emotes.update((emoteData) => {
-                const found_set = emoteData["7TV"]["channel"][set_key];
+            if (found_set && "set" in found_set)
+                found_set["set"]["emotes"].push(...data);
 
-                if ("emotes" in found_set) found_set["emotes"].push(...data);
-
-                return emoteData;
-            });
-        }
+            return emoteData;
+        });
     }
 
     //console.log("Emote added:", id, data);
 });
 
 services["7TV"].ws.on("remove_emote", (id, actor, data) => {
-    const set_key = getSetKey(id);
+    emotes.update((emoteData) => {
+        const found_set = getSavedSet(id, undefined, emoteData);
 
-    if (typeof set_key == "string") {
-        // CHANNEL SET
-        emotes.update((emoteData) => {
-            const found_set = emoteData["7TV"]["channel"][set_key];
+        if (found_set && "set" in found_set)
+            found_set["set"]["emotes"] = found_set["set"]["emotes"].filter(
+                (emote) => emote.name !== data.name,
+            );
 
-            if (found_set && "emotes" in found_set)
-                found_set["emotes"] = found_set["emotes"].filter(
-                    (emote) => emote.name !== data.name,
-                );
-
-            return emoteData;
-        });
-    }
+        return emoteData;
+    });
 
     //console.log("Emote removed:", id, data);
 });
 
 services["7TV"].ws.on("rename_emote", (id, actor, data) => {
-    const set_key = getSetKey(id);
+    emotes.update((emoteData) => {
+        const found_set = getSavedSet(id, undefined, emoteData);
 
-    if (typeof set_key == "string") {
-        emotes.update((emoteData) => {
-            const found_set = emoteData["7TV"]["channel"][set_key];
+        if (found_set && "ste" in found_set) {
+            const foundEmote = found_set["set"]["emotes"].find(
+                (emote) => emote.name === data.old.name,
+            );
 
-            if (found_set && "emotes" in found_set) {
-                const foundEmote = found_set["emotes"].find(
-                    (emote) => emote.name === data.old.name,
-                );
+            if (foundEmote) foundEmote.name = data.new.name;
+        }
 
-                if (foundEmote) foundEmote.name = data.new.name;
-            }
-
-            return emoteData;
-        });
-    }
+        return emoteData;
+    });
 
     //console.log("Emote renamed:", id, data);
 });
 
 services["7TV"].ws.on("set_change", async (actor, data) => {
     // no need to resub to a new set id, already done via the websocket client
-    const newSet = await services["7TV"].main.emoteSet.bySetID(data.new_set.id);
+    const newSet = await services["7TV"].main.emoteSet.bySetID(
+        data["new_set"]["id"],
+    );
 
-    const set_key = getSetKey(data.old_set.id);
+    emotes.update((emoteData) => {
+        const foundOldSet = getSavedSet(
+            data["old_set"]["id"],
+            undefined,
+            emoteData,
+        );
+        const foundNewSet = getSavedSet(
+            data["new_set"]["id"],
+            undefined,
+            emoteData,
+        );
 
-    if (typeof set_key == "string") {
-        emotes.update((emoteData) => {
-            const channelSets = emoteData["7TV"]["channel"];
+        const oldSetOwners = foundOldSet
+            ? foundOldSet["set"]["owners"].filter(
+                  (c) => c["user_id"] == data["SevenTV_user_id"],
+              )
+            : []; // for now we trust the overlay to have the set saved, gotta fix that later
 
-            if (typeof set_key == "string") {
-                channelSets[set_key] = {
-                    ...channelSets[set_key],
+        if (foundOldSet)
+            foundOldSet["set"]["owners"] = foundOldSet["set"]["owners"].filter(
+                (c) => c["user_id"] != data["SevenTV_user_id"],
+            );
+
+        if (foundNewSet) {
+            foundNewSet["set"]["owners"] = [
+                ...foundNewSet["set"]["owners"],
+                ...oldSetOwners,
+            ];
+        } else {
+            emoteData["7TV"]["channel"] = [
+                ...emoteData["7TV"]["channel"],
+                {
+                    ...(foundOldSet || []),
                     id: data.new_set.id,
                     emotes: newSet,
-                } as SavedSevenTVSet;
-            }
+                    owners: oldSetOwners,
+                },
+            ];
+        }
 
-            return emoteData;
-        });
-    }
+        return emoteData;
+    });
 
     //console.log("Emote set changed:", data);
 });
@@ -497,7 +587,7 @@ services["7TV"].ws.on("create_personal_set", (data) => {
                 id: data.id,
                 name: data.name,
                 flags: data.flags,
-                owner: data?.flags == 4 ? [data.owner] : [],
+                owner: data?.flags == 4 ? data.owner : [],
                 emotes: [],
             };
 
@@ -509,13 +599,19 @@ services["7TV"].ws.on("create_personal_set", (data) => {
 // PERSONAL SETS SHOULD NOT REMOVE THE OWNER, RIGHT 7TV?
 services["7TV"].ws.on("create_entitlement", (data) => {
     // BIND A BADGE, PAINT OR SET TO A USER
+    const mappedIDs = data.owner.map((c) => c.id + "-" + c.platform);
+
     if (
         cosmetic_data.sets[data.id] &&
         cosmetic_data.sets[data.id]?.flags != 4
     ) {
         // SET
         cosmetics.update((cosmeticsData) => {
-            cosmeticsData.sets[data.id].owner.push(data.owner);
+            // GIVE OWNERSHIP TO SET
+            cosmeticsData.sets[data.id].owner = [
+                ...cosmeticsData.sets[data.id].owner,
+                ...data.owner,
+            ];
 
             return cosmeticsData;
         });
@@ -523,13 +619,17 @@ services["7TV"].ws.on("create_entitlement", (data) => {
         // BADGE
         cosmetics.update((cosmeticsData) => {
             for (const badge of Object.values(cosmeticsData.badges)) {
-                // REMOVE BADGE OWNER
+                // REMOVE OLD BADGE OWNER
                 badge.owner = badge.owner.filter(
-                    (o) => o.id !== String(data?.owner.id),
+                    (c) => !mappedIDs.includes(c.id + "-" + c.platform),
                 );
             }
 
-            cosmeticsData.badges[data.id].owner.push(data.owner);
+            // GIVE OWNERSHIP TO NEW BADGE
+            cosmeticsData.badges[data.id].owner = [
+                ...cosmeticsData.badges[data.id].owner,
+                ...data.owner,
+            ];
 
             return cosmeticsData;
         });
@@ -537,13 +637,17 @@ services["7TV"].ws.on("create_entitlement", (data) => {
         // PAINT
         cosmetics.update((cosmeticsData) => {
             for (const paint of Object.values(cosmeticsData.paints)) {
-                // REMOVE PAINT OWNER
+                // REMOVE OLD PAINT OWNER
                 paint.owner = paint.owner.filter(
-                    (o) => o.id !== String(data?.owner.id),
+                    (c) => !mappedIDs.includes(c.id + "-" + c.platform),
                 );
             }
 
-            cosmeticsData.paints[data.id].owner.push(data.owner);
+            // GIVE OWNERSHIP TO NEW PAINT
+            cosmeticsData.paints[data.id].owner = [
+                ...cosmeticsData.paints[data.id].owner,
+                ...data.owner,
+            ];
 
             return cosmeticsData;
         });
@@ -563,14 +667,15 @@ services["7TV"].ws.on("delete_entitlement", (data) => {
         whatToDelete = "paints";
     }
 
+    const mappedIDs = data.owner.map((c) => c.id + "-" + c.platform);
+
     cosmetics.update((cosmeticsData) => {
-        if (typeof whatToDelete == "string") {
+        if (typeof whatToDelete == "string" && whatToDelete in cosmeticsData) {
             for (const entitlement of Object.values(
                 cosmeticsData[whatToDelete],
-            ) as Record<string, any>[]) {
+            ) as (Paint | SevenTVBadge)[]) {
                 entitlement.owner = entitlement.owner.filter(
-                    (o: Record<string, string>) =>
-                        o.id !== String(data?.owner.id),
+                    (c) => !mappedIDs.includes(c.id + "-" + c.platform),
                 );
             }
         }

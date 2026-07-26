@@ -18,6 +18,7 @@ const config = {
             $types: path.resolve("./src/types"),
             $lib: path.resolve("./src/lib"),
             $styles: path.resolve("./src/styles/"),
+            $locales: path.resolve("./src/locales/"),
         },
     },
     compilerOptions: {

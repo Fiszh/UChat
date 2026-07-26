@@ -1,7 +1,9 @@
+import { API_URL } from "$stores/global";
+
 export async function valideToken(
     accessToken: string,
 ): Promise<Record<string, string> | false> {
-    const response = await fetch("https://api.unii.dev/validate", {
+    const response = await fetch(API_URL + "/validate", {
         headers: {
             "x-auth-token": `Bearer ${accessToken}`,
         },

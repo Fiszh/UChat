@@ -18,7 +18,8 @@
 
     onMount(() => {
         const params = new URLSearchParams(window.location.search);
-        hasChannel = params.has("channel") || params.has("id");
+        hasChannel =
+            params.has("channel") || params.has("id") || params.has("kick");
 
         const isFirefox = navigator.userAgent.toLowerCase().includes("firefox");
 
@@ -77,93 +78,6 @@
 
         h1 {
             margin: 0.2rem;
-        }
-    }
-
-    :global {
-        .paint {
-            -webkit-text-fill-color: transparent;
-            background-clip: text !important;
-            -webkit-background-clip: text !important;
-            background-size: 100% 100% !important;
-            text-shadow: none !important;
-        }
-
-        // *>* {
-        //   outline: 1px solid;
-        // }
-
-        // THIS MAKES SURE BITS DISPLAY DONT LOOK WEIRD
-        .bits-wrapper {
-            display: inline-flex;
-            align-items: center;
-            vertical-align: middle;
-        }
-
-        /* 
-        START
-        WHAT MAKES EMOTES WORK IN ZERO-WIDTH 
-        */
-        .emote-wrapper {
-            display: inline-grid;
-            grid-auto-rows: 0px;
-
-            position: relative;
-
-            line-height: normal;
-            vertical-align: middle;
-
-            .emote {
-                justify-self: center;
-                height: 100vh;
-            }
-
-            .emote.emoji {
-                height: 100vh;
-            }
-        }
-        /* END */
-
-        .twemoji {
-            height: 100vh !important;
-            display: inline-block;
-            vertical-align: middle;
-            line-height: normal;
-        }
-
-        #rainbow-text {
-            font-weight: bold;
-            background: linear-gradient(
-                90deg,
-                red,
-                orange,
-                yellow,
-                green,
-                blue,
-                indigo,
-                violet,
-                red
-            );
-            background-size: 200%;
-            animation: rainbow 5s linear infinite;
-            display: inline-block;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            -webkit-background-clip: text;
-        }
-
-        @keyframes rainbow {
-            0% {
-                background-position: 200% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
         }
     }
 </style>

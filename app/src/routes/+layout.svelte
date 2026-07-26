@@ -9,7 +9,10 @@
 
     import { page } from "$app/state";
     import Banner from "$components/Banner.svelte";
-    import { isMobile } from "$stores/global.js";
+    import { isMobile } from "$stores/global";
+
+    import { RenderScan } from "svelte-render-scan";
+    import ToastWrapper from "$components/toast/Wrapper.svelte";
 
     let { data, children } = $props();
 
@@ -20,7 +23,8 @@
 
     onMount(() => {
         const params = new URLSearchParams(window.location.search);
-        hasChannel = params.has("channel") || params.has("id");
+        hasChannel =
+            params.has("channel") || params.has("id") || params.has("kick");
 
         setMobile();
         window.addEventListener("resize", setMobile);
@@ -29,8 +33,13 @@
     });
 </script>
 
+{#if __DEBUG__}
+    <RenderScan />
+{/if}
+
 {#if mounted}
     {#if !hasChannel}
+        <ToastWrapper />
         {#if data.statusMessage == null}
             <Banner type="fail" />
         {:else if data.statusMessage && (data.statusMessage.type || data.statusMessage.message)}

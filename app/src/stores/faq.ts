@@ -1,3 +1,5 @@
+import { API_URL } from "./global";
+
 export const faqItems = [
     {
         question: "What is UChat?",
@@ -11,12 +13,9 @@ export const faqItems = [
         question: "Who made UChat?",
         answer: "UChat was made by uniiDev with the help of ftk789 & creepycode.",
         links: [
-            { name: "uniiDev", url: "https://api.unii.dev/twitch/528761326" },
-            { name: "ftk789", url: "https://api.unii.dev/twitch/166427338" },
-            {
-                name: "creepycode",
-                url: "https://api.unii.dev/twitch/404660262",
-            },
+            { name: "uniiDev", url: API_URL + "/twitch/528761326" },
+            { name: "ftk789", url: API_URL + "/twitch/166427338" },
+            { name: "creepycode", url: API_URL + "/twitch/404660262" },
         ],
     },
     {
@@ -67,7 +66,7 @@ export const faqItems = [
     {
         question: "Where can I find the API?",
         answer: "You can access the public API documentation here.",
-        links: [{ name: "here", url: "https://api.unii.dev/docs/" }],
+        links: [{ name: "here", url: API_URL + "/docs/" }],
     },
     {
         question: "Can I use this overlay or its API for my own project?",
@@ -90,7 +89,7 @@ export const faqItems = [
         question: "What if my question isn't listed here?",
         answer: "For more information, you can reach out via Twitch or Discord.",
         links: [
-            { name: "Twitch", url: "https://api.unii.dev/twitch/528761326" },
+            { name: "Twitch", url: API_URL + "/twitch/528761326" },
             {
                 name: "Discord",
                 url: "https://discord.com/users/703639905691238490",

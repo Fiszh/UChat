@@ -18,6 +18,7 @@
         invalid?: boolean;
         readonly?: boolean;
         onChange?: (e: Event) => void;
+        onPaste?: (e: ClipboardEvent) => void;
     } & HTMLInputAttributes &
         HTMLAnchorAttributes;
 
@@ -30,6 +31,7 @@
         invalid = false,
         readonly = false,
         onChange,
+        onPaste,
         ...restProps
     }: Props = $props();
 
@@ -49,6 +51,7 @@
         {disabled}
         {readonly}
         oninput={onChange}
+        onpaste={onPaste}
         {...restProps}
         placeholder={disabled ? "Disabled" : restProps.placeholder}
     />

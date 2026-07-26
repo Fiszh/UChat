@@ -20,26 +20,17 @@ interface Emote {
 
 const parseSetData = (data: Emote[], emoteSet?: string): ParsedEmote[] =>
     data.map<ParsedEmote>((emote: Emote) => ({
-        name: emote?.name,
-        original_name: emote?.data?.name,
-        emote_id: emote?.id,
-        flags: emote?.data?.flags,
-        urls: emote.data.host.files.reduce<Record<string, ParsedEmotesUrls>>(
-            (acc, file) => {
-                const scale = file.name.split(".")?.[0];
-
-                if (typeof scale == "string" && file.name.endsWith(".avif"))
-                    acc[scale] = {
-                        scale,
-                        url: `https://cdn.7tv.app/emote/${emote.id}/${file.name}`,
-                        width: file.width,
-                        height: file.height,
-                    };
-
-                return acc;
-            },
-            {},
-        ),
+        name: emote.name,
+        original_name: emote.data.name,
+        emote_id: emote.id,
+        flags: emote.data.flags,
+        urls: emote.data.host.files.map<ParsedEmotesUrls>((file) => ({
+            scale: file.name.split(".")[0],
+            url: `https://cdn.7tv.app/emote/${emote.id}/${file.name}`,
+            width: file.width,
+            height: file.height,
+            format: file.format,
+        })),
         set: emoteSet === "global" ? "Global 7TV" : "7TV",
     }));
 
@@ -153,6 +144,7 @@ async function emoteSetViaSetID(emoteSetId: string) {
 }
 
 type SetData = SavedSevenTVSet | Record<never, never>;
+
 async function emoteSetViaTwitchID(
     twitchID: string | number,
 ): Promise<SetData> {
@@ -180,26 +172,65 @@ async function emoteSetViaTwitchID(
     }
 }
 
-interface UserInfo {
-    id: string;
-    username: string;
-    display_name: string;
-    avatar_url?: string;
-    emote_set_id: string;
-    emote_data: ParsedEmote[];
-    twitch: {
-        id: string;
-        username: string;
-        display_name: string;
-    };
+async function emoteSetViaKickID(twitchID: string | number): Promise<SetData> {
+    let set_data: SetData = {};
+
+    try {
+        const response = await fetch(
+            `https://7tv.io/v3/users/kick/${twitchID}`,
+        );
+
+        if (response.ok) {
+            const data = await response.json();
+
+            if (data?.emote_set?.emotes)
+                set_data = {
+                    id: data?.emote_set_id,
+                    user_id: data.user.id,
+                    emotes: await parseSetData(data.emote_set.emotes),
+                };
+        }
+    } catch (error) {
+        throw new Error(`Error fetching emote data: ${error}`);
+    } finally {
+        return set_data;
+    }
 }
+
+const parseUserInfo = async (
+    data: Record<string, any>,
+): Promise<Types7TV.UserInfo> => {
+    const user_data = data.user;
+
+    const emote_data = await parseSetData(data?.emote_set?.emotes || []);
+
+    return {
+        id: user_data?.id,
+        username: user_data?.username,
+        display_name: user_data?.display_name,
+        avatar_url: user_data?.avatar_url,
+        emote_set_id: data?.emote_set_id,
+        emote_data,
+        connections: user_data?.connections.map((c: Types7TV.Connection) => ({
+            ...c,
+            user_id: user_data?.id,
+        })),
+        service: {
+            id: data?.id,
+            username: data?.username,
+            display_name: data?.display_name,
+        },
+    };
+};
 
 interface UserInfoInvalid {
     id: null;
 }
 
 async function getUserViaTwitchID(twitchID: string | number) {
-    let user_info: UserInfo | UserInfoInvalid | null = null;
+    let user_info: Types7TV.UserInfo | UserInfoInvalid = {
+        id: null,
+    };
 
     try {
         const response = await fetch(
@@ -209,33 +240,49 @@ async function getUserViaTwitchID(twitchID: string | number) {
         if (response.ok) {
             const data = await response.json();
 
-            if (data?.user) {
-                const user_data = data.user;
+            if (data?.user) user_info = await parseUserInfo(data);
+        }
+    } catch (error) {
+        throw new Error(`Error fetching user data: ${error}`);
+    } finally {
+        return user_info;
+    }
+}
 
-                const emote_data = await parseSetData(
-                    data?.emote_set?.emotes || [],
-                );
+async function getUserViaKickID(
+    kickID: string | number,
+): Promise<Types7TV.UserInfo | UserInfoInvalid> {
+    let user_info: Types7TV.UserInfo | UserInfoInvalid = {
+        id: null,
+    };
 
-                user_info = {
-                    id: user_data?.id,
-                    username: user_data?.username,
-                    display_name: user_data?.display_name,
-                    avatar_url: user_data?.avatar_url,
-                    emote_set_id: data?.emote_set_id,
-                    emote_data,
-                    twitch: {
-                        id: data?.id,
-                        username: data?.username,
-                        display_name: data?.display_name,
-                    },
-                };
-            }
-        } else {
-            if (response.status == 404) {
-                user_info = {
-                    id: null,
-                };
-            }
+    try {
+        const response = await fetch(`https://7tv.io/v3/users/kick/${kickID}`);
+
+        if (response.ok) {
+            const data = await response.json();
+
+            if (data?.user) user_info = await parseUserInfo(data);
+        }
+    } catch (error) {
+        throw new Error(`Error fetching user data: ${error}`);
+    } finally {
+        return user_info;
+    }
+}
+
+async function getUserVia7TVID(stvID: string | number) {
+    let user_info: Types7TV.UserInfo | UserInfoInvalid = {
+        id: null,
+    };
+
+    try {
+        const response = await fetch(`https://7tv.io/v3/users/${stvID}`);
+
+        if (response.ok) {
+            const data = await response.json();
+
+            if (data?.user) user_info = await parseUserInfo(data);
         }
     } catch (error) {
         throw new Error(`Error fetching user data: ${error}`);
@@ -257,9 +304,14 @@ export default {
     parseSetData,
     parsePaintData,
     parseBadgeData,
-    getUserViaTwitchID,
+    user: {
+        by7TVID: getUserVia7TVID,
+        byTwitchID: getUserViaTwitchID,
+        byKickID: getUserViaKickID,
+    },
     emoteSet: {
         bySetID: emoteSetViaSetID,
         byTwitchID: emoteSetViaTwitchID,
+        byKickID: emoteSetViaKickID,
     },
 };

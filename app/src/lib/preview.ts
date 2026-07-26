@@ -1,6 +1,21 @@
 import { badges } from "$stores/global";
 import { get } from "svelte/store";
 import { messages } from "./chat";
+import type { Badges } from "$types/badges";
+
+interface IVRBadge {
+    set_id: string;
+    versions: {
+        id: string;
+        image_url_1x: string;
+        image_url_2x: string;
+        image_url_4x: string;
+        title: string;
+        description: string;
+        click_action: null;
+        click_url: null;
+    }[];
+}
 
 export async function getBadges() {
     const response = await fetch(`https://api.ivr.fi/v2/twitch/badges/global`, {
@@ -11,20 +26,18 @@ export async function getBadges() {
 
     if (!response.ok) throw new Error("Network response was not ok");
 
-    const data = await response.json();
+    const data: IVRBadge[] = await response.json();
 
-    const previewData = (data || []).flatMap((badge: Record<string, any>) => {
-        return (badge?.versions || []).flatMap(
-            (version: Record<string, any>) => ({
-                id: badge.set_id + "_" + version.id,
-                url:
-                    version.image_url_4x ||
-                    version.image_url_2x ||
-                    version.image_url_1x ||
-                    "",
-                title: version.title,
-            }),
-        );
+    const previewData = data.flatMap((badge) => {
+        return badge.versions.flatMap((version) => ({
+            id: badge.set_id + "_" + version.id,
+            url:
+                version.image_url_4x ||
+                version.image_url_2x ||
+                version.image_url_1x ||
+                "",
+            title: version.title,
+        }));
     });
 
     badges.update((e) => ({
@@ -44,7 +57,7 @@ function randomString(len: number) {
     return out;
 }
 
-function pickRandomBadges(): Record<string, string>[] {
+function pickRandomBadges(): Badges.Twitch[] {
     const count = Math.floor(Math.random() * 2) + 1;
     const badges_data = get(badges);
     const shuffled = badges_data["TTV"]["global"].sort(
@@ -58,17 +71,17 @@ export function sendFakeMessage(message: string) {
     const displayName = username;
     const userId = Math.floor(Math.random() * 1_000_000_000).toString();
 
-    const badgesPicked = pickRandomBadges() as Record<string, string>[];
+    const badgesPicked = pickRandomBadges();
 
     const badgesRaw = badgesPicked
-        .map((b: Record<string, string>) => {
+        .map((b) => {
             const badge_split = b.id.split("_");
 
             return `${badge_split[0]}/${badge_split[1]}`;
         })
         .join(",");
     const badges_parsed: Record<string, string> = {};
-    badgesPicked.forEach((b: Record<string, string>) => {
+    badgesPicked.forEach((b) => {
         const badge_split = b.id.split("_");
 
         badges_parsed[badge_split[0]] = badge_split[1];

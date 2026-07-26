@@ -1,7 +1,8 @@
-import { badges } from "$stores/global";
+import { API_URL, badges } from "$stores/global";
 
 import BTTV_main from "$lib/services/BTTV/main";
 import FFZ_main from "$lib/services/FFZ/main";
+import type { Badges } from "$types/badges";
 
 export async function getFFZBadges() {
     const globalBadges = await FFZ_main.getBadges();
@@ -23,22 +24,35 @@ export async function getBTTVBadges() {
     });
 }
 
+interface UChatBadges extends Badges.UChat {
+    urls: never;
+    imgs: {
+        animated: {
+            "1x": string;
+            "2x": string;
+            "3x": string;
+            "4x": string;
+        };
+        static: {
+            "1x": string;
+            "2x": string;
+            "3x": string;
+            "4x": string;
+        };
+    };
+}
+
 export async function getMainBadges() {
-    const response = await fetch("https://api.unii.dev/badges");
+    const response = await fetch(API_URL + "/badges");
 
-    const data = await response.json();
+    const data: Record<string, UChatBadges[]> = await response.json();
 
-    const map = [...data["UChat"], ...data["YAUTC"]].map((badge) => {
-        if (badge["imgs"]["animated"]) {
-            badge["urls"] = badge["imgs"]["animated"];
-        } else {
-            badge["urls"] = badge["imgs"]["static"];
-        }
-
-        delete badge["imgs"];
-
-        return badge;
-    });
+    const map = Object.values(data)
+        .flat()
+        .map((badge) => ({
+            ...badge,
+            urls: badge["imgs"]["animated"] ?? badge["imgs"]["static"],
+        }));
 
     badges.update((e) => {
         e["UChat"] = map;
@@ -54,31 +68,24 @@ export async function getChatterinoBadges() {
 
     if (!response.ok) throw new Error("Network response was not ok");
 
-    const data = await response.json();
-
-    const map = data.badges.map((badge: Record<string, any>) => ({
-        id: badge.tooltip.replace(/\s+/g, "_").toLowerCase(),
-        url: badge["image3"] || badge["image2"] || badge["image1"] || undefined,
-        title: badge.tooltip,
-        owners: badge.users,
-    }));
+    const data: { badges: Badges.Chatterino[] } = await response.json();
 
     badges.update((e) => {
-        e["OTHER"]["Chatterino"] = map;
+        e["OTHER"]["Chatterino"] = data.badges;
 
         return e;
     });
 }
 
 export async function getChatterinoHomiesBadges() {
-    let badge_data: any[] = [];
+    let badge_data: Badges.Chatterino[] = [];
 
     const response0 = await fetch(`https://itzalex.github.io/badges`, {
         method: "GET",
     });
 
     if (response0.ok) {
-        const data = await response0.json();
+        const data: { badges: Badges.Chatterino[] } = await response0.json();
 
         if (data?.badges) badge_data = [...data.badges];
     }
@@ -88,28 +95,43 @@ export async function getChatterinoHomiesBadges() {
     });
 
     if (response1.ok) {
-        const data = await response1.json();
+        const data: { badges: Badges.Chatterino[] } = await response1.json();
 
         if (data?.badges) badge_data = [...badge_data, ...data.badges];
     }
 
-    const map = badge_data.map((badge: Record<string, any>) => ({
-        id: badge?.id || badge.tooltip.replace(/\s+/g, "_").toLowerCase(),
-        url: badge["image3"] || badge["image2"] || badge["image1"] || undefined,
-        title: badge.tooltip,
-        owners: badge.users,
-    }));
-
     badges.update((e) => {
-        e["OTHER"]["ChatterinoHomies"] = map;
+        e["OTHER"]["ChatterinoHomies"] = badge_data;
 
         return e;
     });
 }
 
+export async function getCustomChatterinoHomiesBadges() {
+    const response = await fetch(
+        `https://chatterinohomies.com/api/badges/list`,
+        {
+            method: "GET",
+        },
+    );
+
+    if (response.ok) {
+        const data: { badges: Badges.ChatterinoHomiesCustom[] } =
+            await response.json();
+
+        if (data?.badges) {
+            badges.update((e) => {
+                e["OTHER"]["ChatterinoHomiesCustom"] = data.badges;
+
+                return e;
+            });
+        }
+    }
+}
+
 export async function getPolandBOTBadges() {
     const response = await fetch("https://devpoland.xyz/api/roles");
-    const data = await response.json();
+    const data: Record<string, string[]> = await response.json();
 
     badges.update((e) => {
         e["OTHER"]["PolandBOT"] = data;
@@ -120,7 +142,7 @@ export async function getPolandBOTBadges() {
 
 export async function getTurtegBotBadges() {
     const response = await fetch("https://turteg-api.xslash.ovh/v1/ffz/badges");
-    const data = await response.json();
+    const data: { badges: Badges.TurtegBadge[] } = await response.json();
 
     badges.update((e) => {
         e["OTHER"]["TurtegBot"] = data.badges;

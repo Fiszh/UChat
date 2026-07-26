@@ -1,8 +1,11 @@
+<!-- ORIGINAL LOGO: https://github.com/ -->
+<!-- MODIFIED BY: uniidev -->
+
 <script lang="ts">
     let {
         size = 1.2 * 16,
         brandColor = false,
-    }: { size?: number; brandColor?: boolean } = $props();
+    }: { size?: number | string; brandColor?: boolean } = $props();
 </script>
 
 <svg
