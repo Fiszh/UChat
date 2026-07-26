@@ -1,3 +1,6 @@
+import { logos } from "$components/logos.svelte";
+import { flags } from "$lib/bitmap";
+import type { Snippet } from "svelte";
 import { writable } from "svelte/store";
 
 export interface DefaultSetting {
@@ -8,32 +11,32 @@ export interface DefaultSetting {
     previewReact?: boolean;
 }
 
-interface NumberSetting extends DefaultSetting {
+export interface NumberSetting extends DefaultSetting {
     type: "number";
     value: string;
     default?: string;
 }
 
-interface TextSetting extends DefaultSetting {
+export interface TextSetting extends DefaultSetting {
     type: "text";
     value: string;
     default?: string;
     list?: boolean;
 }
 
-interface BooleanSetting extends DefaultSetting {
+export interface BooleanSetting extends DefaultSetting {
     type: "boolean";
     value: boolean;
     default?: boolean;
 }
 
-interface ColorPickerSetting extends DefaultSetting {
+export interface ColorPickerSetting extends DefaultSetting {
     type: "color-picker";
     value: string;
     default?: string;
 }
 
-interface SliderSetting extends DefaultSetting {
+export interface SliderSetting extends DefaultSetting {
     type: "slider";
     value: string;
     min: string;
@@ -41,12 +44,26 @@ interface SliderSetting extends DefaultSetting {
     default?: string;
 }
 
+export interface SelectorSetting extends DefaultSetting {
+    type: "selector";
+    value: number;
+    default?: number;
+    selectors: {
+        enabled: boolean;
+        label?: string;
+        icon?: Snippet<[boolean]>;
+        bitmap: number;
+        disabled?: boolean;
+    }[];
+}
+
 export type Setting =
     | NumberSetting
     | TextSetting
     | BooleanSetting
     | ColorPickerSetting
-    | SliderSetting;
+    | SliderSetting
+    | SelectorSetting;
 
 const defaultEmoteSize = "25";
 
@@ -134,11 +151,63 @@ export const configs: Setting[] = [
             "Automatically fade out messages after the specified number of seconds",
     },
     {
-        name: "Display badges",
-        type: "boolean",
-        value: true,
+        name: "Badges",
+        type: "selector",
+        value: 0,
+        selectors: [
+            {
+                label: "UChat",
+                enabled: true,
+                icon: logos["uchat"],
+                bitmap: 1 << 0,
+            },
+            {
+                label: "Twitch",
+                enabled: true,
+                icon: logos["twitch"],
+                bitmap: 1 << 1,
+            },
+            {
+                label: "Kick",
+                enabled: true,
+                icon: logos["kick"],
+                bitmap: 1 << 2,
+            },
+            { label: "7TV", enabled: true, icon: logos["7tv"], bitmap: 1 << 3 },
+            {
+                label: "BTTV",
+                enabled: true,
+                icon: logos["bttv"],
+                bitmap: 1 << 4,
+            },
+            { label: "FFZ", enabled: true, icon: logos["ffz"], bitmap: 1 << 5 },
+            {
+                label: "Chatterino",
+                enabled: true,
+                icon: logos["chatterino"],
+                bitmap: 1 << 6,
+            },
+            {
+                label: "Homies",
+                enabled: false,
+                icon: logos["chatterino-homies"],
+                bitmap: 1 << 7,
+            },
+            {
+                label: "PolandBOT",
+                enabled: true,
+                icon: logos["polandbot"],
+                bitmap: 1 << 8,
+            },
+            {
+                label: "Turteg",
+                enabled: true,
+                icon: logos["turteg"],
+                bitmap: 1 << 9,
+            },
+        ],
         param: "badges",
-        description: "Show or hide user badges (moderator, subscriber, etc.)",
+        description: "Choose which badges to show in chat",
     },
     {
         name: "Display only Twitch badges",
@@ -190,7 +259,7 @@ export const configs: Setting[] = [
             "Moderation actions like deletions, timeouts, bans, and clears affect chat messages",
     },
     {
-        name: 'Mentions are <div id="rainbow-text">Colored</div>',
+        name: 'Mentions are <div class="rainbow-text">Colored</div>',
         type: "boolean",
         value: false,
         param: "mentionColor",
@@ -231,6 +300,9 @@ export const configs: Setting[] = [
 ];
 
 for (const config of configs) {
+    if (config["type"] == "selector")
+        config["value"] = flags.getDefault(config["selectors"]);
+
     config["default"] = config["value"] as Setting["default"];
 }
 
@@ -241,3 +313,12 @@ export const savedSettings = writable<Record<string, any>>([]);
 export const channelID = writable<string>("");
 
 export const settingsParams = writable<Record<string, Setting["value"]>>({});
+
+type ChatSettings = Record<string, Setting["value"]>;
+export let chatSettings: ChatSettings = {};
+
+settings.subscribe((cfg) => {
+    for (const setting of cfg) {
+        chatSettings[setting.param] = setting.value;
+    }
+});

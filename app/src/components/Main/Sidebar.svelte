@@ -25,6 +25,7 @@
     import { isMobile } from "$stores/global";
     import type { Snippet } from "svelte";
     import UChat from "$components/logos/uchat.svelte";
+    import HelpNotice from "$components/helpNotice.svelte";
 
     let username = $state(
         getCookie("twitchUsername") || ("" as string | undefined),
@@ -113,7 +114,11 @@
             <h1 style="font-size:0.8rem; line-height: 1px;">
                 UChat Chat Overlay for Twitch
             </h1>
-            <small id="version_text">{__APP_VERSION} {dev ? "DEV" : ""}</small>
+            <small id="version_text"
+                >{__APP_VERSION}
+                {dev ? "DEV" : ""}
+                {__DEBUG__ ? "DEBUG" : ""}</small
+            >
         </div>
     </header>
 
@@ -163,7 +168,7 @@
                 server.
             </p>
 
-            <a href="/help#notice">[Learn more]</a>
+            <HelpNotice />
             {#if username && twitchToken && twitchID}
                 <GlobalSettings
                     name={username}

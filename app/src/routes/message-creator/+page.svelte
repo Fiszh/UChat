@@ -8,13 +8,16 @@
 
     import { initChat } from "$lib/loadChat";
     import { getUser } from "$lib/services/twitch";
-    import { getChannelEmotesViaTwitchID } from "$lib/emotes";
+    import { getChannelEmotesViaTwitchID } from "$lib/emotes/main";
     import { pushUserInfoViaGQL } from "$lib/services/7TV/cosmetics";
     import { getBadges } from "$lib/preview";
 
     import SevenTV_main from "$lib/services/7TV/main";
     import Button from "$components/Inputs/Button.svelte";
     import Input from "$components/Inputs/Input.svelte";
+    import Banner from "$components/Banner.svelte";
+    import { isFirefox, isSafari } from "$lib/browser";
+    import { addToast } from "$lib/toast";
 
     let messageDisplay: HTMLElement;
 
@@ -58,6 +61,24 @@
             };
 
         getChannelEmotesViaTwitchID(channel.id);
+    }
+
+    function loadUserInfo() {
+        addToast({ msg: "Loading user & channel info..." });
+
+        loadChatInfo()
+            .then(() =>
+                addToast({
+                    msg: "Loaded user & channel info",
+                    type: "success",
+                }),
+            )
+            .catch(() =>
+                addToast({
+                    msg: "Failed loading user & channel info!",
+                    type: "error",
+                }),
+            );
     }
 
     function downloadImage() {
@@ -108,6 +129,14 @@
 
 <Settings />
 <main>
+    {#if isFirefox() || isSafari()}
+        <Banner
+            type="outage"
+            message="The message creator might be buggy on {isFirefox()
+                ? 'Firefox'
+                : 'Safari'}"
+        />
+    {/if}
     <h1>UChat Message Creator</h1>
     <section id="message" class="bg-grid" bind:this={messageDisplay}>
         <ChatDisplay />
@@ -148,12 +177,12 @@
         <Download />
     {/snippet}
 
-    <Button secondary icon={LoadIcon} onclick={loadChatInfo}>
+    <Button secondary icon={LoadIcon} onclick={loadUserInfo}>
         Fetch Channel & User
     </Button>
-    <Button primary icon={DownloadIcon} onclick={downloadImage}
-        >Download image</Button
-    >
+    <Button primary icon={DownloadIcon} onclick={downloadImage}>
+        Download image
+    </Button>
 </main>
 
 <style lang="scss">

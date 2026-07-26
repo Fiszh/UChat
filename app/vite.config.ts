@@ -9,10 +9,12 @@ const repoUrl = execSync("git remote get-url origin")
     .trim()
     .replace(/\.git$/, "");
 
+const isDebug = process.argv.includes("--debug");
+
 export default defineConfig({
     plugins: [sveltekit()],
     preview: {
-        allowedHosts: ["dev.unii.dev", "chat.unii.dev", "localhost"],
+        allowedHosts: [".unii.dev", "unii.dev", "localhost"],
     },
     server: {
         allowedHosts: [".unii.dev", "unii.dev"],
@@ -22,5 +24,9 @@ export default defineConfig({
         __BUILD_DATE: JSON.stringify(new Date().toISOString()),
         __REPO_URL: JSON.stringify(repoUrl),
         __APP_VERSION: JSON.stringify(pkg.version),
+        __DEBUG__: JSON.stringify(isDebug),
+        "import.meta.env.API_URL": JSON.stringify(
+            process.env.API_URL ?? "https://api.unii.dev",
+        ),
     },
 });

@@ -1,0 +1,37 @@
+{
+    "hello": "Hello, {name}!",
+    "dialogs": {
+        "channel_link": {
+            "title": "Link Detected",
+            "description": "Looks like you pasted a {platform} channel link",
+            "channel_confirm": "Want to {platformChange}use {name} as your channel?",
+            "platform_change": "change platform to {platform} and "
+        },
+        "hidden_settings": {
+            "title": "Warning",
+            "description": "Hidden settings aren't meant for regular use, some are old or being phased out, so they may disappear without notice."
+        }
+    },
+    "labels": {
+        "learn_more": "Learn more",
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "proceed": "Proceed",
+        "send": "Send",
+        "save": "Save",
+        "delete": "Delete",
+        "reset": "Reset",
+        "copy": "Copy",
+        "login": "Login",
+        "logout": "Logout",
+        "enable_all": "Enable All",
+        "disable_all": "Disable All"
+    },
+    "notices": {
+        "ip": "We log IP addresses for abuse prevention."
+    },
+    "channel_input": {
+        "name": "{platform} Channel Name",
+        "id": "{platform} Channel ID"
+    }
+}

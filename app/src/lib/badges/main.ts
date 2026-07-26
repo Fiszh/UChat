@@ -1,4 +1,4 @@
-import { badges } from "$stores/global";
+import { API_URL, badges } from "$stores/global";
 
 import BTTV_main from "$lib/services/BTTV/main";
 import FFZ_main from "$lib/services/FFZ/main";
@@ -24,8 +24,8 @@ export async function getBTTVBadges() {
     });
 }
 
-interface UChatBadges {
-    id: string;
+interface UChatBadges extends Badges.UChat {
+    urls: never;
     imgs: {
         animated: {
             "1x": string;
@@ -40,20 +40,21 @@ interface UChatBadges {
             "4x": string;
         };
     };
-    type: string;
-    title: string;
-    users: string[];
 }
 
 export async function getMainBadges() {
-    const response = await fetch("https://api.unii.dev/badges");
+    const response = await fetch(API_URL + "/badges");
 
     const data: Record<string, UChatBadges[]> = await response.json();
 
-    const map = [...data["UChat"], ...data["YAUTC"]].map((badge) => ({
-        ...badge,
-        urls: badge["imgs"]["animated"] || badge["imgs"]["static"],
-    }));
+    const map = Object.values(data)
+        .flat()
+        .map((badge) => ({
+            ...badge,
+            urls: badge["imgs"]["animated"] ?? badge["imgs"]["static"],
+        }));
+
+    console.log(response, data, map);
 
     badges.update((e) => {
         e["UChat"] = map;
@@ -106,6 +107,28 @@ export async function getChatterinoHomiesBadges() {
 
         return e;
     });
+}
+
+export async function getCustomChatterinoHomiesBadges() {
+    const response = await fetch(
+        `https://chatterinohomies.com/api/badges/list`,
+        {
+            method: "GET",
+        },
+    );
+
+    if (response.ok) {
+        const data: { badges: Badges.ChatterinoHomiesCustom[] } =
+            await response.json();
+
+        if (data?.badges) {
+            badges.update((e) => {
+                e["OTHER"]["ChatterinoHomiesCustom"] = data.badges;
+
+                return e;
+            });
+        }
+    }
 }
 
 export async function getPolandBOTBadges() {

@@ -44,7 +44,7 @@ interface ParsedMessage {
     command: string;
     channel: string;
     message: string;
-    service: "twitch";
+    service: "TWITCH";
 }
 
 export const messages = writable<Record<string, any>[]>([]);
@@ -82,10 +82,11 @@ function assignMessage(parsed: ReturnType<typeof parseIrcLine>) {
             if (!modActions) break;
 
             messages.update((arr) =>
-                arr.filter(
-                    (item) =>
-                        item.tags["id"] !== parsed.tags.merged["target-msg-id"],
-                ),
+                arr.filter((item) => {
+                    if (item["service"] != "TWITCH") return item;
+                    if (item.tags["id"] != parsed.tags.merged["target-msg-id"])
+                        return item;
+                }),
             );
 
             break;
@@ -94,15 +95,19 @@ function assignMessage(parsed: ReturnType<typeof parseIrcLine>) {
 
             if (parsed.tags.merged["target-user-id"]) {
                 messages.update((arr) =>
-                    arr.filter(
-                        (item) =>
-                            item.tags["user-id"] !==
-                            parsed.tags.merged["target-user-id"],
-                    ),
+                    arr.filter((item) => {
+                        if (item["service"] != "TWITCH") return item;
+                        if (
+                            item.tags["user-id"] !=
+                            parsed.tags.merged["target-user-id"]
+                        )
+                            return item;
+                    }),
                 );
             } else {
-                messages.set([]);
-                clearChat();
+                messages.update((arr) =>
+                    arr.filter((item) => item["service"] != "TWITCH"),
+                );
             }
 
             break;
@@ -266,7 +271,7 @@ function parseIrcLine(raw: string): ParsedMessage {
         command: "",
         channel: "",
         message: "",
-        service: "twitch",
+        service: "TWITCH",
     };
 
     try {

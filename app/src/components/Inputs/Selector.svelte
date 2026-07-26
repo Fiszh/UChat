@@ -1,38 +1,82 @@
-<!-- SOME PARTS ARE FROM https://github.com/SevenTV/SevenTV/blob/main/apps/website/src/components/input/segmented-control.svelte -->
-
 <script lang="ts">
-    import type { Snippet } from "svelte";
-    import { crossfade } from "svelte/transition";
-    import { cubicInOut } from "svelte/easing";
+    import { dev } from "$app/environment";
+    import { flags } from "$lib/bitmap";
+    import { onMount, type Snippet } from "svelte";
+    import { t } from "svelte-i18n";
 
     type Option = {
         enabled: boolean;
         label?: string;
-        icon?: Snippet;
+        icon?: Snippet<[boolean]>;
+        bitmap?: number;
+        disabled?: boolean;
     };
 
     type Props = {
         options: Option[];
+        quickOptions?: boolean;
+        bitmap?: number;
+        onChange?: (v: number) => void;
     };
 
-    const [send, receive] = crossfade({
-        duration: 200,
-        easing: cubicInOut,
-    });
+    let {
+        options = [],
+        quickOptions = false,
+        bitmap = 0,
+        onChange,
+    }: Props = $props();
 
-    let { options = [] }: Props = $props();
+    function toggleOption(i: number) {
+        bitmap = flags.toggle(bitmap, i);
+
+        onChange?.(bitmap);
+    }
+
+    function toggleAll(value: boolean) {
+        if (value) {
+            bitmap = flags.enableAll(options);
+        } else {
+            bitmap = flags.disableAll();
+        }
+
+        onChange?.(bitmap);
+    }
 </script>
 
 <section>
-    {#each options as option}
-        <label class:enabled={option.enabled}>
-            <input type="checkbox" bind:checked={option.enabled} />
-            {@render option?.icon?.()}
-            {#if option.label}
-                <p>{option.label}</p>
-            {/if}
-        </label>
-    {/each}
+    <div id="layout">
+        {#each options as option, i}
+            <label
+                class:enabled={flags.isEnabled(bitmap, i)}
+                title={option.disabled ? "disabled" : ""}
+            >
+                <input
+                    type="checkbox"
+                    onchange={() => toggleOption(i)}
+                    disabled={option.disabled}
+                />
+                {@render option?.icon?.(
+                    !option.disabled && flags.isEnabled(bitmap, i),
+                )}
+                {#if option.label}
+                    <small>{option.label}</small>
+                {/if}
+            </label>
+        {/each}
+    </div>
+    <span>
+        {#if quickOptions}
+            <button onclick={() => toggleAll(true)}>
+                <small>{$t("labels.enable_all")}</small>
+            </button>
+            <small>{bitmap}</small>
+            <button onclick={() => toggleAll(false)}>
+                <small>{$t("labels.disable_all")}</small>
+            </button>
+        {:else if !quickOptions && dev}
+            <small>{bitmap}</small>
+        {/if}
+    </span>
 </section>
 
 <style lang="scss">
@@ -40,15 +84,42 @@
         display: none;
     }
 
-    section {
+    #layout {
         display: flex;
-        background-color: var(--secondary);
 
         gap: 0.25rem;
+
+        flex-wrap: wrap;
+    }
+
+    section {
+        background-color: var(--secondary);
         padding: 0.35rem;
         border-radius: 0.5rem;
 
         user-select: none;
+
+        overflow: hidden;
+
+        span {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            &:has(> :only-child) {
+                justify-content: center;
+            }
+        }
+
+        button {
+            color: rgb(66, 66, 66);
+
+            transition: color 0.3s ease;
+
+            &:hover {
+                color: rgb(109, 109, 109);
+            }
+        }
 
         label {
             border: none;
@@ -64,6 +135,12 @@
                 opacity: 1;
             }
 
+            &:has(input[disabled]) {
+                opacity: 0.25;
+                color: rgba(255, 255, 255, 0.25);
+                cursor: not-allowed;
+            }
+
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -77,9 +154,15 @@
 
             transition: opacity 0.3s ease;
 
-            p {
-                margin: 0;
+            small {
+                font-size: 0.75rem;
             }
+        }
+    }
+
+    @media (max-width: 768px) {
+        section label {
+            padding: 0.25rem;
         }
     }
 </style>

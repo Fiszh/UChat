@@ -34,6 +34,7 @@
             data-id={id}
             class:selected={value == id}
             onclick={() => (value = id)}
+            type="button"
             {disabled}
         >
             {@render icon?.(value == id && !disabled)}
@@ -107,5 +108,11 @@
         background-color: var(--secondary-active);
         border-radius: 0.25rem;
         z-index: -1;
+    }
+
+    @media (max-width: 768px) {
+        section button {
+            padding: 0.25rem;
+        }
     }
 </style>

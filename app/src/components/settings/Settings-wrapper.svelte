@@ -1,5 +1,4 @@
 <script lang="ts">
-    import Button from "$components/Inputs/Button.svelte";
     import type { Setting } from "$stores/settings";
     import { RotateCcw } from "@lucide/svelte";
     import type { Snippet } from "svelte";
@@ -54,6 +53,8 @@
         justify-content: space-between;
         align-items: center;
         position: relative;
+
+        min-height: min-content;
 
         padding: 0.75rem 1rem;
         box-sizing: border-box;

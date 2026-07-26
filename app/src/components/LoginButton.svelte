@@ -5,6 +5,7 @@
 
     import { delCookie, getCookie, setCookie } from "$lib/cookie";
     import Button from "./Inputs/Button.svelte";
+    import { t } from "svelte-i18n";
 
     type Props = { onToken: (token: string) => void; onLogOut: () => void };
 
@@ -67,8 +68,8 @@
     onclick={openTwitchPopup}
 >
     {#if hasToken}
-        Logout
+        {$t("labels.logout")}
     {:else}
-        Login
+        {$t("labels.login")}
     {/if}
 </Button>

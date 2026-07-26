@@ -11,7 +11,9 @@
     import SettingsText from "$components/settings/Settings-text.svelte";
     import SettingsColor from "$components/settings/Settings-color.svelte";
     import SettingsSlider from "$components/settings/Settings-slider.svelte";
+    import SettingsSelector from "$components/settings/Settings-selector.svelte";
     import { removeParam, setParam } from "$lib/params";
+    import { t } from "svelte-i18n";
 
     let showHidden = $state(false);
     let hiddenWarning = $state(false);
@@ -37,11 +39,7 @@
             const found = arr.find((s) => s.param === param);
 
             if (found) {
-                if (
-                    type == "number" &&
-                    typeof value == "string" &&
-                    value.length
-                ) {
+                if (type == "number") {
                     found.value = String(value).replace(/[^0-9]+/g, "");
                 } else if (
                     typeof value == "boolean" ||
@@ -77,79 +75,84 @@
     });
 </script>
 
-<Dialog name="Warning" bind:show={hiddenWarning}>
-    Hidden settings are not meant to be used regularly, please keep that in mind
-    when enabling them. They can go away any day and may be hidden because they
-    are old features or are being replaced.
+<Dialog name={$t("dialogs.hidden_settings.title")} bind:show={hiddenWarning}>
+    {$t("dialogs.hidden_settings.description")}
 </Dialog>
 
 <div id="settings">
-    <section id="config">
-        {#each $settings as setting, i (i)}
-            {#if !setting.hide || (setting.hide && showHidden)}
-                {#if setting.type == "boolean"}
-                    <SettingsToggle
-                        name={setting.name}
-                        description={setting.description}
-                        hidden={setting.hide}
-                        value={setting.value}
-                        defaultValue={setting["default"]}
-                        onChange={(checked) =>
-                            handleInput(setting.param, checked)}
-                    />
-                {:else if setting.type == "text" || setting.type == "number"}
-                    <SettingsText
-                        name={setting.name}
-                        description={setting.description}
-                        hidden={setting.hide}
-                        defaultValue={setting["default"]}
-                        value={setting.value}
-                        onChange={(value) =>
-                            handleInput(
-                                setting.param,
-                                value,
-                                typeof setting["default"],
-                            )}
-                    />
-                {:else if setting.type == "color-picker"}
-                    <SettingsColor
-                        name={setting.name}
-                        description={setting.description}
-                        hidden={setting.hide}
-                        value={setting.value}
-                        defaultValue={setting["default"]}
-                        onChange={(value) =>
-                            handleInput(setting.param, value, "color-picker")}
-                    />
-                {:else if setting.type == "slider"}
-                    <SettingsSlider
-                        name={setting.name}
-                        description={setting.description}
-                        hidden={setting.hide}
-                        value={setting.value}
-                        min={setting["min"]}
-                        max={setting["max"]}
-                        defaultValue={setting["default"]}
-                        onChange={(value) =>
-                            handleInput(setting.param, value, "slider")}
-                    />
-                {/if}
-
-                <hr />
+    {#each $settings as setting, i (i)}
+        {#if !setting.hide || (setting.hide && showHidden)}
+            {#if setting.type == "boolean"}
+                <SettingsToggle
+                    name={setting.name}
+                    description={setting.description}
+                    hidden={setting.hide}
+                    value={setting.value}
+                    defaultValue={setting["default"]}
+                    onChange={(checked) => handleInput(setting.param, checked)}
+                />
+            {:else if setting.type == "text" || setting.type == "number"}
+                <SettingsText
+                    name={setting.name}
+                    description={setting.description}
+                    hidden={setting.hide}
+                    value={setting.value}
+                    defaultValue={setting["default"]}
+                    onChange={(value) =>
+                        handleInput(
+                            setting.param,
+                            value,
+                            typeof setting["default"],
+                        )}
+                />
+            {:else if setting.type == "color-picker"}
+                <SettingsColor
+                    name={setting.name}
+                    description={setting.description}
+                    hidden={setting.hide}
+                    value={setting.value}
+                    defaultValue={setting["default"]}
+                    onChange={(value) =>
+                        handleInput(setting.param, value, "color-picker")}
+                />
+            {:else if setting.type == "slider"}
+                <SettingsSlider
+                    name={setting.name}
+                    description={setting.description}
+                    hidden={setting.hide}
+                    value={setting.value}
+                    min={setting["min"]}
+                    max={setting["max"]}
+                    defaultValue={setting["default"]}
+                    onChange={(value) =>
+                        handleInput(setting.param, value, "slider")}
+                />
+            {:else if setting.type == "selector"}
+                <SettingsSelector
+                    name={setting.name}
+                    description={setting.description}
+                    hidden={setting.hide}
+                    value={setting.value}
+                    selectors={setting.selectors}
+                    defaultValue={setting.default}
+                    onChange={(value) =>
+                        handleInput(
+                            setting.param,
+                            value,
+                            typeof setting["default"],
+                        )}
+                />
             {/if}
-        {/each}
 
-        {#if !showHidden}
-            <Button
-                id="hidden-settings"
-                center
-                danger
-                onclick={showHiddenSettings}
-            >
-                Show hidden settings
-            </Button>
+            <hr />
         {/if}
-    </section>
+    {/each}
+
+    {#if !showHidden}
+        <Button id="hidden-settings" center danger onclick={showHiddenSettings}>
+            Show hidden settings
+        </Button>
+    {/if}
 </div>
 
 <style lang="scss">
@@ -164,20 +167,6 @@
         background-color: rgba(255, 255, 255, 0.021);
 
         border-right: #242424 1px solid;
-
-        #config {
-            width: 100%;
-            height: 100%;
-
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-            overflow-x: hidden;
-
-            box-sizing: border-box;
-
-            gap: 0.3rem;
-        }
     }
 
     @media (max-width: 768px) {

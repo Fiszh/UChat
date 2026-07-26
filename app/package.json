@@ -1,16 +1,18 @@
 {
     "name": "uchat",
     "private": true,
-    "version": "3.8.1",
+    "version": "3.9.0",
     "type": "module",
+    "license": "AGPL-3.0-or-later",
     "scripts": {
         "dev": "vite dev",
+        "dev:api": "API_URL=http://api.localhost:3000 vite dev",
+        "dev:open": "vite dev --open --host",
         "build": "vite build",
         "preview": "vite preview",
         "prepare": "svelte-kit sync || echo ''",
         "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json && bunx tsc --noEmit && bunx prettier --check .",
         "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-        "dev:open": "vite dev --open --host",
         "typecheck": "bunx tsc --noEmit",
         "fmt": "bunx prettier --write ."
     },
@@ -27,6 +29,7 @@
         "sass-embedded": "^1.98.0",
         "svelte": "^5.53.11",
         "svelte-check": "^4.4.5",
+        "svelte-render-scan": "^1.1.0",
         "typescript": "^6.0.2",
         "vite": "^8.0.0"
     },
@@ -34,6 +37,7 @@
         "@lucide/svelte": "^1.18.0",
         "html-to-image": "^1.11.13",
         "svelte-awesome-color-picker": "^4.1.1",
+        "svelte-i18n": "^4.0.1",
         "tinycolor2": "^1.6.0",
         "twemoji": "^14.0.2"
     }

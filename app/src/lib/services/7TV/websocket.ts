@@ -7,9 +7,7 @@ const id_types: Record<string, string> = {
     "emote_set.update": "object_id", // EMOTE CHANGES
 };
 
-const condition_types: Record<string, any> = {
-    "entitlement.create": { platform: "TWITCH", ctx: "channel" },
-};
+type Conditions = WebSocket7TV.entitlement_create | Record<never, never>;
 
 interface Options {
     url?: string;
@@ -51,35 +49,11 @@ type Events = {
     ) => void;
     create_badge: (data: SevenTVBadge) => void;
     create_paint: (data: Paint) => void;
-    create_set: (data: Set) => void;
-    create_personal_set: (data: Set) => void;
-    create_entitlement: (data: Entitlement) => void;
-    delete_entitlement: (data: Entitlement) => void;
+    create_set: (data: Types7TV.Set) => void;
+    create_personal_set: (data: Types7TV.Set) => void;
+    create_entitlement: (data: Types7TV.Entitlement) => void;
+    delete_entitlement: (data: Types7TV.Entitlement) => void;
 };
-
-interface Set {
-    id: string;
-    name: string;
-    owner: Connection;
-    flags: number;
-}
-
-interface Connection {
-    id: string;
-    platform: string;
-    username: string;
-    display_name: string;
-    linked_at: number;
-    emote_capacity: number;
-    emote_set_id: string;
-    emote_set: any;
-}
-
-interface Entitlement {
-    id: number | string;
-    kind: string;
-    owner: Connection;
-}
 
 class SevenTVWebSocket {
     url: string;
@@ -307,13 +281,12 @@ class SevenTVWebSocket {
                 case "emote_set.create":
                     const set_object = message_body.object;
 
-                    const set_data: Set = {
+                    const set_data: Types7TV.Set = {
                         id: set_object.id,
                         name: set_object.name,
-                        owner: set_object.owner?.connections?.find(
-                            (c: Connection) => c.platform === "TWITCH",
-                        ),
+                        owner: set_object.owner?.connections,
                         flags: message_body.object?.flags || 0,
+                        emotes: [],
                     };
 
                     this.caughtPersonalSets.push(set_data);
@@ -323,25 +296,24 @@ class SevenTVWebSocket {
                     11 - SPECIAL SETS (LIKE NNYS)
                     */
 
-                    if (![4, 11].includes(message_body.object?.flags)) {
-                        this.emit("create_set", set_data);
-                    } else {
-                        this.emit("create_personal_set", set_data);
-                    }
+                    this.emit(
+                        ![4, 11].includes(message_body.object?.flags)
+                            ? "create_set"
+                            : "create_personal_set",
+                        set_data,
+                    );
 
                     break;
                 case "entitlement.create":
                 case "entitlement.delete":
                     const entitlement_object = message_body.object;
 
-                    const entitlement_data: Entitlement = {
+                    const entitlement_data: Types7TV.Entitlement = {
                         id: Number(entitlement_object.id)
                             ? entitlement_object.id
                             : entitlement_object.ref_id,
                         kind: entitlement_object.kind,
-                        owner: entitlement_object.user?.connections?.find(
-                            (c: Connection) => c.platform === "TWITCH",
-                        ),
+                        owner: entitlement_object.user?.connections,
                     };
 
                     this.emit(
@@ -384,7 +356,7 @@ class SevenTVWebSocket {
     async subscribe(
         id: string | number,
         type: string,
-        condition: Record<string | number, any> = {},
+        condition?: Conditions,
         silent?: boolean,
     ) {
         if (!id) throw new Error("Missing 'id' parameter");
@@ -415,16 +387,18 @@ class SevenTVWebSocket {
         )
             throw new Error("Invalid subscription id field");
 
-        if (id_types[type]) id_type = { [idField]: id };
+        if (id_types[type]) id_type = { [idField]: String(id) };
 
-        condition = { ...condition_types[type], ...id_type };
+        const sub_condition = { ...condition, ...id_type };
+
+        console.log(id, type, condition, silent);
 
         const message = {
             op: 35,
             t: Date.now(),
             d: {
                 type,
-                condition,
+                condition: sub_condition,
             },
         };
 
@@ -432,7 +406,7 @@ class SevenTVWebSocket {
 
         if (!this.subscriptions[idKey]) this.subscriptions[idKey] = {};
 
-        this.subscriptions[idKey][type] = condition;
+        this.subscriptions[idKey][type] = sub_condition;
 
         return true;
     }

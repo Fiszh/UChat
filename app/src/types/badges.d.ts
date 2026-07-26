@@ -5,6 +5,13 @@ export namespace Badges {
         title: string;
     }
 
+    interface Kick {
+        url: string;
+        id: number;
+        months: number;
+        alt: string;
+    }
+
     interface parsed {
         badge_url: string;
         alt: string;
@@ -26,6 +33,17 @@ export namespace Badges {
         image1: string;
         image2: string;
         image3: string;
+    }
+
+    interface ChatterinoHomiesCustom {
+        badgeFileType: string;
+        badgeId: string;
+        image1: string;
+        image2: string;
+        image3: string;
+        tooltip: string;
+        userId: string;
+        username: string;
     }
 
     interface TurtegBadge {
@@ -52,7 +70,7 @@ export namespace Badges {
         };
         type: string;
         title: string;
-        users: string[];
+        users: Record<Lowercase<Platforms>, string[]> | string[];
     }
 
     interface BTTV {

@@ -13,10 +13,10 @@ export const loadingInfo = writable<LoadingInfo>({
     type: undefined,
 });
 
-interface GlobalEmotes {
+export interface GlobalEmotes {
     "7TV": {
         global: ParsedEmote[];
-        channel: Record<string, SavedSevenTVSet | Record<string, never>>;
+        channel: SavedSevenTVSet[] | never[];
     };
     BTTV: {
         global: ParsedEmote[];
@@ -29,13 +29,13 @@ interface GlobalEmotes {
     BITS: Emotes.Bits[];
 }
 
-interface GlobalBadges {
+export interface GlobalBadges {
     UChat: Badges.UChat[];
     TTV: {
         global: Badges.Twitch[];
         channel: Badges.Twitch[];
     };
-    KICK: Badge[];
+    KICK: Badges.Kick[];
     BTTV: {
         global: Badges.BTTV[];
     };
@@ -50,6 +50,7 @@ interface GlobalBadges {
     OTHER: {
         Chatterino: Badges.Chatterino[];
         ChatterinoHomies: Badges.Chatterino[];
+        ChatterinoHomiesCustom: Badges.ChatterinoHomiesCustom[];
         PolandBOT: Record<string, string[]>;
         TurtegBot: Badges.TurtegBadge[];
     };
@@ -57,7 +58,7 @@ interface GlobalBadges {
 }
 
 export const emotes = writable<GlobalEmotes>({
-    "7TV": { global: [], channel: {} },
+    "7TV": { global: [], channel: [] },
     BTTV: { global: [], channel: {} },
     FFZ: { global: [], channel: {} },
     BITS: [],
@@ -72,6 +73,7 @@ export const badges = writable<GlobalBadges>({
     OTHER: {
         Chatterino: [],
         ChatterinoHomies: [],
+        ChatterinoHomiesCustom: [],
         PolandBOT: {},
         TurtegBot: [],
     },
@@ -90,9 +92,6 @@ interface Globals {
     channelKickID: string | null;
     chatroomKickID: string | null;
     userKickID: string | null;
-
-    SevenTVID: string | null;
-    SevenTVemoteSetId: string | null;
 
     userNameColor: Record<string, string>;
 }
@@ -127,11 +126,8 @@ export const globals: Globals = {
     channelKickID: null,
     chatroomKickID: null,
     userKickID: null,
-
-    // 7TV
-    SevenTVID: null,
-    SevenTVemoteSetId: null,
-
     // OTHER
     userNameColor: {},
 };
+
+export const API_URL = import.meta.env.API_URL;

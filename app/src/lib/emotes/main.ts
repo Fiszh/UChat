@@ -1,8 +1,11 @@
 import { get } from "svelte/store";
 
-import { badges, emotes, globals } from "$stores/global";
+import { API_URL, badges, emotes, globals } from "$stores/global";
 
-import { subscribeEventAPIToSharedChatUser } from "./overlayIndex";
+import {
+    getSavedSet,
+    subscribeEventAPIToSharedChatUser,
+} from "../overlayIndex";
 
 import SevenTV_main from "$lib/services/7TV/main";
 import BTTV_main from "$lib//services/BTTV/main";
@@ -25,7 +28,9 @@ export async function getChannelEmotesViaTwitchID(twitchID: string) {
 
     // 7TV
     try {
-        if (!emote_data["7TV"]["channel"][twitchID]) {
+        const channel_set = getSavedSet(twitchID, "TWITCH");
+
+        if (!channel_set) {
             const SevenTV_user_data =
                 await SevenTV_main.user.byTwitchID(twitchID);
 
@@ -35,26 +40,17 @@ export async function getChannelEmotesViaTwitchID(twitchID: string) {
                         "emote_data" in SevenTV_user_data &&
                         "emote_set_id" in SevenTV_user_data
                     )
-                        emoteData["7TV"]["channel"][twitchID] = {
-                            id: SevenTV_user_data.emote_set_id,
-                            user_id: SevenTV_user_data.id,
-                            emotes: SevenTV_user_data.emote_data,
-                        };
-
-                    if (
-                        "id" in SevenTV_user_data &&
-                        SevenTV_user_data["id"] == null
-                    )
-                        emoteData["7TV"]["channel"][twitchID] = {};
+                        emoteData["7TV"]["channel"] = [
+                            ...emoteData["7TV"]["channel"],
+                            {
+                                id: SevenTV_user_data.emote_set_id,
+                                owners: SevenTV_user_data.connections,
+                                emotes: SevenTV_user_data.emote_data,
+                            },
+                        ];
 
                     return emoteData;
                 });
-
-                if (SevenTV_user_data?.id)
-                    globals.SevenTVID = SevenTV_user_data.id;
-
-                if ("emote_set_id" in SevenTV_user_data)
-                    globals.SevenTVemoteSetId = SevenTV_user_data.emote_set_id;
             }
         }
     } catch (e) {
@@ -161,7 +157,7 @@ export async function getChannelEmotesViaTwitchID(twitchID: string) {
 }
 
 async function getAvatarViaID(user_id: string) {
-    const response = await fetch(`https://api.unii.dev/avatar?id=${user_id}`);
+    const response = await fetch(API_URL + `/avatar?id=${user_id}`);
 
     if (!response.ok) return false;
 

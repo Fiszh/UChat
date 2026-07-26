@@ -139,7 +139,7 @@
 
 <ChatDisplay />
 
-<style lang="scss">
+<style>
     :global(body, html) {
         background-color: rgba(0, 0, 0, 0) !important;
     }

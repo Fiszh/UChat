@@ -5,7 +5,7 @@
         background_color: string;
     };
 
-    const { badge_url, alt, background_color } = $props();
+    const { badge_url, alt, background_color }: Props = $props();
 </script>
 
 <img

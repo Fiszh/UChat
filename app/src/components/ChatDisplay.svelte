@@ -5,14 +5,20 @@
     import KickChatMessage from "$components/chat/kick/message.svelte";
 
     import { messages } from "$lib/chat";
-    import { setEmoteSize, settings } from "$stores/settings";
+    import { setEmoteSize, settings, type Setting } from "$stores/settings";
     import { badges, globals } from "$stores/global";
+    import { generateUUID } from "$lib/overlayIndex";
 
     type Props = {
         customStyle?: string;
+        scrollSmoothness?: number;
     };
 
-    const { customStyle, ...restProps }: Props = $props();
+    const {
+        customStyle,
+        scrollSmoothness = 0.15,
+        ...restProps
+    }: Props = $props();
 
     let chatMessages: Record<string, any>[] = $state([]);
     let chat: HTMLElement | undefined = $state();
@@ -32,7 +38,7 @@
 
     type ChatSettings = Record<
         string,
-        Record<string, boolean | string | number | string[] | undefined>
+        Record<string, Setting["value"] | string[]>
     >;
 
     let chatSettings: ChatSettings = $state({});
@@ -42,12 +48,12 @@
             if (setting.type == "text" && setting.list) {
                 acc[setting.param] = {
                     value: setting.value.split(" ").filter(Boolean),
-                    default: setting.default,
+                    default: setting.default!,
                 };
             } else {
                 acc[setting.param] = {
                     value: setting.value,
-                    default: setting.default,
+                    default: setting.default!,
                 };
             }
 
@@ -196,21 +202,25 @@
         return passed.every(Boolean);
     }
 
-    function generateUUID(): string {
-        let UUID: string = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx";
+    function formatUsername(
+        username: string,
+        displayName: string,
+        platform: Platforms = "TWITCH",
+    ): string {
+        const trimmedDisplayName = displayName.trim().toLowerCase();
 
-        try {
-            UUID = window.crypto.randomUUID();
-        } catch {
-            // fallback
-            UUID = UUID.replace(/[xy]/g, (c) => {
-                const r = (Math.random() * 16) | 0;
-                const v = c === "x" ? r : (r & 0x3) | 0x8;
-                return v.toString(16);
-            });
-        } finally {
-            return UUID;
+        if (platform == "TWITCH" && username != trimmedDisplayName) {
+            return `${username} (${displayName})`;
         }
+
+        if (
+            platform == "KICK" &&
+            username.replace(/-/g, "_") != trimmedDisplayName
+        ) {
+            return `${username} (${displayName})`;
+        }
+
+        return displayName;
     }
 
     let filteredMessages = $derived(
@@ -245,30 +255,50 @@
                         msg?.["chatroom_id"] ??
                         globals.channelTwitchID,
                     ...msg,
-                    formattedUser:
-                        username === displayName.trim().toLowerCase()
-                            ? displayName
-                            : `${username} (${displayName})`,
+                    formattedUser: formatUsername(
+                        username,
+                        displayName,
+                        msg["service"],
+                    ),
                 };
             }) as any,
     );
 
     onMount(() => {
-        let lastScrollTime = 0;
-        let scrollRaf: number;
+        let currentScroll = chat?.scrollTop ?? 0;
+        let targetScroll = 0;
+        let animationFrameId = 0;
+
+        function updateScroll() {
+            if (!chat) return;
+
+            currentScroll += (targetScroll - currentScroll) * scrollSmoothness;
+            chat.scrollTop = currentScroll;
+
+            if (Math.abs(targetScroll - currentScroll) > 0.5) {
+                animationFrameId = requestAnimationFrame(updateScroll);
+            } else {
+                currentScroll = targetScroll;
+                animationFrameId = 0; // loop stopped, next mutation can restart it
+            }
+        }
 
         const observer = new MutationObserver(() => {
-            cancelAnimationFrame(scrollRaf);
-            scrollRaf = requestAnimationFrame(() => {
-                const now = Date.now();
-                const fast = now - lastScrollTime < 100;
-                lastScrollTime = now;
+            if (!chat) return;
 
-                chat?.scrollTo({
-                    top: chat.scrollHeight,
-                    behavior: fast || instantScroll ? "instant" : "smooth",
-                });
-            });
+            targetScroll = chat.scrollHeight - chat.clientHeight;
+
+            if (instantScroll) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = 0;
+                currentScroll = targetScroll;
+                chat.scrollTop = targetScroll;
+                return;
+            }
+
+            if (!animationFrameId) {
+                animationFrameId = requestAnimationFrame(updateScroll);
+            }
         });
 
         if (chat) observer.observe(chat, { childList: true });
@@ -277,6 +307,7 @@
             unsubscribeMessages();
             unsubscribeSettings();
             observer.disconnect();
+            cancelAnimationFrame(animationFrameId);
         };
     });
 </script>
@@ -288,21 +319,29 @@
     {...restProps}
 >
     {#each filteredMessages as msg (msg.id)}
-        {#if msg.service == "kick"}
+        {#if msg.service == "KICK"}
             <KickChatMessage
                 user={msg.formattedUser}
                 text={msg.content}
                 tags={msg.sender}
-                id={msg.id}
-                room_id={msg.room_id}
+                message_id={msg.id}
+                room_id={globals.userKickID ?? msg.room_id}
+                /*
+                random id
+                user id
+                and room id
+                ngl, we need more ids to confuse the devs instead of a unified one like twitch
+                */
+                platform={"KICK"}
             />
         {:else}
             <TwitchChatMessage
                 user={msg.formattedUser}
                 text={msg.message}
                 tags={msg.tags}
-                id={msg.id}
+                message_id={msg.id}
                 room_id={msg.room_id}
+                platform={"TWITCH"}
             />
         {/if}
     {/each}

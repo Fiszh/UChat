@@ -1,5 +1,19 @@
 import { messages } from "$lib/chat";
 import { execCommand } from "$lib/chatCommands";
+import { settings } from "$stores/settings";
+
+let modActions = false;
+
+settings.subscribe((cfg) => {
+    const foundSetting0 = cfg.find(
+        (setting) => setting.param == "modAction",
+    ) || {
+        value: true,
+    };
+
+    if (typeof foundSetting0.value == "boolean")
+        modActions = foundSetting0.value;
+});
 
 type Events = {
     open: () => void;
@@ -89,13 +103,53 @@ class KICKSocket {
 
                     parsedMessage = {
                         ...parsedMessage,
-                        service: "kick",
+                        service: "KICK",
                     };
 
                     messages.update((msgs) => [
                         ...msgs.slice(-99),
                         parsedMessage,
                     ]);
+
+                    break;
+                case "App\\Events\\UserBannedEvent":
+                    let parsedBanNotif = JSON.parse(data.data);
+
+                    messages.update((arr) =>
+                        arr.filter((item) => {
+                            if (item["service"] != "KICK") return item;
+                            if (
+                                item["sender"]["id"] !=
+                                parsedBanNotif["user"]["id"]
+                            )
+                                return item;
+                        }),
+                    );
+
+                    break;
+                case "App\\Events\\MessageDeletedEvent":
+                    if (!modActions) break;
+
+                    let parsedDeletionNotif = JSON.parse(data.data);
+
+                    messages.update((arr) =>
+                        arr.filter((item) => {
+                            if (item["service"] != "KICK") return item;
+                            if (
+                                item["id"] !=
+                                parsedDeletionNotif["message"]["id"]
+                            )
+                                return item;
+                        }),
+                    );
+
+                    break;
+                case "App\\Events\\ChatroomClearEvent":
+                    if (!modActions) break;
+
+                    messages.update((arr) =>
+                        arr.filter((item) => item["service"] != "KICK"),
+                    );
 
                     break;
                 default:

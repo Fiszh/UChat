@@ -19,9 +19,7 @@
     onMount(async () => {
         messages.set(previewMessages);
 
-        if (!$badges["TTV"].global.length) {
-            await getBadges();
-        }
+        if (!$badges["TTV"].global.length) await getBadges();
 
         if (!$emotes["7TV"]["global"].length) {
             const previewEmotes = await SevenTV_main.emoteSet.bySetID(
@@ -41,6 +39,7 @@
                 "01FDSMJ8MG0005Y8ZGBVC26NJ6",
                 "01FH0MNYA800096T3FQZKZQVZB",
                 "01F74DWQMR0005C7FW3P0F45Y5",
+                "01JFK40WSQZ9H3SMKNGXPPDXP2",
             ];
 
             await pushUsersInfoViaGQL(stv_users);
@@ -86,6 +85,7 @@
             flex-direction: column;
             overflow: hidden;
         }
+
         footer {
             border-top: 1px #161616 solid;
             padding: 0.5rem 2rem;

@@ -5,6 +5,9 @@ declare global {
     const __BUILD_DATE: string;
     const __REPO_URL: string;
     const __APP_VERSION: string;
+    const __DEBUG__: boolean;
+
+    type Platforms = "TWITCH" | "KICK";
 
     interface Window {
         obsstudio?: boolean;
@@ -39,7 +42,7 @@ declare global {
         id: string;
         name: string;
         tooltip: any;
-        owner: any[];
+        owner: Types7TV.Connection[];
         urls: any;
     }
 
@@ -51,7 +54,7 @@ declare global {
         backgroundImage: any;
         shadows: string | null;
         KIND: string;
-        owner: any[];
+        owner: Types7TV.Connection[];
         url: string;
     }
 
@@ -60,6 +63,7 @@ declare global {
         url: string;
         width: number;
         height: number;
+        format?: string;
     }
 
     interface ParsedEmoteBase {
@@ -76,7 +80,7 @@ declare global {
     }
 
     interface ParsedEmoteMultiple extends ParsedEmoteBase {
-        urls: Record<string, ParsedEmotesUrls>;
+        urls: ParsedEmotesUrls[];
         url?: never;
     }
 
@@ -84,7 +88,7 @@ declare global {
 
     interface SavedSevenTVSet {
         id: string;
-        user_id: string;
+        owners: Types7TV.ConnectionWithID[];
         emotes: ParsedEmote[];
     }
 

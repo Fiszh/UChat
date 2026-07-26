@@ -10,7 +10,7 @@ type Badge = {
     };
 }[];
 
-export async function getKickUser(name: string) {
+export async function getKickUser(name: string): Promise<boolean> {
     try {
         const res = await fetch("https://kick.com/api/v2/channels/" + name);
 
@@ -24,21 +24,22 @@ export async function getKickUser(name: string) {
         globals.chatroomKickID = data?.chatroom?.id || null;
 
         // CHANNEL BADGES
-        const broadcastBadges: Badge | [] =
-            data?.channel_badges?.broadcastBadges || [];
+        const broadcastBadges: Badge | [] = data["subscriber_badges"];
         try {
             badges.update((badgeData) => {
-                // badgeData["KICK"] = broadcastBadges.map((badge) => ({
-                //     id: badge.id,
-                //     badge_url: badge.badge_image.src,
-                //     alt: String(badge.months),
-                // }));
+                badgeData["KICK"] = broadcastBadges.map((badge) => ({
+                    url: badge["badge_image"]["src"],
+                    id: badge["id"],
+                    months: badge["months"],
+                    alt: String(badge["months"]),
+                }));
 
                 return badgeData;
             });
         } catch (err) {
             console.error("Error loading channel badges:", err);
         }
+
         return true;
     } catch (err) {
         return false;

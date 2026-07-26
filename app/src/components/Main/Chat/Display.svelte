@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { RotateCcw, Copy, Send } from "@lucide/svelte";
+    import { RotateCcw, Copy, Send, ShieldPlus } from "@lucide/svelte";
     import ColorPicker, { ChromeVariant } from "svelte-awesome-color-picker";
 
     import { messages, sanitizeInput } from "$lib/chat";
@@ -20,6 +20,10 @@
     import Kick from "$components/logos/kick.svelte";
     import SegmentedControl from "$components/Inputs/Segmented-control.svelte";
     import Dialog from "$components/Dialog.svelte";
+    import { initBadges } from "$lib/loadChat";
+    import { addToast } from "$lib/toast";
+    import HelpNotice from "$components/helpNotice.svelte";
+    import { t } from "svelte-i18n";
 
     let hex = $state("#191919");
     let customMessageValue = $state("");
@@ -37,7 +41,13 @@
 
     let channelSelect = $state("Twitch");
 
-    let pastedName = $state("");
+    const emptyPastedName = {
+        name: "",
+        platform: "Twitch",
+        clearName: true,
+    };
+
+    let pastedName = $state(emptyPastedName);
 
     const params = $derived(
         new URLSearchParams(
@@ -123,15 +133,53 @@
     function checkForChannelLink(e: ClipboardEvent) {
         if (e.clipboardData) {
             const pasted_url = new URL(e.clipboardData.getData("text"));
+            const pastedUsername = pasted_url.pathname
+                .split("/")
+                .filter(Boolean)[0];
 
-            if (pasted_url.host.endsWith("twitch.tv"))
-                pastedName = pasted_url.pathname.split("/").filter(Boolean)[0];
+            if (pasted_url.host.endsWith("twitch.tv")) {
+                pastedName = {
+                    name: pastedUsername,
+                    platform: "Twitch",
+                    clearName: "Twitch" != channelSelect,
+                };
+            } else if (pasted_url.host.endsWith("kick.com")) {
+                pastedName = {
+                    name: pastedUsername,
+                    platform: "Kick",
+                    clearName: "Kick" != channelSelect,
+                };
+            }
         }
     }
 
     function setPastedName() {
-        channelInfo["twitch"]["name"] = pastedName;
-        pastedName = "";
+        channelSelect = pastedName["platform"];
+
+        if (pastedName["platform"] == "Twitch") {
+            channelInfo["twitch"]["name"] = pastedName["name"];
+            if (pastedName["clearName"]) channelInfo["kick"]["name"] = "";
+        }
+
+        if (pastedName["platform"] == "Kick") {
+            channelInfo["kick"]["name"] = pastedName["name"];
+            if (pastedName["clearName"]) channelInfo["twitch"]["name"] = "";
+        }
+
+        pastedName = emptyPastedName;
+    }
+
+    function loadMoreBadges() {
+        addToast({ msg: "Loading all badges..." });
+
+        initBadges()
+            .then(() =>
+                addToast({ msg: "Loaded all badges!", type: "success" }),
+            )
+            .catch(() =>
+                addToast({ msg: "Failed loading badges!", type: "error" }),
+            )
+            .finally(() => messages.set(previewMessages));
     }
 
     $effect(() =>
@@ -156,26 +204,53 @@
 </script>
 
 {#snippet logoTwitch(chosen: boolean)}
-    <Twitch brandColor={chosen} />
+    <Twitch brandColor={chosen} size={$isMobile ? "1rem" : "1.5rem"} />
 {/snippet}
 {#snippet logoKick(chosen: boolean)}
-    <Kick brandColor={chosen} />
+    <Kick brandColor={chosen} size={$isMobile ? "1rem" : "1.5rem"} />
+{/snippet}
+
+{#snippet loadBadgesIcon()}
+    <ShieldPlus size={$isMobile ? "1rem" : "1.5rem"} />
+{/snippet}
+{#snippet resetSettingsIcon()}
+    <RotateCcw size={$isMobile ? "1rem" : "1.5rem"} />
 {/snippet}
 
 {#snippet channelLinkButtons()}
-    <Button onclick={() => (pastedName = "")}>Cancel</Button>
+    <Button onclick={() => (pastedName = emptyPastedName)}>
+        {$t("labels.cancel")}
+    </Button>
 
-    <Button primary onclick={setPastedName}>Confirm</Button>
+    <Button primary onclick={setPastedName}>{$t("labels.confirm")}</Button>
 {/snippet}
 
 <Dialog
-    name="Link Detected"
-    show={pastedName.length > 0}
+    name={$t("dialogs.channel_link.title")}
+    show={pastedName["name"].length > 0}
     buttons={channelLinkButtons}
-    onClose={() => (pastedName = "")}
+    onClose={() => (pastedName = emptyPastedName)}
 >
-    <h3>Looks like you pasted a Twitch channel link</h3>
-    <p>Want to use <strong>{pastedName}</strong> as your channel?</p>
+    <h3>
+        {$t("dialogs.channel_link.description", {
+            values: { platform: pastedName["platform"] },
+        })}
+    </h3>
+    <p>
+        {$t("dialogs.channel_link.channel_confirm", {
+            values: {
+                platformChange:
+                    pastedName["platform"] == channelSelect
+                        ? ""
+                        : $t("dialogs.channel_link.platform_change", {
+                              values: {
+                                  platform: pastedName["platform"],
+                              },
+                          }),
+                name: pastedName["name"],
+            },
+        })}
+    </p>
 </Dialog>
 
 <div id="chat-preview" style="--chat-background: {hex}">
@@ -194,9 +269,22 @@
         <span class="header">
             <p>Chat Preview Settings</p>
 
-            <Button onclick={resetSettings} title="Reset Settings">
-                <RotateCcw size="20" />
-            </Button>
+            <div id="buttons">
+                <Button
+                    onclick={loadMoreBadges}
+                    icon={loadBadgesIcon}
+                    title="Load Badges"
+                >
+                    {$isMobile ? "Load Badges" : "Load More Badges"}
+                </Button>
+                <Button
+                    onclick={resetSettings}
+                    icon={resetSettingsIcon}
+                    title="Reset Settings"
+                >
+                    {$t("labels.reset")}
+                </Button>
+            </div>
         </span>
         <hr />
         <section id="color-picker">
@@ -212,7 +300,7 @@
 
             <div class="display">
                 {#snippet icon()}
-                    <Send size="2rem" />
+                    <Send size={$isMobile ? "1.5rem" : "2rem"} />
                 {/snippet}
 
                 <Input
@@ -221,7 +309,9 @@
                     placeholder="Message to display..."
                 />
 
-                <Button secondary onclick={addMessage} {icon}>Send</Button>
+                <Button secondary onclick={addMessage} {icon}>
+                    {$t("labels.send")}
+                </Button>
             </div>
         </section>
         <hr />
@@ -241,7 +331,11 @@
                             <Input
                                 wide
                                 required
-                                placeholder="Twitch Channel Name"
+                                placeholder={$t("channel_input.name", {
+                                    values: {
+                                        platform: "Twitch",
+                                    },
+                                })}
                                 bind:value={channelInfo["twitch"]["name"]}
                                 invalid={!channelInfo["twitch"]["name"].length}
                                 onChange={(e) =>
@@ -258,7 +352,11 @@
                             <Input
                                 wide
                                 required
-                                placeholder="Twitch Channel ID"
+                                placeholder={$t("channel_input.id", {
+                                    values: {
+                                        platform: "Twitch",
+                                    },
+                                })}
                                 bind:value={channelInfo["twitch"]["id"]}
                                 invalid={!channelInfo["twitch"]["id"].length}
                                 onChange={(e: Event) =>
@@ -275,7 +373,11 @@
                         <Input
                             wide
                             required
-                            placeholder="Kick Channel Name"
+                            placeholder={$t("channel_input.name", {
+                                values: {
+                                    platform: "Kick",
+                                },
+                            })}
                             bind:value={channelInfo["kick"]["name"]}
                             invalid={!channelInfo["kick"]["name"].length}
                             onChange={(e) =>
@@ -283,6 +385,7 @@
                                     (e.currentTarget as HTMLInputElement).value,
                                     "twitch_name",
                                 ))}
+                            onPaste={checkForChannelLink}
                         />
                     {/if}
                     <SegmentedControl
@@ -300,19 +403,18 @@
 
                 <div class="display">
                     {#snippet icon()}
-                        <Copy size="2rem" />
+                        <Copy size={$isMobile ? "1.5rem" : "2rem"} />
                     {/snippet}
 
                     <Input wide readonly bind:value={urlResults} />
-                    <Button primary type="submit" {icon}>Copy</Button>
+                    <Button primary type="submit" {icon}>
+                        {$t("labels.copy")}
+                    </Button>
                 </div>
             </section>
         </form>
     </section>
-    <span class="note">
-        We log IP addresses for abuse prevention.
-        <a href="/help#notice">[Learn more]</a>
-    </span>
+    <HelpNotice>{$t("notices.ip")}</HelpNotice>
 </div>
 
 <style lang="scss">
@@ -360,10 +462,6 @@
             box-sizing: border-box;
         }
 
-        .note {
-            text-align: center;
-        }
-
         #bottom {
             display: flex;
             flex-direction: column;
@@ -402,6 +500,11 @@
                 align-items: center;
                 padding-bottom: 0.7rem;
                 box-sizing: border-box;
+
+                #buttons {
+                    display: inherit;
+                    align-items: inherit;
+                }
             }
         }
     }
