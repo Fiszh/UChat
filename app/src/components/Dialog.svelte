@@ -6,6 +6,7 @@
     type Props = {
         name: string;
         show: boolean;
+        index?: number;
         buttons?: Snippet;
         children: Snippet;
         onClose?: () => void;
@@ -14,6 +15,7 @@
     let {
         name,
         show = $bindable(false),
+        index = 0,
         buttons,
         onClose,
         children,
@@ -27,7 +29,7 @@
 </script>
 
 {#if show}
-    <section class="dialog">
+    <section class="dialog" style="z-index: {2 + index};">
         <span id="header">
             <p>{name}</p>
             <Button onclick={close}><X /></Button>
@@ -39,7 +41,7 @@
             <section id="buttons">{@render buttons()}</section>
         {/if}
     </section>
-    <section id="site-blackout"></section>
+    <section id="site-blackout" style="z-index: {1 + index};"></section>
 {/if}
 
 <style lang="scss">
@@ -48,7 +50,6 @@
         width: 100%;
         height: 100%;
         background-color: rgba(0, 0, 0, 0.5);
-        z-index: 999;
     }
 
     .dialog {
@@ -56,7 +57,6 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        z-index: 100000;
         background-color: #0a0a0a;
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
 

@@ -24,8 +24,8 @@
     import Polandbot from "$components/logos/polandbot.svelte";
     import { addToast } from "$lib/toast";
     import { t } from "svelte-i18n";
+    import CalloutBubble from "$components/CalloutBubble.svelte";
 
-    //FIXME MAKE SELECTOR WAY BETTER WITHOUT THE NEED OF THIS
     let selectorOptions = $state([
         { enabled: true, label: "Lorem" },
         { enabled: true, label: "ipsum" },
@@ -264,6 +264,12 @@
             </Checkbox>
         </p>
         <Button secondary onclick={displayTestToast}>Display Toasts</Button>
+    </section>
+
+    <section>
+        <p>Callout Bubble</p>
+        <CalloutBubble relative>Lorem Ipsum!</CalloutBubble>
+        <CalloutBubble type="error" relative>Input Required</CalloutBubble>
     </section>
 </main>
 

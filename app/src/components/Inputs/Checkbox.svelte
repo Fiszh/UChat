@@ -1,9 +1,17 @@
 <script lang="ts">
-    let { checked = $bindable(false), children } = $props();
+    import type { Snippet } from "svelte";
+    import type { HTMLInputAttributes } from "svelte/elements";
+
+    interface Props extends HTMLInputAttributes {
+        checked?: boolean;
+        children: Snippet;
+    }
+
+    let { checked = $bindable(false), children, ...rest }: Props = $props();
 </script>
 
 <label>
-    <input type="checkbox" bind:checked />
+    <input type="checkbox" bind:checked {...rest} />
     {@render children()}
 </label>
 
@@ -13,6 +21,8 @@
         align-items: center;
         gap: 0.25rem;
         cursor: pointer;
+
+        user-select: none;
 
         & > * {
             cursor: pointer;

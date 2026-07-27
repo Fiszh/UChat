@@ -13,41 +13,39 @@
     import Button from "$components/Inputs/Button.svelte";
     import Input from "$components/Inputs/Input.svelte";
     import Color from "$components/Inputs/Color.svelte";
-    import Checkbox from "$components/Inputs/Checkbox.svelte";
     import { removeParam, setParam } from "$lib/params";
     import { isMobile } from "$stores/global";
-    import Twitch from "$components/logos/twitch.svelte";
-    import Kick from "$components/logos/kick.svelte";
-    import SegmentedControl from "$components/Inputs/Segmented-control.svelte";
-    import Dialog from "$components/Dialog.svelte";
     import { initBadges } from "$lib/loadChat";
     import { addToast } from "$lib/toast";
     import HelpNotice from "$components/helpNotice.svelte";
     import { t } from "svelte-i18n";
+    import ChannelManager from "$components/dialogs/channel_manager.svelte";
+    import CalloutBubble from "$components/CalloutBubble.svelte";
+    import { shake } from "$lib/shake";
 
     let hex = $state("#191919");
     let customMessageValue = $state("");
-    let usingChannelID = $state(false);
 
     let channelInfo = $state({
         twitch: {
-            name: "",
-            id: "",
+            input: {
+                name: "",
+                id: "",
+            },
+            mode: "name",
         },
         kick: {
-            name: "",
+            input: {
+                name: "",
+                id: "",
+            },
+            mode: "name",
         },
     });
 
-    let channelSelect = $state("Twitch");
-
-    const emptyPastedName = {
-        name: "",
-        platform: "Twitch",
-        clearName: true,
-    };
-
-    let pastedName = $state(emptyPastedName);
+    let showChannelManager = $state(false);
+    let showAttentionManager = $state(false);
+    let channelManagerButton = $state<HTMLButtonElement | HTMLAnchorElement>();
 
     const params = $derived(
         new URLSearchParams(
@@ -66,10 +64,11 @@
     );
 
     const resetSettings = () => {
-        channelInfo["twitch"]["name"] = "";
-        channelInfo["twitch"]["id"] = "";
+        channelInfo["twitch"]["input"]["name"] = "";
+        channelInfo["twitch"]["input"]["id"] = "";
 
-        channelInfo["kick"]["name"] = "";
+        channelInfo["kick"]["input"]["name"] = "";
+        channelInfo["kick"]["input"]["id"] = "";
 
         settings.set(
             configs.map((c) => {
@@ -81,6 +80,7 @@
                 }
             }),
         );
+
         settingsParams.set({});
 
         params.forEach((_, key) => params.delete(key));
@@ -106,7 +106,8 @@
                         console.error("Failed to copy URL: ", err);
                     });
             } else {
-                alert("Channel name or id not provided!.");
+                showAttentionManager = true;
+                if (channelManagerButton) shake(channelManagerButton);
             }
         }
     }
@@ -119,54 +120,6 @@
         if (!message.length) return;
 
         sendFakeMessage(message);
-    }
-
-    function validateInput(value: string, type: string) {
-        if (type == "number") {
-            return value.replace(/[^0-9]+/g, "");
-        } else if (type == "twitch_name") {
-            return value.replace(/[^a-zA-Z0-9_]+/g, "");
-        }
-        return value;
-    }
-
-    function checkForChannelLink(e: ClipboardEvent) {
-        if (e.clipboardData) {
-            const pasted_url = new URL(e.clipboardData.getData("text"));
-            const pastedUsername = pasted_url.pathname
-                .split("/")
-                .filter(Boolean)[0];
-
-            if (pasted_url.host.endsWith("twitch.tv")) {
-                pastedName = {
-                    name: pastedUsername,
-                    platform: "Twitch",
-                    clearName: "Twitch" != channelSelect,
-                };
-            } else if (pasted_url.host.endsWith("kick.com")) {
-                pastedName = {
-                    name: pastedUsername,
-                    platform: "Kick",
-                    clearName: "Kick" != channelSelect,
-                };
-            }
-        }
-    }
-
-    function setPastedName() {
-        channelSelect = pastedName["platform"];
-
-        if (pastedName["platform"] == "Twitch") {
-            channelInfo["twitch"]["name"] = pastedName["name"];
-            if (pastedName["clearName"]) channelInfo["kick"]["name"] = "";
-        }
-
-        if (pastedName["platform"] == "Kick") {
-            channelInfo["kick"]["name"] = pastedName["name"];
-            if (pastedName["clearName"]) channelInfo["twitch"]["name"] = "";
-        }
-
-        pastedName = emptyPastedName;
     }
 
     function loadMoreBadges() {
@@ -183,32 +136,32 @@
     }
 
     $effect(() =>
-        channelInfo["twitch"]["name"].length &&
-        (!channelInfo["twitch"]["id"].length || !usingChannelID)
-            ? setParam("channel", String(channelInfo["twitch"]["name"]))
+        channelInfo["twitch"]["input"]["name"].length &&
+        (!channelInfo["twitch"]["input"]["id"].length ||
+            channelInfo["twitch"]["mode"] != "id")
+            ? setParam(
+                  "channel",
+                  String(channelInfo["twitch"]["input"]["name"]),
+              )
             : removeParam("channel"),
     );
 
     $effect(() =>
-        channelInfo["twitch"]["id"].length &&
-        (!channelInfo["twitch"]["name"].length || usingChannelID)
-            ? setParam("id", String(channelInfo["twitch"]["id"]))
+        channelInfo["twitch"]["input"]["id"].length &&
+        (!channelInfo["twitch"]["input"]["name"].length ||
+            channelInfo["twitch"]["mode"] == "id")
+            ? setParam("id", String(channelInfo["twitch"]["input"]["id"]))
             : removeParam("id"),
     );
 
     $effect(() =>
-        channelInfo["kick"]["name"].length
-            ? setParam("kick", String(channelInfo["kick"]["name"]))
+        channelInfo["kick"]["input"]["name"].length
+            ? setParam("kick", String(channelInfo["kick"]["input"]["name"]))
             : removeParam("kick"),
     );
 </script>
 
-{#snippet logoTwitch(chosen: boolean)}
-    <Twitch brandColor={chosen} size={$isMobile ? "1rem" : "1.5rem"} />
-{/snippet}
-{#snippet logoKick(chosen: boolean)}
-    <Kick brandColor={chosen} size={$isMobile ? "1rem" : "1.5rem"} />
-{/snippet}
+<ChannelManager bind:show={showChannelManager} inputs={channelInfo} />
 
 {#snippet loadBadgesIcon()}
     <ShieldPlus size={$isMobile ? "1rem" : "1.5rem"} />
@@ -216,42 +169,6 @@
 {#snippet resetSettingsIcon()}
     <RotateCcw size={$isMobile ? "1rem" : "1.5rem"} />
 {/snippet}
-
-{#snippet channelLinkButtons()}
-    <Button onclick={() => (pastedName = emptyPastedName)}>
-        {$t("labels.cancel")}
-    </Button>
-
-    <Button primary onclick={setPastedName}>{$t("labels.confirm")}</Button>
-{/snippet}
-
-<Dialog
-    name={$t("dialogs.channel_link.title")}
-    show={pastedName["name"].length > 0}
-    buttons={channelLinkButtons}
-    onClose={() => (pastedName = emptyPastedName)}
->
-    <h3>
-        {$t("dialogs.channel_link.description", {
-            values: { platform: pastedName["platform"] },
-        })}
-    </h3>
-    <p>
-        {$t("dialogs.channel_link.channel_confirm", {
-            values: {
-                platformChange:
-                    pastedName["platform"] == channelSelect
-                        ? ""
-                        : $t("dialogs.channel_link.platform_change", {
-                              values: {
-                                  platform: pastedName["platform"],
-                              },
-                          }),
-                name: pastedName["name"],
-            },
-        })}
-    </p>
-</Dialog>
 
 <div id="chat-preview" style="--chat-background: {hex}">
     <section id="top">
@@ -315,104 +232,43 @@
             </div>
         </section>
         <hr />
-        <form onsubmit={copyUrl}>
-            <section>
-                <small class="title">
-                    Channel Info
-                    {#if channelSelect == "Twitch"}
-                        <Checkbox bind:checked={usingChannelID}>
-                            Use Channel ID
-                        </Checkbox>
+        <section>
+            <small class="title"> Channel Info </small>
+            <div class="display">
+                <Button
+                    primary
+                    wide
+                    onclick={() => {
+                        showChannelManager = true;
+                        showAttentionManager = false;
+                    }}
+                    type="button"
+                    bind:element={channelManagerButton}
+                >
+                    {#if showAttentionManager}
+                        <CalloutBubble type="error">
+                            Input Required
+                        </CalloutBubble>
                     {/if}
-                </small>
-                <div class="display">
-                    {#if channelSelect == "Twitch"}
-                        {#if !usingChannelID}
-                            <Input
-                                wide
-                                required
-                                placeholder={$t("channel_input.name", {
-                                    values: {
-                                        platform: "Twitch",
-                                    },
-                                })}
-                                bind:value={channelInfo["twitch"]["name"]}
-                                invalid={!channelInfo["twitch"]["name"].length}
-                                onChange={(e) =>
-                                    (channelInfo["twitch"]["name"] =
-                                        validateInput(
-                                            (
-                                                e.currentTarget as HTMLInputElement
-                                            ).value,
-                                            "twitch_name",
-                                        ))}
-                                onPaste={checkForChannelLink}
-                            />
-                        {:else}
-                            <Input
-                                wide
-                                required
-                                placeholder={$t("channel_input.id", {
-                                    values: {
-                                        platform: "Twitch",
-                                    },
-                                })}
-                                bind:value={channelInfo["twitch"]["id"]}
-                                invalid={!channelInfo["twitch"]["id"].length}
-                                onChange={(e: Event) =>
-                                    (channelInfo["twitch"]["id"] =
-                                        validateInput(
-                                            (
-                                                e.currentTarget as HTMLInputElement
-                                            ).value,
-                                            "number",
-                                        ))}
-                            />
-                        {/if}
-                    {:else if channelSelect == "Kick"}
-                        <Input
-                            wide
-                            required
-                            placeholder={$t("channel_input.name", {
-                                values: {
-                                    platform: "Kick",
-                                },
-                            })}
-                            bind:value={channelInfo["kick"]["name"]}
-                            invalid={!channelInfo["kick"]["name"].length}
-                            onChange={(e) =>
-                                (channelInfo["kick"]["name"] = validateInput(
-                                    (e.currentTarget as HTMLInputElement).value,
-                                    "twitch_name",
-                                ))}
-                            onPaste={checkForChannelLink}
-                        />
-                    {/if}
-                    <SegmentedControl
-                        options={[
-                            { id: "Twitch", icon: logoTwitch },
-                            { id: "Kick", icon: logoKick },
-                        ]}
-                        bind:value={channelSelect}
-                    />
-                </div>
-            </section>
-            <hr />
-            <section id="overlay-url">
-                <small class="title">Overlay URL</small>
+                    Manage Channels
+                </Button>
+            </div>
+        </section>
+        <hr />
+        <section id="overlay-url">
+            <small class="title">Overlay URL</small>
 
-                <div class="display">
-                    {#snippet icon()}
-                        <Copy size={$isMobile ? "1.5rem" : "2rem"} />
-                    {/snippet}
+            <div class="display">
+                {#snippet icon()}
+                    <Copy size={$isMobile ? "1.5rem" : "2rem"} />
+                {/snippet}
 
-                    <Input wide readonly bind:value={urlResults} />
-                    <Button primary type="submit" {icon}>
-                        {$t("labels.copy")}
-                    </Button>
-                </div>
-            </section>
-        </form>
+                <Input wide readonly bind:value={urlResults} />
+                <Button primary onclick={copyUrl} {icon}>
+                    {$t("labels.copy")}
+                </Button>
+            </div>
+        </section>
     </section>
     <HelpNotice>{$t("notices.ip")}</HelpNotice>
 </div>

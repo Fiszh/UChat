@@ -11,7 +11,7 @@
         href?: string | null;
         icon?: Snippet;
         iconRight?: Snippet;
-        element?: HTMLElement;
+        element?: HTMLButtonElement | HTMLAnchorElement;
         disabled?: boolean;
         wide?: boolean;
         center?: boolean;
@@ -59,6 +59,8 @@
 
             href = HREF_URL.toString();
         }
+
+        if (disabled) noHover = true;
     });
 </script>
 
@@ -122,6 +124,7 @@
         align-items: center;
         text-align: center;
         gap: 0.5rem;
+        position: relative;
 
         white-space: nowrap;
         user-select: none;

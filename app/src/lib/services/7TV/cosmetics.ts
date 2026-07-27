@@ -167,15 +167,21 @@ async function pushUserInfoFromGQL(data: Record<string, any>): Promise<true> {
         const badge = parseBadgeData(user["style"]["badge"]);
 
         if (badge) {
-            if (foundTwitchConnection) badge.owner.push(foundTwitchConnection);
+            cosmetics.update((e) => {
+                if (e["badges"][badge.id]) {
+                    e["badges"][badge.id]["owner"].push(foundTwitchConnection);
+                } else {
+                    e = {
+                        ...e,
+                        badges: {
+                            ...e.badges,
+                            [badge.id]: badge,
+                        },
+                    };
+                }
 
-            cosmetics.update((e) => ({
-                ...e,
-                badges: {
-                    ...e.badges,
-                    [badge.id]: badge,
-                },
-            }));
+                return e;
+            });
         }
     }
 
@@ -183,15 +189,21 @@ async function pushUserInfoFromGQL(data: Record<string, any>): Promise<true> {
         const paint = await parsePaintData(user["style"]["paint"]);
 
         if (paint) {
-            if (foundTwitchConnection) paint.owner.push(foundTwitchConnection);
+            cosmetics.update((e) => {
+                if (e["paints"][paint.id]) {
+                    e["paints"][paint.id]["owner"].push(foundTwitchConnection);
+                } else {
+                    e = {
+                        ...e,
+                        paints: {
+                            ...e.paints,
+                            [paint.id]: paint,
+                        },
+                    };
+                }
 
-            cosmetics.update((e) => ({
-                ...e,
-                paints: {
-                    ...e.paints,
-                    [paint.id]: paint,
-                },
-            }));
+                return e;
+            });
         }
     }
 
