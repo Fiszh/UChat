@@ -159,26 +159,20 @@ async function pushUserInfoFromGQL(data: Record<string, any>): Promise<true> {
     let user = data;
     if (data["user"]) user = data["user"];
 
-    const foundTwitchConnection = user["connections"].find(
-        (connection: { platform: string }) => connection?.platform == "TWITCH",
-    );
-
     if (user["style"]["badge"]) {
         const badge = parseBadgeData(user["style"]["badge"]);
 
         if (badge) {
             cosmetics.update((e) => {
-                if (e["badges"][badge.id]) {
-                    e["badges"][badge.id]["owner"].push(foundTwitchConnection);
-                } else {
-                    e = {
-                        ...e,
-                        badges: {
-                            ...e.badges,
-                            [badge.id]: badge,
-                        },
-                    };
-                }
+                e["badges"][badge.id] = {
+                    ...badge,
+                    owner: [
+                        ...(badge.id in e["badges"]
+                            ? e["badges"][badge.id]["owner"]
+                            : []),
+                        ...user["connections"],
+                    ],
+                };
 
                 return e;
             });
@@ -190,17 +184,15 @@ async function pushUserInfoFromGQL(data: Record<string, any>): Promise<true> {
 
         if (paint) {
             cosmetics.update((e) => {
-                if (e["paints"][paint.id]) {
-                    e["paints"][paint.id]["owner"].push(foundTwitchConnection);
-                } else {
-                    e = {
-                        ...e,
-                        paints: {
-                            ...e.paints,
-                            [paint.id]: paint,
-                        },
-                    };
-                }
+                e["paints"][paint.id] = {
+                    ...paint,
+                    owner: [
+                        ...(paint.id in e["paints"]
+                            ? e["paints"][paint.id]["owner"]
+                            : []),
+                        ...user["connections"],
+                    ],
+                };
 
                 return e;
             });
