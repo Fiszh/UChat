@@ -160,9 +160,9 @@ async function emoteSetViaTwitchID(
 
             if (data?.emote_set?.emotes)
                 set_data = {
-                    id: data?.emote_set_id,
-                    user_id: data.user.id,
-                    emotes: await parseSetData(data.emote_set.emotes),
+                    id: data["emote_set_id"],
+                    user_id: data["user"]["id"],
+                    emotes: await emoteSetViaSetID(data["emote_set_id"]),
                 };
         }
     } catch (error) {
@@ -185,9 +185,9 @@ async function emoteSetViaKickID(twitchID: string | number): Promise<SetData> {
 
             if (data?.emote_set?.emotes)
                 set_data = {
-                    id: data?.emote_set_id,
-                    user_id: data.user.id,
-                    emotes: await parseSetData(data.emote_set.emotes),
+                    id: data["emote_set_id"],
+                    user_id: data["user"]["id"],
+                    emotes: await emoteSetViaSetID(data["emote_set_id"]),
                 };
         }
     } catch (error) {
@@ -199,7 +199,7 @@ async function emoteSetViaKickID(twitchID: string | number): Promise<SetData> {
 
 const parseUserInfo = async (
     data: Record<string, any>,
-): Promise<Types7TV.UserInfo> => {
+): Promise<Omit<Types7TV.UserInfo, "emote_data">> => {
     const user_data = data.user;
 
     const emote_data = await parseSetData(data?.emote_set?.emotes || []);
@@ -210,7 +210,6 @@ const parseUserInfo = async (
         display_name: user_data?.display_name,
         avatar_url: user_data?.avatar_url,
         emote_set_id: data?.emote_set_id,
-        emote_data,
         connections: user_data?.connections.map((c: Types7TV.Connection) => ({
             ...c,
             user_id: user_data?.id,
@@ -240,7 +239,13 @@ async function getUserViaTwitchID(twitchID: string | number) {
         if (response.ok) {
             const data = await response.json();
 
-            if (data?.user) user_info = await parseUserInfo(data);
+            const parsedUserInfo = await parseUserInfo(data);
+
+            if (data?.user)
+                user_info = {
+                    ...parsedUserInfo,
+                    emote_data: await emoteSetViaSetID(data["emote_set_id"]),
+                };
         }
     } catch (error) {
         throw new Error(`Error fetching user data: ${error}`);
@@ -262,7 +267,13 @@ async function getUserViaKickID(
         if (response.ok) {
             const data = await response.json();
 
-            if (data?.user) user_info = await parseUserInfo(data);
+            const parsedUserInfo = await parseUserInfo(data);
+
+            if (data?.user)
+                user_info = {
+                    ...parsedUserInfo,
+                    emote_data: await emoteSetViaSetID(data["emote_set_id"]),
+                };
         }
     } catch (error) {
         throw new Error(`Error fetching user data: ${error}`);
@@ -282,7 +293,13 @@ async function getUserVia7TVID(stvID: string | number) {
         if (response.ok) {
             const data = await response.json();
 
-            if (data?.user) user_info = await parseUserInfo(data);
+            const parsedUserInfo = await parseUserInfo(data);
+
+            if (data?.user)
+                user_info = {
+                    ...parsedUserInfo,
+                    emote_data: await emoteSetViaSetID(data["emote_set_id"]),
+                };
         }
     } catch (error) {
         throw new Error(`Error fetching user data: ${error}`);
