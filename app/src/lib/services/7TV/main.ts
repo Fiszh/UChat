@@ -143,7 +143,7 @@ async function emoteSetViaSetID(emoteSetId: string) {
     }
 }
 
-const getEmotes = async (emotes: Emote[], set_id: string) =>
+const getEmotes = async (emotes: Emote[] | null, set_id: string) =>
     emotes ? await parseSetData(emotes) : await emoteSetViaSetID(set_id);
 
 type SetData = SavedSevenTVSet | Record<never, never>;
