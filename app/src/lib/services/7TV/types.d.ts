@@ -34,7 +34,7 @@ declare namespace Types7TV {
         display_name: string;
         avatar_url?: string;
         emote_set_id: string;
-        emote_data: ParsedEmote[] | null;
+        emote_data: ParsedEmote[];
         connections: ConnectionWithID[];
         service: {
             id: string;

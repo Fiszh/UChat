@@ -12,10 +12,7 @@ export namespace Converter {
     }
 
     type ParamValues =
-        | Record<string, string>
-        | ConditionalValue[]
-        | "boolean"
-        | null;
+        Record<string, string> | ConditionalValue[] | "boolean" | null;
 
     type ConditionalValues = Record<string, string>;
 
