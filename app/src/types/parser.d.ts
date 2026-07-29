@@ -57,9 +57,5 @@ declare namespace EmoteParser {
     }
 
     type FoundPart =
-        | FoundEmote
-        | FoundEmoji
-        | FoundBits
-        | FoundUser
-        | FoundOther;
+        FoundEmote | FoundEmoji | FoundBits | FoundUser | FoundOther;
 }

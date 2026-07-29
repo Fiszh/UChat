@@ -384,6 +384,7 @@
 
         & > :global(*) {
             filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, var(--chat-shadow)));
+            // filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.95));
         }
 
         /* EMTOTE SIZE SETTINGS */

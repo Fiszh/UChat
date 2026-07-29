@@ -143,6 +143,9 @@ async function emoteSetViaSetID(emoteSetId: string) {
     }
 }
 
+const getEmotes = async (emotes: Emote[], set_id: string) =>
+    emotes ? await parseSetData(emotes) : await emoteSetViaSetID(set_id);
+
 type SetData = SavedSevenTVSet | Record<never, never>;
 
 async function emoteSetViaTwitchID(
@@ -160,9 +163,12 @@ async function emoteSetViaTwitchID(
 
             if (data?.emote_set?.emotes)
                 set_data = {
-                    id: data?.emote_set_id,
-                    user_id: data.user.id,
-                    emotes: await parseSetData(data.emote_set.emotes),
+                    id: data["emote_set_id"],
+                    user_id: data["user"]["id"],
+                    emotes: await getEmotes(
+                        data.emote_set.emotes,
+                        data["emote_set_id"],
+                    ),
                 };
         }
     } catch (error) {
@@ -185,9 +191,12 @@ async function emoteSetViaKickID(twitchID: string | number): Promise<SetData> {
 
             if (data?.emote_set?.emotes)
                 set_data = {
-                    id: data?.emote_set_id,
-                    user_id: data.user.id,
-                    emotes: await parseSetData(data.emote_set.emotes),
+                    id: data["emote_set_id"],
+                    user_id: data["user"]["id"],
+                    emotes: await getEmotes(
+                        data.emote_set.emotes,
+                        data["emote_set_id"],
+                    ),
                 };
         }
     } catch (error) {
@@ -202,23 +211,24 @@ const parseUserInfo = async (
 ): Promise<Types7TV.UserInfo> => {
     const user_data = data.user;
 
-    const emote_data = await parseSetData(data?.emote_set?.emotes || []);
-
     return {
-        id: user_data?.id,
-        username: user_data?.username,
-        display_name: user_data?.display_name,
-        avatar_url: user_data?.avatar_url,
-        emote_set_id: data?.emote_set_id,
-        emote_data,
-        connections: user_data?.connections.map((c: Types7TV.Connection) => ({
+        id: user_data.id,
+        username: user_data.username,
+        display_name: user_data.display_name,
+        avatar_url: user_data.avatar_url,
+        emote_set_id: data.emote_set_id,
+        emote_data: await getEmotes(
+            data.emote_set.emotes,
+            data["emote_set_id"],
+        ),
+        connections: user_data.connections.map((c: Types7TV.Connection) => ({
             ...c,
-            user_id: user_data?.id,
+            user_id: user_data.id,
         })),
         service: {
-            id: data?.id,
-            username: data?.username,
-            display_name: data?.display_name,
+            id: data.id,
+            username: data.username,
+            display_name: data.display_name,
         },
     };
 };
