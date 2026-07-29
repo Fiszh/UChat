@@ -143,6 +143,9 @@ async function emoteSetViaSetID(emoteSetId: string) {
     }
 }
 
+const getEmotes = async (emotes: Emote[], set_id: string) =>
+    emotes ? await parseSetData(emotes) : await emoteSetViaSetID(set_id);
+
 type SetData = SavedSevenTVSet | Record<never, never>;
 
 async function emoteSetViaTwitchID(
@@ -162,7 +165,10 @@ async function emoteSetViaTwitchID(
                 set_data = {
                     id: data["emote_set_id"],
                     user_id: data["user"]["id"],
-                    emotes: await emoteSetViaSetID(data["emote_set_id"]),
+                    emotes: await getEmotes(
+                        data.emote_set.emotes,
+                        data["emote_set_id"],
+                    ),
                 };
         }
     } catch (error) {
@@ -187,7 +193,10 @@ async function emoteSetViaKickID(twitchID: string | number): Promise<SetData> {
                 set_data = {
                     id: data["emote_set_id"],
                     user_id: data["user"]["id"],
-                    emotes: await emoteSetViaSetID(data["emote_set_id"]),
+                    emotes: await getEmotes(
+                        data.emote_set.emotes,
+                        data["emote_set_id"],
+                    ),
                 };
         }
     } catch (error) {
@@ -199,25 +208,27 @@ async function emoteSetViaKickID(twitchID: string | number): Promise<SetData> {
 
 const parseUserInfo = async (
     data: Record<string, any>,
-): Promise<Omit<Types7TV.UserInfo, "emote_data">> => {
+): Promise<Types7TV.UserInfo> => {
     const user_data = data.user;
 
-    const emote_data = await parseSetData(data?.emote_set?.emotes || []);
-
     return {
-        id: user_data?.id,
-        username: user_data?.username,
-        display_name: user_data?.display_name,
-        avatar_url: user_data?.avatar_url,
-        emote_set_id: data?.emote_set_id,
-        connections: user_data?.connections.map((c: Types7TV.Connection) => ({
+        id: user_data.id,
+        username: user_data.username,
+        display_name: user_data.display_name,
+        avatar_url: user_data.avatar_url,
+        emote_set_id: data.emote_set_id,
+        emote_data: await getEmotes(
+            data.emote_set.emotes,
+            data["emote_set_id"],
+        ),
+        connections: user_data.connections.map((c: Types7TV.Connection) => ({
             ...c,
-            user_id: user_data?.id,
+            user_id: user_data.id,
         })),
         service: {
-            id: data?.id,
-            username: data?.username,
-            display_name: data?.display_name,
+            id: data.id,
+            username: data.username,
+            display_name: data.display_name,
         },
     };
 };
@@ -239,13 +250,7 @@ async function getUserViaTwitchID(twitchID: string | number) {
         if (response.ok) {
             const data = await response.json();
 
-            const parsedUserInfo = await parseUserInfo(data);
-
-            if (data?.user)
-                user_info = {
-                    ...parsedUserInfo,
-                    emote_data: await emoteSetViaSetID(data["emote_set_id"]),
-                };
+            if (data?.user) user_info = await parseUserInfo(data);
         }
     } catch (error) {
         throw new Error(`Error fetching user data: ${error}`);
@@ -267,13 +272,7 @@ async function getUserViaKickID(
         if (response.ok) {
             const data = await response.json();
 
-            const parsedUserInfo = await parseUserInfo(data);
-
-            if (data?.user)
-                user_info = {
-                    ...parsedUserInfo,
-                    emote_data: await emoteSetViaSetID(data["emote_set_id"]),
-                };
+            if (data?.user) user_info = await parseUserInfo(data);
         }
     } catch (error) {
         throw new Error(`Error fetching user data: ${error}`);
@@ -293,13 +292,7 @@ async function getUserVia7TVID(stvID: string | number) {
         if (response.ok) {
             const data = await response.json();
 
-            const parsedUserInfo = await parseUserInfo(data);
-
-            if (data?.user)
-                user_info = {
-                    ...parsedUserInfo,
-                    emote_data: await emoteSetViaSetID(data["emote_set_id"]),
-                };
+            if (data?.user) user_info = await parseUserInfo(data);
         }
     } catch (error) {
         throw new Error(`Error fetching user data: ${error}`);
