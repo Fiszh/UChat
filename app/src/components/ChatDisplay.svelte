@@ -265,49 +265,85 @@
     );
 
     onMount(() => {
-        let currentScroll = chat?.scrollTop ?? 0;
-        let targetScroll = 0;
         let animationFrameId = 0;
+        let currentScroll = chat?.scrollTop ?? 0;
 
-        function updateScroll() {
+        let shouldAutoScroll = true;
+
+        const getBottomScroll = () =>
+            !chat ? 0 : Math.max(0, chat.scrollHeight - chat.clientHeight);
+
+        function updateAutoScrollState() {
             if (!chat) return;
 
+            const distanceFromBottom =
+                chat.scrollHeight - chat.clientHeight - chat.scrollTop;
+
+            shouldAutoScroll = distanceFromBottom < 100;
+        }
+
+        function updateScroll() {
+            if (!chat) return (animationFrameId = 0);
+
+            const targetScroll = getBottomScroll();
+
             currentScroll += (targetScroll - currentScroll) * scrollSmoothness;
+
             chat.scrollTop = currentScroll;
 
             if (Math.abs(targetScroll - currentScroll) > 0.5) {
                 animationFrameId = requestAnimationFrame(updateScroll);
             } else {
+                chat.scrollTop = targetScroll;
                 currentScroll = targetScroll;
-                animationFrameId = 0; // loop stopped, next mutation can restart it
+                animationFrameId = 0;
             }
         }
 
-        const observer = new MutationObserver(() => {
-            if (!chat) return;
+        function scrollToBottom() {
+            if (!chat || !shouldAutoScroll) return;
 
-            targetScroll = chat.scrollHeight - chat.clientHeight;
+            const targetScroll = getBottomScroll();
 
             if (instantScroll) {
                 cancelAnimationFrame(animationFrameId);
                 animationFrameId = 0;
-                currentScroll = targetScroll;
+
                 chat.scrollTop = targetScroll;
+                currentScroll = targetScroll;
                 return;
             }
 
-            if (!animationFrameId) {
-                animationFrameId = requestAnimationFrame(updateScroll);
-            }
-        });
+            currentScroll = chat.scrollTop;
 
-        if (chat) observer.observe(chat, { childList: true });
+            if (!animationFrameId)
+                animationFrameId = requestAnimationFrame(updateScroll);
+        }
+
+        chat?.addEventListener("scroll", updateAutoScrollState);
+
+        const mutationObserver = new MutationObserver(scrollToBottom);
+        const resizeObserver = new ResizeObserver(scrollToBottom);
+
+        if (chat) {
+            mutationObserver.observe(chat, {
+                childList: true,
+                subtree: true,
+            });
+
+            resizeObserver.observe(chat);
+
+            chat.scrollTop = getBottomScroll();
+            currentScroll = chat.scrollTop;
+        }
 
         return () => {
             unsubscribeMessages();
             unsubscribeSettings();
-            observer.disconnect();
+            resizeObserver.disconnect();
+            mutationObserver.disconnect();
             cancelAnimationFrame(animationFrameId);
+            chat?.removeEventListener("scroll", updateAutoScrollState);
         };
     });
 </script>
@@ -365,6 +401,7 @@
         display: flex;
         flex-direction: column;
         overflow: hidden;
+        overflow-anchor: none;
         word-wrap: break-word;
         word-break: break-word;
         overflow-wrap: break-word;
