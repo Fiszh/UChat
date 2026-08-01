@@ -47,7 +47,7 @@ export async function getMainBadges() {
 
     const data: Record<string, UChatBadges[]> = await response.json();
 
-    const map = Object.values(data)
+    const map = Object.values({ UChat: data["UChat"], ...data })
         .flat()
         .map((badge) => ({
             ...badge,
