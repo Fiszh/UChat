@@ -369,6 +369,7 @@
                 ngl, we need more ids to confuse the devs instead of a unified one like twitch
                 */
                 platform={"KICK"}
+                removed={msg.removed}
             />
         {:else}
             <TwitchChatMessage
@@ -378,6 +379,7 @@
                 message_id={msg.id}
                 room_id={msg.room_id}
                 platform={"TWITCH"}
+                removed={msg.removed}
             />
         {/if}
     {/each}

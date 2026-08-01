@@ -279,3 +279,17 @@ img {
     font-weight: 900;
     font-style: normal;
 }
+
+.fadeOut {
+    animation: fadeIt 2.5s ease forwards;
+    will-change: opacity, transform;
+}
+
+@keyframes fadeIt {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}

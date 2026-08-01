@@ -15,6 +15,8 @@
     import Kick from "$components/logos/kick.svelte";
     import Paint from "./paint.svelte";
     import Emote from "./emote.svelte";
+    import { removeMessage } from "$lib/message";
+    import { fade } from "svelte/transition";
 
     interface Userstate {
         id: string;
@@ -29,9 +31,11 @@
         message_id: string;
         room_id: number;
         platform: Platforms;
+        removed?: boolean;
     };
 
-    let { user, text, tags, message_id, room_id, platform }: Props = $props();
+    let { user, text, tags, message_id, room_id, platform, removed }: Props =
+        $props();
 
     let username = $state<Lowercase<string>>("");
     let nameColor = $state<string>("");
@@ -49,16 +53,7 @@
             setTimeout(() => {
                 if (!chatMessage) return;
                 chatMessage.classList.add("fadeOut");
-
-                setTimeout(() => {
-                    if (!chatMessage) return;
-                    chatMessage.remove();
-                    chatMessage = undefined as unknown as HTMLElement;
-
-                    messages.update((e) =>
-                        e.filter((msg) => msg.tags.id != message_id),
-                    );
-                }, 2600);
+                setTimeout(() => removeMessage(message_id), 2600);
             }, delay);
         }
 
@@ -133,7 +128,7 @@
     {/if}
 {/snippet}
 
-<div class="chat-message" bind:this={chatMessage}>
+<div class="chat-message" bind:this={chatMessage} class:removed>
     {#if (parsedBadges && parsedBadges.length) || globals.channelKickName}{@render Badges()}{/if}
     <Paint
         {platform}
@@ -188,6 +183,10 @@
         display: block;
         padding: 0.15rem 0rem;
 
+        &.removed {
+            opacity: 0;
+        }
+
         .badge-wrapper {
             display: inline-flex;
             line-height: normal;
@@ -197,7 +196,7 @@
 
         span {
             display: inline;
-            vertical-align: middle;
+            vertical-align: baseline;
             white-space: normal;
             overflow-wrap: anywhere;
             word-break: break-word;
@@ -215,19 +214,6 @@
             margin: 0;
             display: contents;
             color: red;
-        }
-
-        &:global(.fadeOut) {
-            animation: fadeIt 2.5s forwards;
-        }
-    }
-
-    @keyframes fadeIt {
-        from {
-            opacity: 1;
-        }
-        to {
-            opacity: 0;
         }
     }
 </style>
