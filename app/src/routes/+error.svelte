@@ -6,40 +6,25 @@
 
     import SevenTV_main from "$lib/services/7TV/main";
     import { page } from "$app/state";
-    import { Dot, DotIcon } from "@lucide/svelte";
+    import { Dot } from "@lucide/svelte";
     import Button from "$components/Inputs/Button.svelte";
+    import { t } from "svelte-i18n";
 
     let loaded = $state(false);
     let isAbleToGoBack = $state(true);
 
     function statusTitle(status: number): string {
-        if (status === 401) {
-            return "unauthorized!";
-        } else if (status === 403) {
-            return "no permission!";
-        } else if (status === 404) {
-            return "page not found!";
-        } else if (status === 500) {
-            return "unexpected error.";
-        } else if (status === 418) {
-            return "I'm a teapot!";
-        } else {
-            return "an error occurred.";
-        }
+        const key = [401, 403, 404, 418, 500].includes(status)
+            ? status
+            : "default";
+        return $t(`error_page.status.${key}.title`);
     }
 
     function statusMessage(status: number): string {
-        if (status === 401) {
-            return "You are unauthorized to view this page.";
-        } else if (status === 403) {
-            return "You do not have permission to view this page.";
-        } else if (status === 404) {
-            return "Looks like the page you're trying to reach doesn't exist or was moved.";
-        } else if (status === 418) {
-            return "Sorry, I refuse to brew coffee because I'm, permanently, a teapot.";
-        } else {
-            return "Please refresh or try again. If the issue persists, contact us.";
-        }
+        const key = [401, 403, 404, 418, 500].includes(status)
+            ? status
+            : "default";
+        return $t(`error_page.status.${key}.message`, { values: { status } });
     }
 
     let chatRotation = $state({
@@ -47,24 +32,13 @@
         y: 0,
     });
 
-    const msgs = [
-        page.status + " OMEGADANCE",
-        "F",
-        "chat where is the page PauseChamp",
-        "bro the page is gone NOOOO",
-        page.status + " Pepega",
-        "who broke the site RAGEY",
-        "COPIUM",
-        "NOOOO",
-        "the page is gone Sadge",
-        "SadgeCry the page was right here",
-        "@uniidev ur site is cooked bro",
-        "have you tried turning it off and on again Nerd",
-        "bro needs to learn nginx omE",
-        "unban the page mods",
-        "mods can we get the page back Prayge",
-        "DIESOFCRINGE",
-    ];
+    const msgKeys = Array.from({ length: 16 }, (_, i) => `msg_${i + 1}`);
+
+    const msgs = msgKeys.map((key) =>
+        $t(`error_page.chat_messages.${key}`, {
+            values: { status: page.status },
+        }),
+    );
 
     let sendInterval: ReturnType<typeof setInterval>;
 
@@ -131,7 +105,6 @@
             <section id="chat-display">
                 <ChatDisplay />
                 <p id="error">ERROR: channel not found</p>
-                <div id="red-dot"></div>
             </section>
         {/if}
     {:else}
@@ -202,18 +175,6 @@
             position: relative !important;
         }
 
-        #red-dot {
-            position: absolute;
-            background-color: rgb(255, 0, 0);
-            aspect-ratio: 1/1;
-            width: 1rem;
-            border-radius: 1rem;
-            right: -0.25rem;
-            top: -0.25rem;
-
-            animation: pulse 1s ease-in-out infinite;
-        }
-
         user-select: none;
 
         #error {
@@ -223,6 +184,7 @@
 
             padding: 0.5rem 0.75rem;
             box-sizing: border-box;
+            margin-bottom: 0.5rem;
 
             background-color: #ffffff07;
             border: 1px #ffffff0e solid;

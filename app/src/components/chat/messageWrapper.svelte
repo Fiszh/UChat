@@ -10,13 +10,11 @@
     import { chatSettings, settings } from "$stores/settings";
     import { emotes, globals } from "$stores/global";
     import { cosmetics } from "$stores/cosmetics";
-    import { messages } from "$lib/chat";
     import Twitch from "$components/logos/twitch.svelte";
     import Kick from "$components/logos/kick.svelte";
     import Paint from "./paint.svelte";
     import Emote from "./emote.svelte";
     import { removeMessage } from "$lib/message";
-    import { fade } from "svelte/transition";
 
     interface Userstate {
         id: string;

@@ -5,14 +5,13 @@
     import { isMobile } from "$stores/global";
 
     type Props = {
-        name: string;
         onChange: (value: string) => void;
-        description?: string;
         hidden?: boolean;
         value: string;
         min?: string;
         max: string;
         defaultValue?: Props["value"];
+        param: string;
     };
 
     function handleChange(e: Event) {
@@ -23,14 +22,13 @@
     }
 
     let {
-        name,
         onChange,
-        description,
         hidden,
         value = $bindable(),
         defaultValue,
         min,
         max,
+        param,
     }: Props = $props();
 
     // default will be set to starter value if not set in props
@@ -44,8 +42,7 @@
 </script>
 
 <SettingsWrapper
-    {name}
-    {description}
+    {param}
     {hidden}
     {value}
     settingsDefault={defaultValue}

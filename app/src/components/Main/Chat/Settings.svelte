@@ -84,19 +84,17 @@
         {#if !setting.hide || (setting.hide && showHidden)}
             {#if setting.type == "boolean"}
                 <SettingsToggle
-                    name={setting.name}
-                    description={setting.description}
                     hidden={setting.hide}
                     value={setting.value}
+                    param={setting.param}
                     defaultValue={setting["default"]}
                     onChange={(checked) => handleInput(setting.param, checked)}
                 />
             {:else if setting.type == "text" || setting.type == "number"}
                 <SettingsText
-                    name={setting.name}
-                    description={setting.description}
                     hidden={setting.hide}
                     value={setting.value}
+                    param={setting.param}
                     defaultValue={setting["default"]}
                     onChange={(value) =>
                         handleInput(
@@ -107,20 +105,18 @@
                 />
             {:else if setting.type == "color-picker"}
                 <SettingsColor
-                    name={setting.name}
-                    description={setting.description}
                     hidden={setting.hide}
                     value={setting.value}
+                    param={setting.param}
                     defaultValue={setting["default"]}
                     onChange={(value) =>
                         handleInput(setting.param, value, "color-picker")}
                 />
             {:else if setting.type == "slider"}
                 <SettingsSlider
-                    name={setting.name}
-                    description={setting.description}
                     hidden={setting.hide}
                     value={setting.value}
+                    param={setting.param}
                     min={setting["min"]}
                     max={setting["max"]}
                     defaultValue={setting["default"]}
@@ -129,10 +125,9 @@
                 />
             {:else if setting.type == "selector"}
                 <SettingsSelector
-                    name={setting.name}
-                    description={setting.description}
                     hidden={setting.hide}
                     value={setting.value}
+                    param={setting.param}
                     selectors={setting.selectors}
                     defaultValue={setting.default}
                     onChange={(value) =>
@@ -150,7 +145,7 @@
 
     {#if !showHidden}
         <Button id="hidden-settings" center danger onclick={showHiddenSettings}>
-            Show hidden settings
+            {$t("settings.show_hidden")}
         </Button>
     {/if}
 </div>

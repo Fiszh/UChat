@@ -2,26 +2,25 @@
     import type { Setting } from "$stores/settings";
     import { RotateCcw } from "@lucide/svelte";
     import type { Snippet } from "svelte";
+    import { t } from "svelte-i18n";
 
     type Props = {
-        name: string;
-        description?: string;
         onReset?: () => void;
         value?: Setting["value"];
         settingsDefault?: Setting["default"];
         column?: boolean;
         hidden?: boolean;
+        param: string;
         children: Snippet;
     };
 
     const {
-        name,
-        description,
         onReset,
         value,
         settingsDefault,
         column,
         hidden,
+        param,
         children,
     }: Props = $props();
 </script>
@@ -30,7 +29,8 @@
     <aside>
         <span>
             <p>
-                {@html name}
+                <span id="hidden">{$t("settings.hidden")}</span>
+                {$t("settings.items." + param + ".name")}
             </p>
 
             {#if settingsDefault != value}
@@ -39,9 +39,7 @@
                 </button>
             {/if}
         </span>
-        {#if description?.trim()?.length}
-            <small>{@html description}</small>
-        {/if}
+        <small>{$t("settings.items." + param + ".description")}</small>
     </aside>
 
     {@render children()}
@@ -76,11 +74,16 @@
             gap: 0.25rem;
         }
 
+        #hidden {
+            display: none;
+        }
+
         &.hidden {
             border: 1px solid red;
 
-            aside p::before {
-                content: "hidden";
+            #hidden {
+                display: unset;
+
                 padding-inline: 0.25rem;
                 border-radius: 0.25rem;
 

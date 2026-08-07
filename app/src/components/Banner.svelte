@@ -6,6 +6,7 @@
         ServerOff,
         Wrench,
     } from "@lucide/svelte";
+    import { t } from "svelte-i18n";
 
     const {
         type = "fail",
@@ -16,11 +17,11 @@
     }: StatusMessage = $props();
 
     const messages = {
-        issues: "We're having issues - some features may be unavailable",
-        outage: "We're experiencing a major outage - working on it",
+        issues: $t("banners.issues"),
+        outage: $t("banners.outage"),
         annoucement: "",
-        resolved: "Issues have been resolved!",
-        fail: "Unable to fetch status info. Please click here to view our status page.",
+        resolved: $t("banners.resolved"),
+        fail: $t("banners.fail"),
     };
 </script>
 

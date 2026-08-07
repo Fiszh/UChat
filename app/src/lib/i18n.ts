@@ -19,16 +19,13 @@ function getInitialLocale() {
 }
 
 locale.subscribe((l) => {
-    if (browser && l) {
-        window.localStorage.setItem("locale", l);
-    }
+    if (browser && l) window.localStorage.setItem("locale", l);
 });
 
-export function initI18n() {
+export const initI18n = () =>
     init({
         initialLocale: getInitialLocale(),
         fallbackLocale: defaultLocale,
     });
-}
 
 initI18n();
