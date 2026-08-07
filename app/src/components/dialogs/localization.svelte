@@ -41,7 +41,9 @@
             {$t("dialogs.localization.description")}
         </p>
         <Dropdown {icon} {dropdown}>{localeNames[currentCode]}</Dropdown>
-        <Button primary wide center>{$t("labels.save")}</Button>
+        <Button primary wide center onclick={() => (show = false)}>
+            {$t("labels.save")}
+        </Button>
     </div>
 </Dialog>
 

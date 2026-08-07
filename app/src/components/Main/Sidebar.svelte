@@ -27,7 +27,7 @@
     import UChat from "$components/logos/uchat.svelte";
     import HelpNotice from "$components/helpNotice.svelte";
     import LocalizationDialog from "$components/dialogs/localization.svelte";
-    import { t } from "svelte-i18n";
+    import { locale, t } from "svelte-i18n";
 
     let username = $state(
         getCookie("twitchUsername") || ("" as string | undefined),
@@ -63,7 +63,11 @@
         twitchToken = undefined;
     }
 
-    moment.locale(navigator.language);
+    let relativeTime = $derived(
+        moment(__BUILD_DATE)
+            .locale($locale ?? "en")
+            .fromNow(),
+    );
 </script>
 
 <LocalizationDialog bind:show={localizationDialog} />
@@ -123,7 +127,7 @@
         <UChat size={50} brandColor />
         <div id="name">
             <strong>UChat</strong>
-            <h1 style="font-size:0.6em; line-height: 1px;">
+            <h1>
                 {$t("branding.tagline", {
                     values: {
                         name: "UChat",
@@ -211,10 +215,7 @@
                 target="_blank"
                 rel="noopener noreferrer"
             >
-                {moment(__BUILD_DATE).fromNow()}, commit: #{__COMMIT_HASH.slice(
-                    0,
-                    7,
-                )}
+                {relativeTime}, commit: #{__COMMIT_HASH.slice(0, 7)}
             </a>
         </section>
     </footer>
@@ -241,13 +242,19 @@
             align-items: center;
             justify-content: space-between;
 
-            gap: 0.25rem;
+            gap: 0.5rem;
 
             padding: 0.75rem;
             box-sizing: border-box;
 
             border-bottom: 1px solid #242424;
             background-color: rgba(0, 0, 0);
+
+            h1 {
+                font-size: 0.6em;
+                margin: 0;
+                padding: 0;
+            }
 
             small {
                 font-size: 0.7rem;
@@ -256,7 +263,6 @@
             #name {
                 display: flex;
                 flex-direction: column;
-                gap: 0.5rem;
             }
         }
 
