@@ -1,0 +1,380 @@
+{
+    "dialogs": {
+        "channel_link": {
+            "title": "Link Detected",
+            "description": "Looks like you pasted a {platform} channel link",
+            "channel_confirm": "Want to use {name} as your channel?",
+            "platform_change": "Want to use {name} as the channel for {platform}?"
+        },
+        "hidden_settings": {
+            "title": "Warning",
+            "description": "Hidden settings aren't meant for regular use, some are old or being phased out, so they may disappear without notice."
+        },
+        "manage_channels": {
+            "title": "Manage Channels",
+            "use_channel_id": "Use Channel ID"
+        },
+        "localization": {
+            "title": "Language",
+            "description": "Select available language to display UChat in"
+        }
+    },
+    "labels": {
+        "learn_more": "Learn more",
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "proceed": "Proceed",
+        "send": "Send",
+        "save": "Save",
+        "delete": "Delete",
+        "reset": "Reset",
+        "copy": "Copy",
+        "login": "Login",
+        "logout": "Logout",
+        "enable_all": "Enable All",
+        "disable_all": "Disable All",
+        "input_required": "Input Required",
+        "username": "Username",
+        "message": "Message",
+        "channel": "Channel"
+    },
+    "notices": {
+        "ip": "We log IP addresses for abuse prevention."
+    },
+    "channel_input": {
+        "name": "{platform} Channel Name",
+        "id": "{platform} Channel ID"
+    },
+    "mobile_footer": {
+        "settings": "Settings",
+        "preview": "Preview"
+    },
+    "branding": {
+        "tagline": "{name} Chat Overlay for Twitch & Kick"
+    },
+    "sidebar": {
+        "home": "Home",
+        "message_creator": {
+            "pc": "Message creator",
+            "mobile": "Create"
+        },
+        "convert": "Convert",
+        "language": {
+            "pc": "Language",
+            "mobile": "Lang"
+        },
+        "design": "Design",
+        "teapot": "Teapot",
+        "info": {
+            "pc": "Info & Privacy",
+            "mobile": "Info"
+        },
+        "suggestions": {
+            "pc": "Suggestions & Bugs",
+            "mobile": "Ideas"
+        },
+        "support": "Support"
+    },
+    "footer": {
+        "login_note": "Login is not required.",
+        "token_note": "Your token is only shared to validate and never stored on the server."
+    },
+    "display": {
+        "top": {
+            "title": "Chat Preview",
+            "description": "Live preview of your settings"
+        },
+        "bottom": {
+            "header": {
+                "title": "Chat Preview Settings",
+                "load_badges": {
+                    "pc": "Load More Badges",
+                    "mobile": "Load Badges"
+                }
+            },
+            "chat_background": {
+                "title": "Chat Background"
+            },
+            "custom_message": {
+                "title": "Custom Message",
+                "input_placeholder": "Message to display..."
+            },
+            "channel_info": {
+                "title": "Channel Info",
+                "manage": "Manage Channels"
+            },
+            "overlay_url": {
+                "title": "Overlay URL"
+            }
+        }
+    },
+    "global_settings": {
+        "title": "{name} Settings"
+    },
+    "settings": {
+        "show_hidden": "Show hidden settings",
+        "hidden": "hidden",
+        "items": {
+            "msgBold": {
+                "name": "Message are in bold text",
+                "description": "Make messages bold"
+            },
+            "msgCaps": {
+                "name": "Message are in UPPERCASE",
+                "description": "Convert all chat message text to uppercase"
+            },
+            "smoothScroll": {
+                "name": "Smooth message scroll",
+                "description": "Animate scrolling for new messages when possible, may jump if messages arrive rapidly"
+            },
+            "font": {
+                "name": "Custom chat font",
+                "description": "Change the chat message font"
+            },
+            "fontColor": {
+                "name": "Chat font color (hex)",
+                "description": "Change the chat text color"
+            },
+            "fontSize": {
+                "name": "Font & Badge size (px)",
+                "description": "Set the size of message text and badges in pixels, changing this will also automatically scale emotes"
+            },
+            "fontStroke": {
+                "name": "Font stroke",
+                "description": "Enable an outline stroke around chat text for readability (note: outline does not apply to 7TV paints)"
+            },
+            "fontShadow": {
+                "name": "Message shadow",
+                "description": "Add a shadow behind message"
+            },
+            "emoteSize": {
+                "name": "Emote size (px)",
+                "description": "Set the display size of emotes in pixels, scales with font size setting if not set"
+            },
+            "fadeOut": {
+                "name": "Text fade out (seconds)",
+                "description": "Automatically fade out messages after the specified number of seconds"
+            },
+            "badges": {
+                "name": "Badges",
+                "description": "Choose which badges to show in chat"
+            },
+            "badgesTTV": {
+                "name": "Display only Twitch badges",
+                "description": "When enabled, only Twitch badges will be displayed"
+            },
+            "redeem": {
+                "name": "Display Redeems & Usernotices",
+                "description": "Show channel points redeems, subscriptions, and announcements in chat"
+            },
+            "bots": {
+                "name": "Hide bot messages",
+                "description": "Hide messages from chat bots, detected using Twitch & FFZ bot badges"
+            },
+            "userBL": {
+                "name": "Custom user blacklist (separate using spaces)",
+                "description": "Space-separated list of usernames to hide from chat"
+            },
+            "prefixBL": {
+                "name": "Custom prefix blacklist (separate using spaces)",
+                "description": "Space-separated list of message prefixes to hide (e.g. !commands)"
+            },
+            "modAction": {
+                "name": "Moderation actions",
+                "description": "Moderation actions like deletions, timeouts, bans, and clears affect chat messages"
+            },
+            "mentionColor": {
+                "name": "Mentions are Colored",
+                "description": "Highlight user mentions (users must have typed in chat before)"
+            },
+            "paints": {
+                "name": "7TV Paints",
+                "description": "Enable rendering of 7TV Paints in chat"
+            },
+            "paintShadows": {
+                "name": "7TV Paint Shadows",
+                "description": "Toggle shadows on 7TV Paints, may cause drops in performance"
+            },
+            "lastMsg": {
+                "name": "Load in latest chat messages",
+                "description": "Load a history of recent chat messages on connect"
+            },
+            "clearLive": {
+                "name": "Clear chat when going live (OBS ONLY)",
+                "description": "Clear the chat automatically when the channel goes live"
+            }
+        }
+    },
+    "toasts": {
+        "loading_badges": "Loading all badges...",
+        "loaded_badges": "Loaded all badges!",
+        "fail_load_badges": "Failed loading badges!",
+        "url_copied": "Overlay URL has been copied!",
+        "url_copied_fail": "Failed to copy URL, check the console for more info.",
+        "unsupported": "Unsupported.",
+        "no_input": "No input.",
+        "loading_info": "Loading user & channel info...",
+        "loaded_info": "Loaded user & channel info",
+        "loading_info_fail": "Failed loading user & channel info!"
+    },
+    "banners": {
+        "issues": "We're having issues - some features may be unavailable",
+        "outage": "We're experiencing a major outage - working on it",
+        "resolved": "Issues have been resolved!",
+        "fail": "Unable to fetch status info. Please click here to view our status page.",
+        "message_creator_buggy": "The message creator might be buggy on {browser}"
+    },
+    "error_page": {
+        "status": {
+            "401": {
+                "title": "unauthorized!",
+                "message": "You are unauthorized to view this page."
+            },
+            "403": {
+                "title": "no permission!",
+                "message": "You do not have permission to view this page."
+            },
+            "404": {
+                "title": "page not found!",
+                "message": "Looks like the page you're trying to reach doesn't exist or was moved."
+            },
+            "418": {
+                "title": "I'm a teapot!",
+                "message": "Sorry, I refuse to brew coffee because I'm, permanently, a teapot."
+            },
+            "500": {
+                "title": "unexpected error.",
+                "message": "Please refresh or try again. If the issue persists, contact us."
+            },
+            "default": {
+                "title": "an error occurred.",
+                "message": "Please refresh or try again. If the issue persists, contact us."
+            }
+        },
+        "chat_messages": {
+            "msg_1": "{status} OMEGADANCE",
+            "msg_2": "F",
+            "msg_3": "chat where is the page PauseChamp",
+            "msg_4": "bro the page is gone NOOOO",
+            "msg_5": "{status} Pepega",
+            "msg_6": "who broke the site RAGEY",
+            "msg_7": "COPIUM",
+            "msg_8": "NOOOO",
+            "msg_9": "the page is gone Sadge",
+            "msg_10": "SadgeCry the page was right here",
+            "msg_11": "@uniiDev ur site is cooked bro",
+            "msg_12": "have you tried turning it off and on again Nerd",
+            "msg_13": "bro needs to learn nginx omE",
+            "msg_14": "unban the page mods",
+            "msg_15": "mods can we get the page back Prayge",
+            "msg_16": "DIESOFCRINGE"
+        }
+    },
+    "pages": {
+        "convert": {
+            "title": "Convert your chat overlay settings to UChat",
+            "warning_bugs": "Bugs could occur, please be aware.",
+            "warning_settings": "Not every setting exists in UChat.",
+            "supported": "Currently supported: JChat & ChatIS.",
+            "url_input": {
+                "title": "Chat Overlay URL",
+                "convert_button": "Convert & Copy"
+            }
+        },
+        "help": {
+            "info": {
+                "title": "Info & Privacy",
+                "description": "All the info you need to get started with UChat"
+            },
+            "faq": "FAQ",
+            "privacy": "Privacy & Security",
+            "privacy_items": {
+                "item_1": "Your Twitch token is never stored; it is only sent to the server when needed to authenticate actions like login, saving, or deleting your settings.",
+                "item_2": "Settings you change are saved only in your browser so they stay after refresh or returning to the page; they are not stored on our servers unless you are a tester saving global settings.",
+                "item_3": "For testers, we store only their Twitch user ID and the settings they changed from default—nothing else.",
+                "item_4": "Pressing \"Save\" updates your saved global settings; \"Delete\" removes all your saved settings from our servers.",
+                "item_5": "Using \"Reset Settings\" clears all locally saved settings in your browser.",
+                "item_6": "We log every request made to our API to prevent spam or abuse.",
+                "item_7": "UChat and all services under unii.dev are independent and are not affiliated, endorsed, or sponsored by Twitch Interactive, Inc."
+            },
+            "faq_items": {
+                "item_1": {
+                    "question": "What is UChat?",
+                    "answer": "UChat is a custom Twitch chat overlay that supports 7TV, BetterTTV, and FrankerFaceZ emotes."
+                },
+                "item_2": {
+                    "question": "How do I get my overlay URL?",
+                    "answer": "After entering your channel name and customizing your settings, the overlay URL will appear in the 'Overlay URL' section where you can copy it using the copy button."
+                },
+                "item_3": {
+                    "question": "Who made UChat?",
+                    "answer": "UChat was made by {uniidev} with the help of {ftk789} & {creepycode}."
+                },
+                "item_4": {
+                    "question": "What chat commands are available?",
+                    "answer": "Commands can only be used by the broadcaster or a mod; you can also use commands with !uchat <command>. Click to copy a command.",
+                    "commands": {
+                        "reloadchat": "Reloads the overlay",
+                        "refreshchat": "Refreshes the overlay",
+                        "reloadws": "Reconnects the 7TV and BTTV WebSockets",
+                        "reconnectchat": "Reconnects to Twitch IRC",
+                        "chatversion": "Shows Chat Overlay Version (reuse command to disable)",
+                        "hideloading": "Hides the loading UI in case any of the API is down"
+                    }
+                },
+                "item_5": {
+                    "question": "What is YAUTO?",
+                    "answer": "YAUTO, short for \"Yet Another Useless Twitch Overlay,\" was the former name of this project. It was renamed to UChat on 02/08/2025 for a cleaner and more recognizable name."
+                },
+                "item_6": {
+                    "question": "Is Twitch login required?",
+                    "answer": "No."
+                },
+                "item_7": {
+                    "question": "Why is there a login button?",
+                    "answer": "Early testers of UChat can log in to save their settings globally. This way, they only need to enter their channel name without using a long overlay URL."
+                },
+                "item_8": {
+                    "question": "How do the Save and Delete buttons work for testers?",
+                    "answer": "Pressing Save updates only the settings you've changed on the server linked to your user ID. Delete removes all your saved global settings from the server. Local browser settings aren't affected by Delete."
+                },
+                "item_9": {
+                    "question": "What are the chances of becoming a tester?",
+                    "answer": "The testing phase is over. Currently, no new testers are being accepted."
+                },
+                "item_10": {
+                    "question": "Why do my settings stay after refreshing?",
+                    "answer": "They are saved in your browser. Click 'Reset Settings' to reset."
+                },
+                "item_11": {
+                    "question": "Where can I find the API?",
+                    "answer": "You can access the public API documentation here.",
+                    "links": {
+                        "here": "here"
+                    }
+                },
+                "item_12": {
+                    "question": "Can I use this overlay or its API for my own project?",
+                    "answer": "You may use the public API endpoints, but the overlay is strictly proprietary. Unauthorized usage or attempts to bypass restrictions (such as CORS) will result in an immediate, indefinite ban."
+                },
+                "item_13": {
+                    "question": "Where can I find the source code?",
+                    "answer": "You can find the source code on {github}."
+                },
+                "item_14": {
+                    "question": "Is my Twitch token safe?",
+                    "answer": "Your token is only used for validation and is never stored on our servers."
+                },
+                "item_15": {
+                    "question": "What if my question isn't listed here?",
+                    "answer": "For more information, you can reach out via {twitch} or {discord}."
+                }
+            }
+        },
+        "message_creator": {
+            "title": "UChat Message Creator",
+            "fetch_channel": "Fetch Channel & User",
+            "download": "Download image"
+        }
+    }
+}
