@@ -43,10 +43,10 @@
     <UChat brandColor size="10rem" />
     <div class="info">
         <span class="loading-info app-title">UChat</span>
-        <span class="loading-text"
-            ><div class="loader"></div>
-            Loading...</span
-        >
+        <span class="loading-text">
+            <div class="loader"></div>
+            Loading...
+        </span>
         <span class="loading-info">{@html text}</span>
         <p class="version">{__APP_VERSION}</p>
     </div>

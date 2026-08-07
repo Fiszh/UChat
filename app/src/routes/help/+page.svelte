@@ -3,24 +3,34 @@
 
     import { CircleQuestionMark, ShieldCheck } from "@lucide/svelte";
 
-    import { faqItems, privacyItems } from "$stores/faq";
+    import { faqItems } from "$stores/faq";
+    import { t } from "svelte-i18n";
 
     let helpNotice: HTMLElement;
 
     function replaceLinks(
         answer: string,
-        links: { name: string; url: string }[],
+        links: (
+            { name: string; url: string } | { nameKey: string; url: string }
+        )[],
     ) {
-        if (!links.length) {
-            return answer;
-        }
+        if (!links.length) return answer;
 
         let Answer = answer;
         for (const link of links) {
-            Answer = Answer.replace(
-                link.name,
-                `<a href="${link.url}" target="_blank" rel="noopener noreferrer nofollow">${link.name}</a>`,
-            );
+            if ("name" in link) {
+                Answer = Answer.replace(
+                    "{" + link.name.toLowerCase() + "}",
+                    `<a href="${link.url}" target="_blank" rel="noopener noreferrer nofollow">${link.name}</a>`,
+                );
+            } else {
+                const name = $t(link.nameKey);
+
+                Answer = Answer.replace(
+                    name,
+                    `<a href="${link.url}" target="_blank" rel="noopener noreferrer nofollow">${name}</a>`,
+                );
+            }
         }
 
         return Answer;
@@ -32,27 +42,39 @@
         if (window.location.hash == "#notice")
             helpNotice?.scrollIntoView({ behavior: "smooth" });
     });
+
+    const privacyKeys = Array.from({ length: 7 }, (_, i) => `item_${i + 1}`);
+
+    const privacyItems = privacyKeys.map((key) =>
+        $t(`pages.help.privacy_items.${key}`),
+    );
 </script>
 
 <div id="faq-container">
     <section>
-        <h2>Info & Privacy</h2>
-        <h3>All the info you need to get started with UChat</h3>
+        <h2>{$t("pages.help.info.title")}</h2>
+        <h3>
+            {$t("pages.help.info.description")}
+        </h3>
     </section>
 
     <h5>
-        <CircleQuestionMark size="2rem" /> FAQ
+        <CircleQuestionMark size="2rem" />
+        {$t("pages.help.faq")}
     </h5>
 
     <section id="help-items" class="faq-items">
         {#each faqItems as faqItem, i}
             <div class="faq-item">
-                <h4>{faqItem.question}</h4>
+                <h4>{$t(faqItem.i18nKey + ".question")}</h4>
                 <p>
                     {#if faqItem.links}
-                        {@html replaceLinks(faqItem.answer, faqItem.links)}
+                        {@html replaceLinks(
+                            $t(faqItem.i18nKey + ".answer"),
+                            faqItem.links,
+                        )}
                     {:else}
-                        {faqItem.answer}
+                        {$t(faqItem.i18nKey + ".answer")}
                     {/if}
                 </p>
                 {#if faqItem.commands}
@@ -61,10 +83,10 @@
                             <li>
                                 <!-- svelte-ignore a11y_click_events_have_key_events -->
                                 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-                                <code onclick={() => copy(command.cmd)}
-                                    >{command.cmd}</code
-                                >
-                                - {command.desc}
+                                <code onclick={() => copy(command.cmd)}>
+                                    {command.cmd}
+                                </code>
+                                - {$t(command.descKey)}
                             </li>
                         {/each}
                     </ul>
@@ -77,7 +99,8 @@
     </section>
 
     <h5>
-        <ShieldCheck size="2rem" /> Privacy & Security
+        <ShieldCheck size="2rem" />
+        {$t("pages.help.privacy")}
     </h5>
 
     <section id="help-notice" class="faq-items" bind:this={helpNotice}>

@@ -47,8 +47,10 @@
 <style lang="scss">
     #site-blackout {
         position: absolute;
-        width: 100%;
-        height: 100%;
+        height: 100vw;
+        height: 100vh;
+        width: 100dvw;
+        height: 100dvh;
         background-color: rgba(0, 0, 0, 0.5);
     }
 

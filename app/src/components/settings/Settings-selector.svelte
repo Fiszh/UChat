@@ -6,28 +6,20 @@
     import { isMobile } from "$stores/global";
 
     type Props = {
-        name: string;
         onChange: (v: number) => void;
-        description?: string;
         hidden?: boolean;
         value: number;
         defaultValue?: number;
         selectors: SelectorSetting["selectors"];
+        param: string;
     };
 
     const handleChange = (v: number) => {
         if (typeof onChange != "undefined") return onChange(v);
     };
 
-    let {
-        name,
-        onChange,
-        description,
-        hidden,
-        value,
-        defaultValue,
-        selectors,
-    }: Props = $props();
+    let { onChange, hidden, value, defaultValue, selectors, param }: Props =
+        $props();
 
     // default will be set to starter value if not set in props
     const handleReset = () => {
@@ -40,9 +32,8 @@
 </script>
 
 <SettingsWrapper
+    {param}
     column={$isMobile}
-    {name}
-    {description}
     {hidden}
     {value}
     settingsDefault={defaultValue}

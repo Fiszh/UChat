@@ -132,23 +132,24 @@
         })}
     </h3>
     <p>
-        {$t("dialogs.channel_link.channel_confirm", {
-            values: {
-                platformChange:
-                    pastedName["platform"] == pastedName["input"]
-                        ? ""
-                        : $t("dialogs.channel_link.platform_change", {
-                              values: {
-                                  platform: toTitleCase(pastedName["platform"]),
-                              },
-                          }),
-                name: pastedName["name"],
-            },
-        })}
+        {#if pastedName["platform"] == pastedName["input"]}
+            {$t("dialogs.channel_link.channel_confirm", {
+                values: {
+                    name: pastedName["name"],
+                },
+            })}
+        {:else}
+            {$t("dialogs.channel_link.platform_change", {
+                values: {
+                    platform: toTitleCase(pastedName["platform"]),
+                    name: pastedName["name"],
+                },
+            })}
+        {/if}
     </p>
 </Dialog>
 
-<Dialog bind:show name="Manage Channels">
+<Dialog bind:show name={$t("dialogs.manage_channels.title")}>
     <div id="layout">
         <section>
             <p>
@@ -159,7 +160,11 @@
             {#if inputs.twitch.mode === "name"}
                 <Input
                     bind:value={inputs["twitch"]["input"]["name"]}
-                    placeholder="Channel name..."
+                    placeholder={$t("channel_input.name", {
+                        values: {
+                            platform: "",
+                        },
+                    }) + "..."}
                     data-platform="TWITCH"
                     invalid={!inputs["twitch"]["input"]["name"].length}
                     onPaste={checkForChannelLink}
@@ -172,7 +177,11 @@
             {:else}
                 <Input
                     bind:value={inputs["twitch"]["input"]["id"]}
-                    placeholder="Channel ID..."
+                    placeholder={$t("channel_input.id", {
+                        values: {
+                            platform: "",
+                        },
+                    }) + "..."}
                     invalid={!inputs["twitch"]["input"]["id"].length}
                     onChange={(e) =>
                         (inputs["twitch"]["input"]["id"] = validateInput(
@@ -189,7 +198,7 @@
                         ? "id"
                         : "name")}
             >
-                Use Channel ID
+                {$t("dialogs.manage_channels.use_channel_id")}
             </Checkbox>
         </section>
 
@@ -202,7 +211,11 @@
             {#if inputs.kick.mode === "name"}
                 <Input
                     bind:value={inputs["kick"]["input"]["name"]}
-                    placeholder="Channel name..."
+                    placeholder={$t("channel_input.name", {
+                        values: {
+                            platform: "",
+                        },
+                    }) + "..."}
                     data-platform="KICK"
                     invalid={!inputs["kick"]["input"]["name"].length}
                     onPaste={checkForChannelLink}
@@ -215,7 +228,11 @@
             {:else}
                 <Input
                     bind:value={inputs["kick"]["input"]["id"]}
-                    placeholder="Channel ID..."
+                    placeholder={$t("channel_input.id", {
+                        values: {
+                            platform: "",
+                        },
+                    }) + "..."}
                     invalid={!inputs["kick"]["input"]["id"].length}
                     onChange={(e) =>
                         (inputs["twitch"]["input"]["id"] = validateInput(
@@ -232,11 +249,13 @@
                         ? "id"
                         : "name")}
             >
-                Use Channel ID
+                {$t("dialogs.manage_channels.use_channel_id")}
             </Checkbox> -->
         </section>
 
-        <Button primary center onclick={() => (show = false)}>Save</Button>
+        <Button primary center onclick={() => (show = false)}>
+            {$t("labels.save")}
+        </Button>
     </div>
 </Dialog>
 

@@ -100,7 +100,7 @@
                 navigator.clipboard
                     .writeText(urlResults)
                     .then(() => {
-                        alert("Overlay URL has been copied!");
+                        alert($t("toasts.url_copied"));
                     })
                     .catch((err) => {
                         console.error("Failed to copy URL: ", err);
@@ -123,14 +123,14 @@
     }
 
     function loadMoreBadges() {
-        addToast({ msg: "Loading all badges..." });
+        addToast({ msg: $t("toasts.loading_badges") });
 
         initBadges()
             .then(() =>
-                addToast({ msg: "Loaded all badges!", type: "success" }),
+                addToast({ msg: $t("toasts.loaded_badges"), type: "success" }),
             )
             .catch(() =>
-                addToast({ msg: "Failed loading badges!", type: "error" }),
+                addToast({ msg: $t("toasts.fail_load_badges"), type: "error" }),
             )
             .finally(() => messages.set(previewMessages));
     }
@@ -172,8 +172,8 @@
 
 <div id="chat-preview" style="--chat-background: {hex}">
     <section id="top">
-        <h4>Chat Preview</h4>
-        <small>Live preview of your settings</small>
+        <h4>{$t("display.top.title")}</h4>
+        <small>{$t("display.top.description")}</small>
     </section>
     <section id="chat-display" class="bg-grid">
         {#if !$isMobile}
@@ -184,15 +184,17 @@
     </section>
     <section id="bottom">
         <span class="header">
-            <p>Chat Preview Settings</p>
+            <p>{$t("display.bottom.header.title")}</p>
 
             <div id="buttons">
                 <Button
                     onclick={loadMoreBadges}
                     icon={loadBadgesIcon}
-                    title="Load Badges"
+                    title={$t("display.bottom.header.load_badges.mobile")}
                 >
-                    {$isMobile ? "Load Badges" : "Load More Badges"}
+                    {$isMobile
+                        ? $t("display.bottom.header.load_badges.mobile")
+                        : $t("display.bottom.header.load_badges.pc")}
                 </Button>
                 <Button
                     onclick={resetSettings}
@@ -205,7 +207,9 @@
         </span>
         <hr />
         <section id="color-picker">
-            <small class="title">Chat Background</small>
+            <small class="title">
+                {$t("display.bottom.chat_background.title")}
+            </small>
 
             <div class="display">
                 <Color bind:value={hex} />
@@ -213,7 +217,9 @@
         </section>
         <hr />
         <section>
-            <small class="title">Custom Message</small>
+            <small class="title">
+                {$t("display.bottom.custom_message.title")}
+            </small>
 
             <div class="display">
                 {#snippet icon()}
@@ -223,7 +229,9 @@
                 <Input
                     wide
                     bind:value={customMessageValue}
-                    placeholder="Message to display..."
+                    placeholder={$t(
+                        "display.bottom.custom_message.input_placeholder",
+                    )}
                 />
 
                 <Button secondary onclick={addMessage} {icon}>
@@ -233,7 +241,9 @@
         </section>
         <hr />
         <section>
-            <small class="title"> Channel Info </small>
+            <small class="title">
+                {$t("display.bottom.channel_info.title")}
+            </small>
             <div class="display">
                 <Button
                     primary
@@ -247,16 +257,18 @@
                 >
                     {#if showAttentionManager}
                         <CalloutBubble type="error">
-                            Input Required
+                            {$t("labels.input_required")}
                         </CalloutBubble>
                     {/if}
-                    Manage Channels
+                    {$t("display.bottom.channel_info.manage")}
                 </Button>
             </div>
         </section>
         <hr />
         <section id="overlay-url">
-            <small class="title">Overlay URL</small>
+            <small class="title">
+                {$t("display.bottom.overlay_url.title")}
+            </small>
 
             <div class="display">
                 {#snippet icon()}

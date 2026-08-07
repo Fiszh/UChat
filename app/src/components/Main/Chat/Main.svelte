@@ -13,6 +13,7 @@
     import { emotes, badges, isMobile } from "$stores/global";
     import { cosmetics } from "$stores/cosmetics";
     import { previewMessages } from "$stores/previewMessages";
+    import { t } from "svelte-i18n";
 
     let tab: string = $state("settings");
 
@@ -60,11 +61,11 @@
         <footer>
             <button onclick={() => changeTab("settings")}>
                 <Settings size="15" />
-                Settings
+                {$t("mobile_footer.settings")}
             </button>
             <button onclick={() => changeTab("preview")}>
                 <MessageSquare size="15" />
-                Preview
+                {$t("mobile_footer.preview")}
             </button>
         </footer>
     {:else}

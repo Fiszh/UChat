@@ -104,9 +104,9 @@
         class:noHover
         class:column={layout == "column"}
     >
-        <span>{@render icon?.()}</span>
+        {@render icon?.()}
         <span>{@render children?.()}</span>
-        <span>{@render iconRight?.()}</span>
+        {@render iconRight?.()}
     </button>
 {/if}
 

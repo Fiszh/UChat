@@ -19,6 +19,7 @@
     import { isFirefox, isSafari } from "$lib/browser";
     import { addToast } from "$lib/toast";
     import { previewMessages } from "$stores/previewMessages";
+    import { t } from "svelte-i18n";
 
     let messageDisplay: HTMLElement;
 
@@ -69,18 +70,18 @@
     }
 
     function loadUserInfo() {
-        addToast({ msg: "Loading user & channel info..." });
+        addToast({ msg: $t("toasts.loading_info") });
 
         loadChatInfo()
             .then(() =>
                 addToast({
-                    msg: "Loaded user & channel info",
+                    msg: $t("toasts.loaded_info"),
                     type: "success",
                 }),
             )
             .catch(() =>
                 addToast({
-                    msg: "Failed loading user & channel info!",
+                    msg: $t("toasts.loading_info_fail"),
                     type: "error",
                 }),
             );
@@ -130,20 +131,30 @@
     {#if isFirefox() || isSafari()}
         <Banner
             type="outage"
-            message="The message creator might be buggy on {isFirefox()
-                ? 'Firefox'
-                : 'Safari'}"
+            message={$t("banners.message_creator_buggy", {
+                values: {
+                    browser: isFirefox() ? "Firefox" : "Safari",
+                },
+            })}
         />
     {/if}
-    <h1>UChat Message Creator</h1>
+    <h1>
+        {$t("pages.message_creator.title")}
+    </h1>
     <section id="message" class="bg-grid" bind:this={messageDisplay}>
         <ChatDisplay />
     </section>
-    <p>Channel: {channel.name}</p>
+    <p>
+        {$t("channel_input.name", {
+            values: {
+                platform: "",
+            },
+        })}: {channel.name}
+    </p>
 
     <section id="inputs">
         <label>
-            <p>Username:</p>
+            <p>{$t("labels.username")}:</p>
             <Input
                 type="text"
                 placeholder="Username"
@@ -151,7 +162,7 @@
             />
         </label>
         <label>
-            <p>Message:</p>
+            <p>{$t("labels.message")}:</p>
             <Input
                 type="text"
                 placeholder="Message"
@@ -159,7 +170,7 @@
             />
         </label>
         <label>
-            <p>Channel:</p>
+            <p>{$t("labels.channel")}:</p>
             <Input
                 type="text"
                 placeholder="Channel"
@@ -176,10 +187,10 @@
     {/snippet}
 
     <Button secondary icon={LoadIcon} onclick={loadUserInfo}>
-        Fetch Channel & User
+        {$t("pages.message_creator.fetch_channel")}
     </Button>
     <Button primary icon={DownloadIcon} onclick={downloadImage}>
-        Download image
+        {$t("pages.message_creator.download")}
     </Button>
 </main>
 

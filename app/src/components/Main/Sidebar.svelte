@@ -7,6 +7,7 @@
         ArrowLeftRight,
         Lightbulb,
         Brush,
+        Earth,
     } from "@lucide/svelte";
 
     import moment from "moment/min/moment-with-locales";
@@ -25,6 +26,8 @@
     import type { Snippet } from "svelte";
     import UChat from "$components/logos/uchat.svelte";
     import HelpNotice from "$components/helpNotice.svelte";
+    import LocalizationDialog from "$components/dialogs/localization.svelte";
+    import { t } from "svelte-i18n";
 
     let username = $state(
         getCookie("twitchUsername") || ("" as string | undefined),
@@ -33,6 +36,8 @@
     let twitchToken = $state(
         getCookie("twitchToken") || ("" as string | undefined),
     );
+
+    let localizationDialog = $state(false);
 
     async function handleToken(token: string) {
         const user_info = await valideToken(token);
@@ -61,6 +66,8 @@
     moment.locale(navigator.language);
 </script>
 
+<LocalizationDialog bind:show={localizationDialog} />
+
 {#snippet HouseIcon()}
     <House size={$isMobile ? "15" : "20"} />
 {/snippet}
@@ -85,18 +92,24 @@
 {#snippet DesignIcon()}
     <Brush size={$isMobile ? "15" : "20"} />
 {/snippet}
+{#snippet GlobeIcon()}
+    <Earth size={$isMobile ? "15" : "20"} />
+{/snippet}
 
 {#snippet sideBarButton(
-    href: string,
+    href: string | (() => void),
     icon: Snippet,
     name: string,
     newTab?: boolean,
 )}
     <Button
-        {href}
+        href={typeof href === "string" ? href : undefined}
+        onclick={typeof href === "function" ? href : undefined}
         target={newTab ? "_blank" : ""}
         rel={newTab ? "noopener noreferrer" : ""}
-        class={page.route.id == href ? "active" : ""}
+        class={typeof href === "string" && page.route.id == href
+            ? "active"
+            : ""}
         {icon}
         layout={$isMobile ? "column" : "row"}
         noHover={$isMobile}
@@ -111,37 +124,56 @@
         <div id="name">
             <strong>UChat</strong>
             <h1 style="font-size:0.6em; line-height: 1px;">
-                UChat Chat Overlay for Twitch & Kick
+                {$t("branding.tagline", {
+                    values: {
+                        name: "UChat",
+                    },
+                })}
             </h1>
-            <small id="version_text"
-                >{__APP_VERSION}
+            <small id="version_text">
+                {__APP_VERSION}
                 {dev ? "DEV" : ""}
-                {__DEBUG__ ? "DEBUG" : ""}</small
-            >
+                {__DEBUG__ ? "DEBUG" : ""}
+            </small>
         </div>
     </header>
 
     <nav>
-        {@render sideBarButton("/", HouseIcon, "Home")}
+        {@render sideBarButton("/", HouseIcon, $t("sidebar.home"))}
         {@render sideBarButton(
             "/message-creator",
             MessageSquareMoreIcon,
-            $isMobile ? "Create" : "Message creator",
+            $isMobile
+                ? $t("sidebar.message_creator.mobile")
+                : $t("sidebar.message_creator.pc"),
         )}
-        {@render sideBarButton("/convert", ArrowLeftRightIcon, "Convert")}
+        {@render sideBarButton(
+            "/convert",
+            ArrowLeftRightIcon,
+            $t("sidebar.convert"),
+        )}
+        {@render sideBarButton(
+            () => (localizationDialog = true),
+            GlobeIcon,
+            $isMobile
+                ? $t("sidebar.language.mobile")
+                : $t("sidebar.language.pc"),
+        )}
         {#if dev}
-            {@render sideBarButton("/design", DesignIcon, "Design")}
-            {@render sideBarButton("/teapot", CoffeeIcon, "Teapot")}
+            {@render sideBarButton("/design", DesignIcon, $t("sidebar.design"))}
+            {@render sideBarButton("/teapot", CoffeeIcon, $t("sidebar.teapot"))}
         {/if}
         {@render sideBarButton(
             "/help",
             InfoIcon,
-            $isMobile ? "Info" : "Info & Privacy",
+            $isMobile ? $t("sidebar.info.mobile") : $t("sidebar.info.pc"),
         )}
         {@render sideBarButton(
             "https://github.com/Fiszh/UChat/issues/new",
             SuggetsionsIcon,
-            $isMobile ? "Ideas" : "Suggestions & Bugs",
+            $isMobile
+                ? $t("sidebar.suggestions.mobile")
+                : $t("sidebar.suggestions.pc"),
             true,
         )}
         {@render sideBarButton(
@@ -153,7 +185,7 @@
         {@render sideBarButton(
             "https://buymeacoffee.com/jzlnkf5qgo",
             CoffeeIcon,
-            "Support",
+            $t("sidebar.support"),
             true,
         )}
     </nav>
@@ -161,11 +193,8 @@
     <footer>
         <section id="account" aria-label="User account section">
             <LoginButton onToken={handleToken} onLogOut={logOut} />
-            <p class="note">Login is not required.</p>
-            <p class="note">
-                Your token is only shared to validate and never stored on the
-                server.
-            </p>
+            <p class="note">{$t("footer.login_note")}</p>
+            <p class="note">{$t("footer.token_note")}</p>
 
             <HelpNotice />
             {#if username && twitchToken && twitchID}

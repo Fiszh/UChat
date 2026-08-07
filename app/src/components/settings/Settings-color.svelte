@@ -4,20 +4,18 @@
     import { onMount } from "svelte";
 
     type Props = {
-        name: string;
         onChange: (hex: string) => void;
-        description?: string;
         hidden?: boolean;
         value: string;
         defaultValue?: Props["value"];
+        param: string;
     };
 
     const handleChange = (hex: string) => {
         if (typeof onChange != "undefined") return onChange(hex);
     };
 
-    let { name, onChange, description, hidden, value, defaultValue }: Props =
-        $props();
+    let { onChange, hidden, value, defaultValue, param }: Props = $props();
 
     // default will be set to starter value if not set in props
     const handleReset = () => {
@@ -30,8 +28,7 @@
 </script>
 
 <SettingsWrapper
-    {name}
-    {description}
+    {param}
     {hidden}
     {value}
     settingsDefault={defaultValue}

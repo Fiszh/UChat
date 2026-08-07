@@ -4,6 +4,7 @@
     import chatis from "$stores/convert/chatis";
     import { config } from "$stores/settings";
     import type { Converter } from "$types/converter";
+    import { t } from "svelte-i18n";
 
     let input = $state("");
 
@@ -45,7 +46,7 @@
     }
 
     function convertURL() {
-        if (!input.length) return alert("no input");
+        if (!input.length) return alert($t("toasts.no_input"));
         const url = new URL(input);
         const params = url.searchParams.entries();
 
@@ -131,32 +132,34 @@
 
             navigator.clipboard
                 .writeText(result_url + "?" + result_params)
-                .then(() => {
-                    alert("Overlay URL has been copied!");
-                })
+                .then(() => alert($t("toasts.url_copied")))
                 .catch((err) => {
                     console.error("Failed to copy URL: ", err);
-                    alert(
-                        "Failed to copy URL, check the console for more info.",
-                    );
+                    alert($t("toasts.url_copied_fail"));
                 });
         } else {
-            return alert("Unsupported.");
+            return alert($t("toasts.unsupported"));
         }
     }
 </script>
 
 <section id="layout">
-    <h1>Convert your chat overlay settings to UChat</h1>
-    <p>Bugs could occur, please be aware.</p>
-    <p>Not every setting exists in UChat.</p>
-    <p>Currently supported: JChat & ChatIS.</p>
+    <h1>
+        {$t("pages.convert.title")}
+    </h1>
+    <p>{$t("pages.convert.warning_bugs")}</p>
+    <p>
+        {$t("pages.convert.warning_settings")}
+    </p>
+    <p>{$t("pages.convert.supported")}</p>
 
     <section id="url-input">
-        <h2>Chat Overlay URL:</h2>
+        <h2>{$t("pages.convert.url_input.title")}</h2>
         <Input type="text" bind:value={input} />
 
-        <Button primary onclick={convertURL}>Convert & Copy</Button>
+        <Button primary onclick={convertURL}>
+            {$t("pages.convert.url_input.convert_button")}
+        </Button>
     </section>
 </section>
 

@@ -7,9 +7,7 @@ import { flags } from "$lib/bitmap";
 import { writable } from "svelte/store";
 
 export interface DefaultSetting {
-    name: string;
     param: string;
-    description?: string;
     hide?: boolean;
     previewReact?: boolean;
 }
@@ -74,87 +72,61 @@ export const setEmoteSize = writable<string>(defaultEmoteSize);
 
 export const configs: Setting[] = [
     {
-        name: "Message are in <strong>bold</strong> text",
         type: "boolean",
         value: true,
         param: "msgBold",
-        description: "Make messages bold",
     },
     {
-        name: "Message are in UPPERCASE",
         type: "boolean",
         value: false,
         param: "msgCaps",
-        description: "Convert all chat message text to uppercase",
     },
     {
-        name: "Smooth message scroll",
         type: "boolean",
         param: "smoothScroll",
         value: true,
-        description:
-            "Animate scrolling for new messages when possible, may jump if messages arrive rapidly",
     },
     {
-        name: "Custom chat font",
         type: "text",
         value: "Geist",
         param: "font",
-        description: "Change the chat message font",
     },
     {
-        name: "Chat font color (hex)",
         type: "color-picker",
         value: "#FFFFFF",
         param: "fontColor",
-        description: "Change the chat text color",
     },
     {
-        name: "Font & Badge size (px)",
         type: "number",
         param: "fontSize",
         value: "20",
         previewReact: false,
-        description:
-            "Set the size of message text and badges in pixels, changing this will also automatically scale emotes",
     },
     {
-        name: "Font stroke",
         type: "boolean",
         value: false,
         param: "fontStroke",
-        description:
-            "Enable an outline stroke around chat text for readability (note: outline does not apply to 7TV paints)",
     },
     {
-        name: "Message shadow",
         type: "slider",
         param: "fontShadow",
         value: "10",
         min: "0",
         max: "10",
-        description: "Add a shadow behind message",
     },
     {
-        name: "Emote size (px)",
         type: "number",
         param: "emoteSize",
         value: defaultEmoteSize,
         previewReact: false,
-        description:
-            "Set the display size of emotes in pixels, scales with font size setting if not set",
     },
     {
-        name: "Text fade out (seconds)",
         type: "number",
         param: "fadeOut",
         value: "0",
         previewReact: false,
-        description:
-            "Automatically fade out messages after the specified number of seconds",
     },
     {
-        name: "Badges",
         type: "selector",
         value: 0,
         selectors: [
@@ -210,95 +182,66 @@ export const configs: Setting[] = [
             },
         ],
         param: "badges",
-        description: "Choose which badges to show in chat",
     },
     {
-        name: "Display only Twitch badges",
         type: "boolean",
         value: false,
         hide: true,
         param: "badgesTTV",
-        description: "When enabled, only Twitch badges will be displayed",
     },
     {
-        name: "Display Redeems & Usernotices",
         type: "boolean",
         value: true,
         param: "redeem",
-        description:
-            "Show channel points redeems, subscriptions, and announcements in chat",
     },
     {
-        name: "Hide bot messages",
         type: "boolean",
         value: true,
         param: "bots",
-        description:
-            "Hide messages from chat bots, detected using Twitch & FFZ bot badges",
     },
     {
-        name: "Custom user blacklist (separate using spaces)",
         type: "text",
         value: "",
         param: "userBL",
         list: true,
-        description: "Space-separated list of usernames to hide from chat",
     },
     {
-        name: "Custom prefix blacklist (separate using spaces)",
         type: "text",
         value: "",
         param: "prefixBL",
         list: true,
-        description:
-            "Space-separated list of message prefixes to hide (e.g. !commands)",
     },
     {
-        name: "Moderation actions",
         type: "boolean",
         value: true,
         param: "modAction",
-        description:
-            "Moderation actions like deletions, timeouts, bans, and clears affect chat messages",
     },
     {
-        name: 'Mentions are <div class="rainbow-text">Colored</div>',
         type: "boolean",
         value: false,
         param: "mentionColor",
-        description:
-            "Highlight user mentions (users must have typed in chat before)",
     },
     {
-        name: "7TV Paints",
         type: "boolean",
         value: true,
         param: "paints",
-        description: "Enable rendering of 7TV Paints in chat",
     },
     {
-        name: "7TV Paint Shadows",
         type: "boolean",
         value: true,
         param: "paintShadows",
-        description:
-            "Toggle shadows on 7TV Paints, may cause drops in performance",
     },
     {
-        name: "Load in latest chat messages",
         type: "boolean",
         value: false,
         hide: true,
         param: "lastMsg",
-        description: "Load a history of recent chat messages on connect",
     },
     {
-        name: "Clear chat when going live (OBS ONLY)",
         type: "boolean",
         value: false,
         hide: true,
         param: "clearLive",
-        description: "Clear the chat automatically when the channel goes live",
     },
 ];
 

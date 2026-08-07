@@ -110,7 +110,13 @@
     }
 </script>
 
-<p id="settings_text" transition:slide>{name} Settings</p>
+<p id="settings_text" transition:slide>
+    {$t("global_settings.title", {
+        values: {
+            name,
+        },
+    })}
+</p>
 <div id="settingsButtons" transition:slide>
     <Button approve wide center onclick={save}>
         {$t("labels.save")}

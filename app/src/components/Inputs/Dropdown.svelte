@@ -4,6 +4,7 @@
     import { ChevronDown, ChevronUp } from "@lucide/svelte";
 
     type Props = {
+        icon?: Snippet;
         dropdown?: Snippet;
         children?: Snippet;
         value?: string;
@@ -13,6 +14,7 @@
     let expanded = $state(false);
 
     let {
+        icon,
         dropdown,
         children,
         value,
@@ -39,7 +41,8 @@
     role="none"
 >
     <button id="top">
-        {@render children?.()}
+        {@render icon?.()}
+        <span id="child-render">{@render children?.()}</span>
         {#if !expanded}
             <ChevronDown size="1rem" />
         {:else}
@@ -65,6 +68,11 @@
 
         white-space: nowrap;
 
+        #child-render {
+            width: 100%;
+            text-align: left;
+        }
+
         #dropdown {
             display: flex;
             flex-direction: column;
@@ -78,7 +86,8 @@
 
             border-radius: 0px 0px 10px 10px;
 
-            position: relative;
+            position: absolute;
+            top: 100%;
 
             min-width: fit-content;
 
@@ -91,6 +100,8 @@
         }
 
         &.expanded {
+            border-radius: 10px 10px 0px 0px;
+
             #dropdown {
                 border-top: var(--secondary-active) 2px solid;
 
