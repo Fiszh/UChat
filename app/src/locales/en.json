@@ -132,8 +132,8 @@
                 "description": "Change the chat message font"
             },
             "fontColor": {
-                "name": "Chat font colour (hex)",
-                "description": "Change the chat text colour"
+                "name": "Chat font color (hex)",
+                "description": "Change the chat text color"
             },
             "fontSize": {
                 "name": "Font & Badge size (px)",
@@ -184,7 +184,7 @@
                 "description": "Moderation actions like deletions, timeouts, bans, and clears affect chat messages"
             },
             "mentionColor": {
-                "name": "Mentions are Coloured",
+                "name": "Mentions are Colored",
                 "description": "Highlight user mentions (users must have typed in chat before)"
             },
             "paints": {
@@ -227,8 +227,8 @@
     "error_page": {
         "status": {
             "401": {
-                "title": "unauthorised!",
-                "message": "You are unauthorised to view this page."
+                "title": "unauthorized!",
+                "message": "You are unauthorized to view this page."
             },
             "403": {
                 "title": "no permission!",
@@ -255,16 +255,16 @@
             "msg_1": "{status} OMEGADANCE",
             "msg_2": "F",
             "msg_3": "chat where is the page PauseChamp",
-            "msg_4": "mate the page is gone NOOOO",
+            "msg_4": "bro the page is gone NOOOO",
             "msg_5": "{status} Pepega",
             "msg_6": "who broke the site RAGEY",
             "msg_7": "COPIUM",
             "msg_8": "NOOOO",
             "msg_9": "the page is gone Sadge",
             "msg_10": "SadgeCry the page was right here",
-            "msg_11": "@uniiDev ur site is proper knackered mate",
+            "msg_11": "@uniiDev ur site is cooked bro",
             "msg_12": "have you tried turning it off and on again Nerd",
-            "msg_13": "lad needs to learn nginx omE",
+            "msg_13": "bro needs to learn nginx omE",
             "msg_14": "unban the page mods",
             "msg_15": "mods can we get the page back Prayge",
             "msg_16": "DIESOFCRINGE"
@@ -304,7 +304,7 @@
                 },
                 "item_2": {
                     "question": "How do I get my overlay URL?",
-                    "answer": "After entering your channel name and customising your settings, the overlay URL will appear in the 'Overlay URL' section where you can copy it using the copy button."
+                    "answer": "After entering your channel name and customizing your settings, the overlay URL will appear in the 'Overlay URL' section where you can copy it using the copy button."
                 },
                 "item_3": {
                     "question": "Who made UChat?",
@@ -324,7 +324,7 @@
                 },
                 "item_5": {
                     "question": "What is YAUTO?",
-                    "answer": "YAUTO, short for \"Yet Another Useless Twitch Overlay,\" was the former name of this project. It was renamed to UChat on 08/02/2025 for a cleaner and more recognisable name."
+                    "answer": "YAUTO, short for \"Yet Another Useless Twitch Overlay,\" was the former name of this project. It was renamed to UChat on 02/08/2025 for a cleaner and more recognizable name."
                 },
                 "item_6": {
                     "question": "Is Twitch login required?",
@@ -355,7 +355,7 @@
                 },
                 "item_12": {
                     "question": "Can I use this overlay or its API for my own project?",
-                    "answer": "You may use the public API endpoints, but the overlay is strictly proprietary. Unauthorised usage or attempts to bypass restrictions (such as CORS) will result in an immediate, indefinite ban."
+                    "answer": "You may use the public API endpoints, but the overlay is strictly proprietary. Unauthorized usage or attempts to bypass restrictions (such as CORS) will result in an immediate, indefinite ban."
                 },
                 "item_13": {
                     "question": "Where can I find the source code?",
