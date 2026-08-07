@@ -1,11 +1,12 @@
 <script lang="ts" module>
     export const flags = {
         en: new URL("$assets/flags/us.svg", import.meta.url).href,
-        uk: new URL("$assets/flags/uk.svg", import.meta.url).href,
-        pl: new URL("$assets/flags/pl.svg", import.meta.url).href,
-        pt: new URL("$assets/flags/pt.svg", import.meta.url).href,
-        "en-x-pirate": new URL("$assets/flags/en-x-pirate.svg", import.meta.url)
-            .href,
+        "en-GB": new URL("$assets/flags/uk.svg", import.meta.url).href,
+        "pl-PL": new URL("$assets/flags/pl.svg", import.meta.url).href,
+        "en-PT": new URL("$assets/flags/en-x-pirate.svg", import.meta.url).href,
+        "pt-PT": new URL("$assets/flags/pt.svg", import.meta.url).href,
+        "ar-SA": new URL("$assets/flags/sa.svg", import.meta.url).href,
+        "es-ES": new URL("$assets/flags/es.svg", import.meta.url).href,
     };
 
     export type FlagCode = keyof typeof flags;
