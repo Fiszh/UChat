@@ -1,92 +1,92 @@
 {
     "dialogs": {
         "channel_link": {
-            "title": "Link Detected",
-            "description": "Looks like you pasted a {platform} channel link",
-            "channel_confirm": "Want to use {name} as your channel?",
-            "platform_change": "Want to use {name} as the channel for {platform}?"
+            "title": "تم اكتشاف رابط",
+            "description": "يبدو أنك قمت بلصق رابط قناة {platform}.",
+            "channel_confirm": "هل ترغب في استخدام {name} كقناتك؟",
+            "platform_change": "هل تريد استخدام {name} كقناة لـ {platform}؟"
         },
         "hidden_settings": {
-            "title": "Warning",
-            "description": "Hidden settings aren't meant for regular use, some are old or being phased out, so they may disappear without notice."
+            "title": "تحذير",
+            "description": "الإعدادات المخفية ليست مخصصة للاستخدام المتكرر، فبعضها قديم أو يتم التخلص منه تدريجياً، لذا قد تختفي دون إشعار."
         },
         "manage_channels": {
-            "title": "Manage Channels",
-            "use_channel_id": "Use Channel ID"
+            "title": "إدارة القنوات",
+            "use_channel_id": "استخدم معرف القناة (Channel ID)"
         },
         "localization": {
-            "title": "Language",
-            "description": "Select available language to display UChat in"
+            "title": "اللغة",
+            "description": "اختر اللغة المتاحة لعرض UChat بها"
         }
     },
     "labels": {
-        "learn_more": "Learn more",
-        "cancel": "Cancel",
-        "confirm": "Confirm",
-        "proceed": "Proceed",
-        "send": "Send",
-        "save": "Save",
-        "delete": "Delete",
-        "reset": "Reset",
-        "copy": "Copy",
-        "login": "Login",
-        "logout": "Logout",
-        "enable_all": "Enable All",
-        "disable_all": "Disable All",
-        "input_required": "Input Required",
-        "username": "Username",
-        "message": "Message",
+        "learn_more": "مزيد من المعلومات",
+        "cancel": "إلغاء",
+        "confirm": "تأكيد",
+        "proceed": "تابع",
+        "send": "أبعث",
+        "save": "أحفظ",
+        "delete": "أحذف",
+        "reset": "إعادة ضبط",
+        "copy": "نسخ",
+        "login": "تسجيل دخول",
+        "logout": "تسجيل خروج",
+        "enable_all": "تفعيل الكل",
+        "disable_all": "إلغاء تفعيل الكل",
+        "input_required": "مطلوب أدخال",
+        "username": "أسم المستخدم",
+        "message": "رسالة",
         "channel": "Channel"
     },
     "notices": {
-        "ip": "We log IP addresses for abuse prevention."
+        "ip": "نحن نقوم بحفظ عناوين IP لمنع إساءة الاستخدام."
     },
     "channel_input": {
-        "name": "{platform} Channel Name",
-        "id": "{platform} Channel ID"
+        "name": "اسم القناة {platform}",
+        "id": "معرف القناة {platform}"
     },
     "mobile_footer": {
-        "settings": "Settings",
-        "preview": "Preview"
+        "settings": "الإعدادات",
+        "preview": "عرض"
     },
     "branding": {
-        "tagline": "{name} Chat Overlay for Twitch & Kick"
+        "tagline": "{name} Chat Overlay لـ Twitch و Kick"
     },
     "sidebar": {
-        "home": "Home",
+        "home": "الصفحة الرئيسية",
         "message_creator": {
-            "pc": "Message creator",
-            "mobile": "Create"
+            "pc": "صانع الرسائل",
+            "mobile": "أصنع"
         },
-        "convert": "Convert",
+        "convert": "حول",
         "language": {
-            "pc": "Language",
-            "mobile": "Lang"
+            "pc": "اللغة",
+            "mobile": "اللغة"
         },
-        "design": "Design",
-        "teapot": "Teapot",
+        "design": "تصميم",
+        "teapot": "بريق شاي",
         "info": {
-            "pc": "Info & Privacy",
-            "mobile": "Info"
+            "pc": "المعلومات والخصوصية",
+            "mobile": "معلومات"
         },
         "suggestions": {
-            "pc": "Suggestions & Bugs",
-            "mobile": "Ideas"
+            "pc": "الاقتراحات والأخطاء",
+            "mobile": "أفكار و أقتراحات"
         },
-        "support": "Support"
+        "support": "مساعدة"
     },
     "footer": {
-        "login_note": "Login is not required.",
-        "token_note": "Your token is only shared to validate and never stored on the server."
+        "login_note": "تسجيل الدخول غير مطلوب.",
+        "token_note": "يتم مشاركة الرمز الخاص بك فقط للتحقق من صحته ولا يتم تخزينه على الخادم مطلقًا."
     },
     "display": {
         "top": {
-            "title": "Chat Preview",
-            "description": "Live preview of your settings"
+            "title": "معاينة الدردشة",
+            "description": "معاينة مباشرة لإعداداتك"
         },
         "bottom": {
             "header": {
-                "title": "Chat Preview Settings",
+                "title": "",
                 "load_badges": {
                     "pc": "Load More Badges",
                     "mobile": "Load Badges"
@@ -104,7 +104,7 @@
                 "manage": "Manage Channels"
             },
             "overlay_url": {
-                "title": "Overlay URL"
+                "title": "رابط ال Overlay"
             }
         }
     },
@@ -193,98 +193,98 @@
             },
             "paintShadows": {
                 "name": "7TV Paint Shadows",
-                "description": "Toggle shadows on 7TV Paints, may cause drops in performance"
+                "description": ""
             },
             "lastMsg": {
-                "name": "Load in latest chat messages",
-                "description": "Load a history of recent chat messages on connect"
+                "name": "قم بتحميل أحدث رسائل الشات",
+                "description": "قم بتحميل سجل رسائل الدردشة الأخيرة "
             },
             "clearLive": {
-                "name": "Clear chat when going live (OBS ONLY)",
-                "description": "Clear the chat automatically when the channel goes live"
+                "name": "مسح الدردشة عند البث المباشر (خاص ببرنامج OBS فقط)",
+                "description": "يتم مسح الشات تلقائيًا عند بدء البث المباشر للقناة"
             }
         }
     },
     "toasts": {
-        "loading_badges": "Loading all badges...",
-        "loaded_badges": "Loaded all badges!",
-        "fail_load_badges": "Failed loading badges!",
-        "url_copied": "Overlay URL has been copied!",
-        "url_copied_fail": "Failed to copy URL, check the console for more info.",
-        "unsupported": "Unsupported.",
-        "no_input": "No input.",
-        "loading_info": "Loading user & channel info...",
-        "loaded_info": "Loaded user & channel info",
-        "loading_info_fail": "Failed loading user & channel info!"
+        "loading_badges": "جارٍ تحميل جميع البادجات...",
+        "loaded_badges": "تم تحميل جميع البادجات!",
+        "fail_load_badges": "فشل تحميل البادجات!",
+        "url_copied": "تم نسخ رابط ال Overlay!",
+        "url_copied_fail": "فشلت عملية نسخ الرابط، راجع وحدة التحكم لمزيد من المعلومات.",
+        "unsupported": "غير مدعوم.",
+        "no_input": "لا توجد مدخلات.",
+        "loading_info": "جارٍ تحميل معلومات المستخدم والقناة...",
+        "loaded_info": "تم تحميل معلومات المستخدم والقناة",
+        "loading_info_fail": "فشل تحميل معلومات المستخدم والقناة!"
     },
     "banners": {
-        "issues": "We're having issues - some features may be unavailable",
-        "outage": "We're experiencing a major outage - working on it",
-        "resolved": "Issues have been resolved!",
-        "fail": "Unable to fetch status info. Please click here to view our status page.",
-        "message_creator_buggy": "The message creator might be buggy on {browser}"
+        "issues": "نواجه بعض المشاكل - قد لا تتوفر بعض الميزات",
+        "outage": "نواجه انقطاعًا كبيرًا في الخدمة - نعمل على إصلاحه",
+        "resolved": "تم حل المشاكل!",
+        "fail": "تعذر جلب معلومات الحالة. يرجى النقر هنا لعرض صفحة الحالة الخاصة بنا.",
+        "message_creator_buggy": "قد يكون منشئ الرسائل به خلل في {المتصفح}"
     },
     "error_page": {
         "status": {
             "401": {
-                "title": "unauthorized!",
-                "message": "You are unauthorized to view this page."
+                "title": "غير مصرح!",
+                "message": "أنت غير مصرح لك بالاطلاع على هذه الصفحة."
             },
             "403": {
-                "title": "no permission!",
-                "message": "You do not have permission to view this page."
+                "title": "ممنوع الإذن!",
+                "message": "ليس لديك إذن لعرض هذه الصفحة."
             },
             "404": {
-                "title": "page not found!",
-                "message": "Looks like the page you're trying to reach doesn't exist or was moved."
+                "title": "الصفحة غير موجودة!",
+                "message": "يبدو أن الصفحة التي تحاول الوصول إليها غير موجودة أو تم نقلها."
             },
             "418": {
-                "title": "I'm a teapot!",
-                "message": "Sorry, I refuse to brew coffee because I'm, permanently, a teapot."
+                "title": "أنا إبريق شاي!",
+                "message": "معذرةً، أرفض تحضير القهوة لأنني، بشكل دائم، إبريق شاي."
             },
             "500": {
-                "title": "unexpected error.",
-                "message": "Please refresh or try again. If the issue persists, contact us."
+                "title": "خطأ غير متوقع.",
+                "message": "يرجى تحديث الصفحة أو المحاولة مرة أخرى. إذا استمرت المشكلة، فاتصل بنا."
             },
             "default": {
-                "title": "an error occurred.",
-                "message": "Please refresh or try again. If the issue persists, contact us."
+                "title": "حدث خطأ.",
+                "message": "يرجى تحديث الصفحة أو المحاولة مرة أخرى. إذا استمرت المشكلة، فاتصل بنا."
             }
         },
         "chat_messages": {
             "msg_1": "{status} OMEGADANCE",
             "msg_2": "F",
-            "msg_3": "chat where is the page PauseChamp",
-            "msg_4": "bro the page is gone NOOOO",
+            "msg_3": "شات، أين صفحة PauseChamp؟",
+            "msg_4": "يا أخي، الصفحة اختفت! لااااا NOOOO",
             "msg_5": "{status} Pepega",
-            "msg_6": "who broke the site RAGEY",
+            "msg_6": "من الذي خرب الموقع RAGEY",
             "msg_7": "COPIUM",
             "msg_8": "NOOOO",
-            "msg_9": "the page is gone Sadge",
-            "msg_10": "SadgeCry the page was right here",
-            "msg_11": "@uniiDev ur site is cooked bro",
-            "msg_12": "have you tried turning it off and on again Nerd",
-            "msg_13": "bro needs to learn nginx omE",
-            "msg_14": "unban the page mods",
-            "msg_15": "mods can we get the page back Prayge",
+            "msg_9": "اختفت الصفحة Sadge",
+            "msg_10": "SadgeCry الصفحة كانت هنا",
+            "msg_11": "@uniiDev موقعك فاسد يا أخي",
+            "msg_12": "هل جربت إطفاءه وتشغيله مرة أخرى يا نيرد؟ Nerd",
+            "msg_13": "أخي بحاجة لتعلم nginx omE",
+            "msg_14": "ارفعوا الحظر MODS",
+            "msg_15": "يا MODS، هل يمكننا استعادة الصفحة Prayge",
             "msg_16": "DIESOFCRINGE"
         }
     },
     "pages": {
         "convert": {
-            "title": "Convert your chat overlay settings to UChat",
-            "warning_bugs": "Bugs could occur, please be aware.",
-            "warning_settings": "Not every setting exists in UChat.",
-            "supported": "Currently supported: JChat & ChatIS.",
+            "title": "قم بتحويل إعدادات الشات Overlay إلى UChat",
+            "warning_bugs": "قد تحدث بعض المشاكل التقنية، يرجى الانتباه.",
+            "warning_settings": "لا توجد جميع الإعدادات في برنامج UChat.",
+            "supported": "",
             "url_input": {
-                "title": "Chat Overlay URL",
-                "convert_button": "Convert & Copy"
+                "title": "",
+                "convert_button": ""
             }
         },
         "help": {
             "info": {
-                "title": "Info & Privacy",
-                "description": "All the info you need to get started with UChat"
+                "title": "لا توجد جميع الإعدادات في برنامج UChat.",
+                "description": ""
             },
             "faq": "FAQ",
             "privacy": "Privacy & Security",
@@ -367,14 +367,14 @@
                 },
                 "item_15": {
                     "question": "What if my question isn't listed here?",
-                    "answer": "For more information, you can reach out via {twitch} or {discord}."
+                    "answer": ""
                 }
             }
         },
         "message_creator": {
-            "title": "UChat Message Creator",
-            "fetch_channel": "Fetch Channel & User",
-            "download": "Download image"
+            "title": "",
+            "fetch_channel": "",
+            "download": ""
         }
     }
 }
