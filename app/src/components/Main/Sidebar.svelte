@@ -66,7 +66,7 @@
     moment.locale(navigator.language);
 </script>
 
-<LocalizationDialog bind:show={localizationDialog} onChange={() => {}} />
+<LocalizationDialog bind:show={localizationDialog} />
 
 {#snippet HouseIcon()}
     <House size={$isMobile ? "15" : "20"} />
