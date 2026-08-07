@@ -1,88 +1,88 @@
 {
     "dialogs": {
         "channel_link": {
-            "title": "Link Detected",
-            "description": "Looks like you pasted a {platform} channel link",
-            "channel_confirm": "Want to use {name} as your channel?",
-            "platform_change": "Want to use {name} as the channel for {platform}?"
+            "title": "Wykryto Link",
+            "description": "Wygląda na to, że wkleiłeś link do kanału {platform}",
+            "channel_confirm": "Chcesz użyć {name} jako twój kanał?",
+            "platform_change": "Chcesz użyć {name} jako twój kanał dla {platform}?"
         },
         "hidden_settings": {
-            "title": "Warning",
-            "description": "Hidden settings aren't meant for regular use, some are old or being phased out, so they may disappear without notice."
+            "title": "Uwaga",
+            "description": "Ukryte ustawienia nie są przeznaczone do regularnego użytku, niektóre są stare lub są wycofywane, więc mogą zniknąć bez ostrzeżenia."
         },
         "manage_channels": {
-            "title": "Manage Channels",
-            "use_channel_id": "Use Channel ID"
+            "title": "Zarządzaj Kanałami",
+            "use_channel_id": "Użyj ID Kanału"
         },
         "localization": {
-            "title": "Language",
-            "description": "Select aviable language to display UChat in"
+            "title": "Język",
+            "description": "Select available language to display UChat in"
         }
     },
     "labels": {
-        "learn_more": "Learn more",
-        "cancel": "Cancel",
-        "confirm": "Confirm",
-        "proceed": "Proceed",
-        "send": "Send",
-        "save": "Save",
-        "delete": "Delete",
-        "reset": "Reset",
-        "copy": "Copy",
-        "login": "Login",
-        "logout": "Logout",
-        "enable_all": "Enable All",
-        "disable_all": "Disable All",
-        "input_required": "Input Required",
-        "username": "Username",
-        "message": "Message",
-        "channel": "Channel"
+        "learn_more": "Dowiedz się więcej",
+        "cancel": "Anuluj",
+        "confirm": "Potwierdź",
+        "proceed": "Dalej",
+        "send": "Wyślij",
+        "save": "Zapisz",
+        "delete": "Usuń",
+        "reset": "Zresetuj",
+        "copy": "Kopiuj",
+        "login": "Zaloguj",
+        "logout": "Wyloguj",
+        "enable_all": "Włącz Wszystko",
+        "disable_all": "Wyłącz Wszystko",
+        "input_required": "Wymagane Dane",
+        "username": "Nazwa użytkownika",
+        "message": "Wiadomość",
+        "channel": "Kanał"
     },
     "notices": {
-        "ip": "We log IP addresses for abuse prevention."
+        "ip": "Rejestrujemy adresy IP w celu zapobiegania nadużyciom."
     },
     "channel_input": {
-        "name": "{platform} Channel Name",
-        "id": "{platform} Channel ID"
+        "name": "Nazwa Kanału {platform}",
+        "id": "ID Kanału {platform}"
     },
     "mobile_footer": {
-        "settings": "Settings",
-        "preview": "Preview"
+        "settings": "Ustawienia",
+        "preview": "Podgląd"
     },
     "branding": {
         "tagline": "{name} Chat Overlay for Twitch & Kick"
     },
     "sidebar": {
-        "home": "Home",
+        "home": "Dom",
         "message_creator": {
-            "pc": "Message creator",
-            "mobile": "Create"
+            "pc": "Twórca wiadomości",
+            "mobile": "Twórz"
         },
-        "convert": "Convert",
+        "convert": "Konwertuj",
         "language": {
-            "pc": "Language",
-            "mobile": "Lang"
+            "pc": "Język",
+            "mobile": "Język"
         },
         "design": "Design",
-        "teapot": "Teapot",
+        "teapot": "Czajniczek",
         "info": {
-            "pc": "Info & Privacy",
+            "pc": "Informacje i prywatność",
             "mobile": "Info"
         },
         "suggestions": {
-            "pc": "Suggestions & Bugs",
-            "mobile": "Ideas"
+            "pc": "Sugestie i błędy",
+            "mobile": "Pomysły"
         },
-        "support": "Support"
+        "support": "Wsparcie"
     },
     "footer": {
-        "login_note": "Login is not required.",
-        "token_note": "Your token is only shared to validate and never stored on the server."
+        "login_note": "Logowanie nie jest wymagane.",
+        "token_note": "Twój token jest udostępniany tylko w celu weryfikacji i nigdy nie jest przechowywany na serwerze."
     },
     "display": {
         "top": {
-            "title": "Chat Preview",
-            "description": "Live preview of your settings"
+            "title": "Podgląd Czatu",
+            "description": "Podgląd ustawień"
         },
         "bottom": {
             "header": {
