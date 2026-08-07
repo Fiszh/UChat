@@ -1,0 +1,380 @@
+{
+    "dialogs": {
+        "channel_link": {
+            "title": "Link Detetado",
+            "description": "Parece que colocou uma ligação do canal {platform}",
+            "channel_confirm": "Quer usar {name} como o seu canal?",
+            "platform_change": "Quer usar {name} como canal para {platform}?"
+        },
+        "hidden_settings": {
+            "title": "Aviso",
+            "description": "Configurações ocultas não são destinadas para uso regular, algumas são antigas ou são progressivamente eliminadas, então elas podem desaparecer sem aviso."
+        },
+        "manage_channels": {
+            "title": "Gerir Canais",
+            "use_channel_id": "Usar ID do Canal"
+        },
+        "localization": {
+            "title": "Idioma",
+            "description": "Selecione o idioma disponível para exibir no UChat"
+        }
+    },
+    "labels": {
+        "learn_more": "Saiba mais",
+        "cancel": "Cancelar",
+        "confirm": "Confirmar",
+        "proceed": "Continuar",
+        "send": "Enviar",
+        "save": "Guardar",
+        "delete": "Eliminar",
+        "reset": "Reiniciar",
+        "copy": "Copiar",
+        "login": "Iniciar Sessão",
+        "logout": "Desconectar-se",
+        "enable_all": "Ativar tudo",
+        "disable_all": "Desativar tudo",
+        "input_required": "Entrada Necessária",
+        "username": "Utilizador",
+        "message": "Mensagem",
+        "channel": "Canal"
+    },
+    "notices": {
+        "ip": "Registamos endereços IP para prevenção de abusos."
+    },
+    "channel_input": {
+        "name": "{platform} Nome do Canal",
+        "id": "{platform} ID do Canal"
+    },
+    "mobile_footer": {
+        "settings": "Configurações",
+        "preview": "Pré-visualizar"
+    },
+    "branding": {
+        "tagline": "{name} Sobreposição do Chat para Twitch & Kick"
+    },
+    "sidebar": {
+        "home": "Início",
+        "message_creator": {
+            "pc": "Criador de mensagens",
+            "mobile": "Criar"
+        },
+        "convert": "Converter",
+        "language": {
+            "pc": "Idioma",
+            "mobile": "Idioma"
+        },
+        "design": "Design",
+        "teapot": "Bule de chá",
+        "info": {
+            "pc": "Informações & Privacidade",
+            "mobile": "Informação"
+        },
+        "suggestions": {
+            "pc": "Sugestões & Erros",
+            "mobile": "Ideias"
+        },
+        "support": "Suporte"
+    },
+    "footer": {
+        "login_note": "Não é necessário iniciar sessão.",
+        "token_note": "O seu token é compartilhado apenas para validar e nunca armazenado no servidor."
+    },
+    "display": {
+        "top": {
+            "title": "Pré-visualização do chat",
+            "description": "Pré-visualização ao vivo das suas configurações"
+        },
+        "bottom": {
+            "header": {
+                "title": "Pré-visualização das definições do chat",
+                "load_badges": {
+                    "pc": "Carregar mais distintivos",
+                    "mobile": "Carregar distintivos"
+                }
+            },
+            "chat_background": {
+                "title": "Fundo do Chat"
+            },
+            "custom_message": {
+                "title": "Mensagem personalizada",
+                "input_placeholder": "Mensagem para exibir..."
+            },
+            "channel_info": {
+                "title": "Informação do canal",
+                "manage": "Gerir Canais"
+            },
+            "overlay_url": {
+                "title": "URL da Sobreposição"
+            }
+        }
+    },
+    "global_settings": {
+        "title": "{name} Configurações"
+    },
+    "settings": {
+        "show_hidden": "Mostrar configurações ocultas",
+        "hidden": "ocultas",
+        "items": {
+            "msgBold": {
+                "name": "Mensagem em texto em negrito",
+                "description": "Criar mensagens em negrito"
+            },
+            "msgCaps": {
+                "name": "A mensagem está em MAIÚSCULAS",
+                "description": "Converta todo o texto da mensagem do chat para maiúsculas"
+            },
+            "smoothScroll": {
+                "name": "Rolagem de mensagem suave",
+                "description": "Animar a rolagem para novas mensagens quando possível, pode pular se as mensagens chegarem rapidamente"
+            },
+            "font": {
+                "name": "Fonte do chat personalizada",
+                "description": "Alterar a fonte da mensagem do chat"
+            },
+            "fontColor": {
+                "name": "Cor da fonte do chat (hex)",
+                "description": "Altere a cor do texto do chat"
+            },
+            "fontSize": {
+                "name": "Tamanho da Fonte & Distintivos (px)",
+                "description": "Defina o tamanho da mensagem de texto e distintivos em pixeis, alterando isto também irá automaticamente dimensionar os ícones expressivos"
+            },
+            "fontStroke": {
+                "name": "Contorno da fonte",
+                "description": "Ativar um contorno em torno do texto do chat para legibilidade (nota: o contorno não se aplica a pinturas 7TV)"
+            },
+            "fontShadow": {
+                "name": "Sombra da mensagem",
+                "description": "Adicionar sombra atrás da mensagem"
+            },
+            "emoteSize": {
+                "name": "Tamanho dos ícones expressivos (px)",
+                "description": "Defina o tamanho de exibição de ícones expressivos em pixeis, escalas com a configuração de tamanho da fonte se não estiver definido"
+            },
+            "fadeOut": {
+                "name": "Desvanecer texto (segundos)",
+                "description": "Desvanecer automaticamente mensagens após um número especificado de segundos"
+            },
+            "badges": {
+                "name": "Distintivos",
+                "description": "Escolha quais distintivos mostrar no chat"
+            },
+            "badgesTTV": {
+                "name": "Mostrar apenas distintivos da Twitch",
+                "description": "Quando ativado, apenas os distintivos da Twitch serão exibidos"
+            },
+            "redeem": {
+                "name": "Mostrar recompensas & Avisos de Utilizadores",
+                "description": "Mostrar recompensas de pontos de canal, subscrições, e anúncios no chat"
+            },
+            "bots": {
+                "name": "Ocultar mensagens do bot",
+                "description": "Ocultar mensagens dos bots de chat, detetados usando os distintivos do bot Twitch & FFZ"
+            },
+            "userBL": {
+                "name": "Lista negra de utilizadores personalizada (separar por espaços)",
+                "description": "Lista de nomes de utilizadores separados por espaço para ocultar no chat"
+            },
+            "prefixBL": {
+                "name": "Lista negra de prefixo personalizada (separar por espaços)",
+                "description": "Lista separada por espaço de prefixos de mensagens para ocultar (por exemplo, !comandos)"
+            },
+            "modAction": {
+                "name": "Ações de moderação",
+                "description": "Ações de moderação como exclusões, timeouts, banimentos e limpezas afetam as mensagens do chat"
+            },
+            "mentionColor": {
+                "name": "Menções são coloridas",
+                "description": "Destacar menções de utilizadores (os utilizadores precisam ter digitado no chat antes)"
+            },
+            "paints": {
+                "name": "Pinturas 7TV",
+                "description": "Ativar renderização de pinturas de 7TV no chat"
+            },
+            "paintShadows": {
+                "name": "Sombras nas pinturas 7TV",
+                "description": "Ativar/desativar sombras nas pinturas 7TV, pode causar quedas no desempenho"
+            },
+            "lastMsg": {
+                "name": "Carregar as últimas mensagens do chat",
+                "description": "Carregar um histórico de mensagens recentes do chat ao conectar"
+            },
+            "clearLive": {
+                "name": "Limpar o chat ao iniciar stream (APENAS OBS)",
+                "description": "Limpar o chat automaticamente quando o canal iniciar stream"
+            }
+        }
+    },
+    "toasts": {
+        "loading_badges": "A carregar todos os distintivos...",
+        "loaded_badges": "Todos os distintivos carregados!",
+        "fail_load_badges": "Falha ao carregar distintivos!",
+        "url_copied": "URL da sobreposição foi copiado!",
+        "url_copied_fail": "Falha ao copiar URL, verifique a consola para mais informações.",
+        "unsupported": "Não suportado.",
+        "no_input": "Sem entrada.",
+        "loading_info": "A carregar informações do utilizador & canal...",
+        "loaded_info": "Informações de utilizador e canal carregados",
+        "loading_info_fail": "Falha ao carregar informações de utilizador e canal!"
+    },
+    "banners": {
+        "issues": "Estamos com problemas - algumas funcionalidades podem estar indisponíveis",
+        "outage": "Estamos a passar por uma grande interrupção - trabalhando nisso",
+        "resolved": "Problemas foram resolvidos!",
+        "fail": "Não é possível obter informações de status. Por favor, clique aqui para ver a nossa página de status.",
+        "message_creator_buggy": "O criador de mensagem pode estar com problemas no {browser}"
+    },
+    "error_page": {
+        "status": {
+            "401": {
+                "title": "não autorizado!",
+                "message": "Não está autorizado a visualizar esta página."
+            },
+            "403": {
+                "title": "sem permissão!",
+                "message": "Não tem permissão para visualizar esta página."
+            },
+            "404": {
+                "title": "página não encontrada!",
+                "message": "Parece que a página que você está a tentar acessar não existe ou foi movida."
+            },
+            "418": {
+                "title": "Sou um bule de chá!",
+                "message": "Desculpe, eu recuso-me a preparar café porque eu sou, permanentemente, um bule de chá."
+            },
+            "500": {
+                "title": "erro inesperado.",
+                "message": "Por favor, atualize ou tente novamente. Se o problema persistir, entre em contacto connosco."
+            },
+            "default": {
+                "title": "um erro ocorreu.",
+                "message": "Por favor, atualize ou tente novamente. Se o problema persistir, entre em contacto connosco."
+            }
+        },
+        "chat_messages": {
+            "msg_1": "{status} OMEGADANCE",
+            "msg_2": "F",
+            "msg_3": "chat onde está a página PauseChamp",
+            "msg_4": "bro a página foi-se NOOOO",
+            "msg_5": "{status} Pepega",
+            "msg_6": "quem partiu o site RAGEY",
+            "msg_7": "COPIUM",
+            "msg_8": "NOOOO",
+            "msg_9": "a página foi-se",
+            "msg_10": "SadgeCry a página estava aqui",
+            "msg_11": "@uniiDev o seu site está partido",
+            "msg_12": "já tentou desligar e ligar novamente Nerd",
+            "msg_13": "bro precisa aprender nginx omE",
+            "msg_14": "removam o banimento da página moderadores",
+            "msg_15": "moderadores podemos ter a página de volta Prayge",
+            "msg_16": "DIESOFCRINGE"
+        }
+    },
+    "pages": {
+        "convert": {
+            "title": "Converta as suas configurações da sobreposição de chat para UChat",
+            "warning_bugs": "Erros podem ocorrer, por favor, esteja ciente.",
+            "warning_settings": "Nem todas as configurações existem no UChat.",
+            "supported": "Atualmente suportado: JChat e ChatIS.",
+            "url_input": {
+                "title": "URL da sobreposição de chat",
+                "convert_button": "Converter & Copiar"
+            }
+        },
+        "help": {
+            "info": {
+                "title": "Informações & Privacidade",
+                "description": "Todas as informações necessárias para começar com o UChat"
+            },
+            "faq": "Perguntas Frequentes",
+            "privacy": "Privacidade e Segurança",
+            "privacy_items": {
+                "item_1": "O seu token da Twitch nunca é armazenado; ele só é enviado ao servidor quando necessário para autenticar ações como iniciar sessão, salvar ou excluir as suas configurações.",
+                "item_2": "As configurações alteradas são salvas somente no seu navegador para que elas permaneçam após serem atualizadas ou retornarem à página; eles não são armazenados nos nossos servidores a menos que seja um testador salvando as configurações globais.",
+                "item_3": "Para testadores, armazenamos apenas o seu ID de utilizador da Twitch e as configurações que mudou de padrão — nada mais.",
+                "item_4": "Pressionar \"Guardar\" atualiza as suas configurações globais salvas; \"Eliminar\" remove todas as suas configurações salvas dos nossos servidores.",
+                "item_5": "Usando \"Redefinir configurações\" limpa todas as configurações salvas localmente no seu navegador.",
+                "item_6": "Registamos todas as solicitações feitas na nossa API para evitar spam ou abuso.",
+                "item_7": "UChat e todos os serviços sob unii.dev são independentes e não são afiliados, endossados ou patrocinados pela Twitch Interactive, Inc."
+            },
+            "faq_items": {
+                "item_1": {
+                    "question": "O que é UChat?",
+                    "answer": "UChat é uma sobreposição personalizada do chat da Twitch que suporta 7TV, BetterTTV e os emotes FrankerFaceZ."
+                },
+                "item_2": {
+                    "question": "Como consigo obter o URL da sobreposição?",
+                    "answer": "Após inserir o nome do seu canal e personalizar as suas configurações. O URL de sobreposição aparecerá na secção 'URL da sobreposição', onde pode copiá-lo usando o botão copiar."
+                },
+                "item_3": {
+                    "question": "Quem fez UChat?",
+                    "answer": "UChat foi feito por {uniidev} com a ajuda de {ftk789} & {creepycode}."
+                },
+                "item_4": {
+                    "question": "Quais comandos do chat estão disponíveis?",
+                    "answer": "Os comandos só podem ser usados pelo transmissor ou moderador; também pode usar comandos com !uchat <command>. Clique para copiar um comando.",
+                    "commands": {
+                        "reloadchat": "Recarrega a sobreposição",
+                        "refreshchat": "Atualiza a sobreposição",
+                        "reloadws": "Reconecta os WebSockets 7TV e BTTV",
+                        "reconnectchat": "Reconecta ao Twitch IRC",
+                        "chatversion": "Mostra a versão da sobreposição do Chat (reutilizar o comando para desativar)",
+                        "hideloading": "Oculta a interface de carregamento caso qualquer uma da API esteja indisponível"
+                    }
+                },
+                "item_5": {
+                    "question": "O que é YAUTO?",
+                    "answer": "YAUTO, abreviação de \"Yet Another Useless Twitch Overlay\", foi o antigo nome deste projeto. Foi renomeado para UChat em 02/08/2025 para um nome mais limpo e mais reconhecível."
+                },
+                "item_6": {
+                    "question": "É necessário iniciar sessão?",
+                    "answer": "Não."
+                },
+                "item_7": {
+                    "question": "Por que existe um botão de Iniciar Sessão?",
+                    "answer": "Os testadores iniciais do UChat podem iniciar sessão para salvar as suas configurações globalmente. Desta forma, eles só precisam inserir o nome do seu canal sem usar um URL da sobreposição longo."
+                },
+                "item_8": {
+                    "question": "Como funcionam os botões Guardar e Eliminar para testes?",
+                    "answer": "Ao pressionar Guardar apenas as configurações alteradas no servidor vinculadas ao seu ID de utilizador. A exclusão remove todas as suas configurações globais salvas do servidor. As configurações do navegador local não são afetadas por Eliminar."
+                },
+                "item_9": {
+                    "question": "Quais são as chances de se tornar um testador?",
+                    "answer": "A fase de testes acabou. Atualmente, nenhum novo testador está sendo aceite."
+                },
+                "item_10": {
+                    "question": "Porque minhas configurações ficam depois de atualizadas?",
+                    "answer": "Eles são salvos no seu navegador. Clique em 'Redefinir Configurações' para redefinir."
+                },
+                "item_11": {
+                    "question": "Onde posso encontrar a API?",
+                    "answer": "Pode acessar a documentação da API pública aqui.",
+                    "links": {
+                        "here": "aqui"
+                    }
+                },
+                "item_12": {
+                    "question": "Posso usar esta sobreposição ou a sua API para o meu próprio projeto?",
+                    "answer": "Pode usar os endpoints públicos da API, mas a sobreposição é estritamente proprietária. O uso ou tentativas não autorizadas de contornar restrições (como CORS) resultará num banimento imediato e indefinido."
+                },
+                "item_13": {
+                    "question": "Onde posso encontrar o código-fonte?",
+                    "answer": "Pode encontrar o código-fonte no {github}."
+                },
+                "item_14": {
+                    "question": "O meu token da Twitch é seguro?",
+                    "answer": "O seu token é compartilhado apenas para validar e nunca armazenado no servidor."
+                },
+                "item_15": {
+                    "question": "E se a minha pergunta não estiver listada aqui?",
+                    "answer": "Para mais informações, pode entrar em contacto via {twitch} ou {discord}."
+                }
+            }
+        },
+        "message_creator": {
+            "title": "Criador de Mensagens UChat",
+            "fetch_channel": "Buscar canal e utilizador",
+            "download": "Descarregar imagem"
+        }
+    }
+}

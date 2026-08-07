@@ -131,8 +131,10 @@
     <Paint
         {platform}
         platformID={tags["user-id-raw"]}
-        backgroundColor={nameColor ?? ""}>{@html user}</Paint
-    >{#if !tags.action}:{/if}
+        backgroundColor={nameColor ?? ""}
+    >
+        {@html user}
+    </Paint>{#if !tags.action}:{/if}
     <span
         style:color={tags.action ? nameColor : "defaultColor"}
         data-first-type={Array.isArray(parsedMessage)
@@ -150,8 +152,9 @@
                         {platform}
                         platformID={part["name"]}
                         backgroundColor={part["nameColor"]}
-                        >{@html part["input"]}</Paint
                     >
+                        {@html part["input"]}
+                    </Paint>
                 {:else if part["type"] == "other"}
                     {@html part["part"]}
                 {:else}

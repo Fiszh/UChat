@@ -2,6 +2,7 @@
     "useTabs": false,
     "tabWidth": 4,
     "plugins": ["prettier-plugin-svelte"],
+    "htmlWhitespaceSensitivity": "ignore",
     "overrides": [
         { "files": "*.svelte", "options": { "parser": "svelte" } },
         { "files": "*.svg", "options": { "parser": "html" } }

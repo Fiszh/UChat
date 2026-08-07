@@ -36,8 +36,8 @@
     onmouseleave={handleMouseLeave}
     class:expanded
     class:reversed
-    {...restProps}
     onclick={toggle}
+    {...restProps}
     role="none"
 >
     <button id="top">
