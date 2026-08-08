@@ -16,7 +16,7 @@
         },
         "localization": {
             "title": "Język",
-            "description": "Select available language to display UChat in"
+            "description": "Wybierz dostępny język, w którym chcesz wyświetlać UChat"
         }
     },
     "labels": {
@@ -113,7 +113,7 @@
     },
     "settings": {
         "show_hidden": "Show hidden settings",
-        "hidden": "hidden",
+        "hidden": "ukryte",
         "items": {
             "msgBold": {
                 "name": "Message are in bold text",
