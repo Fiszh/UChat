@@ -129,7 +129,7 @@
             },
             "font": {
                 "name": "Niestandardowa czcionka czatu",
-                "description": "Zmień czcionke wiadomości czatu"
+                "description": "Zmień czcionkę wiadomości czatu"
             },
             "fontColor": {
                 "name": "Kolor czcionki czatu (hex)",
@@ -141,7 +141,7 @@
             },
             "fontStroke": {
                 "name": "Obrys czcionki",
-                "description": "Włącza obrys czcionki dookoła tekstu na czacie dla czytelności (uwaga: obrys nie ma zastosowania w przypadku kolorów 7TV)"
+                "description": "Włącz obrys tekstu czatu, aby zwiększyć czytelność (uwaga: obrys nie ma zastosowania w przypadku kolorów 7TV)"
             },
             "fontShadow": {
                 "name": "Cień wiadomości",
@@ -152,7 +152,7 @@
                 "description": "Ustaw wyświetlany rozmiar emotek w pikselach. Jeżeli nie ustawiono, skaluje się z rozmiarem czcionki"
             },
             "fadeOut": {
-                "name": "Zanikanie wiadomości (w sekundach)",
+                "name": "Zanikanie wiadomości (sekundy)",
                 "description": "Automatycznie zanikaj wiadomości po podanej liczbie sekund"
             },
             "badges": {
@@ -177,66 +177,66 @@
             },
             "prefixBL": {
                 "name": "Niestandardowa czarna lista prefiksów (oddziel używając spacji)",
-                "description": "Space-separated list of message prefixes to hide (e.g. !commands)"
+                "description": "Oddzielona spacjami lista prefiksów do ukrycia (przykładowo !commands)"
             },
             "modAction": {
-                "name": "Moderation actions",
-                "description": "Moderation actions like deletions, timeouts, bans, and clears affect chat messages"
+                "name": "Akcje Moderacyjne",
+                "description": "Akcje moderacyjne takie jak usuwanie wiadomości, wykluczenia, bany i wyczyszczenia, wpływają na wiadomości czatu"
             },
             "mentionColor": {
-                "name": "Mentions are Colored",
-                "description": "Highlight user mentions (users must have typed in chat before)"
+                "name": "Wzmianki są Kolorowane",
+                "description": "Podświetl wzmianki użytkowników (użytkownicy musieli wcześniej napisać na czacie)"
             },
             "paints": {
-                "name": "7TV Paints",
-                "description": "Enable rendering of 7TV Paints in chat"
+                "name": "Kolory 7TV",
+                "description": "Włącz renderowanie kolorów 7TV na czacie"
             },
             "paintShadows": {
-                "name": "7TV Paint Shadows",
-                "description": "Toggle shadows on 7TV Paints, may cause drops in performance"
+                "name": "Cienie kolorów 7TV",
+                "description": "Przełącz cienie na kolorach 7TV, może spowodować spadek wydajności"
             },
             "lastMsg": {
-                "name": "Load in latest chat messages",
-                "description": "Load a history of recent chat messages on connect"
+                "name": "Wczytaj najnowsze wiadomości czatu",
+                "description": "Wczytaj historie najnowszych wiadomości czatu po połączeniu"
             },
             "clearLive": {
-                "name": "Clear chat when going live (OBS ONLY)",
-                "description": "Clear the chat automatically when the channel goes live"
+                "name": "Wyczyść czat podczas uruchomienia transmisji (TYLKO OBS)",
+                "description": "Wyczyść czat automatycznie, gdy kanał uruchamia transmisje"
             }
         }
     },
     "toasts": {
-        "loading_badges": "Loading all badges...",
-        "loaded_badges": "Loaded all badges!",
-        "fail_load_badges": "Failed loading badges!",
+        "loading_badges": "Wczytywanie wszystkich odznak...",
+        "loaded_badges": "Wczytano wszystkie odznaki!",
+        "fail_load_badges": "Nie udało się wczytać wszystkich odznak!",
         "url_copied": "Overlay URL has been copied!",
         "url_copied_fail": "Failed to copy URL, check the console for more info.",
-        "unsupported": "Unsupported.",
-        "no_input": "No input.",
-        "loading_info": "Loading user & channel info...",
-        "loaded_info": "Loaded user & channel info",
-        "loading_info_fail": "Failed loading user & channel info!"
+        "unsupported": "Nieobsługiwane.",
+        "no_input": "Brak danych wejściowych.",
+        "loading_info": "Wczytywanie informacji o użytkownikach i kanale...",
+        "loaded_info": "Wczytano informacje o użytkownikach i kanale",
+        "loading_info_fail": "Nie udało się wczytać informacji o użytkownikach i kanale!"
     },
     "banners": {
-        "issues": "We're having issues - some features may be unavailable",
-        "outage": "We're experiencing a major outage - working on it",
-        "resolved": "Issues have been resolved!",
-        "fail": "Unable to fetch status info. Please click here to view our status page.",
-        "message_creator_buggy": "The message creator might be buggy on {browser}"
+        "issues": "Mamy problemy - niektóre funkcje mogą być niedostępne",
+        "outage": "Doświadczamy sporej awarii - działamy nad tym",
+        "resolved": "Problemy zostały rozwiązane!",
+        "fail": "Nie udało się załadować informacji o statusie. Kliknij tutaj, aby wyświetlić stronę statusu.",
+        "message_creator_buggy": "Kreator wiadomości może być problematyczny na {browser}"
     },
     "error_page": {
         "status": {
             "401": {
-                "title": "unauthorized!",
-                "message": "You are unauthorized to view this page."
+                "title": "nieautoryzowane!",
+                "message": "Nie jesteś upoważniony do wyświetlania tej strony."
             },
             "403": {
-                "title": "no permission!",
-                "message": "You do not have permission to view this page."
+                "title": "brak uprawnień!",
+                "message": "Nie masz uprawnień do wyświetlania tej strony."
             },
             "404": {
-                "title": "page not found!",
-                "message": "Looks like the page you're trying to reach doesn't exist or was moved."
+                "title": "nie znaleziono strony!",
+                "message": "Wygląda na to, że strona, do której próbujesz dotrzeć, nie istnieje lub została przeniesiona."
             },
             "418": {
                 "title": "I'm a teapot!",
@@ -295,11 +295,11 @@
                 "item_4": "Pressing \"Save\" updates your saved global settings; \"Delete\" removes all your saved settings from our servers.",
                 "item_5": "Using \"Reset Settings\" clears all locally saved settings in your browser.",
                 "item_6": "We log every request made to our API to prevent spam or abuse.",
-                "item_7": "UChat and all services under unii.dev are independent and are not affiliated, endorsed, or sponsored by Twitch Interactive, Inc."
+                "item_7": "UChat i wszystkie usługi pod unii.dev są niezależne oraz nie są powiązane, wspierane ani sponsorowane przez Twitch Interactive, Inc."
             },
             "faq_items": {
                 "item_1": {
-                    "question": "What is UChat?",
+                    "question": "Czym jest UChat?",
                     "answer": "UChat is a custom Twitch chat overlay that supports 7TV, BetterTTV, and FrankerFaceZ emotes."
                 },
                 "item_2": {
@@ -307,55 +307,55 @@
                     "answer": "After entering your channel name and customizing your settings, the overlay URL will appear in the 'Overlay URL' section where you can copy it using the copy button."
                 },
                 "item_3": {
-                    "question": "Who made UChat?",
-                    "answer": "UChat was made by {uniidev} with the help of {ftk789} & {creepycode}."
+                    "question": "Kto zrobił UChat?",
+                    "answer": "UChat został stworzony przez {uniidev} z pomocą {ftk789} i {creepycode}."
                 },
                 "item_4": {
-                    "question": "What chat commands are available?",
-                    "answer": "Commands can only be used by the broadcaster or a mod; you can also use commands with !uchat <command>. Click to copy a command.",
+                    "question": "Jakie komendy czatu są dostępne?",
+                    "answer": "Komendy mogą zostać użyte tylko przez nadawcę lub moderatora; możesz też używać komend z !uchat <command>. Kliknij, aby skopiować komendę.",
                     "commands": {
                         "reloadchat": "Reloads the overlay",
                         "refreshchat": "Refreshes the overlay",
-                        "reloadws": "Reconnects the 7TV and BTTV WebSockets",
-                        "reconnectchat": "Reconnects to Twitch IRC",
+                        "reloadws": "Ponownie łączy WebSockety 7TV i BTTV",
+                        "reconnectchat": "Ponownie łączy z Twitch IRC",
                         "chatversion": "Shows Chat Overlay Version (reuse command to disable)",
-                        "hideloading": "Hides the loading UI in case any of the API is down"
+                        "hideloading": "Ukrywa interfejs wczytywania w przypadku, gdy którykolwiek z interfejsów API nie odpowiada"
                     }
                 },
                 "item_5": {
-                    "question": "What is YAUTO?",
-                    "answer": "YAUTO, short for \"Yet Another Useless Twitch Overlay,\" was the former name of this project. It was renamed to UChat on 02/08/2025 for a cleaner and more recognizable name."
+                    "question": "Czym jest YAUTO?",
+                    "answer": "YAUTO, skrót od \"Yet Another Useless Twitch Overlay\" (Kolejna Bezużyteczna Nakładka Twitcha), była to poprzednia nazwa tego projektu. Nazwa została zmieniona na UChat 02/08/2025 dla czystszej i bardziej rozpoznawalnej nazwy."
                 },
                 "item_6": {
-                    "question": "Is Twitch login required?",
-                    "answer": "No."
+                    "question": "Czy logowanie przez Twitch jest wymagane?",
+                    "answer": "Nie."
                 },
                 "item_7": {
-                    "question": "Why is there a login button?",
-                    "answer": "Early testers of UChat can log in to save their settings globally. This way, they only need to enter their channel name without using a long overlay URL."
+                    "question": "Dlaczego istnieje przycisk logowania?",
+                    "answer": "Wcześni testerzy UChat mogą się zalogować, aby zapisać swoje ustawienia globalnie. W ten sposób mogli podać tylko nazwę swojego kanału bez korzystania z długiego URL nakładki."
                 },
                 "item_8": {
-                    "question": "How do the Save and Delete buttons work for testers?",
+                    "question": "W jaki sposób przyciski Zapisywania i Usuwania działają dla testerów?",
                     "answer": "Pressing Save updates only the settings you've changed on the server linked to your user ID. Delete removes all your saved global settings from the server. Local browser settings aren't affected by Delete."
                 },
                 "item_9": {
-                    "question": "What are the chances of becoming a tester?",
-                    "answer": "The testing phase is over. Currently, no new testers are being accepted."
+                    "question": "Jakie są szanse zostania testerem?",
+                    "answer": "Faza testów została zakończona. Obecnie żadni nowi testerzy nie są akceptowani."
                 },
                 "item_10": {
-                    "question": "Why do my settings stay after refreshing?",
-                    "answer": "They are saved in your browser. Click 'Reset Settings' to reset."
+                    "question": "Dlaczego moje ustawienia pozostają po odświeżeniu?",
+                    "answer": "Są one zapisywane w przeglądarce. Kliknij 'Zresetuj Ustawienia', aby zresetować."
                 },
                 "item_11": {
-                    "question": "Where can I find the API?",
-                    "answer": "You can access the public API documentation here.",
+                    "question": "Gdzie mogę znaleźć API?",
+                    "answer": "Możesz skorzystać z publicznej dokumentacji API tutaj.",
                     "links": {
-                        "here": "here"
+                        "here": "tutaj"
                     }
                 },
                 "item_12": {
-                    "question": "Can I use this overlay or its API for my own project?",
-                    "answer": "You may use the public API endpoints, but the overlay is strictly proprietary. Unauthorized usage or attempts to bypass restrictions (such as CORS) will result in an immediate, indefinite ban."
+                    "question": "Czy mogę użyćtej nakładki lub jej API dla mojego własnego projektu?",
+                    "answer": "Możesz korzystać z publicznych punktów końcowych API, lecz nakładka jest ściśle zastrzeżona. Nieautoryzowane użycie lub próby obejścia zabezpieczeń (jak CORS) spowodują natychmiastową, permanentną blokadę."
                 },
                 "item_13": {
                     "question": "Where can I find the source code?",
