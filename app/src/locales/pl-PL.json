@@ -101,7 +101,7 @@
             },
             "channel_info": {
                 "title": "Channel Info",
-                "manage": "Manage Channels"
+                "manage": "Zarządzaj Kanałami"
             },
             "overlay_url": {
                 "title": "Overlay URL"
@@ -109,74 +109,74 @@
         }
     },
     "global_settings": {
-        "title": "{name} Settings"
+        "title": "Ustawienia {name}"
     },
     "settings": {
-        "show_hidden": "Show hidden settings",
+        "show_hidden": "Pokaż ukryte ustawienia",
         "hidden": "ukryte",
         "items": {
             "msgBold": {
-                "name": "Message are in bold text",
-                "description": "Make messages bold"
+                "name": "Wiadomości są pogrubione",
+                "description": "Pogrub wiadomości"
             },
             "msgCaps": {
-                "name": "Message are in UPPERCASE",
-                "description": "Convert all chat message text to uppercase"
+                "name": "Wiadomości są zapisane WIELKIMI LITERAMI",
+                "description": "Konwertuj wszystkie wiadomości czatu na wielkie litery"
             },
             "smoothScroll": {
-                "name": "Smooth message scroll",
-                "description": "Animate scrolling for new messages when possible, may jump if messages arrive rapidly"
+                "name": "Płynne przewijanie wiadomości",
+                "description": "Animuj przewijanie do nowych wiadomości, kiedy to możliwe. Może przeskakiwać, gdy wiadomości pojawiają się za szybko"
             },
             "font": {
-                "name": "Custom chat font",
-                "description": "Change the chat message font"
+                "name": "Niestandardowa czcionka czatu",
+                "description": "Zmień czcionke wiadomości czatu"
             },
             "fontColor": {
-                "name": "Chat font color (hex)",
-                "description": "Change the chat text color"
+                "name": "Kolor czcionki czatu (hex)",
+                "description": "Zmień kolor tekstu na czacie"
             },
             "fontSize": {
-                "name": "Font & Badge size (px)",
-                "description": "Set the size of message text and badges in pixels, changing this will also automatically scale emotes"
+                "name": "Rozmiar czcionki i odznak (px)",
+                "description": "Ustaw rozmiar czcionki wiadomości czatu i odznak w pikselach, spowoduje to również automatyczne skalowanie emotek"
             },
             "fontStroke": {
-                "name": "Font stroke",
-                "description": "Enable an outline stroke around chat text for readability (note: outline does not apply to 7TV paints)"
+                "name": "Obrys czcionki",
+                "description": "Włącza obrys czcionki dookoła tekstu na czacie dla czytelności (uwaga: obrys nie ma zastosowania w przypadku kolorów 7TV)"
             },
             "fontShadow": {
-                "name": "Message shadow",
-                "description": "Add a shadow behind message"
+                "name": "Cień wiadomości",
+                "description": "Dodaje cień za wiadomościami czatu"
             },
             "emoteSize": {
-                "name": "Emote size (px)",
-                "description": "Set the display size of emotes in pixels, scales with font size setting if not set"
+                "name": "Rozmiar emotek (px)",
+                "description": "Ustaw wyświetlany rozmiar emotek w pikselach. Jeżeli nie ustawiono, skaluje się z rozmiarem czcionki"
             },
             "fadeOut": {
-                "name": "Text fade out (seconds)",
-                "description": "Automatically fade out messages after the specified number of seconds"
+                "name": "Zanikanie wiadomości (w sekundach)",
+                "description": "Automatycznie zanikaj wiadomości po podanej liczbie sekund"
             },
             "badges": {
-                "name": "Badges",
-                "description": "Choose which badges to show in chat"
+                "name": "Odznaki",
+                "description": "Wybierz, które odznaki pokazywać na czacie"
             },
             "badgesTTV": {
-                "name": "Display only Twitch badges",
-                "description": "When enabled, only Twitch badges will be displayed"
+                "name": "Pokaż tylko odznaki Twitch",
+                "description": "Gdy włączone, tylko odznaki Twitch będą wyświetlane"
             },
             "redeem": {
-                "name": "Display Redeems & Usernotices",
-                "description": "Show channel points redeems, subscriptions, and announcements in chat"
+                "name": "Wyświetlaj odbiór nagród oraz usernotice",
+                "description": "Pokaż odbiór nagród za punkty kanału, subskrypcje oraz ogłoszenia na czacie"
             },
             "bots": {
-                "name": "Hide bot messages",
-                "description": "Hide messages from chat bots, detected using Twitch & FFZ bot badges"
+                "name": "Ukryj wiadomości botów",
+                "description": "Ukryj wiadomości od czat botów, wykrytych używając Twitch i odznaki bota FFZ"
             },
             "userBL": {
-                "name": "Custom user blacklist (separate using spaces)",
-                "description": "Space-separated list of usernames to hide from chat"
+                "name": "Niestandardowa czarna lista użytkowników (oddziel używając spacji)",
+                "description": "Oddzielona spacjami lista użytkowników do ukrycia z czatu"
             },
             "prefixBL": {
-                "name": "Custom prefix blacklist (separate using spaces)",
+                "name": "Niestandardowa czarna lista prefiksów (oddziel używając spacji)",
                 "description": "Space-separated list of message prefixes to hide (e.g. !commands)"
             },
             "modAction": {
