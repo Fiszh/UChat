@@ -213,9 +213,9 @@
         "url_copied_fail": "Failed to copy URL, check the console for more info.",
         "unsupported": "Nieobsługiwane.",
         "no_input": "Brak danych wejściowych.",
-        "loading_info": "Wczytywanie informacji o użytkownikach i kanale...",
-        "loaded_info": "Wczytano informacje o użytkownikach i kanale",
-        "loading_info_fail": "Nie udało się wczytać informacji o użytkownikach i kanale!"
+        "loading_info": "Wczytywanie informacji o użytkowniku i kanale...",
+        "loaded_info": "Wczytano informacje o użytkowniku i kanale",
+        "loading_info_fail": "Nie udało się wczytać informacji o użytkowniku i kanale!"
     },
     "banners": {
         "issues": "Mamy problemy - niektóre funkcje mogą być niedostępne",
@@ -354,8 +354,8 @@
                     }
                 },
                 "item_12": {
-                    "question": "Czy mogę użyćtej nakładki lub jej API dla mojego własnego projektu?",
-                    "answer": "Możesz korzystać z publicznych punktów końcowych API, lecz nakładka jest ściśle zastrzeżona. Nieautoryzowane użycie lub próby obejścia zabezpieczeń (jak CORS) spowodują natychmiastową, permanentną blokadę."
+                    "question": "Czy mogę użyć tej nakładki lub jej API dla mojego własnego projektu?",
+                    "answer": "Any use of undocumented endpoints is strictly restricted. Unauthorized usage or attempts to bypass restrictions (such as CORS) will result in an immediate indefinite ban."
                 },
                 "item_13": {
                     "question": "Where can I find the source code?",
