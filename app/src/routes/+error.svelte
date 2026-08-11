@@ -8,7 +8,8 @@
     import { page } from "$app/state";
     import { Dot } from "@lucide/svelte";
     import Button from "$components/Inputs/Button.svelte";
-    import { t } from "svelte-i18n";
+    import { locale, t } from "svelte-i18n";
+    import type { FlagCode } from "$components/CountryFlag.svelte";
 
     let loaded = $state(false);
     let isAbleToGoBack = $state(true);
@@ -32,15 +33,29 @@
         y: 0,
     });
 
-    const msgKeys = Array.from({ length: 16 }, (_, i) => `msg_${i + 1}`);
+    const msgKeys = Array.from({ length: 10 }, (_, i) => `msg_${i + 1}`);
 
-    const msgs = msgKeys.map((key) =>
-        $t(`error_page.chat_messages.${key}`, {
-            values: { status: page.status },
-        }),
-    );
+    const msgs = [
+        "F",
+        "NOOOO",
+        "COPIUM",
+        "DIESOFCRINGE",
+        page.status + "Pepega",
+        page.status + "OMEGADANCE",
+        ...msgKeys.map((key) =>
+            $t(`error_page.chat_messages.${key}`, {
+                values: { status: page.status },
+            }),
+        ),
+    ];
 
     let sendInterval: ReturnType<typeof setInterval>;
+
+    let currentLocale = $state<FlagCode>("en");
+
+    locale.subscribe(
+        (l) => (currentLocale = (l as FlagCode | undefined) ?? "en"),
+    );
 
     onMount(async () => {
         loaded = true;
@@ -66,11 +81,14 @@
             return e;
         });
 
-        sendInterval = setInterval(
-            () =>
-                sendFakeMessage(msgs[Math.floor(Math.random() * msgs.length)]),
-            1000,
-        );
+        sendInterval = setInterval(() => {
+            let msg = msgs[Math.floor(Math.random() * msgs.length)];
+
+            if (currentLocale == "ar-SA")
+                msg = msg.replace(/Prayge/g, "PraygeAr");
+
+            sendFakeMessage(msg);
+        }, 1000);
     });
 
     onDestroy(() => clearInterval(sendInterval));

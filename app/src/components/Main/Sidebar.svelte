@@ -164,8 +164,8 @@
                 : $t("sidebar.language.pc"),
         )}
         {#if dev}
-            {@render sideBarButton("/design", DesignIcon, $t("sidebar.design"))}
-            {@render sideBarButton("/teapot", CoffeeIcon, $t("sidebar.teapot"))}
+            {@render sideBarButton("/design", DesignIcon, "Design")}
+            {@render sideBarButton("/teapot", CoffeeIcon, "Teapot")}
         {/if}
         {@render sideBarButton(
             "/help",

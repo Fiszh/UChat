@@ -63,8 +63,6 @@
             "pc": "Language",
             "mobile": "Lang"
         },
-        "design": "Design",
-        "teapot": "Teapot",
         "info": {
             "pc": "Info & Privacy",
             "mobile": "Info"
@@ -252,22 +250,16 @@
             }
         },
         "chat_messages": {
-            "msg_1": "{status} OMEGADANCE",
-            "msg_2": "F",
-            "msg_3": "chat where is the page PauseChamp",
-            "msg_4": "bro the page is gone NOOOO",
-            "msg_5": "{status} Pepega",
-            "msg_6": "who broke the site RAGEY",
-            "msg_7": "COPIUM",
-            "msg_8": "NOOOO",
-            "msg_9": "the page is gone Sadge",
-            "msg_10": "SadgeCry the page was right here",
-            "msg_11": "@uniiDev ur site is cooked bro",
-            "msg_12": "have you tried turning it off and on again Nerd",
-            "msg_13": "bro needs to learn nginx omE",
-            "msg_14": "unban the page mods",
-            "msg_15": "mods can we get the page back Prayge",
-            "msg_16": "DIESOFCRINGE"
+            "msg_1": "chat where is the page PauseChamp",
+            "msg_2": "bro the page is gone NOOOO",
+            "msg_3": "who broke the site RAGEY",
+            "msg_4": "the page is gone Sadge",
+            "msg_5": "SadgeCry the page was right here",
+            "msg_6": "@uniiDev ur site is cooked bro",
+            "msg_7": "have you tried turning it off and on again Nerd",
+            "msg_8": "bro needs to learn nginx omE",
+            "msg_9": "unban the page mods",
+            "msg_10": "mods can we get the page back Prayge"
         }
     },
     "pages": {
