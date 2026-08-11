@@ -63,8 +63,6 @@
             "pc": "Idioma",
             "mobile": "Idioma"
         },
-        "design": "Design",
-        "teapot": "Bule de chá",
         "info": {
             "pc": "Informações & Privacidade",
             "mobile": "Informação"
@@ -252,22 +250,16 @@
             }
         },
         "chat_messages": {
-            "msg_1": "{status} OMEGADANCE",
-            "msg_2": "F",
-            "msg_3": "chat onde está a página PauseChamp",
-            "msg_4": "bro a página foi-se NOOOO",
-            "msg_5": "{status} Pepega",
-            "msg_6": "quem partiu o site RAGEY",
-            "msg_7": "COPIUM",
-            "msg_8": "NOOOO",
-            "msg_9": "a página foi-se",
-            "msg_10": "SadgeCry a página estava aqui",
-            "msg_11": "@uniiDev o seu site está partido",
-            "msg_12": "já tentou desligar e ligar novamente Nerd",
-            "msg_13": "bro precisa aprender nginx omE",
-            "msg_14": "removam o banimento da página moderadores",
-            "msg_15": "moderadores podemos ter a página de volta Prayge",
-            "msg_16": "DIESOFCRINGE"
+            "msg_1": "chat onde está a página PauseChamp",
+            "msg_2": "bro a página foi-se NOOOO",
+            "msg_3": "quem partiu o site RAGEY",
+            "msg_4": "a página foi-se",
+            "msg_5": "SadgeCry a página estava aqui",
+            "msg_6": "@uniiDev o seu site está partido",
+            "msg_7": "já tentou desligar e ligar novamente Nerd",
+            "msg_8": "bro precisa aprender nginx omE",
+            "msg_9": "removam o banimento da página moderadores",
+            "msg_10": "moderadores podemos ter a página de volta Prayge"
         }
     },
     "pages": {
