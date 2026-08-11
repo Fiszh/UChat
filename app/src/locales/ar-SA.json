@@ -355,7 +355,7 @@
                 },
                 "item_12": {
                     "question": "Can I use this overlay or its API for my own project?",
-                    "answer": "You may use the public API endpoints, but the overlay is strictly proprietary. Unauthorized usage or attempts to bypass restrictions (such as CORS) will result in an immediate, indefinite ban."
+                    "answer": "Any use of undocumented endpoints is strictly restricted. Unauthorized usage or attempts to bypass restrictions (such as CORS) will result in an immediate indefinite ban."
                 },
                 "item_13": {
                     "question": "Where can I find the source code?",
