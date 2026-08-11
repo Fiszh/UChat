@@ -63,8 +63,6 @@
             "pc": "اللغة",
             "mobile": "اللغة"
         },
-        "design": "تصميم",
-        "teapot": "بريق شاي",
         "info": {
             "pc": "المعلومات والخصوصية",
             "mobile": "معلومات"
@@ -252,22 +250,16 @@
             }
         },
         "chat_messages": {
-            "msg_1": "{status} OMEGADANCE",
-            "msg_2": "F",
-            "msg_3": "شات، أين صفحة PauseChamp؟",
-            "msg_4": "يا أخي، الصفحة اختفت! لااااا NOOOO",
-            "msg_5": "{status} Pepega",
-            "msg_6": "من الذي خرب الموقع RAGEY",
-            "msg_7": "COPIUM",
-            "msg_8": "NOOOO",
-            "msg_9": "اختفت الصفحة Sadge",
-            "msg_10": "SadgeCry الصفحة كانت هنا",
-            "msg_11": "@uniiDev موقعك فاسد يا أخي",
-            "msg_12": "هل جربت إطفاءه وتشغيله مرة أخرى يا نيرد؟ Nerd",
-            "msg_13": "أخي بحاجة لتعلم nginx omE",
-            "msg_14": "ارفعوا الحظر MODS",
-            "msg_15": "يا MODS، هل يمكننا استعادة الصفحة Prayge",
-            "msg_16": "DIESOFCRINGE"
+            "msg_1": "شات، أين صفحة PauseChamp؟",
+            "msg_2": "يا أخي، الصفحة اختفت! لااااا NOOOO",
+            "msg_3": "من الذي خرب الموقع RAGEY",
+            "msg_4": "اختفت الصفحة Sadge",
+            "msg_5": "SadgeCry الصفحة كانت هنا",
+            "msg_6": "@uniiDev موقعك فاسد يا أخي",
+            "msg_7": "هل جربت إطفاءه وتشغيله مرة أخرى يا نيرد؟ Nerd",
+            "msg_8": "أخي بحاجة لتعلم nginx omE",
+            "msg_9": "ارفعوا الحظر MODS",
+            "msg_10": "يا MODS، هل يمكننا استعادة الصفحة Prayge"
         }
     },
     "pages": {
