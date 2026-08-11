@@ -355,7 +355,7 @@
                 },
                 "item_12": {
                     "question": "Posso usar esta sobreposição ou a sua API para o meu próprio projeto?",
-                    "answer": "Pode usar os endpoints públicos da API, mas a sobreposição é estritamente proprietária. O uso ou tentativas não autorizadas de contornar restrições (como CORS) resultará num banimento imediato e indefinido."
+                    "answer": "Any use of undocumented endpoints is strictly restricted. Unauthorized usage or attempts to bypass restrictions (such as CORS) will result in an immediate indefinite ban."
                 },
                 "item_13": {
                     "question": "Onde posso encontrar o código-fonte?",
