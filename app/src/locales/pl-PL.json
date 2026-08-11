@@ -157,7 +157,7 @@
             },
             "badges": {
                 "name": "Odznaki",
-                "description": "Wybierz, które odznaki pokazywać na czacie"
+                "description": "Wybierz które odznaki pokazywać na czacie"
             },
             "badgesTTV": {
                 "name": "Pokaż tylko odznaki Twitch",
@@ -169,7 +169,7 @@
             },
             "bots": {
                 "name": "Ukryj wiadomości botów",
-                "description": "Ukryj wiadomości od czat botów, wykrytych używając Twitch i odznaki bota FFZ"
+                "description": "Ukryj wiadomości czat botów wykrytych za pomocą odznak botów Twitch i FFZ"
             },
             "userBL": {
                 "name": "Niestandardowa czarna lista użytkowników (oddziel używając spacji)",
