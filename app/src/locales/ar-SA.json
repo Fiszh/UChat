@@ -191,7 +191,7 @@
             },
             "paintShadows": {
                 "name": "7TV Paint Shadows",
-                "description": ""
+                "description": "Toggle shadows on 7TV Paints, may cause drops in performance"
             },
             "lastMsg": {
                 "name": "قم بتحميل أحدث رسائل الشات",
@@ -267,16 +267,16 @@
             "title": "قم بتحويل إعدادات الشات Overlay إلى UChat",
             "warning_bugs": "قد تحدث بعض المشاكل التقنية، يرجى الانتباه.",
             "warning_settings": "لا توجد جميع الإعدادات في برنامج UChat.",
-            "supported": "",
+            "supported": "Currently supported: JChat & ChatIS.",
             "url_input": {
-                "title": "",
-                "convert_button": ""
+                "title": "Chat Overlay URL",
+                "convert_button": "Convert & Copy"
             }
         },
         "help": {
             "info": {
                 "title": "لا توجد جميع الإعدادات في برنامج UChat.",
-                "description": ""
+                "description": "All the info you need to get started with UChat"
             },
             "faq": "FAQ",
             "privacy": "Privacy & Security",
@@ -359,14 +359,14 @@
                 },
                 "item_15": {
                     "question": "What if my question isn't listed here?",
-                    "answer": ""
+                    "answer": "For more information, you can reach out via {twitch} or {discord}."
                 }
             }
         },
         "message_creator": {
-            "title": "",
-            "fetch_channel": "",
-            "download": ""
+            "title": "UChat Message Creator",
+            "fetch_channel": "Fetch Channel & User",
+            "download": "Download image"
         }
     }
 }
