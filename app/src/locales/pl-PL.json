@@ -84,21 +84,21 @@
         },
         "bottom": {
             "header": {
-                "title": "Chat Preview Settings",
+                "title": "Ustawienia Podglądu Czatu",
                 "load_badges": {
-                    "pc": "Load More Badges",
-                    "mobile": "Load Badges"
+                    "pc": "Wczytaj Więcej Odznak",
+                    "mobile": "Wczytaj Odznaki"
                 }
             },
             "chat_background": {
-                "title": "Chat Background"
+                "title": "Tło Czatu"
             },
             "custom_message": {
-                "title": "Custom Message",
-                "input_placeholder": "Message to display..."
+                "title": "Niestandardowa Wiadomość",
+                "input_placeholder": "Wiadomość do wyświetlenia..."
             },
             "channel_info": {
-                "title": "Channel Info",
+                "title": "Informacje o Kanale",
                 "manage": "Zarządzaj Kanałami"
             },
             "overlay_url": {
@@ -208,7 +208,7 @@
         "loaded_badges": "Wczytano wszystkie odznaki!",
         "fail_load_badges": "Nie udało się wczytać wszystkich odznak!",
         "url_copied": "Overlay URL has been copied!",
-        "url_copied_fail": "Failed to copy URL, check the console for more info.",
+        "url_copied_fail": "Nie udało się skopiować URL, sprawdź konsolę po więcej informacji.",
         "unsupported": "Nieobsługiwane.",
         "no_input": "Brak danych wejściowych.",
         "loading_info": "Wczytywanie informacji o użytkowniku i kanale...",
@@ -241,7 +241,7 @@
                 "message": "Sorry, I refuse to brew coffee because I'm, permanently, a teapot."
             },
             "500": {
-                "title": "unexpected error.",
+                "title": "nieoczekiwany błąd.",
                 "message": "Please refresh or try again. If the issue persists, contact us."
             },
             "default": {
@@ -279,7 +279,7 @@
                 "description": "All the info you need to get started with UChat"
             },
             "faq": "FAQ",
-            "privacy": "Privacy & Security",
+            "privacy": "Prywatność i Bezpieczeństwo",
             "privacy_items": {
                 "item_1": "Your Twitch token is never stored; it is only sent to the server when needed to authenticate actions like login, saving, or deleting your settings.",
                 "item_2": "Settings you change are saved only in your browser so they stay after refresh or returning to the page; they are not stored on our servers unless you are a tester saving global settings.",
