@@ -289,9 +289,6 @@
 
 <style lang="scss">
     #layout {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
 
         section {
             display: flex;
