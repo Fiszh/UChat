@@ -3,6 +3,7 @@
 
     import TwitchChatMessage from "$components/chat/twitch/message.svelte";
     import KickChatMessage from "$components/chat/kick/message.svelte";
+    import YouTubeChatMessage from "$components/chat/youtube/message.svelte";
 
     import { messages } from "$lib/chat";
     import { setEmoteSize, settings, type Setting } from "$stores/settings";
@@ -398,6 +399,16 @@
                 ngl, we need more ids to confuse the devs instead of a unified one like twitch
                 */
                 platform={"KICK"}
+                removed={msg.removed}
+            />
+        {:else if msg.service == "GOOGLE"}
+            <YouTubeChatMessage
+                user={msg.author}
+                text={msg.text}
+                tags={msg}
+                message_id={msg.id}
+                room_id={0}
+                platform={"GOOGLE"}
                 removed={msg.removed}
             />
         {:else}

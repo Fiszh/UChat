@@ -38,6 +38,7 @@
         const TwitchChannelName = params.get("channel");
         const TwitchChannelID = params.get("id");
         const KickChannelName = params.get("kick");
+        const YouTubeChannelName = params.get("youtube");
 
         let loadedIn = $state({
             twitch: TwitchChannelName || TwitchChannelID ? false : null,
@@ -49,6 +50,7 @@
         );
 
         if (TwitchChannelName) connect(TwitchChannelName);
+        //if (YouTubeChannelName) startTestWS();
 
         for (const [key, value] of params) {
             settings.update((list) =>

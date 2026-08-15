@@ -5,30 +5,22 @@
     import Input from "$components/Inputs/Input.svelte";
     import Kick from "$components/logos/kick.svelte";
     import Twitch from "$components/logos/twitch.svelte";
+    import Youtube from "$components/logos/youtube.svelte";
     import { t } from "svelte-i18n";
 
     type InputMode = "name" | "id" | string; // im to lazy to fix this rn so i will leave string here
 
-    interface Inputs {
-        twitch: {
-            input: {
-                name: string;
-                id: string;
-            };
-            mode: InputMode;
+    interface PlatformInput {
+        input: {
+            name: string;
+            id: string;
         };
-        kick: {
-            input: {
-                name: string;
-                id: string;
-            };
-            mode: InputMode;
-        };
+        mode: InputMode;
     }
 
     type Props = {
         show: boolean;
-        inputs: Inputs;
+        inputs: Record<Lowercase<Platforms>, PlatformInput>;
     };
 
     let { show = $bindable(false), inputs = $bindable() }: Props = $props();
@@ -100,6 +92,9 @@
 
         if (pastedName["platform"] == "KICK")
             inputs["kick"]["input"]["name"] = pastedName["name"];
+
+        if (pastedName["platform"] == "GOOGLE")
+            inputs["google"]["input"]["name"] = pastedName["name"];
 
         if (pastedName["input"] != pastedName["platform"]) {
             inputs[pastedName["input"].toLowerCase() as Lowercase<Platforms>][
@@ -251,6 +246,39 @@
             >
                 {$t("dialogs.manage_channels.use_channel_id")}
             </Checkbox> -->
+        </section>
+
+        <section>
+            <p>
+                <Youtube brandColor />
+                YouTube
+            </p>
+
+            {#if inputs.google.mode === "name"}
+                <Input
+                    bind:value={inputs["google"]["input"]["name"]}
+                    placeholder="Channel name..."
+                    data-platform="GOOGLE"
+                    invalid={!inputs["google"]["input"]["name"].length}
+                    onPaste={checkForChannelLink}
+                    onChange={(e) =>
+                        (inputs["google"]["input"]["name"] = validateInput(
+                            (e.currentTarget as HTMLInputElement).value,
+                            "kick_name",
+                        ))}
+                />
+            {:else}
+                <Input
+                    bind:value={inputs["google"]["input"]["id"]}
+                    placeholder="Channel ID..."
+                    invalid={!inputs["google"]["input"]["id"].length}
+                    onChange={(e) =>
+                        (inputs["google"]["input"]["id"] = validateInput(
+                            (e.currentTarget as HTMLInputElement).value,
+                            "number",
+                        ))}
+                />
+            {/if}
         </section>
 
         <Button primary center onclick={() => (show = false)}>

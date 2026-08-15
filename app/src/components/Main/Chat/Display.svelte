@@ -43,6 +43,13 @@
             },
             mode: "name",
         },
+        google: {
+            input: {
+                name: "",
+                id: "",
+            },
+            mode: "name",
+        },
     });
 
     let showChannelManager = $state(false);
@@ -97,7 +104,8 @@
             if (
                 $settingsParams["channel"] ||
                 $settingsParams["id"] ||
-                $settingsParams["kick"]
+                $settingsParams["kick"] ||
+                $settingsParams["youtube"]
             ) {
                 navigator.clipboard
                     .writeText(urlResults)
@@ -171,6 +179,15 @@
         channelInfo["kick"]["input"]["name"].length
             ? setParam("kick", String(channelInfo["kick"]["input"]["name"]))
             : removeParam("kick"),
+    );
+
+    $effect(() =>
+        channelInfo["google"]["input"]["name"].length
+            ? setParam(
+                  "youtube",
+                  String(channelInfo["google"]["input"]["name"]),
+              )
+            : removeParam("youtube"),
     );
 </script>
 
