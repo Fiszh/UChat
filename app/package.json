@@ -20,7 +20,7 @@
         "@socketsecurity/bun-security-scanner": "^1.1.2",
         "@sveltejs/adapter-static": "^3.0.10",
         "@sveltejs/kit": "^2.70.1",
-        "@sveltejs/vite-plugin-svelte": "7.2.0",
+        "@sveltejs/vite-plugin-svelte": "7.3.0",
         "@types/node": "^26.1.2",
         "@types/tinycolor2": "^1.4.6",
         "moment": "^2.30.1",
