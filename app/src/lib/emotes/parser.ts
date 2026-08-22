@@ -1,6 +1,6 @@
 import { get } from "svelte/store";
 
-import twemoji from "twemoji";
+import twemoji from "@twemoji/api";
 
 import { getPersonalSets } from "$lib/services/7TV/cosmetics";
 
@@ -17,7 +17,7 @@ type TwemojiToken = string | { emoji: string; image: string };
 
 function splitTextWithTwemoji(text: string): TwemojiToken[] {
     const parsedText = twemoji.parse(text, {
-        base: "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/",
+        base: "https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/",
         folder: "svg",
         ext: ".svg",
     });
