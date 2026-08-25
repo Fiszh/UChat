@@ -213,7 +213,8 @@
         "no_input": "لا توجد مدخلات.",
         "loading_info": "جارٍ تحميل معلومات المستخدم والقناة...",
         "loaded_info": "تم تحميل معلومات المستخدم والقناة",
-        "loading_info_fail": "فشل تحميل معلومات المستخدم والقناة!"
+        "loading_info_fail": "فشل تحميل معلومات المستخدم والقناة!",
+        "pogly_widget_copied": "Pogly Widget has been copied!"
     },
     "banners": {
         "issues": "نواجه بعض المشاكل - قد لا تتوفر بعض الميزات",
