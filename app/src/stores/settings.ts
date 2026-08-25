@@ -5,6 +5,7 @@ const logos: Record<string, Snippet<[boolean]>> = (logosModule as any).logos ??
 {};
 import { flags } from "$lib/bitmap";
 import { writable } from "svelte/store";
+import { isPogly } from "$lib/pogly";
 
 export interface DefaultSetting {
     param: string;
@@ -51,7 +52,7 @@ export interface SelectorSetting extends DefaultSetting {
     default?: number;
     selectors: {
         enabled: boolean;
-        label?: string;
+        label: string;
         icon?: Snippet<[boolean]>;
         bitmap: number;
         disabled?: boolean;

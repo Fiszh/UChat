@@ -4,7 +4,7 @@
 </script>
 
 <section id="toasts">
-    {#each $toastNotifs as toast}
+    {#each $toastNotifs as toast (toast.id)}
         <Notif {toast} />
     {/each}
 </section>

@@ -1,6 +1,7 @@
 <script lang="ts">
     import LoadingAnimation from "$lib/assets/loading.avif";
     import UChat from "$components/logos/uchat.svelte";
+    import { dev } from "$app/env";
 
     const availableStyles: string[] = ["minimal", "big", "small"];
 
@@ -34,7 +35,11 @@
         {:else}
             <span class="loading-text">Loading...</span>
         {/if}
-        <p class="version">{__APP_VERSION}</p>
+        <p class="version">
+            {__APP_VERSION}
+            {dev ? " DEV" : ""}
+            {__DEBUG__ ? " DEBUG" : ""}
+        </p>
     </div>
     <div class="loader"></div>
 {/snippet}
@@ -48,7 +53,11 @@
             Loading...
         </span>
         <span class="loading-info">{@html text}</span>
-        <p class="version">{__APP_VERSION}</p>
+        <p class="version">
+            {__APP_VERSION}
+            {dev ? " DEV" : ""}
+            {__DEBUG__ ? " DEBUG" : ""}
+        </p>
     </div>
 {/snippet}
 

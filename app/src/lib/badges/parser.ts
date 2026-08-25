@@ -6,6 +6,7 @@ import { badges } from "$stores/global";
 
 import { settings, type SelectorSetting } from "$stores/settings";
 import { flags } from "$lib/bitmap";
+import { isPogly } from "$lib/pogly";
 
 let BadgesData = get(badges);
 badges.subscribe((e) => (BadgesData = e));
@@ -17,7 +18,7 @@ let enabledBadges: string[] = [];
 settings.subscribe((cfg) => {
     const foundSetting0 = cfg.find((setting) => setting.param == "badges");
 
-    if (foundSetting0 && foundSetting0["type"] == "selector")
+    if (foundSetting0 && foundSetting0["type"] == "selector") {
         enabledBadges = (
             flags.getEnabled(
                 foundSetting0["value"],
@@ -26,6 +27,7 @@ settings.subscribe((cfg) => {
         )
             .map((item) => item["label"]?.toLowerCase())
             .filter((i) => typeof i == "string");
+    }
 
     const foundSetting1 = cfg.find(
         (setting) => setting.param == "badgesTTV",

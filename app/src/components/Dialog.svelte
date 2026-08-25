@@ -7,6 +7,7 @@
         name: string;
         show: boolean;
         index?: number;
+        width?: number;
         buttons?: Snippet;
         children: Snippet;
         onClose?: () => void;
@@ -16,6 +17,7 @@
         name,
         show = $bindable(false),
         index = 0,
+        width = 50,
         buttons,
         onClose,
         children,
@@ -29,7 +31,7 @@
 </script>
 
 {#if show}
-    <section class="dialog" style="z-index: {2 + index};">
+    <section class="dialog" style="z-index: {2 + index}; min-width: {width}px;">
         <span id="header">
             <p>{name}</p>
             <Button onclick={close}><X /></Button>
@@ -51,6 +53,8 @@
         height: 100vh;
         width: 100dvw;
         height: 100dvh;
+        top: 0;
+        left: 0;
         background-color: rgba(0, 0, 0, 0.5);
     }
 
@@ -69,7 +73,7 @@
         max-width: 30rem;
         max-height: 25rem;
 
-        border-radius: 1rem;
+        border-radius: 0.5rem;
 
         & > *:not(hr) {
             padding: 0.5rem 1rem;
@@ -83,6 +87,7 @@
             align-items: center;
             justify-content: space-between;
             user-select: none;
+            font-weight: bold;
         }
 
         #buttons {
