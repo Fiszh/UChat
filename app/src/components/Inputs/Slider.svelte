@@ -6,7 +6,7 @@
         const min = Number(inputEl.min);
         const max = Number(inputEl.max);
         const percent = ((value - min) / (max - min)) * 100;
-        inputEl.style.background = `linear-gradient(to right, #7c5cfc 0%, #7c5cfc ${percent}%, #2a2a2a ${percent}%, #2a2a2a 100%)`;
+        inputEl.style.background = `linear-gradient(to right, var(--accent) 0%, var(--accent) ${percent}%, #2a2a2a ${percent}%, #2a2a2a 100%)`;
     }
 
     let inputEl: HTMLInputElement;

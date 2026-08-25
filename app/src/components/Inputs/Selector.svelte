@@ -1,7 +1,7 @@
 <script lang="ts">
     import { dev } from "$app/environment";
     import { flags } from "$lib/bitmap";
-    import { onMount, type Snippet } from "svelte";
+    import type { Snippet } from "svelte";
     import { t } from "svelte-i18n";
 
     type Option = {

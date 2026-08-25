@@ -12,6 +12,8 @@
 
     import { getKickUser } from "$lib/services/KICK/user";
     import KICKSocket from "$lib/services/KICK/chat";
+    import { isPogly } from "$lib/pogly";
+    import { flags } from "$lib/bitmap";
 
     // REFRESH IMAGES IF FAILED
     function handleImageRetries(): void {
@@ -51,12 +53,25 @@
         for (const [key, value] of params) {
             settings.update((list) =>
                 list.map((s) => {
-                    if (s.param !== key) return s;
+                    if (s["param"] !== key) return s;
 
                     let v: any = value;
 
-                    if (s.type === "number") v = Number(value);
-                    if (s.type === "boolean") v = value == "1";
+                    if (s["type"] === "number") v = Number(value);
+                    if (s["type"] === "boolean") {
+                        v = value == "1";
+                        if (isPogly()) v = value == "true";
+                    }
+
+                    if (s["type"] == "selector" && isPogly()) {
+                        const parsedValue: string[] = JSON.parse(value);
+                        const mappedSelectors = s["selectors"].map((sl) => ({
+                            ...sl,
+                            enabled: parsedValue.includes(sl["label"]),
+                        }));
+
+                        v = flags.getDefault(mappedSelectors);
+                    }
 
                     return { ...s, value: v };
                 }),

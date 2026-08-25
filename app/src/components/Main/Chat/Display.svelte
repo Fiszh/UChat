@@ -22,6 +22,8 @@
     import ChannelManager from "$components/dialogs/channel_manager.svelte";
     import CalloutBubble from "$components/CalloutBubble.svelte";
     import { shake } from "$lib/shake";
+    import Pogly from "$components/logos/pogly.svelte";
+    import { generatePoglyWidget } from "$lib/pogly";
 
     let hex = $state("#191919");
     let customMessageValue = $state("");
@@ -112,6 +114,17 @@
         }
     }
 
+    function copyAsPoglyWidget() {
+        navigator.clipboard
+            .writeText(JSON.stringify(generatePoglyWidget()))
+            .then(() => {
+                alert($t("toasts.pogly_widget_copied"));
+            })
+            .catch((err) => {
+                console.error("Failed to copy URL: ", err);
+            });
+    }
+
     function addMessage() {
         if (!customMessageValue.trim().length) return;
 
@@ -168,6 +181,9 @@
 {/snippet}
 {#snippet resetSettingsIcon()}
     <RotateCcw size={$isMobile ? "1rem" : "1.5rem"} />
+{/snippet}
+{#snippet PoglyIcon()}
+    <Pogly brandColor size={$isMobile ? "1rem" : "1.5rem"} />
 {/snippet}
 
 <div id="chat-preview" style="--chat-background: {hex}">
@@ -279,6 +295,12 @@
                 <Button primary onclick={copyUrl} {icon}>
                     {$t("labels.copy")}
                 </Button>
+                <Button
+                    title="Copy as Pogly widget"
+                    secondary
+                    onclick={copyAsPoglyWidget}
+                    icon={PoglyIcon}
+                />
             </div>
         </section>
     </section>

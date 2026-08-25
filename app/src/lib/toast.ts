@@ -22,19 +22,19 @@ export function addToast(toast: AddToastInput) {
         timeout: 3,
     };
 
+    const timeout = (toast.timeout ?? defaults.timeout) * 1000;
+
     toastNotifs.update((t) => [
         {
             ...defaults,
             ...toast,
+            timeout,
         },
         ...t,
     ]);
 
     if (toast.timeout ?? defaults.timeout)
-        setTimeout(
-            () => dismissToast(defaults["id"]),
-            (toast.timeout || defaults.timeout) * 1000,
-        );
+        setTimeout(() => dismissToast(defaults["id"]), timeout);
 }
 
 export const dismissToast = (id: ToastNotif["id"]) =>
