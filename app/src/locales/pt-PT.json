@@ -213,7 +213,8 @@
         "no_input": "Sem entrada.",
         "loading_info": "A carregar informações do utilizador & canal...",
         "loaded_info": "Informações de utilizador e canal carregados",
-        "loading_info_fail": "Falha ao carregar informações de utilizador e canal!"
+        "loading_info_fail": "Falha ao carregar informações de utilizador e canal!",
+        "pogly_widget_copied": "Pogly Widget has been copied!"
     },
     "banners": {
         "issues": "Estamos com problemas - algumas funcionalidades podem estar indisponíveis",
