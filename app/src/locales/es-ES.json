@@ -213,7 +213,8 @@
         "no_input": "No input.",
         "loading_info": "Loading user & channel info...",
         "loaded_info": "Loaded user & channel info",
-        "loading_info_fail": "Failed loading user & channel info!"
+        "loading_info_fail": "Failed loading user & channel info!",
+        "pogly_widget_copied": "Pogly Widget has been copied!"
     },
     "banners": {
         "issues": "We're having issues - some features may be unavailable",
