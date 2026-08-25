@@ -213,7 +213,8 @@
         "no_input": "Brak danych wejściowych.",
         "loading_info": "Wczytywanie informacji o użytkowniku i kanale...",
         "loaded_info": "Wczytano informacje o użytkowniku i kanale",
-        "loading_info_fail": "Nie udało się wczytać informacji o użytkowniku i kanale!"
+        "loading_info_fail": "Nie udało się wczytać informacji o użytkowniku i kanale!",
+        "pogly_widget_copied": "Pogly Widget has been copied!"
     },
     "banners": {
         "issues": "Mamy problemy - niektóre funkcje mogą być niedostępne",
