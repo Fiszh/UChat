@@ -144,6 +144,22 @@
                     setEmoteSize.set(emoteSize as string);
 
                     break;
+                case "gifSize":
+                    let gifSize = setting.value;
+                    const emoteSizeSetting = chatSettings["emoteSize"];
+
+                    if (
+                        gifSize == setting.default &&
+                        emoteSizeSetting.value != emoteSizeSetting.default &&
+                        typeof emoteSizeSetting.value == "number"
+                    )
+                        gifSize = String(Number(emoteSizeSetting.value) * 4);
+
+                    styles["--chat-gif-size"] = gifSize
+                        ? `${gifSize}px`
+                        : "25px";
+
+                    break;
                 case "fontColor":
                     styles["--chat-font-color"] =
                         setting.value && typeof setting?.value == "string"
@@ -394,6 +410,7 @@
         --chat-font-stroke: unset;
         --chat-shadow: 10;
         --chat-emote-size: 20px;
+        --chat-gif-size: 100px;
         --chat-font-color: #ffffff;
     }
 
@@ -434,6 +451,16 @@
         :global(.emote) {
             min-height: 5px;
             max-height: var(--chat-emote-size);
+        }
+
+        /* EMTOTE SIZE SETTINGS */
+        :global(.gif-wrapper) {
+            min-height: var(--chat-gif-size);
+        }
+
+        :global(.gif) {
+            min-height: 5px;
+            max-height: var(--chat-gif-size);
         }
     }
 </style>
