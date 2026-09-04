@@ -15,6 +15,7 @@
     import Paint from "./paint.svelte";
     import Emote from "./emote.svelte";
     import { removeMessage } from "$lib/message";
+    import Gif from "./gif.svelte";
 
     interface Userstate {
         id: string;
@@ -144,23 +145,27 @@
         {#if typeof (parsedMessage ?? text) == "string"}
             <span class="text-part">{@html parsedMessage ?? text}</span>
         {:else if Array.isArray(parsedMessage)}
-            {#each parsedMessage as part}
-                {#if part["type"] == "emote" || part["type"] == "bits" || part["type"] == "emoji"}
-                    <Emote emoteInfo={part} />
-                {:else if part["type"] == "user"}
-                    <Paint
-                        {platform}
-                        platformID={part["name"]}
-                        backgroundColor={part["nameColor"]}
-                    >
-                        {@html part["input"]}
-                    </Paint>
-                {:else if part["type"] == "other"}
-                    {@html part["part"]}
-                {:else}
-                    <p id="unkown">UNKNOWN TYPE: {part["type"]}</p>
-                {/if}
-            {/each}
+            {#if "gifs" in tags && chatSettings["gifs"]}
+                <Gif url={tags["gifs"] as string} />
+            {:else}
+                {#each parsedMessage as part}
+                    {#if part["type"] == "emote" || part["type"] == "bits" || part["type"] == "emoji"}
+                        <Emote emoteInfo={part} />
+                    {:else if part["type"] == "user"}
+                        <Paint
+                            {platform}
+                            platformID={part["name"]}
+                            backgroundColor={part["nameColor"]}
+                        >
+                            {@html part["input"]}
+                        </Paint>
+                    {:else if part["type"] == "other"}
+                        {@html part["part"]}
+                    {:else}
+                        <p id="unkown">UNKNOWN TYPE: {part["type"]}</p>
+                    {/if}
+                {/each}
+            {/if}
         {/if}
     </span>
 </div>

@@ -122,6 +122,18 @@ export const configs: Setting[] = [
         previewReact: false,
     },
     {
+        type: "boolean",
+        param: "gifs",
+        value: false,
+        previewReact: false,
+    },
+    {
+        type: "number",
+        param: "gifSize",
+        value: String(Number(defaultEmoteSize) * 4),
+        previewReact: false,
+    },
+    {
         type: "number",
         param: "fadeOut",
         value: "0",
