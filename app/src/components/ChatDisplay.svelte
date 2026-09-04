@@ -8,6 +8,8 @@
     import { setEmoteSize, settings, type Setting } from "$stores/settings";
     import { badges, globals } from "$stores/global";
     import { generateUUID } from "$lib/overlayIndex";
+    import GoogleFont from "./GoogleFont.svelte";
+    import { normalizeFont } from "$lib/font";
 
     type Props = {
         customStyle?: string;
@@ -24,6 +26,8 @@
     let chat: HTMLElement | undefined = $state();
 
     let instantScroll = $state(false);
+
+    let mounted = $state(false);
 
     let styles: Record<string, string | number> = $state({});
     const chatStyle = $derived(
@@ -42,6 +46,7 @@
     >;
 
     let chatSettings: ChatSettings = $state({});
+    let customFont = $state("");
 
     const unsubscribeSettings = settings.subscribe((config) => {
         chatSettings = config.reduce<ChatSettings>((acc, setting) => {
@@ -95,11 +100,13 @@
 
                     break;
                 case "font":
-                    const font = setting.value as string;
+                    const font = normalizeFont(setting.value as string);
 
                     styles["--chat-font"] = font
                         ? `${font.includes(" ") ? `"${font}"` : font}, Geist`
                         : "Geist";
+
+                    customFont = decodeURIComponent(font);
 
                     break;
                 case "fontSize":
@@ -353,6 +360,8 @@
             currentScroll = chat.scrollTop;
         }
 
+        mounted = true;
+
         return () => {
             unsubscribeMessages();
             unsubscribeSettings();
@@ -363,6 +372,10 @@
         };
     });
 </script>
+
+{#if customFont && mounted}
+    <GoogleFont fontName={customFont} />
+{/if}
 
 <div
     class="chat"
