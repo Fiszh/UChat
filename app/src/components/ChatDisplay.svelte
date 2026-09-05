@@ -106,7 +106,7 @@
                         ? `${font.includes(" ") ? `"${font}"` : font}, Geist`
                         : "Geist";
 
-                    customFont = decodeURIComponent(font);
+                    customFont = font;
 
                     break;
                 case "fontSize":
