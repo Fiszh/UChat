@@ -3,9 +3,18 @@
 
     let { fontName = "Geist" }: Props = $props();
 
-    let fontUrl = $derived(
-        `https://fonts.googleapis.com/css2?family=${fontName.replace(/\s+/g, "+")}:wght@400;700&display=swap`
-    );
+    let fontUrl = $state("");
+    let timeoutId: ReturnType<typeof setTimeout>;
+
+    $effect(() => {
+        const name = fontName;
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+            fontUrl = `https://fonts.googleapis.com/css2?family=${name.replace(/\s+/g, "+")}:wght@400;700&display=swap`;
+        }, 500);
+
+        return () => clearTimeout(timeoutId);
+    });
 </script>
 
 <svelte:head>
