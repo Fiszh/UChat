@@ -12,7 +12,8 @@
         },
         "manage_channels": {
             "title": "Gerir Canais",
-            "use_channel_id": "Usar ID do Canal"
+            "use_channel_id": "Usar ID do Canal",
+            "use_channel_handle": "Use Channel Handle"
         },
         "localization": {
             "title": "Idioma",
@@ -43,7 +44,8 @@
     },
     "channel_input": {
         "name": "{platform} Nome do Canal",
-        "id": "{platform} ID do Canal"
+        "id": "{platform} ID do Canal",
+        "handle": "{platform} Channel Handle"
     },
     "mobile_footer": {
         "settings": "Configurações",
@@ -203,11 +205,19 @@
             },
             "gifSize": {
                 "name": "GIF size (px)",
-                "description": "Set the display size of GIFs in pixels. If unset, the size is multiplied by 4 from the emote size setting."
+                "description": "Set the display size of GIFs in pixels. If unset, the size is multiplied by 4 from the emote size setting"
             },
             "gifs": {
                 "name": "GIFs",
                 "description": "Display GIFs in the chat overlay"
+            },
+            "track": {
+                "name": "Error tracking",
+                "description": "Opt in or out of error tracking via Better Stack"
+            },
+            "firstMsg": {
+                "name": "Highlight first-time messages",
+                "description": "Highlight users first chat messages with a green background"
             }
         }
     },
@@ -296,7 +306,7 @@
                 "item_4": "Pressionar \"Guardar\" atualiza as suas configurações globais salvas; \"Eliminar\" remove todas as suas configurações salvas dos nossos servidores.",
                 "item_5": "Usando \"Redefinir configurações\" limpa todas as configurações salvas localmente no seu navegador.",
                 "item_6": "Registamos todas as solicitações feitas na nossa API para evitar spam ou abuso.",
-                "item_7": "UChat e todos os serviços sob unii.dev são independentes e não são afiliados, endossados ou patrocinados pela Twitch Interactive, Inc."
+                "item_7": "UChat and all services under unii.dev are independent and are not affiliated, endorsed by, or sponsored by Twitch Interactive, Inc., YouTube, LLC, or Kick Streaming Pty Ltd."
             },
             "faq_items": {
                 "item_1": {
@@ -367,8 +377,12 @@
                     "answer": "O seu token é compartilhado apenas para validar e nunca armazenado no servidor."
                 },
                 "item_15": {
-                    "question": "E se a minha pergunta não estiver listada aqui?",
-                    "answer": "Para mais informações, pode entrar em contacto via {twitch} ou {discord}."
+                    "question": "What do we track?",
+                    "answer": "We log error messages, stack traces, and basic browser/OS data during a crash. We never collect personal data or session recordings, data is only shared with our error-tracking provider."
+                },
+                "item_16": {
+                    "question": "What if my question isn't listed here?",
+                    "answer": "For more information, you can reach out via {twitch} or {discord}."
                 }
             }
         },
