@@ -3,10 +3,9 @@ import * as Sentry from "@sentry/svelte";
 
 const params = new URLSearchParams(location.search);
 const trackingParam = params.get("track");
-const trackingDisabled = trackingParam == "0";
 const DSN = import.meta.env.PUBLIC_SENTRY_DSN;
 
-if ((!trackingParam || !trackingDisabled) && !dev && DSN) {
+if ((!trackingParam || trackingParam != "0") && !dev && DSN) {
     Sentry.init({
         dsn: DSN,
 

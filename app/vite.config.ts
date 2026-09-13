@@ -12,6 +12,8 @@ const repoUrl = execSync("git remote get-url origin")
 const isDebug = process.argv.includes("--debug");
 
 export default defineConfig({
+    envDir: ".",
+    envPrefix: "PUBLIC_",
     plugins: [sveltekit()],
     preview: {
         allowedHosts: [".unii.dev", "unii.dev", "localhost"],
