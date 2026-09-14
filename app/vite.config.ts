@@ -35,7 +35,6 @@ export default defineConfig({
                       url: process.env.SENTRY_URL,
                       authToken: process.env.BETTER_STACK_API_TOKEN,
                       telemetry: false,
-                      sourcemaps: { filesToDeleteAfterUpload: ["**/*.map"] },
                   }),
               ]
             : []),
