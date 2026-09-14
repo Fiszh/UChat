@@ -82,8 +82,8 @@
                     if (s["type"] == "selector" && isPogly()) {
                         const parsedValue: string[] =
                             typeof value == "object"
-                                ? JSON.parse(value)
-                                : value;
+                                ? value
+                                : JSON.parse(value);
                         const mappedSelectors = s["selectors"].map((sl) => ({
                             ...sl,
                             enabled: parsedValue.includes(sl["label"]),
