@@ -213,7 +213,7 @@
             },
             "track": {
                 "name": "Erro no rastreamento",
-                "description": "Opt in or out of error tracking via Better Stack"
+                "description": "Opte pela entrada ou ausência de erros rastreando via Better Stack"
             },
             "firstMsg": {
                 "name": "Destacar mensagens de primeira vez",
@@ -306,7 +306,7 @@
                 "item_4": "Pressionar \"Guardar\" atualiza as suas configurações globais salvas; \"Eliminar\" remove todas as suas configurações salvas dos nossos servidores.",
                 "item_5": "Usando \"Redefinir configurações\" limpa todas as configurações salvas localmente no seu navegador.",
                 "item_6": "Registamos todas as solicitações feitas na nossa API para evitar spam ou abuso.",
-                "item_7": "UChat and all services under unii.dev are independent and are not affiliated, endorsed by, or sponsored by Twitch Interactive, Inc., YouTube, LLC, or Kick Streaming Pty Ltd."
+                "item_7": "UChat e todos os serviços sob unii.dev são independentes e não são afiliados, endossados ou patrocinados pela Twitch Interactive, Inc. YouTube, LLC ou Kick Streaming Pty Ltd."
             },
             "faq_items": {
                 "item_1": {
@@ -366,7 +366,7 @@
                 },
                 "item_12": {
                     "question": "Posso usar esta sobreposição ou a sua API para o meu próprio projeto?",
-                    "answer": "Any use of undocumented endpoints is strictly restricted. Unauthorized usage or attempts to bypass restrictions (such as CORS) will result in an immediate indefinite ban."
+                    "answer": "Qualquer uso de endpoints não documentados é estritamente restrito. O uso ou tentativas não autorizadas de contornar restrições (como CORS) resultará num banimento imediato e indefinida."
                 },
                 "item_13": {
                     "question": "Onde posso encontrar o código-fonte?",
@@ -377,12 +377,12 @@
                     "answer": "O seu token é compartilhado apenas para validar e nunca armazenado no servidor."
                 },
                 "item_15": {
-                    "question": "What do we track?",
-                    "answer": "We log error messages, stack traces, and basic browser/OS data during a crash. We never collect personal data or session recordings, data is only shared with our error-tracking provider."
+                    "question": "O que nós rastreamos?",
+                    "answer": "Registamos mensagens de erro, rastreamento de pilha e dados básicos do navegador/OS durante uma falha. Nunca coletamos dados pessoais ou gravações de sessão, os dados são compartilhados apenas com o nosso provedor de rastreamento de erro."
                 },
                 "item_16": {
-                    "question": "What if my question isn't listed here?",
-                    "answer": "For more information, you can reach out via {twitch} or {discord}."
+                    "question": "E se a minha pergunta não estiver listada aqui?",
+                    "answer": "Para mais informações, pode entrar em contacto via {twitch} ou {discord}."
                 }
             }
         },
