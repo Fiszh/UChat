@@ -34,7 +34,7 @@
         "svelte-render-scan": "^1.1.0",
         "typescript": "^6.0.2",
         "vite": "^8.1.5",
-        "youtubei.js": "^17.2.0"
+        "youtubei.js": "^18.0.0"
     },
     "dependencies": {
         "@lucide/svelte": "^1.25.0",
