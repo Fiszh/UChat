@@ -1,6 +1,7 @@
 import { sveltekit } from "@sveltejs/kit/vite";
 import { defineConfig } from "vite";
 import { execSync } from "node:child_process";
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 import pkg from "./package.json" with { type: "json" };
 
 const commitHash = execSync("git rev-parse HEAD").toString().trim();
@@ -11,10 +12,34 @@ const repoUrl = execSync("git remote get-url origin")
 
 const isDebug = process.argv.includes("--debug");
 
+const isProdBuild = process.env.SENTRY_UPLOAD == "1";
+
+console.log(
+    isProdBuild
+        ? "Sending source map to BetterStack!"
+        : "Not sending source map to BetterStack...",
+    isProdBuild,
+);
+
 export default defineConfig({
     envDir: ".",
     envPrefix: "PUBLIC_",
-    plugins: [sveltekit()],
+    build: { sourcemap: true },
+    plugins: [
+        sveltekit(),
+        ...(isProdBuild
+            ? [
+                  sentryVitePlugin({
+                      org: process.env.SENTRY_ORG,
+                      project: process.env.SENTRY_PROJECT,
+                      url: process.env.SENTRY_URL,
+                      authToken: process.env.BETTER_STACK_API_TOKEN,
+                      telemetry: false,
+                      sourcemaps: { filesToDeleteAfterUpload: ["**/*.map"] },
+                  }),
+              ]
+            : []),
+    ],
     preview: {
         allowedHosts: [".unii.dev", "unii.dev", "localhost"],
     },

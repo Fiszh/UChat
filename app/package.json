@@ -10,6 +10,7 @@
         "dev:apiv2": "API_URL=http://api.unii.dev/v2 WS_URL=wss://api.unii.dev/v2 vite dev",
         "dev:open": "vite dev --open --host",
         "build": "vite build",
+        "build:prod": "SENTRY_UPLOAD=1 vite build",
         "preview": "vite preview",
         "prepare": "svelte-kit sync || echo ''",
         "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json && bunx tsc --noEmit && bunx prettier --check .",
@@ -38,6 +39,7 @@
     "dependencies": {
         "@lucide/svelte": "^1.25.0",
         "@sentry/svelte": "^10.73.0",
+        "@sentry/vite-plugin": "^5.4.0",
         "@twemoji/api": "^17.0.3",
         "html-to-image": "^1.11.13",
         "svelte-awesome-color-picker": "^4.1.3",
