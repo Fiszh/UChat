@@ -13,7 +13,7 @@
         "manage_channels": {
             "title": "Gerir Canais",
             "use_channel_id": "Usar ID do Canal",
-            "use_channel_handle": "Use Channel Handle"
+            "use_channel_handle": "Usar Nome do Canal"
         },
         "localization": {
             "title": "Idioma",
@@ -45,7 +45,7 @@
     "channel_input": {
         "name": "{platform} Nome do Canal",
         "id": "{platform} ID do Canal",
-        "handle": "{platform} Channel Handle"
+        "handle": "{platform} Nome do Canal"
     },
     "mobile_footer": {
         "settings": "Configurações",
@@ -129,7 +129,7 @@
             },
             "font": {
                 "name": "Fonte do chat personalizada",
-                "description": "Change the chat message font (Custom Google Fonts are supported)"
+                "description": "Alterar a fonte da mensagem do chat (Fontes personalizados do Google Fonts são suportados)"
             },
             "fontColor": {
                 "name": "Cor da fonte do chat (hex)",
@@ -149,7 +149,7 @@
             },
             "emoteSize": {
                 "name": "Tamanho dos ícones expressivos (px)",
-                "description": "Set the display size of emotes in pixels, adds 5 pixels to the font size setting if not set"
+                "description": "Definir o tamanho de exibição de emotes em pixels, adiciona 5 pixels para o tamanho da fonte se não estiver definido"
             },
             "fadeOut": {
                 "name": "Desvanecer texto (segundos)",
@@ -168,8 +168,8 @@
                 "description": "Mostrar recompensas de pontos de canal, subscrições, e anúncios no chat"
             },
             "bots": {
-                "name": "Show bot messages",
-                "description": "Show or hide messages from chat bots (detected via Twitch, FFZ badges & custom list)"
+                "name": "Mostrar mensagens dos bots",
+                "description": "Exibir ou ocultar mensagens dos bots do chat (detetados via Twitch, Distintivos FFZ & lista personalizada)"
             },
             "userBL": {
                 "name": "Lista negra de utilizadores personalizada (separar por espaços)",
@@ -204,20 +204,20 @@
                 "description": "Limpar o chat automaticamente quando o canal iniciar stream"
             },
             "gifSize": {
-                "name": "GIF size (px)",
-                "description": "Set the display size of GIFs in pixels. If unset, the size is multiplied by 4 from the emote size setting"
+                "name": "Tamanho dos GIFs (px)",
+                "description": "Definir o tamanho de exibição de GIFs em pixels. Se não for definido, o tamanho é multiplicado por 4 a partir da configuração do tamanho do emote"
             },
             "gifs": {
                 "name": "GIFs",
-                "description": "Display GIFs in the chat overlay"
+                "description": "Exibir GIFs na sobreposição do chat"
             },
             "track": {
-                "name": "Error tracking",
+                "name": "Erro no rastreamento",
                 "description": "Opt in or out of error tracking via Better Stack"
             },
             "firstMsg": {
-                "name": "Highlight first-time messages",
-                "description": "Highlight users first chat messages with a green background"
+                "name": "Destacar mensagens de primeira vez",
+                "description": "Destacar primeiros utilizadores com um fundo verde"
             }
         }
     },
@@ -232,7 +232,7 @@
         "loading_info": "A carregar informações do utilizador & canal...",
         "loaded_info": "Informações de utilizador e canal carregados",
         "loading_info_fail": "Falha ao carregar informações de utilizador e canal!",
-        "pogly_widget_copied": "Pogly Widget has been copied!"
+        "pogly_widget_copied": "Widget Pogly foi copiado!"
     },
     "banners": {
         "issues": "Estamos com problemas - algumas funcionalidades podem estar indisponíveis",
