@@ -90,7 +90,8 @@ export function sendFakeMessage(message: string) {
     const tags = {
         username,
         "display-name": displayName,
-        "user-id": userId,
+        "user-id": Number(userId),
+        "user-id-raw": userId,
         "badges-raw": badgesRaw,
         badges,
         color: null,
