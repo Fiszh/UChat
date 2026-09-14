@@ -23,7 +23,7 @@
     function getPaintStyle() {
         let style = {
             paint: false,
-            style: `color: ${backgroundColor};`,
+            style: `background-color: ${backgroundColor};`,
         };
 
         if ($cosmetics) {
@@ -59,7 +59,9 @@
 <strong
     class="username"
     class:paint={paintStyle["paint"]}
-    style={paintStyle["style"]}
+    style={paintStyle["paint"]
+        ? paintStyle["style"]
+        : `color: ${backgroundColor}`}
     {...restProps}
 >
     {@render children()}
