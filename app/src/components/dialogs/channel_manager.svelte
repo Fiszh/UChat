@@ -42,20 +42,25 @@
 
     let pastedName = $state(emptyPastedName);
 
-    function validateInput(value: string, type: string) {
-        if (type == "number") {
-            return value.replace(/[^0-9]+/g, "");
-        } else if (type == "twitch_name") {
-            return value.replace(/[^a-zA-Z0-9_]+/g, "");
-        } else if (type == "kick_name") {
-            return value.replace(/[^a-zA-Z0-9-]+/g, "");
-        } else if (type == "youtube_id") {
-            return value.replace(/[^a-zA-Z0-9_-]+/g, "");
-        } else if (type == "youtube_handle") {
-            return value.replace(/[^a-zA-Z0-9_.@-]+/g, "");
-        }
-        return value;
-    }
+    const patterns: Record<string, string> = {
+        number: "[^0-9]",
+        twitch_name: "[^a-zA-Z0-9_]",
+        kick_name: "[^a-zA-Z0-9-]",
+        youtube_id: "[^a-zA-Z0-9_-]",
+        youtube_handle: "[^a-zA-Z0-9_.@-]",
+    };
+
+    const validateInput = (value: string, type: string): string =>
+        type in patterns
+            ? value.replace(new RegExp(patterns[type] + "+", "g"), "")
+            : value;
+
+    const detectType = (value: string): string[] =>
+        Object.entries(patterns)
+            .filter(([, p]) =>
+                new RegExp("^" + p.replace("^", "") + "+$").test(value),
+            )
+            .map(([type]) => type);
 
     function checkForChannelLink(e: ClipboardEvent) {
         if (e.clipboardData && e.target instanceof HTMLInputElement) {
@@ -106,8 +111,19 @@
         if (pastedName["platform"] == "KICK")
             inputs["kick"]["input"]["name"] = pastedName["name"];
 
-        if (pastedName["platform"] == "GOOGLE")
+        if (pastedName["platform"] == "GOOGLE") {
             inputs["google"]["input"]["name"] = pastedName["name"];
+
+            const detectedTypes = detectType(pastedName["name"]);
+
+            if (detectedTypes.includes("youtube_handle")) {
+                inputs["google"]["input"]["id"] = "";
+                inputs["google"]["mode"] = "name";
+            } else {
+                inputs["google"]["input"]["name"] = "";
+                inputs["google"]["mode"] = "id";
+            }
+        }
 
         if (pastedName["input"] != pastedName["platform"]) {
             inputs[pastedName["input"].toLowerCase() as Lowercase<Platforms>][
@@ -157,6 +173,7 @@
             type: "success",
             timeout: 5,
         });
+
         show = false;
     }
 </script>
@@ -179,7 +196,7 @@
     <h3>
         {$t("dialogs.channel_link.description", {
             values: { platform: toTitleCase(pastedName["platform"]) },
-        })}
+        }).replace(/Google/g, "YouTube")}
     </h3>
     <p>
         {#if pastedName["platform"] == pastedName["input"]}
@@ -194,7 +211,7 @@
                     platform: toTitleCase(pastedName["platform"]),
                     name: pastedName["name"],
                 },
-            })}
+            }).replace(/Google/g, "YouTube")}
         {/if}
     </p>
 </Dialog>

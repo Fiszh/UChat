@@ -10,7 +10,7 @@
     import { House, ChevronRight, Search, Brush } from "@lucide/svelte";
     import Twitch from "$components/logos/twitch.svelte";
     import Kick from "$components/logos/kick.svelte";
-    import Youtube from "$components/logos/youtube.svelte";
+    import YouTube from "$components/logos/youtube.svelte";
     import Dialog from "$components/Dialog.svelte";
     import UChat from "$components/logos/uchat.svelte";
     import Loading from "$components/Loading.svelte";
@@ -99,7 +99,7 @@
         <Kick brandColor={chosen} />
     {/snippet}
     {#snippet logoYouTube(chosen: boolean)}
-        <Youtube brandColor={chosen} />
+        <YouTube brandColor={chosen} />
     {/snippet}
     {#snippet logoUChat(chosen: boolean)}
         <UChat brandColor={chosen} />
@@ -112,6 +112,7 @@
         <UChat {brandColor} />
         <Twitch {brandColor} />
         <Kick {brandColor} />
+        <YouTube {brandColor} />
         <Chatterino {brandColor} />
         <ChatterinoHomies {brandColor} />
         <Turteg {brandColor} />

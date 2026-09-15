@@ -177,12 +177,7 @@
 
     $effect(() =>
         channelInfo["google"]["input"]["id"].length
-            ? setParam(
-                  "youtube",
-                  encodeURIComponent(
-                      String(channelInfo["google"]["input"]["id"]),
-                  ),
-              )
+            ? setParam("youtube", String(channelInfo["google"]["input"]["id"]))
             : removeParam("youtube"),
     );
 </script>

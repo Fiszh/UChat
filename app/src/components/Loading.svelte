@@ -3,16 +3,33 @@
     import UChat from "$components/logos/uchat.svelte";
     import { dev } from "$app/env";
 
-    const availableStyles: string[] = ["minimal", "big", "small"];
+    const availableStyles: string[] = ["minimal", "big", "small", "minimized"];
 
     type Props = {
         text?: string;
         type?: string;
         relative?: boolean;
+        minimize?: number;
     };
 
-    const { text, type, relative }: Props = $props();
+    let { text, type, relative, minimize = 5000 }: Props = $props();
+
+    let minimizeTimeout: ReturnType<typeof setTimeout> | undefined;
+
+    $effect(() => {
+        if (type != "minimized") {
+            if (minimizeTimeout) clearTimeout(minimizeTimeout);
+            minimizeTimeout = setTimeout(() => {
+                if (type) type = "minimized";
+            }, minimize);
+        }
+    });
 </script>
+
+{#snippet minimized()}
+    <UChat brandColor size="1.5rem" />
+    <div class="loader"></div>
+{/snippet}
 
 {#snippet small()}
     <UChat brandColor size="1.5rem" />
@@ -72,6 +89,8 @@
         {@render big()}
     {:else if type == "small"}
         {@render small()}
+    {:else if type == "minimized"}
+        {@render minimized()}
     {/if}
 </div>
 
@@ -134,6 +153,25 @@
                 .loader {
                     --size: 1.75rem;
                 }
+            }
+        }
+
+        &.minimized {
+            transform: unset;
+            right: 1rem;
+            bottom: 1rem;
+
+            width: max-content;
+            align-items: center;
+            flex-direction: row;
+
+            padding: 0.5rem;
+            border-radius: 1rem;
+
+            gap: 0.5rem;
+
+            & > .loader {
+                --size: 1.5rem;
             }
         }
 
