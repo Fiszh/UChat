@@ -52,7 +52,7 @@
         "preview": "Podgląd"
     },
     "branding": {
-        "tagline": "{name} Chat Overlay for Twitch & Kick"
+        "tagline": "{name} Nakładka czatu dla Twitch i Kick"
     },
     "sidebar": {
         "home": "Dom",
@@ -129,7 +129,7 @@
             },
             "font": {
                 "name": "Niestandardowa czcionka czatu",
-                "description": "Change the chat message font (Custom Google Fonts are supported)"
+                "description": "Zmień czcionkę wiadomości czatu (obsługiwane są czcionki Google)"
             },
             "fontColor": {
                 "name": "Kolor czcionki czatu (hex)",
@@ -149,7 +149,7 @@
             },
             "emoteSize": {
                 "name": "Rozmiar emotek (px)",
-                "description": "Set the display size of emotes in pixels, adds 5 pixels to the font size setting if not set"
+                "description": "Ustaw wyświetlany rozmiar emotek w pikselach. Jeżeli nie ustawiono, skaluje się z rozmiarem czcionki"
             },
             "fadeOut": {
                 "name": "Zanikanie wiadomości (sekundy)",
@@ -168,8 +168,8 @@
                 "description": "Pokaż odbiór nagród za punkty kanału, subskrypcje oraz ogłoszenia na czacie"
             },
             "bots": {
-                "name": "Show bot messages",
-                "description": "Show or hide messages from chat bots (detected via Twitch, FFZ badges & custom list)"
+                "name": "Pokaż wiadomości botów",
+                "description": "Pokaż lub ukryj wiadomości z czatów botów (wykryte za pośrednictwem Twitch, odznak FFZ i niestandardowej listy)"
             },
             "userBL": {
                 "name": "Niestandardowa czarna lista użytkowników (oddziel używając spacji)",
@@ -204,20 +204,20 @@
                 "description": "Wyczyść czat automatycznie, gdy kanał uruchamia transmisje"
             },
             "gifSize": {
-                "name": "GIF size (px)",
-                "description": "Set the display size of GIFs in pixels. If unset, the size is multiplied by 4 from the emote size setting"
+                "name": "Rozmiar GIF-ów (px)",
+                "description": "Ustaw rozmiar wyświetlania GIF-ów w pikselach. Jeśli nie ustawione, rozmiar jest pomnożony przez 4 od ustawienia rozmiaru emota."
             },
             "gifs": {
-                "name": "GIFs",
-                "description": "Display GIFs in the chat overlay"
+                "name": "GIF-y",
+                "description": "Wyświetlaj GIF-y na nakładce czatu"
             },
             "track": {
-                "name": "Error tracking",
-                "description": "Opt in or out of error tracking via Better Stack"
+                "name": "Śledzenie błędów",
+                "description": "Wyraź zgodę lub zrezygnuj z monitorowania błędów przez Better Stack"
             },
             "firstMsg": {
-                "name": "Highlight first-time messages",
-                "description": "Highlight users first chat messages with a green background"
+                "name": "Podświetl pierwsza wiadomość użytkowników",
+                "description": "Podświetl pierwsza wiadomość użytkowników zielonym tłem"
             }
         }
     },
@@ -225,14 +225,14 @@
         "loading_badges": "Wczytywanie wszystkich odznak...",
         "loaded_badges": "Wczytano wszystkie odznaki!",
         "fail_load_badges": "Nie udało się wczytać wszystkich odznak!",
-        "url_copied": "Overlay URL has been copied!",
+        "url_copied": "URL nakładki został skopiowany!",
         "url_copied_fail": "Nie udało się skopiować URL, sprawdź konsolę po więcej informacji.",
         "unsupported": "Nieobsługiwane.",
         "no_input": "Brak danych wejściowych.",
         "loading_info": "Wczytywanie informacji o użytkowniku i kanale...",
         "loaded_info": "Wczytano informacje o użytkowniku i kanale",
         "loading_info_fail": "Nie udało się wczytać informacji o użytkowniku i kanale!",
-        "pogly_widget_copied": "Pogly Widget has been copied!"
+        "pogly_widget_copied": "Widżet Pogly został skopiowany!"
     },
     "banners": {
         "issues": "Mamy problemy - niektóre funkcje mogą być niedostępne",
@@ -256,62 +256,62 @@
                 "message": "Wygląda na to, że strona, do której próbujesz dotrzeć, nie istnieje lub została przeniesiona."
             },
             "418": {
-                "title": "I'm a teapot!",
-                "message": "Sorry, I refuse to brew coffee because I'm, permanently, a teapot."
+                "title": "Jestem czajnikiem!",
+                "message": "Przepraszam, odmawiam zaparzenia kawy, ponieważ jestem na stałe czajniczkiem."
             },
             "500": {
                 "title": "nieoczekiwany błąd.",
-                "message": "Please refresh or try again. If the issue persists, contact us."
+                "message": "Odśwież lub spróbuj ponownie. Jeśli problem będzie się powtarzał, skontaktuj się z nami."
             },
             "default": {
-                "title": "an error occurred.",
-                "message": "Please refresh or try again. If the issue persists, contact us."
+                "title": "Wystąpił błąd.",
+                "message": "Odśwież lub spróbuj ponownie. Jeśli problem będzie się powtarzał, skontaktuj się z nami."
             }
         },
         "chat_messages": {
-            "msg_1": "chat where is the page PauseChamp",
-            "msg_2": "bro the page is gone NOOOO",
-            "msg_3": "who broke the site RAGEY",
-            "msg_4": "the page is gone Sadge",
-            "msg_5": "SadgeCry the page was right here",
-            "msg_6": "@uniiDev ur site is cooked bro",
-            "msg_7": "have you tried turning it off and on again Nerd",
-            "msg_8": "bro needs to learn nginx omE",
-            "msg_9": "unban the page mods",
-            "msg_10": "mods can we get the page back Prayge"
+            "msg_1": "czat gdzie jest ta strona PauseChamp",
+            "msg_2": "brachu strona zniknęła NOOOO",
+            "msg_3": "kto zepsuł stronę RAGEY",
+            "msg_4": "strona została usunięta Sadge",
+            "msg_5": "SadgeCry strona była tutaj",
+            "msg_6": "@uniiDev twoja strona leży bracie",
+            "msg_7": " próbowałeś wyłączyć i włączyć ponownie Nerd",
+            "msg_8": "brat musi nauczyć się nginx omE",
+            "msg_9": "odbanujcie stronę mody",
+            "msg_10": "mody, da się odzyskać tę stronę Prayge"
         }
     },
     "pages": {
         "convert": {
-            "title": "Convert your chat overlay settings to UChat",
-            "warning_bugs": "Bugs could occur, please be aware.",
-            "warning_settings": "Not every setting exists in UChat.",
-            "supported": "Currently supported: JChat & ChatIS.",
+            "title": "Konwertuj ustawienia nakładki czatu na UChat",
+            "warning_bugs": "Mogą pojawić się błędy, proszę być świadomy.",
+            "warning_settings": "Nie każde ustawienie istnieje w UChat.",
+            "supported": "Obecnie obsługiwany: JChat & ChatIS.",
             "url_input": {
                 "title": "Chat Overlay URL",
-                "convert_button": "Convert & Copy"
+                "convert_button": "Konwertuj i skopiuj"
             }
         },
         "help": {
             "info": {
-                "title": "Info & Privacy",
-                "description": "All the info you need to get started with UChat"
+                "title": "Informacje i prywatność",
+                "description": "Wszystkie informacje potrzebne do rozpoczęcia z UChat"
             },
             "faq": "FAQ",
             "privacy": "Prywatność i Bezpieczeństwo",
             "privacy_items": {
-                "item_1": "Your Twitch token is never stored; it is only sent to the server when needed to authenticate actions like login, saving, or deleting your settings.",
-                "item_2": "Settings you change are saved only in your browser so they stay after refresh or returning to the page; they are not stored on our servers unless you are a tester saving global settings.",
-                "item_3": "For testers, we store only their Twitch user ID and the settings they changed from default—nothing else.",
-                "item_4": "Pressing \"Save\" updates your saved global settings; \"Delete\" removes all your saved settings from our servers.",
-                "item_5": "Using \"Reset Settings\" clears all locally saved settings in your browser.",
-                "item_6": "We log every request made to our API to prevent spam or abuse.",
-                "item_7": "UChat and all services under unii.dev are independent and are not affiliated, endorsed by, or sponsored by Twitch Interactive, Inc., YouTube, LLC, or Kick Streaming Pty Ltd."
+                "item_1": "Twój token Twitch nigdy nie jest przechowywany; jest wysyłany na serwer tylko wtedy, gdy jest potrzebny do uwierzytelniania takich czynności, jak logowanie, zapisywanie lub usuwanie ustawień.",
+                "item_2": "Zmienione ustawienia są zapisywane tylko w przeglądarce, więc pozostają po odświeżeniu lub powrocie na stronę; nie są przechowywane na naszych serwerach, chyba że jesteś testerem zapisującym ustawienia globalne.",
+                "item_3": "Dla testerów przechowujemy tylko ich identyfikator użytkownika Twitch i ustawienia, które zmieniły się od domyślnych - nic innego.",
+                "item_4": "Naciśnięcie przycisku \"Zapisz\" aktualizuje Twoje zapisane ustawienia globalne; \"Usuń\" usuwa wszystkie zapisane ustawienia z naszych serwerów.",
+                "item_5": "Używanie \"Resetuj ustawienia\" usuwa wszystkie lokalnie zapisane ustawienia w przeglądarce.",
+                "item_6": "Rejestrujemy każde żądanie wysłane do naszego API, aby zapobiec spamowi lub nadużyciom.",
+                "item_7": "UChat i wszystkie usługi świadczone pod unii.dev są niezależne i nie są powiązane, zatwierdzone lub sponsorowane przez Twitch Interactive, Inc. YouTube, LLC lub Kick Streaming Pty Ltd."
             },
             "faq_items": {
                 "item_1": {
                     "question": "Czym jest UChat?",
-                    "answer": "UChat is a custom Twitch chat overlay that supports 7TV, BetterTTV, and FrankerFaceZ emotes."
+                    "answer": "UChat jest niestandardową nakładką czatu Twitch, która obsługuje 7TV, BetterTTV i FrankerFaceZ emotes."
                 },
                 "item_2": {
                     "question": "How do I get my overlay URL?",
@@ -325,11 +325,11 @@
                     "question": "Jakie komendy czatu są dostępne?",
                     "answer": "Komendy mogą zostać użyte tylko przez nadawcę lub moderatora; możesz też używać komend z !uchat <command>. Kliknij, aby skopiować komendę.",
                     "commands": {
-                        "reloadchat": "Reloads the overlay",
-                        "refreshchat": "Refreshes the overlay",
+                        "reloadchat": "Przeładowuje nakładkę",
+                        "refreshchat": "Odświeża nakładkę",
                         "reloadws": "Ponownie łączy WebSockety 7TV i BTTV",
                         "reconnectchat": "Ponownie łączy z Twitch IRC",
-                        "chatversion": "Shows Chat Overlay Version (reuse command to disable)",
+                        "chatversion": "Pokazuje wersję nakładki czatu (użyj ponownie aby wyłączyć)",
                         "hideloading": "Ukrywa interfejs wczytywania w przypadku, gdy którykolwiek z interfejsów API nie odpowiada"
                     }
                 },
@@ -347,7 +347,7 @@
                 },
                 "item_8": {
                     "question": "W jaki sposób przyciski Zapisywania i Usuwania działają dla testerów?",
-                    "answer": "Pressing Save updates only the settings you've changed on the server linked to your user ID. Delete removes all your saved global settings from the server. Local browser settings aren't affected by Delete."
+                    "answer": "Naciśnij przycisk Zapisz aktualizacje tylko ustawienia, które zmieniłeś na serwerze połączonym z ID użytkownika. Usuń wszystkie zapisane ustawienia globalne z serwera. Usunięcie nie ma wpływu na lokalne ustawienia przeglądarki."
                 },
                 "item_9": {
                     "question": "Jakie są szanse zostania testerem?",
@@ -369,27 +369,27 @@
                     "answer": "Any use of undocumented endpoints is strictly restricted. Unauthorized usage or attempts to bypass restrictions (such as CORS) will result in an immediate indefinite ban."
                 },
                 "item_13": {
-                    "question": "Where can I find the source code?",
-                    "answer": "You can find the source code on {github}."
+                    "question": "Gdzie mogę znaleźć kod źródłowy?",
+                    "answer": "Kod źródłowy można znaleźć na {github}."
                 },
                 "item_14": {
-                    "question": "Is my Twitch token safe?",
-                    "answer": "Your token is only used for validation and is never stored on our servers."
+                    "question": "Czy mój token Twitch jest bezpieczny?",
+                    "answer": "Twój token jest używany tylko do weryfikacji i nigdy nie jest przechowywany na naszych serwerach."
                 },
                 "item_15": {
-                    "question": "What do we track?",
-                    "answer": "We log error messages, stack traces, and basic browser/OS data during a crash. We never collect personal data or session recordings, data is only shared with our error-tracking provider."
+                    "question": "Co śledzimy?",
+                    "answer": "Zapisujemy komunikaty o błędzie, stosy i podstawowe dane przeglądarki/OS podczas błędu. Nigdy nie zbieramy danych osobowych ani nagrań sesji, dane są udostępniane tylko naszemu dostawcy śledzenia błędów."
                 },
                 "item_16": {
-                    "question": "What if my question isn't listed here?",
-                    "answer": "For more information, you can reach out via {twitch} or {discord}."
+                    "question": "Co jeśli moje pytanie nie jest tutaj wymienione?",
+                    "answer": "Aby uzyskać więcej informacji, możesz się skontaktować za pośrednictwem {twitch} lub {discord}."
                 }
             }
         },
         "message_creator": {
-            "title": "UChat Message Creator",
-            "fetch_channel": "Fetch Channel & User",
-            "download": "Download image"
+            "title": "Twórca wiadomości UChat",
+            "fetch_channel": "Wczytaj kanał & Użytkownik",
+            "download": "Pobierz Obraz"
         }
     }
 }
