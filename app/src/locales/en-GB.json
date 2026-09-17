@@ -52,7 +52,7 @@
         "preview": "Preview"
     },
     "branding": {
-        "tagline": "{name} Chat Overlay for Twitch & Kick"
+        "tagline": "{name} Multiplatform Chat Overlay (Twitch, Kick & YouTube)"
     },
     "sidebar": {
         "home": "Home",
