@@ -30,3 +30,4 @@ Put an `x` in the boxes that apply. You can also fill them out later after creat
 - [ ] This PR relates to only one platform.
   - [ ] Twitch.
   - [ ] Kick.
+  - [ ] YouTube.

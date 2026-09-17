@@ -240,7 +240,6 @@
         header {
             display: flex;
             align-items: center;
-            justify-content: space-between;
 
             gap: 0.5rem;
 
@@ -251,7 +250,7 @@
             background-color: rgba(0, 0, 0);
 
             h1 {
-                font-size: 0.6em;
+                font-size: 0.4em;
                 margin: 0;
                 padding: 0;
             }
