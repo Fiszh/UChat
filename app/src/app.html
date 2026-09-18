@@ -8,6 +8,7 @@
         <title>UChat - Custom Twitch Chat Overlay by uniiDev</title>
 
         <meta name="robots" content="index, follow" />
+        <meta name="author" content="uniiDev" />
 
         <meta
             name="description"
@@ -36,6 +37,7 @@
             content="UChat is a multiplaform chat overlay for Twitch, Kick & YouTube with custom settings, saved preferences, and support for 7TV, BTTV, and FFZ. Copy your overlay URL, reset settings, and preview chat instantly. Works with OBS, Streamlabs, and XSplit."
         />
 
+        <meta property="og:site_name" content="UChat" />
         <meta property="og:url" content="https://chat.unii.dev" />
         <meta property="og:type" content="website" />
 
@@ -43,13 +45,15 @@
             property="og:image"
             content="https://chat.unii.dev/images/banner.png"
         />
+        <meta property="og:image:alt" content="UChat chat overlay preview" />
 
         <meta
             name="twitter:image"
             content="https://chat.unii.dev/images/banner.png"
         />
+        <meta name="twitter:image:alt" content="UChat chat overlay preview" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="theme-color" content="#43B581" />
+        <meta name="theme-color" content="#7C5CFC" />
         <meta name="twitter:site" content="@KillerFiszh" />
         <meta name="twitter:creator" content="@KillerFiszh" />
 
@@ -66,6 +70,59 @@
             href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
         />
 
+        <script type="application/json" id="discord:component-embed">
+            {
+                "component": {
+                    "type": 17,
+                    "accent_color": 8142076,
+                    "components": [
+                        {
+                            "type": 10,
+                            "content": "# UChat\nCustomizable Multiplaform chat overlay for Twitch, Kick & YouTube with support for 7TV, BTTV, and FFZ."
+                        },
+                        {
+                            "type": 12,
+                            "items": [
+                                {
+                                    "media": {
+                                        "url": "https://dev.unii.dev/images/banner.png"
+                                    }
+                                }
+                            ]
+                        },
+                        { "type": 14 },
+                        {
+                            "type": 1,
+                            "components": [
+                                {
+                                    "type": 2,
+                                    "style": 5,
+                                    "label": "Open UChat",
+                                    "url": "https://chat.unii.dev"
+                                },
+                                {
+                                    "type": 2,
+                                    "style": 5,
+                                    "label": "Message Creator",
+                                    "url": "https://chat.unii.dev/message-creator"
+                                },
+                                {
+                                    "type": 2,
+                                    "style": 5,
+                                    "label": "GitHub",
+                                    "url": "https://github.com/Fiszh/UChat"
+                                }
+                            ]
+                        },
+                        {
+                            "type": 10,
+                            "content": "-# unii.dev · Open source"
+                        }
+                    ]
+                }
+            }
+        </script>
+
         <script type="application/ld+json">
             {
                 "@context": "https://schema.org",
@@ -73,6 +130,13 @@
                 "name": "UChat",
                 "url": "https://chat.unii.dev",
                 "applicationCategory": "WebApplication",
+                "applicationSubCategory": "Streaming software",
+                "operatingSystem": "Any",
+                "author": {
+                    "@type": "Person",
+                    "name": "uniiDev",
+                    "url": "https://twitch.tv/uniiDev"
+                },
                 "sameAs": [
                     "https://github.com/Fiszh/UChat",
                     "https://twitch.tv/uniiDev",

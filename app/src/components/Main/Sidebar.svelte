@@ -124,7 +124,7 @@
 
 <aside>
     <header id="topbar">
-        <UChat size={50} brandColor />
+        <UChat size={"4rem"} brandColor />
         <div id="name">
             <strong>UChat</strong>
             <h1>
@@ -250,9 +250,10 @@
             background-color: rgba(0, 0, 0);
 
             h1 {
-                font-size: 0.4em;
+                font-size: 0.5em;
                 margin: 0;
                 padding: 0;
+                width: 75%;
             }
 
             small {
