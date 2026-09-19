@@ -232,7 +232,9 @@
         "loading_info": "A carregar informações do utilizador & canal...",
         "loaded_info": "Informações de utilizador e canal carregados",
         "loading_info_fail": "Falha ao carregar informações de utilizador e canal!",
-        "pogly_widget_copied": "Widget Pogly foi copiado!"
+        "pogly_widget_copied": "Widget Pogly foi copiado!",
+        "command_copied": "Command has been copied!",
+        "command_copied_fail": "Failed to copy the command, check the console for more info."
     },
     "banners": {
         "issues": "Estamos com problemas - algumas funcionalidades podem estar indisponíveis",
@@ -330,7 +332,8 @@
                         "reloadws": "Reconecta os WebSockets 7TV e BTTV",
                         "reconnectchat": "Reconecta ao Twitch IRC",
                         "chatversion": "Mostra a versão da sobreposição do Chat (reutilizar o comando para desativar)",
-                        "hideloading": "Oculta a interface de carregamento caso qualquer uma da API esteja indisponível"
+                        "hideloading": "Oculta a interface de carregamento caso qualquer uma da API esteja indisponível",
+                        "multichat": "Disables multiplatform badges (reuse command to enable)"
                     }
                 },
                 "item_5": {
