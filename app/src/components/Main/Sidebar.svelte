@@ -124,7 +124,7 @@
 
 <aside>
     <header id="topbar">
-        <UChat size={"4rem"} brandColor />
+        <UChat size={"4rem"} brandColor={dev} pride />
         <div id="name">
             <strong>UChat</strong>
             <h1>
