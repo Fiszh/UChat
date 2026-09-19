@@ -3,6 +3,8 @@ import { writable } from "svelte/store";
 
 export const isMobile = writable<boolean>(false);
 
+export const multiplatformBadge = writable<boolean>(true);
+
 interface LoadingInfo {
     text: string | undefined;
     type: string | undefined;

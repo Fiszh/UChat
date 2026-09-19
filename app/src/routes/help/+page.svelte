@@ -5,6 +5,7 @@
 
     import { faqItems } from "$stores/faq";
     import { t } from "svelte-i18n";
+    import { addToast } from "$lib/toast";
 
     let helpNotice: HTMLElement;
 
@@ -36,7 +37,22 @@
         return Answer;
     }
 
-    const copy = (text: string) => navigator.clipboard.writeText(text);
+    function copy(text: string) {
+        navigator.clipboard
+            .writeText(text)
+            .catch(() => {
+                addToast({
+                    msg: $t("toasts.command_copied_fail"),
+                    type: "error",
+                });
+            })
+            .finally(() => {
+                addToast({
+                    msg: $t("toasts.command_copied"),
+                    type: "success",
+                });
+            });
+    }
 
     onMount(() => {
         if (window.location.hash == "#notice")

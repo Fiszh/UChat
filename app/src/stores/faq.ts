@@ -42,6 +42,10 @@ export const faqItems = [
                 cmd: "!hideloading",
                 descKey: "pages.help.faq_items.item_4.commands.hideloading",
             },
+            {
+                cmd: "!multichat",
+                descKey: "pages.help.faq_items.item_4.commands.multichat",
+            },
         ],
     },
     {

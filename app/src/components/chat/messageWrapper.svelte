@@ -8,7 +8,7 @@
     import Badge from "$components/Badge.svelte";
 
     import { chatSettings, settings } from "$stores/settings";
-    import { emotes, globals } from "$stores/global";
+    import { emotes, globals, multiplatformBadge } from "$stores/global";
     import { cosmetics } from "$stores/cosmetics";
     import Twitch from "$components/logos/twitch.svelte";
     import Kick from "$components/logos/kick.svelte";
@@ -124,7 +124,7 @@
 
 {#snippet Badges()}
     <strong class="badge-wrapper">
-        {#if moreThanOneService}
+        {#if moreThanOneService && $multiplatformBadge}
             {#if platform == "TWITCH"}
                 <Twitch brandColor />
             {:else if platform == "KICK"}
@@ -144,7 +144,7 @@
 {/snippet}
 
 <div class="chat-message" bind:this={chatMessage} class:removed class:first>
-    {#if (parsedBadges && parsedBadges.length) || moreThanOneService}{@render Badges()}{/if}
+    {#if (parsedBadges && parsedBadges.length) || (moreThanOneService && $multiplatformBadge)}{@render Badges()}{/if}
     <Paint
         {platform}
         platformID={tags["user-id-raw"]}

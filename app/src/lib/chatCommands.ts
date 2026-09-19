@@ -1,4 +1,4 @@
-import { loadingInfo } from "$stores/global";
+import { loadingInfo, multiplatformBadge } from "$stores/global";
 import { get } from "svelte/store";
 import { disconnect } from "./chat";
 import { loadChat } from "./loadChat";
@@ -62,6 +62,11 @@ export function execCommand(message: string, tags: Record<string, any>) {
                     text: undefined,
                     type: undefined,
                 });
+
+                break;
+            case "multiplatform":
+            case "multichat":
+                multiplatformBadge.set(!get(multiplatformBadge));
 
                 break;
             default:

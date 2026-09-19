@@ -1,10 +1,10 @@
 # ![UChat Logo](app/static/images/logo.svg) UChat | Custom Twitch, Kick & YouTube Chat Overlay
 
+[![Crowdin](https://badges.crowdin.net/uchat-app/localized.svg)](https://crowdin.com/project/uchat-app)
+
 [![Build](https://github.com/Fiszh/UChat/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/Fiszh/UChat/actions/workflows/build.yml)
 [![Dev Server](https://github.com/Fiszh/UChat/actions/workflows/dev.yml/badge.svg?branch=main)](https://github.com/Fiszh/UChat/actions/workflows/dev.yml)
 [![Check](https://github.com/Fiszh/UChat/actions/workflows/check.yml/badge.svg?branch=main)](https://github.com/Fiszh/UChat/actions/workflows/check.yml)
-
-[![Crowdin](https://badges.crowdin.net/uchat-app/localized.svg)](https://crowdin.com/project/uchat-app)
 
 Project is currently deployed at: https://chat.unii.dev/
 
