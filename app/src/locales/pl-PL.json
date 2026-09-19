@@ -233,8 +233,8 @@
         "loaded_info": "Wczytano informacje o użytkowniku i kanale",
         "loading_info_fail": "Nie udało się wczytać informacji o użytkowniku i kanale!",
         "pogly_widget_copied": "Widżet Pogly został skopiowany!",
-        "command_copied": "Command has been copied!",
-        "command_copied_fail": "Failed to copy the command, check the console for more info."
+        "command_copied": "Komenda została skopiowana!",
+        "command_copied_fail": "Nie udało się skopiować komendy, sprawdź konsolę, aby uzyskać więcej informacji."
     },
     "banners": {
         "issues": "Mamy problemy - niektóre funkcje mogą być niedostępne",
@@ -333,7 +333,7 @@
                         "reconnectchat": "Ponownie łączy z Twitch IRC",
                         "chatversion": "Pokazuje wersję nakładki czatu (użyj ponownie aby wyłączyć)",
                         "hideloading": "Ukrywa interfejs wczytywania w przypadku, gdy którykolwiek z interfejsów API nie odpowiada",
-                        "multichat": "Disables multiplatform badges (reuse command to enable)"
+                        "multichat": "Wyłącza multiplatformowe odznaki (użyj polecenia ponownie, aby włączyć)"
                     }
                 },
                 "item_5": {
