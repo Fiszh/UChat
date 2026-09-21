@@ -355,6 +355,24 @@ async function getUserVia7TVID(stvID: string | number) {
     }
 }
 
+async function getUsersCosmetics(
+    identifiers: string[],
+): Promise<Types7TV.EventAPIBridgeCosmetic | never[]> {
+    let user_info: Types7TV.EventAPIBridgeCosmetic | never[] = [];
+
+    try {
+        const response = await fetch("https://7tv.io/v3/bridge/event-api", {
+            body: JSON.stringify(identifiers),
+        });
+
+        if (response.ok) return await response.json();
+    } catch (error) {
+        throw new Error(`Error fetching users cosmeticsc: ${error}`);
+    } finally {
+        return user_info;
+    }
+}
+
 function argbToRgba(color: number) {
     if (color < 0) color = color >>> 0;
 
@@ -368,6 +386,7 @@ export default {
     parseSetData,
     parsePaintData,
     parseBadgeData,
+    getUsersCosmetics,
     user: {
         by7TVID: getUserVia7TVID,
         byTwitchID: getUserViaTwitchID,

@@ -36,6 +36,18 @@ export async function getChannelEmotesViaTwitchID(twitchID: string) {
                 await SevenTV_main.user.byTwitchID(twitchID);
 
             if (SevenTV_user_data) {
+                if (
+                    "avatar_url" in SevenTV_user_data &&
+                    SevenTV_user_data["avatar_url"]!.includes("cdn.7tv.app")
+                ) {
+                    badges.update((badgeData) => {
+                        badgeData.channel[twitchID] =
+                            SevenTV_user_data["avatar_url"]!;
+
+                        return badgeData;
+                    });
+                }
+
                 emotes.update((emoteData) => {
                     if (
                         "emote_data" in SevenTV_user_data &&
@@ -164,7 +176,7 @@ async function getAvatarViaID(user_id: string) {
 
     const data = await response.json();
 
-    return data?.avatar || false;
+    return data?.avatar ?? false;
 }
 
 export async function getGlobalEmotes() {
