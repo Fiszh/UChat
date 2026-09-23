@@ -232,7 +232,9 @@
         "loading_info": "جارٍ تحميل معلومات المستخدم والقناة...",
         "loaded_info": "تم تحميل معلومات المستخدم والقناة",
         "loading_info_fail": "فشل تحميل معلومات المستخدم والقناة!",
-        "pogly_widget_copied": "Pogly Widget has been copied!"
+        "pogly_widget_copied": "Pogly Widget has been copied!",
+        "command_copied": "Command has been copied!",
+        "command_copied_fail": "Failed to copy the command, check the console for more info."
     },
     "banners": {
         "issues": "نواجه بعض المشاكل - قد لا تتوفر بعض الميزات",
@@ -330,7 +332,8 @@
                         "reloadws": "Reconnects the 7TV and BTTV WebSockets",
                         "reconnectchat": "Reconnects to Twitch IRC",
                         "chatversion": "Shows Chat Overlay Version (reuse command to disable)",
-                        "hideloading": "Hides the loading UI in case any of the API is down"
+                        "hideloading": "Hides the loading UI in case any of the API is down",
+                        "multichat": "Disables multiplatform badges (reuse command to enable)"
                     }
                 },
                 "item_5": {
