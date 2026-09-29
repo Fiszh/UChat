@@ -5,7 +5,7 @@
     import { parseBadges } from "$lib/badges/parser";
     import { fixNameColor } from "$lib/overlayIndex";
 
-    import Badge from "$components/Badge.svelte";
+    import Badge from "$components/chat/Badge.svelte";
 
     import { chatSettings, settings } from "$stores/settings";
     import { emotes, globals, multiplatformBadge } from "$stores/global";
@@ -125,13 +125,15 @@
 {#snippet Badges()}
     <strong class="badge-wrapper">
         {#if moreThanOneService && $multiplatformBadge}
-            {#if platform == "TWITCH"}
-                <Twitch brandColor />
-            {:else if platform == "KICK"}
-                <Kick brandColor />
-            {:else if platform == "GOOGLE"}
-                <YouTube brandColor />
-            {/if}
+            <Badge>
+                {#if platform == "TWITCH"}
+                    <Twitch brandColor />
+                {:else if platform == "KICK"}
+                    <Kick brandColor />
+                {:else if platform == "GOOGLE"}
+                    <YouTube brandColor />
+                {/if}
+            </Badge>
         {/if}
         {#each parsedBadges as badge, i (i)}
             <Badge

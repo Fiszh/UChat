@@ -148,7 +148,9 @@
             values = Object.fromEntries(
                 Object.entries(values).filter(
                     ([param, value]) =>
-                        param != "undefined" && !isDefault(param, value),
+                        param != "undefined" &&
+                        !isDefault(param, value) &&
+                        Boolean,
                 ),
             );
 

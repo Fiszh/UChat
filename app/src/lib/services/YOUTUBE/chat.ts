@@ -1,4 +1,4 @@
-import { messages } from "$lib/chat";
+import { messages, sanitizeInput } from "$lib/chat";
 import { WS_URL } from "$stores/global";
 import { settings } from "$stores/settings";
 import type { YTNodes } from "youtubei.js";
@@ -78,6 +78,11 @@ class YOUTUBESocket extends TypedEventEmitter<Events> {
                         "message" in item == false
                     )
                         break;
+
+                    (item["message"] as { text: string })["text"] =
+                        sanitizeInput(
+                            (item["message"] as { text: string })["text"],
+                        );
 
                     messages.update((msgs) => {
                         const filtered = msgs.filter((m) => m.id != item.id);

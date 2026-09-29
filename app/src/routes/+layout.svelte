@@ -103,6 +103,12 @@
                         </section>
                     </main>
                 {:else}
+                    <ToastWrapper />
+                    {#if data.statusMessage == null}
+                        <Banner type="fail" />
+                    {:else if data.statusMessage && (data.statusMessage.type || data.statusMessage.message)}
+                        <Banner {...data.statusMessage} />
+                    {/if}
                     <main>
                         {#if page.status == 200 && !["/auth"].includes(page.route.id ?? "")}
                             <Sidebar />
