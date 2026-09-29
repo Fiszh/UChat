@@ -216,7 +216,18 @@
     </p>
 </Dialog>
 
-<Dialog bind:show name={$t("dialogs.manage_channels.title")} hideClose>
+{#snippet channelManagerButtons()}
+    <Button primary wide center onclick={handleSave}>
+        {$t("labels.save")}
+    </Button>
+{/snippet}
+
+<Dialog
+    bind:show
+    name={$t("dialogs.manage_channels.title")}
+    buttons={channelManagerButtons}
+    hideClose
+>
     <div id="layout">
         <section>
             <p>
@@ -378,10 +389,6 @@
                 {$t("dialogs.manage_channels.use_channel_handle")}
             </Checkbox>
         </section>
-
-        <Button primary wide center onclick={handleSave}>
-            {$t("labels.save")}
-        </Button>
     </div>
 </Dialog>
 

@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Setting } from "$stores/settings";
-    import { RotateCcw } from "@lucide/svelte";
+    import { InfoIcon, RotateCcw } from "@lucide/svelte";
     import type { Snippet } from "svelte";
     import { t } from "svelte-i18n";
 
@@ -8,6 +8,7 @@
         onReset?: () => void;
         value?: Setting["value"];
         settingsDefault?: Setting["default"];
+        previewReact?: boolean;
         column?: boolean;
         hidden?: boolean;
         param: string;
@@ -18,6 +19,7 @@
         onReset,
         value,
         settingsDefault,
+        previewReact,
         column,
         hidden,
         param,
@@ -40,6 +42,12 @@
             {/if}
         </span>
         <small>{$t("settings.items." + param + ".description")}</small>
+        {#if typeof previewReact == "boolean" && !previewReact}
+            <small id="non-reactive">
+                <InfoIcon size="0.75rem" />
+                {$t("settings.non_reactive")}
+            </small>
+        {/if}
     </aside>
 
     {@render children()}
@@ -60,7 +68,7 @@
         gap: 0.5rem;
 
         button {
-            color: white;
+            color: var(--color);
         }
 
         &.column {
@@ -78,8 +86,16 @@
             display: none;
         }
 
+        #non-reactive {
+            color: rgba(255, 255, 255, 0.25);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.15rem;
+        }
+
         &.hidden {
-            border: 1px solid red;
+            border: 1px dashed rgba(255, 0, 0, 0.5);
+            border-radius: 0.5rem;
 
             #hidden {
                 display: unset;
@@ -91,8 +107,8 @@
 
                 font-size: 0.75rem;
 
-                border: 1px solid red;
-                background-color: rgba(255, 0, 0, 0.151);
+                border: 1px solid rgba(255, 0, 0, 0.25);
+                background-color: rgba(255, 0, 0, 0.15);
             }
         }
 

@@ -1,18 +1,19 @@
 import { loadingInfo, multiplatformBadge } from "$stores/global";
 import { get } from "svelte/store";
-import { disconnect } from "./chat";
 import { loadChat } from "./loadChat";
-import { services } from "./services";
+import Services from "./services";
 
-const UChatMods = ["528761326", "166427338"];
+export const UChatMods: Record<Platforms, string[]> = {
+    TWITCH: ["528761326", "166427338"],
+    KICK: ["1235565", "116386"],
+    GOOGLE: [],
+};
 
-export function execCommand(message: string, tags: Record<string, any>) {
-    if (
-        message.startsWith("!") &&
-        (UChatMods.includes(tags["user-id-raw"]) ||
-            tags?.mod ||
-            tags?.["badges-raw"]?.includes("broadcaster/1"))
-    ) {
+export const isUChatMod = (platform: Platforms, userid: string) =>
+    UChatMods[platform].includes(userid);
+
+export function execCommand(message: string) {
+    if (message.startsWith("!")) {
         switch (
             message
                 .toLowerCase()
@@ -31,13 +32,15 @@ export function execCommand(message: string, tags: Record<string, any>) {
                 break;
             case "reloadws":
                 try {
-                    services["7TV"].ws.close();
-                    services["BTTV"].ws.close();
+                    Services["7TV"].ws.close();
+                    Services["BTTV"].ws.close();
                 } catch (err) {} // HERE JUST IN CASE THE WEBSOCKET IS NOT OPEN
 
                 break;
             case "reconnectchat":
-                disconnect();
+                Services["TWITCH"]["ws"].disconnect();
+                Services["KICK"]["ws"].disconnect();
+                Services["GOOGLE"]["ws"].disconnect();
 
                 break;
             case "chatversion":

@@ -11,6 +11,7 @@
     import { badges, globals } from "$stores/global";
     import { generateUUID } from "$lib/overlayIndex";
     import { normalizeFont } from "$lib/font";
+    import { page } from "$app/state";
 
     type Props = {
         customStyle?: string;
@@ -85,7 +86,7 @@
 
         for (const setting of config) {
             if (
-                !window.location.search && // CHECKS IF ITS PREVIEW
+                !page.data.hasChannel && // CHECKS IF ITS PREVIEW
                 typeof setting.previewReact != "undefined" &&
                 !setting.previewReact // CHECKS IF SETTING IS REACTIVE IN PREVIEW
             )

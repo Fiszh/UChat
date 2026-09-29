@@ -21,6 +21,7 @@
         approve?: boolean;
         layout?: "row" | "column";
         noHover?: boolean;
+        compact?: boolean;
         children?: Snippet;
     } & HTMLButtonAttributes &
         HTMLAnchorAttributes;
@@ -39,6 +40,7 @@
         approve = false,
         layout = "row",
         noHover = false,
+        compact = false,
         children,
         ...restProps
     }: Props = $props();
@@ -77,6 +79,7 @@
         class:danger
         class:approve
         class:noHover
+        class:compact
         class:column={layout == "column"}
     >
         <span>{@render icon?.()}</span>
@@ -102,6 +105,7 @@
         class:danger
         class:approve
         class:noHover
+        class:compact
         class:column={layout == "column"}
     >
         {@render icon?.()}
@@ -116,7 +120,7 @@
         background-color: var(--ghost);
         color: var(--ghost-text);
         border: var(--ghost-border);
-        border-radius: 10px;
+        border-radius: 0.5rem;
         padding: 0.5rem;
         cursor: pointer;
         font-size: inherit;
@@ -149,6 +153,11 @@
             background-color 0.3s ease,
             border-radius 0.3s ease;
 
+        &.compact {
+            padding: 0.25rem;
+            font-size: 0.85rem;
+        }
+
         &.center {
             justify-content: center;
         }
@@ -161,13 +170,13 @@
             @media (hover: hover) and (pointer: fine) {
                 &:hover {
                     background-color: var(--ghost-hover);
-                    border-radius: 7px;
+                    border-radius: 0.25rem;
                 }
             }
 
             &:active,
             &.active {
-                border-radius: 5px;
+                border-radius: 0.15rem;
                 background-color: var(--ghost-active);
             }
         }
@@ -257,6 +266,7 @@
         a,
         button {
             padding: 0.25rem 0.5rem;
+            gap: 0.25rem;
         }
     }
 </style>

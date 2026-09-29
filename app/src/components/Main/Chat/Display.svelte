@@ -1,6 +1,5 @@
 <script lang="ts">
-    import { RotateCcw, Copy, Send, ShieldPlus } from "@lucide/svelte";
-    import ColorPicker, { ChromeVariant } from "svelte-awesome-color-picker";
+    import { RotateCcw, Copy, Send, ShieldPlus, Import } from "@lucide/svelte";
 
     import { messages, sanitizeInput } from "$lib/chat";
 
@@ -24,6 +23,7 @@
     import { shake } from "$lib/shake";
     import Pogly from "$components/logos/pogly.svelte";
     import PoglyWidget from "$components/dialogs/pogly_widget.svelte";
+    import ImportWidget from "$components/dialogs/import.svelte";
 
     let hex = $state("#191919");
     let customMessageValue = $state("");
@@ -57,6 +57,9 @@
     let channelManagerButton = $state<HTMLButtonElement | HTMLAnchorElement>();
 
     let showPoglyDialog = $state(false);
+    let showImportDialog = $state(false);
+
+    const iconSize = $derived($isMobile ? "0.75rem" : "1.5rem");
 
     const params = $derived(
         new URLSearchParams(
@@ -186,14 +189,25 @@
 
 <PoglyWidget bind:show={showPoglyDialog} />
 
+<ImportWidget bind:show={showImportDialog} />
+
 {#snippet loadBadgesIcon()}
-    <ShieldPlus size={$isMobile ? "1rem" : "1.5rem"} />
+    <ShieldPlus size={iconSize} />
 {/snippet}
 {#snippet resetSettingsIcon()}
-    <RotateCcw size={$isMobile ? "1rem" : "1.5rem"} />
+    <RotateCcw size={iconSize} />
 {/snippet}
 {#snippet PoglyIcon()}
-    <Pogly brandColor size={$isMobile ? "1rem" : "1.5rem"} />
+    <Pogly brandColor size={iconSize} />
+{/snippet}
+{#snippet SendIcon()}
+    <Send size={iconSize} />
+{/snippet}
+{#snippet CopyIcon()}
+    <Copy size={iconSize} />
+{/snippet}
+{#snippet ImportIcon()}
+    <Import size={iconSize} />
 {/snippet}
 
 <div id="chat-preview" style="--chat-background: {hex}">
@@ -202,13 +216,11 @@
         <small>{$t("display.top.description")}</small>
     </section>
     <section id="chat-display" class="bg-grid">
-        {#if !$isMobile}
-            <ChatDisplay />
-        {:else}
-            <ChatDisplay
-                customStyle="--chat-font-size: 13px; --chat-emote-size: 15px;"
-            />
-        {/if}
+        <ChatDisplay
+            customStyle={$isMobile
+                ? "--chat-font-size: 13px; --chat-emote-size: 15px;"
+                : ""}
+        />
     </section>
     <section id="bottom">
         <span class="header">
@@ -250,10 +262,6 @@
             </small>
 
             <div class="display">
-                {#snippet icon()}
-                    <Send size={$isMobile ? "1.5rem" : "2rem"} />
-                {/snippet}
-
                 <Input
                     wide
                     bind:value={customMessageValue}
@@ -262,7 +270,7 @@
                     )}
                 />
 
-                <Button secondary onclick={addMessage} {icon}>
+                <Button secondary onclick={addMessage} icon={SendIcon}>
                     {$t("labels.send")}
                 </Button>
             </div>
@@ -299,14 +307,21 @@
             </small>
 
             <div class="display">
-                {#snippet icon()}
-                    <Copy size={$isMobile ? "1.5rem" : "2rem"} />
-                {/snippet}
-
                 <Input wide readonly bind:value={urlResults} />
-                <Button primary onclick={copyUrl} {icon}>
+                <Button
+                    title="Copy URL"
+                    primary
+                    onclick={copyUrl}
+                    icon={CopyIcon}
+                >
                     {$t("labels.copy")}
                 </Button>
+                <Button
+                    title="Import Settings"
+                    secondary
+                    icon={ImportIcon}
+                    onclick={() => (showImportDialog = true)}
+                />
                 <Button
                     title="Use as Pogly widget"
                     secondary
@@ -400,7 +415,6 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                padding-bottom: 0.7rem;
                 box-sizing: border-box;
 
                 #buttons {
@@ -422,15 +436,19 @@
 
             height: 100%;
             width: 100dvw;
-        }
 
-        #top,
-        #bottom {
-            font-size: 0.7rem;
-        }
+            #top,
+            #bottom {
+                font-size: 0.7rem;
+            }
 
-        #chat-preview #bottom section {
-            padding: 0.1rem 0.5rem;
+            #top {
+                padding: 0.25rem 0.5rem;
+            }
+
+            #bottom section {
+                padding: 0.1rem 0.5rem 0.15rem 0.5rem;
+            }
         }
     }
 </style>

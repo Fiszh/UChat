@@ -1,50 +1,53 @@
 <script lang="ts">
+    import ColorPicker from "$components/colorPicker.svelte";
+
     type Props = {
         value?: string;
         onChange?: (value: string) => void;
     };
 
-    let { value = $bindable("#FFFFFF"), onChange }: Props = $props();
+    let { value = $bindable("#ffffff"), onChange }: Props = $props();
 
-    const timeoutMS = 25;
+    let displayPicker = $state(false);
+    let pickerOffset = $state({
+        x: 0,
+        y: 0,
+    });
 
-    let timeout: ReturnType<typeof setTimeout> | undefined = $state();
-
-    function handleChange(event: Event) {
-        if (timeout) clearTimeout(timeout);
-
-        timeout = setTimeout(() => {
-            const target = event.target as HTMLInputElement;
-            onChange?.(target.value);
-        }, timeoutMS);
+    function showPicker(e: MouseEvent) {
+        pickerOffset["x"] = (e.clientX / window.innerWidth) * 100;
+        pickerOffset["y"] = (e.clientY / window.innerHeight) * 100;
+        displayPicker = true;
     }
+
+    const clickoff = () => (displayPicker = false);
 </script>
 
-<label>
-    <span id="display" style="background-color: {value};"></span>
-    <input
-        type="color"
-        bind:value
-        oninput={handleChange}
-        onchange={handleChange}
+{#if displayPicker}
+    <ColorPicker
+        bind:color={value}
+        bind:offsetX={pickerOffset["x"]}
+        bind:offsetY={pickerOffset["y"]}
+        onchange={onChange}
+        {clickoff}
     />
+{/if}
+
+<button onclick={showPicker}>
+    <span id="display" style="background-color: {value};"></span>
     <span class="value">{value}</span>
-</label>
+</button>
 
 <style lang="scss">
-    input {
-        width: 0rem;
-        height: 0rem;
-        opacity: 0;
-    }
-
-    label {
+    button {
         display: inline-flex;
         align-items: center;
         gap: 0.15rem;
         background-color: var(--secondary);
         padding: 0.25rem 0.5rem;
         border-radius: 0.25rem;
+
+        color: var(--color);
 
         cursor: pointer;
 
@@ -72,7 +75,7 @@
     }
 
     @media (max-width: 768px) {
-        label {
+        button {
             #display {
                 height: 0.75rem;
                 border-radius: 0.15rem;

@@ -11,6 +11,7 @@
         min?: string;
         max: string;
         defaultValue?: Props["value"];
+        previewReact?: boolean;
         param: string;
     };
 
@@ -26,6 +27,7 @@
         hidden,
         value = $bindable(),
         defaultValue,
+        previewReact,
         min,
         max,
         param,
@@ -45,6 +47,7 @@
     {param}
     {hidden}
     {value}
+    {previewReact}
     settingsDefault={defaultValue}
     onReset={handleReset}
     column={$isMobile}

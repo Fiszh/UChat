@@ -6,6 +6,7 @@
     import { faqItems } from "$stores/faq";
     import { t } from "svelte-i18n";
     import { addToast } from "$lib/toast";
+    import { isMobile } from "$stores/global";
 
     let helpNotice: HTMLElement;
 
@@ -64,6 +65,8 @@
     const privacyItems = privacyKeys.map((key) =>
         $t(`pages.help.privacy_items.${key}`),
     );
+
+    const iconSize = $derived($isMobile ? "1rem" : "2rem");
 </script>
 
 <div id="faq-container">
@@ -75,7 +78,7 @@
     </section>
 
     <h5>
-        <CircleQuestionMark size="2rem" />
+        <CircleQuestionMark size={iconSize} />
         {$t("pages.help.faq")}
     </h5>
 
@@ -115,7 +118,7 @@
     </section>
 
     <h5>
-        <ShieldCheck size="2rem" />
+        <ShieldCheck size={iconSize} />
         {$t("pages.help.privacy")}
     </h5>
 
@@ -209,6 +212,19 @@
     @media (max-width: 768px) {
         #faq-container {
             padding: 0.3rem 1rem 2.5rem 1rem;
+
+            h5 {
+                font-size: 1rem;
+            }
+
+            &,
+            .faq-item .commands code {
+                font-size: 0.75rem;
+            }
+
+            .faq-item {
+                padding: 0.75rem 1rem;
+            }
         }
     }
 </style>

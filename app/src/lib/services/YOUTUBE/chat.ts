@@ -1,9 +1,8 @@
 import { messages } from "$lib/chat";
-import { execCommand } from "$lib/chatCommands";
-import { generateUUID } from "$lib/overlayIndex";
 import { WS_URL } from "$stores/global";
 import { settings } from "$stores/settings";
 import type { YTNodes } from "youtubei.js";
+import { closeWebSocket, TypedEventEmitter } from "$lib/services/eventEmitter";
 
 let modActions = false;
 
@@ -26,28 +25,22 @@ type Events = {
     raw: (data: any) => void;
 };
 
-class YOUTUBESocket {
+class YOUTUBESocket extends TypedEventEmitter<Events> {
     url: string;
     ws: WebSocket | null;
-    listeners: Record<string, Function[]>;
-    channel_id: string;
+    reconnect_attempts: number;
+    disconnect_timeout?: ReturnType<typeof setInterval>;
+    max_reconnects: number;
 
-    constructor(channel_id: string) {
+    constructor() {
+        super();
         this.url = WS_URL + "/youtube";
         this.ws = null;
-        this.listeners = {};
 
-        this.channel_id = channel_id;
-    }
+        this.reconnect_attempts = 0;
+        this.max_reconnects = 10;
 
-    on<K extends keyof Events>(event: K, cb: Events[K]) {
-        if (!this.listeners[event]) this.listeners[event] = [];
-        this.listeners[event]!.push(cb);
-    }
-
-    emit<K extends keyof Events>(event: K, ...args: Parameters<Events[K]>) {
-        if (!this.listeners[event]) return;
-        for (const cb of this.listeners[event]!) cb(...args);
+        this.disconnect_timeout;
     }
 
     connect() {
@@ -71,8 +64,6 @@ class YOUTUBESocket {
 
             switch (data["type"]) {
                 case "welcome":
-                    this.subscribe(this.channel_id);
-
                     this.emit("open");
 
                     break;
@@ -130,9 +121,27 @@ class YOUTUBESocket {
                     break;
             }
         });
+
+        this.ws.addEventListener("close", () => {
+            console.log("Disconnected from YouTube WS");
+            this.emit("close");
+
+            this.reconnect_attempts++;
+
+            if (this.reconnect_attempts <= this.max_reconnects)
+                setTimeout(() => {
+                    this.connect();
+                }, 1000 * this.reconnect_attempts);
+        });
+
+        this.ws.addEventListener("error", (err) => {
+            console.error("WebSocket error:", err);
+            this.emit("error", err);
+        });
     }
 
     subscribe(channel_id: string) {
+        if (!channel_id.startsWith("UC")) return;
         if (!channel_id) throw new Error("Missing 'channel_id' parameter");
 
         if (this.ws)
@@ -142,18 +151,10 @@ class YOUTUBESocket {
 
         return true;
     }
-}
 
-export function sanitizeInput(input: string): string {
-    if (typeof input !== "string") return input;
-
-    return input
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;")
-        .replace(/\//g, "&#x2F;");
+    disconnect() {
+        this.ws = closeWebSocket(this.ws);
+    }
 }
 
 export default YOUTUBESocket;

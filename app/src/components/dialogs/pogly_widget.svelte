@@ -67,6 +67,9 @@
         }
 
         small {
+            color: var(--color);
+            text-align: center;
+
             button {
                 all: unset;
                 cursor: pointer;
@@ -78,9 +81,6 @@
                     opacity: 0.5;
                 }
             }
-
-            color: white;
-            text-align: center;
         }
     }
 </style>

@@ -32,17 +32,6 @@ export const previewMessages = [
         },
         message: "Thats a real jammer ShoulderDance RaveTime",
     },
-    // {
-    //     tags: {
-    //         username: "strayyzz",
-    //         "display-name": "strayyzz",
-    //         "user-id": 234567890,
-    //         "badges-raw": "moderator/1,subscriber/3003",
-    //         badges: { moderator: "1", subscriber: "3003" },
-    //         color: "#00FF7F",
-    //     },
-    //     message: "Piss is not boobs or butt Wisdom",
-    // },
     {
         tags: {
             username: "jolong66",
@@ -54,6 +43,18 @@ export const previewMessages = [
         },
         message:
             "aga life is like a box of chocolate, you never know when im gonna eat them all catEat",
+    },
+    {
+        tags: {
+            username: "loganreallyhere",
+            "display-name": "LoganReallyHere",
+            "user-id": 799194677,
+            "badges-raw": "purple-noob/1",
+            badges: { "purple-noob": "1" },
+            color: "#6C0BA9",
+            gifs: "0:a:https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExYnZuZjA2NHdhbXBleWFldWl6a2puOTN6aXFrbnRjY3Vwbnd0bThjcCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/BJGhRE0ez1x1m795uo/giphy.gif", // idk whats the format
+        },
+        message: "[Enable GIFs]",
     },
     {
         tags: {
@@ -77,6 +78,7 @@ export const previewMessages = [
             "badges-raw": "dragonscimmy/1",
             badges: { dragonscimmy: "1" },
             color: "#FF69B4",
+            "first-msg": "1",
         },
         message: "@uniiDev yugi61",
     },

@@ -75,7 +75,7 @@
         background-color: var(--secondary);
 
         border: 0.15rem var(--secondary-active) solid;
-        border-radius: 0.25rem;
+        border-radius: 0.5rem;
         padding: 0.25rem;
 
         cursor: text;

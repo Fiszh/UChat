@@ -75,7 +75,7 @@
         gap: 0.5rem;
         background: var(--background);
 
-        color: white;
+        color: var(--color);
         border-bottom: 1px solid #242424;
 
         &.outage {

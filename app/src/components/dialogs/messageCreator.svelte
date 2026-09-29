@@ -26,7 +26,11 @@
     }
 </script>
 
-<Dialog bind:show name={$t("mobile_footer.settings")}>
+{#snippet Buttons()}
+    <Button primary center onclick={save}>Save</Button>
+{/snippet}
+
+<Dialog bind:show name={$t("mobile_footer.settings")} buttons={Buttons}>
     <div id="layout">
         <section id="inputs">
             <label>
@@ -57,8 +61,6 @@
                 />
             </label>
         </section>
-
-        <Button primary center onclick={save}>Save</Button>
     </div>
 </Dialog>
 

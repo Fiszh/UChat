@@ -11,6 +11,7 @@
         value: number;
         defaultValue?: number;
         selectors: SelectorSetting["selectors"];
+        previewReact?: boolean;
         param: string;
     };
 
@@ -18,8 +19,15 @@
         if (typeof onChange != "undefined") return onChange(v);
     };
 
-    let { onChange, hidden, value, defaultValue, selectors, param }: Props =
-        $props();
+    let {
+        onChange,
+        hidden,
+        value,
+        defaultValue,
+        previewReact,
+        selectors,
+        param,
+    }: Props = $props();
 
     // default will be set to starter value if not set in props
     const handleReset = () => {
@@ -33,9 +41,10 @@
 
 <SettingsWrapper
     {param}
-    column={$isMobile}
     {hidden}
     {value}
+    {previewReact}
+    column={$isMobile}
     settingsDefault={defaultValue}
     onReset={handleReset}
 >

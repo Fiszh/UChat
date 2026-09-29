@@ -8,6 +8,7 @@ import { emotes, globals } from "$stores/global";
 import { chatSettings, setEmoteSize } from "$stores/settings";
 import { getSavedSet } from "$lib/overlayIndex";
 import type { YTNodes } from "youtubei.js";
+import { sanitizeInput } from "$lib/chat";
 
 const kickEmoteRegex = /\[emote:(?<id>\d+)[:]?(?<name>[a-zA-Z0-9-_!]*)[:]?\]/g; // https://github.com/KickTalkOrg/KickTalk/blob/a3570be165618f70449257bbb70df7cd16b66efe/utils/constants.js#L3
 
@@ -55,17 +56,6 @@ function splitTextWithTwemoji(text: string): TwemojiToken[] {
 
     return result.filter(Boolean);
 }
-
-const sanitizeInput = (input: string) =>
-    typeof input !== "string"
-        ? input
-        : input
-              .replace(/&/g, "&amp;")
-              .replace(/</g, "&lt;")
-              .replace(/>/g, "&gt;")
-              .replace(/"/g, "&quot;")
-              .replace(/'/g, "&#39;")
-              .replace(/\//g, "&#x2F;");
 
 function findEntryAndTier(prefix: string, bits: number) {
     prefix = prefix.toLowerCase();

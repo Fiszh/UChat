@@ -102,7 +102,7 @@
             outline: none;
             border: none;
             background: none;
-            color: white;
+            color: var(--color);
         }
 
         #child-render {

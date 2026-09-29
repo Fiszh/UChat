@@ -154,7 +154,9 @@
     </Paint>{#if !tags.action}:{/if}
     <span
         style:color={tags.action ? nameColor : "defaultColor"}
-        data-first-type={Array.isArray(parsedMessage)
+        data-first-type={Array.isArray(parsedMessage) &&
+        parsedMessage.length &&
+        "type" in parsedMessage[0]
             ? parsedMessage[0]["type"]
             : undefined}
     >

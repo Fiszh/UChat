@@ -8,6 +8,7 @@
         hidden?: boolean;
         value: string;
         defaultValue?: Props["value"];
+        previewReact?: boolean;
         param: string;
     };
 
@@ -15,7 +16,8 @@
         if (typeof onChange != "undefined") return onChange(hex);
     };
 
-    let { onChange, hidden, value, defaultValue, param }: Props = $props();
+    let { onChange, hidden, value, defaultValue, previewReact, param }: Props =
+        $props();
 
     // default will be set to starter value if not set in props
     const handleReset = () => {
@@ -31,6 +33,7 @@
     {param}
     {hidden}
     {value}
+    {previewReact}
     settingsDefault={defaultValue}
     onReset={handleReset}
 >

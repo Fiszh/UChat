@@ -1,10 +1,19 @@
 <script lang="ts">
+    import Dialog from "$components/Dialog.svelte";
     import Button from "$components/Inputs/Button.svelte";
     import Input from "$components/Inputs/Input.svelte";
+    import { importConfig } from "$lib/import";
+    import { addToast } from "$lib/toast";
     import chatis from "$stores/convert/chatis";
     import { config } from "$stores/settings";
     import type { Converter } from "$types/converter";
     import { t } from "svelte-i18n";
+
+    type Props = {
+        show: boolean;
+    };
+
+    let { show = $bindable(false) }: Props = $props();
 
     let input = $state("");
 
@@ -46,8 +55,24 @@
     }
 
     function convertURL() {
-        if (!input.length) return alert($t("toasts.no_input"));
-        const url = new URL(input);
+        if (!input.length) {
+            return addToast({
+                msg: $t("toasts.no_input"),
+                type: "error",
+                timeout: 5,
+            });
+        }
+
+        let url;
+        try {
+            url = new URL(input);
+        } catch (error) {
+            return addToast({
+                msg: $t("toasts.no_input"),
+                type: "error",
+                timeout: 5,
+            });
+        }
         const params = url.searchParams.entries();
 
         if (
@@ -127,65 +152,71 @@
                 ),
             );
 
-            const result_url = new URL("https://chat.unii.dev/");
+            const result_url = new URL(window.location.origin);
             const result_params = new URLSearchParams(values);
 
+            const url = result_url + "?" + result_params;
+
             navigator.clipboard
-                .writeText(result_url + "?" + result_params)
-                .then(() => alert($t("toasts.url_copied")))
+                .writeText(url)
+                .then(() => {
+                    addToast({
+                        msg: $t("toasts.url_copied"),
+                        type: "success",
+                        timeout: 5,
+                    });
+
+                    importConfig(url);
+
+                    show = false;
+                })
                 .catch((err) => {
                     console.error("Failed to copy URL: ", err);
-                    alert($t("toasts.url_copied_fail"));
+                    addToast({
+                        msg: $t("toasts.url_copied_fail"),
+                        type: "error",
+                        timeout: 5,
+                    });
                 });
         } else {
-            return alert($t("toasts.unsupported"));
+            return addToast({
+                msg: $t("toasts.unsupported"),
+                type: "error",
+                timeout: 5,
+            });
         }
     }
 </script>
 
-<section id="layout">
-    <h1>
-        {$t("pages.convert.title")}
-    </h1>
-    <p>{$t("pages.convert.warning_bugs")}</p>
-    <p>
-        {$t("pages.convert.warning_settings")}
-    </p>
-    <p>{$t("pages.convert.supported")}</p>
-
-    <section id="url-input">
+<Dialog bind:show name={$t("sidebar.convert")} width={35}>
+    <div id="layout">
+        <h2>
+            {$t("pages.convert.title")}
+        </h2>
+        <p>{$t("pages.convert.warning_bugs")}</p>
+        <p>{$t("pages.convert.supported")}</p>
         <h2>{$t("pages.convert.url_input.title")}</h2>
-        <Input type="text" bind:value={input} />
 
-        <Button primary onclick={convertURL}>
+        <Input type="text" bind:value={input} />
+        <Button primary wide center onclick={convertURL}>
             {$t("pages.convert.url_input.convert_button")}
         </Button>
-    </section>
-</section>
+
+        <small>
+            {$t("pages.convert.warning_settings")}
+        </small>
+    </div>
+</Dialog>
 
 <style lang="scss">
-    @use "sass:color";
-
     #layout {
-        width: 100%;
-        height: 100%;
-
-        padding-block: 2.5rem;
-
-        #url-input {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        text-align: center;
-
         display: flex;
         flex-direction: column;
-
-        align-items: center;
-
         gap: 0.5rem;
+        text-align: center;
+
+        small {
+            color: hsla(0, 0%, 100%, 0.25);
+        }
     }
 </style>

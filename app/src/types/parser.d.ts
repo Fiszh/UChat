@@ -6,15 +6,15 @@ declare namespace EmoteParser {
         site: "TTV";
     }
 
-    interface YouTubeEmoteInfo extends TwitchEmoteInfo {
-        site: "YT";
-    }
-
     interface KickEmoteInfo {
         name: string;
         emote_id: string;
         url: string;
         site: "KICK";
+    }
+
+    interface YouTubeEmoteInfo extends TwitchEmoteInfo {
+        site: "YT";
     }
 
     interface FoundInfo {

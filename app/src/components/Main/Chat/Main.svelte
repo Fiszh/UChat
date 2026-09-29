@@ -5,8 +5,6 @@
     import SettingsDisplay from "./Settings.svelte";
     import Display from "./Display.svelte";
 
-    import ChatDisplay from "$components/ChatDisplay.svelte";
-
     import { getBadges } from "$lib/preview";
     import SevenTV_main from "$lib/services/7TV/main";
     import { pushUsersInfoViaGQL } from "$lib/services/7TV/cosmetics";
@@ -17,6 +15,7 @@
     import { previewMessages } from "$stores/previewMessages";
     import { t } from "svelte-i18n";
     import QuickPreview from "$components/QuickPreview.svelte";
+    import Button from "$components/Inputs/Button.svelte";
 
     let tab: string = $state("settings");
 
@@ -51,11 +50,16 @@
     const changeTab = (setTab: string) => (tab = setTab);
 
     $effect(() => {
-        if (tab != "settings" || !$isMobile) {
-            messages.set(previewMessages);
-        }
+        if (tab != "settings" || !$isMobile) messages.set(previewMessages);
     });
 </script>
+
+{#snippet SettingsIcon()}
+    <Settings size="15" />
+{/snippet}
+{#snippet PreviewIcon()}
+    <MessageSquare size="15" />
+{/snippet}
 
 <section>
     {#if $isMobile}
@@ -67,14 +71,20 @@
         {/if}
 
         <footer>
-            <button onclick={() => changeTab("settings")}>
-                <Settings size="15" />
+            <Button
+                onclick={() => changeTab("settings")}
+                icon={SettingsIcon}
+                compact
+            >
                 {$t("mobile_footer.settings")}
-            </button>
-            <button onclick={() => changeTab("preview")}>
-                <MessageSquare size="15" />
+            </Button>
+            <Button
+                onclick={() => changeTab("preview")}
+                icon={PreviewIcon}
+                compact
+            >
                 {$t("mobile_footer.preview")}
-            </button>
+            </Button>
         </footer>
     {:else}
         <SettingsDisplay />
@@ -96,7 +106,7 @@
         }
 
         footer {
-            border-top: 1px #161616 solid;
+            border-top: 1px #ffffff07 solid;
             padding: 0.5rem 2rem;
             box-sizing: border-box;
             width: 100%;
@@ -104,15 +114,6 @@
             justify-content: space-evenly;
 
             font-size: 0.6rem;
-
-            button {
-                all: unset;
-                pointer-events: auto;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-            }
         }
     }
 </style>

@@ -6,7 +6,15 @@ import BTTV_ws from "$lib/services/BTTV/websocket";
 
 import FFZ_main from "$lib/services/FFZ/main";
 
-export const services = {
+import { TWITCHSocket } from "./TWITCH/chat";
+import TTV_main from "$lib/services/TWITCH/main";
+
+import KICKSocket from "./KICK/chat";
+import KICK_main from "$lib/services/KICK/main";
+
+import YOUTUBESocket from "./YOUTUBE/chat";
+
+export default {
     "7TV": {
         main: SevenTV_main,
         ws: new SevenTV_ws({ reconnect: true, resubscribeOnReconnect: false }),
@@ -17,5 +25,16 @@ export const services = {
     },
     FFZ: {
         main: FFZ_main,
+    },
+    TWITCH: {
+        main: TTV_main,
+        ws: new TWITCHSocket(),
+    },
+    KICK: {
+        main: KICK_main,
+        ws: new KICKSocket(),
+    },
+    GOOGLE: {
+        ws: new YOUTUBESocket(),
     },
 };

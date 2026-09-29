@@ -12,8 +12,8 @@ import { getChannelEmotesViaTwitchID, getGlobalEmotes } from "$lib/emotes/main";
 import { emotes, globals, loadingInfo } from "$stores/global";
 import { settings } from "$stores/settings";
 import { get } from "svelte/store";
-import { getLastMessages } from "./chat";
-import { services } from "./services";
+import Twitch from "./services/TWITCH/main";
+import Services from "./services";
 import { getSavedSet } from "./overlayIndex";
 
 export const initBadges = async () =>
@@ -59,7 +59,7 @@ export async function loadChat(displayLoading?: boolean) {
         );
 
         if (!alreadyHasSet) {
-            const stv_user = await services["7TV"].main.user.byKickID(
+            const stv_user = await Services["7TV"].main.user.byKickID(
                 globals["channels"]["KICK"]["userID"],
             );
 
@@ -87,7 +87,7 @@ export async function loadChat(displayLoading?: boolean) {
         );
 
         if (!alreadyHasSet) {
-            const stv_user = await services["7TV"].main.user.byYouTubeID(
+            const stv_user = await Services["7TV"].main.user.byYouTubeID(
                 globals["channels"]["GOOGLE"]["ID"],
             );
 
@@ -116,7 +116,7 @@ export async function loadChat(displayLoading?: boolean) {
         foundSetting &&
         foundSetting.value
     )
-        getLastMessages(globals["channels"]["TWITCH"]["Name"]);
+        Twitch.getLastMessages(globals["channels"]["TWITCH"]["Name"]);
 
     if (displayLoading) loadingInfo.set({ text: undefined, type: undefined });
 }

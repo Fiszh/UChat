@@ -1,4 +1,5 @@
 import main from "./main.js";
+import { TypedEventEmitter } from "$lib/services/eventEmitter";
 const { parseSetData, parsePaintData, parseBadgeData } = main;
 
 const id_types: Record<string, string> = {
@@ -55,7 +56,7 @@ type Events = {
     delete_entitlement: (data: Types7TV.Entitlement) => void;
 };
 
-class SevenTVWebSocket {
+class SevenTVWebSocket extends TypedEventEmitter<Events> {
     url: string;
     ws: WebSocket | null;
     setting: {
@@ -67,9 +68,9 @@ class SevenTVWebSocket {
     };
     subscriptions: Record<string, any>;
     caughtPersonalSets: any[];
-    listeners: Record<string, Function[]>;
 
     constructor(options: Options = {}) {
+        super();
         this.url = options.url ?? "wss://events.7tv.io/v3";
         this.ws = null;
         this.setting = {
@@ -81,17 +82,6 @@ class SevenTVWebSocket {
         };
         this.subscriptions = {};
         this.caughtPersonalSets = [];
-        this.listeners = {};
-    }
-
-    on<K extends keyof Events>(event: K, cb: Events[K]) {
-        if (!this.listeners[event]) this.listeners[event] = [];
-        this.listeners[event]!.push(cb);
-    }
-
-    emit<K extends keyof Events>(event: K, ...args: Parameters<Events[K]>) {
-        if (!this.listeners[event]) return;
-        for (const cb of this.listeners[event]!) cb(...args);
     }
 
     connect() {

@@ -8,6 +8,15 @@ export const load = async ({ fetch }: LoadEvent) => {
     const isEmbedded = browser ? window.top !== window.self : false;
     const embedderUrl = browser && isEmbedded ? document.referrer : null;
 
+    const params = new URLSearchParams(
+        browser ? window.location.search : "https://chat.unii.dev/",
+    );
+    const hasChannel =
+        params.has("channel") ||
+        params.has("id") ||
+        params.has("kick") ||
+        params.has("youtube");
+
     try {
         await waitLocale();
         const res = await fetch(API_URL + `/status`);
@@ -16,8 +25,9 @@ export const load = async ({ fetch }: LoadEvent) => {
             statusMessage: data as StatusMessage,
             isEmbedded,
             embedderUrl,
+            hasChannel,
         };
     } catch {
-        return { statusMessage: null, isEmbedded, embedderUrl };
+        return { statusMessage: null, isEmbedded, embedderUrl, hasChannel };
     }
 };

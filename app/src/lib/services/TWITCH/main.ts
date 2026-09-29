@@ -1,6 +1,7 @@
 import { API_URL } from "$stores/global";
+import { assignMessage, parseIRCLine } from "./chat";
 
-export async function valideToken(
+async function valideToken(
     accessToken: string,
 ): Promise<Record<string, string> | false> {
     const response = await fetch(API_URL + "/validate", {
@@ -22,7 +23,7 @@ export async function valideToken(
     return false;
 }
 
-export async function getUser(channel: string) {
+async function getUser(channel: string) {
     const response = await fetch(
         `https://api.ivr.fi/v2/twitch/user?login=${channel}`,
     );
@@ -31,3 +32,29 @@ export async function getUser(channel: string) {
 
     return await response.json();
 }
+
+async function getLastMessages(channel_name: string) {
+    const response = await fetch(
+        `https://recent-messages.robotty.de/api/v2/recent-messages/${channel_name}`,
+    );
+
+    if (!response.ok) return console.error(response);
+
+    const data = await response.json();
+
+    if (data?.messages?.length) {
+        const messages = data.messages.reverse().slice(0, 100).reverse();
+
+        for (const message of messages) {
+            const parsed = parseIRCLine(message);
+
+            assignMessage(parsed);
+        }
+    }
+}
+
+export default {
+    valideToken,
+    getUser,
+    getLastMessages,
+};

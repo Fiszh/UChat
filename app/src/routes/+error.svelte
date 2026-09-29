@@ -2,7 +2,7 @@
     import ChatDisplay from "$components/ChatDisplay.svelte";
     import { getBadges, sendFakeMessage } from "$lib/preview";
     import { emotes, isMobile } from "$stores/global";
-    import { onDestroy, onMount } from "svelte";
+    import { onMount } from "svelte";
 
     import SevenTV_main from "$lib/services/7TV/main";
     import { page } from "$app/state";
@@ -57,7 +57,7 @@
         (l) => (currentLocale = (l as FlagCode | undefined) ?? "en"),
     );
 
-    onMount(async () => {
+    onMount(() => {
         loaded = true;
 
         if (window.history.length <= 1) isAbleToGoBack = false;
@@ -71,15 +71,17 @@
             });
         }
 
-        const previewEmotes = await SevenTV_main.emoteSet.bySetID(
-            "01KQD6H6K5ZGDWX2RGM52J75Z5",
-        );
+        (async () => {
+            const previewEmotes = await SevenTV_main.emoteSet.bySetID(
+                "01KQD6H6K5ZGDWX2RGM52J75Z5",
+            );
 
-        emotes.update((e) => {
-            e["7TV"]["global"] = previewEmotes;
+            emotes.update((e) => {
+                e["7TV"]["global"] = previewEmotes;
 
-            return e;
-        });
+                return e;
+            });
+        })();
 
         sendInterval = setInterval(() => {
             let msg = msgs[Math.floor(Math.random() * msgs.length)];
@@ -89,9 +91,11 @@
 
             sendFakeMessage(msg);
         }, 1000);
-    });
 
-    onDestroy(() => clearInterval(sendInterval));
+        return () => {
+            clearInterval(sendInterval);
+        };
+    });
 
     const goBack = () => history.back();
 </script>

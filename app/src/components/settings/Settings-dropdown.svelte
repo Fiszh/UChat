@@ -12,6 +12,7 @@
         value: string;
         list: DropdownSetting["list"];
         defaultValue?: Props["value"];
+        previewReact?: boolean;
         param: string;
     };
 
@@ -24,8 +25,15 @@
             onChange(e.currentTarget.value);
     }
 
-    let { onChange, value, list, hidden, defaultValue, param }: Props =
-        $props();
+    let {
+        onChange,
+        value,
+        list,
+        hidden,
+        defaultValue,
+        previewReact,
+        param,
+    }: Props = $props();
 
     // default will be set to starter value if not set in props
     const handleReset = () => {
@@ -54,8 +62,9 @@
 <SettingsWrapper
     {param}
     {hidden}
-    column={$isMobile}
     {value}
+    {previewReact}
+    column={$isMobile}
     settingsDefault={""}
     onReset={handleReset}
 >

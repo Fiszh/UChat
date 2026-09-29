@@ -105,6 +105,8 @@
 
             padding-block: 0.5rem;
 
+            width: 100%;
+
             & > :global(*) {
                 display: inline-flex;
                 gap: 0.5rem;

@@ -7,7 +7,7 @@
     import { toPng } from "html-to-image";
 
     import { initChat } from "$lib/loadChat";
-    import { getUser } from "$lib/services/twitch";
+    import Twitch from "$lib/services/TWITCH/main";
     import { getChannelEmotesViaTwitchID } from "$lib/emotes/main";
     import { pushUserInfoViaGQL } from "$lib/services/7TV/cosmetics";
     import { getBadges } from "$lib/preview";
@@ -29,8 +29,8 @@
         await initChat();
         await getBadges();
 
-        const channel_info = await getUser(channel.name);
-        const user_info = await getUser(message["tags"]["display-name"]);
+        const channel_info = await Twitch.getUser(channel.name);
+        const user_info = await Twitch.getUser(message["tags"]["display-name"]);
 
         let sevenTV_user_id;
         let mappedBadges = "";

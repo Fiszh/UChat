@@ -11,7 +11,7 @@ import {
     type GlobalEmotes,
 } from "$stores/global";
 
-import { services } from "$lib/services";
+import Services from "$lib/services";
 import { settings, type Setting } from "$stores/settings";
 
 let cosmetic_data = get(cosmetics);
@@ -295,8 +295,8 @@ export function getSavedSet(
 }
 
 export async function connectToWS() {
-    services["7TV"].ws.connect();
-    if (globals["channels"]["TWITCH"]["ID"]) services["BTTV"].ws.connect();
+    Services["7TV"].ws.connect();
+    if (globals["channels"]["TWITCH"]["ID"]) Services["BTTV"].ws.connect();
 }
 
 export async function subscribeEventAPIToSharedChatUser(room_id: string) {
@@ -304,10 +304,10 @@ export async function subscribeEventAPIToSharedChatUser(room_id: string) {
 
     // BTTV
     if (emote_data["BTTV"]["channel"][room_id])
-        services["BTTV"].ws.subscribe(room_id, false, true);
+        Services["BTTV"].ws.subscribe(room_id, false, true);
 
     // 7TV
-    services["7TV"].ws.subscribe(
+    Services["7TV"].ws.subscribe(
         room_id,
         "entitlement.create",
         {
@@ -320,7 +320,7 @@ export async function subscribeEventAPIToSharedChatUser(room_id: string) {
     const channel_set = getSavedSet(room_id, "TWITCH");
     if (channel_set) {
         if (channel_set["set"]["id"])
-            services["7TV"].ws.subscribe(
+            Services["7TV"].ws.subscribe(
                 channel_set["set"]["id"],
                 "emote_set.update",
                 {},
@@ -328,7 +328,7 @@ export async function subscribeEventAPIToSharedChatUser(room_id: string) {
             );
 
         if (channel_set["owner"] && channel_set["owner"]["user_id"])
-            services["7TV"].ws.subscribe(
+            Services["7TV"].ws.subscribe(
                 channel_set["owner"]["user_id"],
                 "user.*",
                 {},
@@ -341,21 +341,21 @@ export async function unsubscribeEventAPISharedChatUser(room_id: string) {
     if (room_id == globals["channels"]["TWITCH"]["ID"]) return;
 
     // BTTV
-    services["BTTV"].ws.unsubscribe(room_id);
+    Services["BTTV"].ws.unsubscribe(room_id);
 
     // 7TV
-    services["7TV"].ws.unsubscribe(room_id, "entitlement.create");
+    Services["7TV"].ws.unsubscribe(room_id, "entitlement.create");
 
     const channel_set = getSavedSet(room_id, "TWITCH");
     if (channel_set) {
         if (channel_set["set"]["id"])
-            services["7TV"].ws.unsubscribe(
+            Services["7TV"].ws.unsubscribe(
                 channel_set["set"]["id"],
                 "emote_set.update",
             );
 
         if (channel_set["owner"] && channel_set["owner"]["user_id"])
-            services["7TV"].ws.unsubscribe(
+            Services["7TV"].ws.unsubscribe(
                 channel_set["owner"]["user_id"],
                 "user.*",
             );
@@ -415,9 +415,9 @@ export async function cleanUpSharedChat() {
 }
 
 // ANCHOR 7TV WEBSOCKET
-services["7TV"].ws.on("open", () => {
+Services["7TV"].ws.on("open", () => {
     if (globals["channels"]["TWITCH"]["ID"]) {
-        services["7TV"].ws.subscribe(
+        Services["7TV"].ws.subscribe(
             globals["channels"]["TWITCH"]["ID"],
             "entitlement.create",
             {
@@ -428,7 +428,7 @@ services["7TV"].ws.on("open", () => {
     }
 
     if (globals["channels"]["KICK"]["userID"]) {
-        services["7TV"].ws.subscribe(
+        Services["7TV"].ws.subscribe(
             globals["channels"]["KICK"]["userID"],
             "entitlement.create",
             {
@@ -451,13 +451,13 @@ services["7TV"].ws.on("open", () => {
     ];
 
     for (const id of unique7TVSetIDs)
-        services["7TV"].ws.subscribe(id, "user.*"); // SET CHANGES
+        Services["7TV"].ws.subscribe(id, "user.*"); // SET CHANGES
 
     for (const id of unique7TVIDs)
-        services["7TV"].ws.subscribe(id, "emote_set.update"); // EMOTE CHANGES
+        Services["7TV"].ws.subscribe(id, "emote_set.update"); // EMOTE CHANGES
 });
 
-services["7TV"].ws.on("add_emote", (id, actor, data) => {
+Services["7TV"].ws.on("add_emote", (id, actor, data) => {
     if (cosmetic_data.sets[id]) {
         // PERSONAL SETS
         cosmetics.update((cosmeticsData) => {
@@ -480,7 +480,7 @@ services["7TV"].ws.on("add_emote", (id, actor, data) => {
     //console.log("Emote added:", id, data);
 });
 
-services["7TV"].ws.on("remove_emote", (id, actor, data) => {
+Services["7TV"].ws.on("remove_emote", (id, actor, data) => {
     emotes.update((emoteData) => {
         const found_set = getSavedSet(id, undefined, emoteData);
 
@@ -495,7 +495,7 @@ services["7TV"].ws.on("remove_emote", (id, actor, data) => {
     //console.log("Emote removed:", id, data);
 });
 
-services["7TV"].ws.on("rename_emote", (id, actor, data) => {
+Services["7TV"].ws.on("rename_emote", (id, actor, data) => {
     emotes.update((emoteData) => {
         const found_set = getSavedSet(id, undefined, emoteData);
 
@@ -513,9 +513,9 @@ services["7TV"].ws.on("rename_emote", (id, actor, data) => {
     //console.log("Emote renamed:", id, data);
 });
 
-services["7TV"].ws.on("set_change", async (actor, data) => {
+Services["7TV"].ws.on("set_change", async (actor, data) => {
     // no need to resub to a new set id, already done via the websocket client
-    const newSet = await services["7TV"].main.emoteSet.bySetID(
+    const newSet = await Services["7TV"].main.emoteSet.bySetID(
         data["new_set"]["id"],
     );
 
@@ -565,7 +565,7 @@ services["7TV"].ws.on("set_change", async (actor, data) => {
     //console.log("Emote set changed:", data);
 });
 
-services["7TV"].ws.on("create_badge", (data) => {
+Services["7TV"].ws.on("create_badge", (data) => {
     if (!cosmetic_data.badges[data.id]) {
         cosmetics.update((cosmeticsData) => {
             cosmeticsData.badges[data.id] = data;
@@ -575,7 +575,7 @@ services["7TV"].ws.on("create_badge", (data) => {
     }
 });
 
-services["7TV"].ws.on("create_paint", (data) => {
+Services["7TV"].ws.on("create_paint", (data) => {
     if (!cosmetic_data.paints[data.id]) {
         cosmetics.update((cosmeticsData) => {
             cosmeticsData.paints[data.id] = data;
@@ -585,7 +585,7 @@ services["7TV"].ws.on("create_paint", (data) => {
     }
 });
 
-services["7TV"].ws.on("create_personal_set", (data) => {
+Services["7TV"].ws.on("create_personal_set", (data) => {
     // CREATE PERSONAL SET
     if (!cosmetic_data.sets[data.id]) {
         cosmetics.update((cosmeticsData) => {
@@ -603,7 +603,7 @@ services["7TV"].ws.on("create_personal_set", (data) => {
 });
 
 // PERSONAL SETS SHOULD NOT REMOVE THE OWNER, RIGHT 7TV?
-services["7TV"].ws.on("create_entitlement", (data) => {
+Services["7TV"].ws.on("create_entitlement", (data) => {
     // BIND A BADGE, PAINT OR SET TO A USER
     const mappedIDs = data.owner.map((c) => c.id + "-" + c.platform);
 
@@ -662,7 +662,7 @@ services["7TV"].ws.on("create_entitlement", (data) => {
     //console.log("Created entitlement:", data);
 });
 
-services["7TV"].ws.on("delete_entitlement", (data) => {
+Services["7TV"].ws.on("delete_entitlement", (data) => {
     let whatToDelete: "badges" | "paints" | undefined;
 
     if (cosmetic_data.badges[data.id]) {
@@ -693,16 +693,16 @@ services["7TV"].ws.on("delete_entitlement", (data) => {
 });
 
 // ANCHOR BTTV WEBSOCKET
-services["BTTV"].ws.on("open", () => {
+Services["BTTV"].ws.on("open", () => {
     if (
         globals["channels"]["TWITCH"]["ID"] &&
         emote_data["BTTV"].channel[globals["channels"]["TWITCH"]["ID"]]?.length
     ) {
-        services["BTTV"].ws.subscribe(globals["channels"]["TWITCH"]["ID"]); // SET CHANGES
+        Services["BTTV"].ws.subscribe(globals["channels"]["TWITCH"]["ID"]); // SET CHANGES
     }
 });
 
-services["BTTV"].ws.on("add_emote", (id, data) => {
+Services["BTTV"].ws.on("add_emote", (id, data) => {
     if (id && emote_data["BTTV"]["channel"][id]) {
         emotes.update((emoteData) => {
             const found_set = emoteData["BTTV"]["channel"][id];
@@ -716,7 +716,7 @@ services["BTTV"].ws.on("add_emote", (id, data) => {
     //console.log("Emote added:", id, data);
 });
 
-services["BTTV"].ws.on("remove_emote", (id, data) => {
+Services["BTTV"].ws.on("remove_emote", (id, data) => {
     if (id && emote_data["BTTV"]["channel"][id]) {
         emotes.update((emoteData) => {
             emoteData["BTTV"]["channel"][id] = emoteData["BTTV"]["channel"][
@@ -730,7 +730,7 @@ services["BTTV"].ws.on("remove_emote", (id, data) => {
     //console.log("Emote removed:", id, data);
 });
 
-services["BTTV"].ws.on("rename_emote", (id, data) => {
+Services["BTTV"].ws.on("rename_emote", (id, data) => {
     if (id && emote_data["BTTV"]["channel"][id]) {
         emotes.update((emoteData) => {
             const found_set = emoteData["BTTV"]["channel"][id];

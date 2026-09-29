@@ -14,24 +14,18 @@
     import { RenderScan } from "svelte-render-scan";
     import ToastWrapper from "$components/toast/Wrapper.svelte";
     import { dev } from "$app/env";
+    import { isPogly } from "$lib/pogly.js";
+    import UChat from "$components/logos/uchat.svelte";
 
     let { data, children } = $props();
 
     let mounted = $state<boolean>(false);
-    let hasChannel = $state<boolean>(false);
 
     const setMobile = () => isMobile.set(window.innerWidth <= 768);
 
     let accentColor = $state("var(--default-accent)");
 
     onMount(() => {
-        const params = new URLSearchParams(window.location.search);
-        hasChannel =
-            params.has("channel") ||
-            params.has("id") ||
-            params.has("kick") ||
-            params.has("youtube");
-
         setMobile();
         window.addEventListener("resize", setMobile);
 
@@ -98,19 +92,24 @@
                 <a href={window.location.origin}>{window.location.host}</a>
             </div>
         {:else}
-            {#if !hasChannel}
-                <ToastWrapper />
-                {#if data.statusMessage == null}
-                    <Banner type="fail" />
-                {:else if data.statusMessage && (data.statusMessage.type || data.statusMessage.message)}
-                    <Banner {...data.statusMessage} />
+            {#if !data.hasChannel}
+                {#if isPogly()}
+                    <main>
+                        <section id="pogly">
+                            <UChat pride size="5rem" />
+                            <h1>UChat</h1>
+                            <small>Pogly Widget</small>
+                            <p>Set your channel in the widget settings</p>
+                        </section>
+                    </main>
+                {:else}
+                    <main>
+                        {#if page.status == 200 && !["/auth"].includes(page.route.id ?? "")}
+                            <Sidebar />
+                        {/if}
+                        {@render children()}
+                    </main>
                 {/if}
-                <main>
-                    {#if page.status == 200 && !["/auth"].includes(page.route.id ?? "")}
-                        <Sidebar />
-                    {/if}
-                    {@render children()}
-                </main>
             {:else}
                 {@render children()}
             {/if}
@@ -164,6 +163,19 @@
         right: 0.5rem;
         bottom: 0.5rem;
         border: 1px var(--accent) solid;
+    }
+
+    #pogly {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+
+        h1 {
+            line-height: 1;
+            color: var(--accent);
+        }
     }
 
     @media (max-width: 768px) {

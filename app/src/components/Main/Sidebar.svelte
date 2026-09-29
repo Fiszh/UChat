@@ -3,11 +3,11 @@
         House,
         Info,
         Coffee,
-        MessageSquareMore,
         ArrowLeftRight,
         Lightbulb,
         Brush,
-        Earth,
+        Languages,
+        MessageSquarePlus,
     } from "@lucide/svelte";
 
     import moment from "moment/min/moment-with-locales";
@@ -15,7 +15,7 @@
     import LoginButton from "$components/LoginButton.svelte";
     import GlobalSettings from "./GlobalSettings.svelte";
 
-    import { valideToken } from "$lib/services/twitch";
+    import Twitch from "$lib/services/TWITCH/main";
     import { delCookie, getCookie, setCookie } from "$lib/cookie";
 
     import { dev } from "$app/environment";
@@ -27,6 +27,7 @@
     import UChat from "$components/logos/uchat.svelte";
     import HelpNotice from "$components/helpNotice.svelte";
     import LocalizationDialog from "$components/dialogs/localization.svelte";
+    import ConvertDialog from "$components/dialogs/convert.svelte";
     import { locale, t } from "svelte-i18n";
 
     let username = $state(
@@ -38,9 +39,10 @@
     );
 
     let localizationDialog = $state(false);
+    let convertDialog = $state(false);
 
     async function handleToken(token: string) {
-        const user_info = await valideToken(token);
+        const user_info = await Twitch.valideToken(token);
         twitchToken = token;
 
         if (user_info) {
@@ -71,12 +73,13 @@
 </script>
 
 <LocalizationDialog bind:show={localizationDialog} />
+<ConvertDialog bind:show={convertDialog} />
 
 {#snippet HouseIcon()}
     <House size={$isMobile ? "15" : "20"} />
 {/snippet}
-{#snippet MessageSquareMoreIcon()}
-    <MessageSquareMore size={$isMobile ? "15" : "20"} />
+{#snippet MessageCreatorIcon()}
+    <MessageSquarePlus size={$isMobile ? "15" : "20"} />
 {/snippet}
 {#snippet ArrowLeftRightIcon()}
     <ArrowLeftRight size={$isMobile ? "15" : "20"} />
@@ -96,8 +99,8 @@
 {#snippet DesignIcon()}
     <Brush size={$isMobile ? "15" : "20"} />
 {/snippet}
-{#snippet GlobeIcon()}
-    <Earth size={$isMobile ? "15" : "20"} />
+{#snippet LanguagesIcon()}
+    <Languages size={$isMobile ? "15" : "20"} />
 {/snippet}
 
 {#snippet sideBarButton(
@@ -115,16 +118,16 @@
             ? "active"
             : ""}
         {icon}
-        layout={$isMobile ? "column" : "row"}
+        //layout={$isMobile ? "column" : "row"}
         noHover={$isMobile}
     >
-        {name}
+        {!$isMobile ? name : ""}
     </Button>
 {/snippet}
 
 <aside>
     <header id="topbar">
-        <UChat size={"4rem"} brandColor={dev} pride />
+        <UChat size={"3.5rem"} brandColor={dev} pride />
         <div id="name">
             <strong>UChat</strong>
             <h1>
@@ -146,19 +149,19 @@
         {@render sideBarButton("/", HouseIcon, $t("sidebar.home"))}
         {@render sideBarButton(
             "/message-creator",
-            MessageSquareMoreIcon,
+            MessageCreatorIcon,
             $isMobile
                 ? $t("sidebar.message_creator.mobile")
                 : $t("sidebar.message_creator.pc"),
         )}
         {@render sideBarButton(
-            "/convert",
+            () => (convertDialog = true),
             ArrowLeftRightIcon,
             $t("sidebar.convert"),
         )}
         {@render sideBarButton(
             () => (localizationDialog = true),
-            GlobeIcon,
+            LanguagesIcon,
             $isMobile
                 ? $t("sidebar.language.mobile")
                 : $t("sidebar.language.pc"),
@@ -194,6 +197,10 @@
         )}
     </nav>
 
+    <section id="mobile-commit" class="commit">
+        {relativeTime}, commit: #{__COMMIT_HASH.slice(0, 7)}
+    </section>
+
     <footer>
         <section id="account" aria-label="User account section">
             <LoginButton onToken={handleToken} onLogOut={logOut} />
@@ -210,7 +217,7 @@
             {/if}
 
             <a
-                id="commit"
+                class="commit"
                 href="{__REPO_URL}/commit/{__COMMIT_HASH}"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -278,6 +285,10 @@
             overflow-y: auto;
         }
 
+        #mobile-commit {
+            display: none;
+        }
+
         #account {
             padding: 0.7rem;
             box-sizing: border-box;
@@ -292,7 +303,7 @@
             }
         }
 
-        #commit {
+        .commit {
             font-size: 0.75rem;
             color: rgba(255, 255, 255, 0.35);
         }
@@ -304,7 +315,7 @@
         }
 
         aside {
-            border-top: 1px #161616 solid;
+            border-top: 1px #ffffff07 solid;
             width: 100%;
             max-width: unset;
             height: unset;
@@ -318,6 +329,14 @@
                 justify-content: space-evenly;
                 overflow-y: hidden;
                 overflow-x: auto;
+            }
+
+            #mobile-commit {
+                display: unset;
+                width: 100%;
+                padding: 0.1rem;
+                text-align: center;
+                box-sizing: border-box;
             }
         }
     }

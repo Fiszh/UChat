@@ -4,17 +4,16 @@
     import ChatDisplay from "./ChatDisplay.svelte";
 
     import { globals, loadingInfo } from "$stores/global";
-    import { clearChat, connect } from "$lib/chat";
+    import { clearChat } from "$lib/chat";
 
     import { getMainUser, connectToWS } from "$lib/overlayIndex";
     import { settings } from "$stores/settings";
     import { loadChat } from "$lib/loadChat";
 
-    import { getKickUser } from "$lib/services/KICK/user";
-    import KICKSocket from "$lib/services/KICK/chat";
     import { isPogly } from "$lib/pogly";
     import { flags } from "$lib/bitmap";
-    import YOUTUBESocket from "$lib/services/YOUTUBE/chat";
+
+    import Services from "$lib/services";
 
     // REFRESH IMAGES IF FAILED
     function handleImageRetries(): void {
@@ -41,29 +40,57 @@
         const KickChannelName = params.get("kick");
         const YouTubeChannelID = params.get("youtube");
 
-        let loadedIn = $state({
-            twitch: TwitchChannelName || TwitchChannelID ? false : null,
-            kick: KickChannelName ? false : null,
-            youtube: YouTubeChannelID ? false : null,
+        let loaded = $state<Record<Platforms, boolean | null>>({
+            TWITCH: TwitchChannelName || TwitchChannelID ? false : null,
+            KICK: KickChannelName ? false : null,
+            GOOGLE: YouTubeChannelID ? false : null,
         });
+
+        let allChannelsLoaded = $derived(
+            Object.values(loaded).every((c) => c === null || c === true),
+        );
 
         console.log(YouTubeChannelID);
 
-        let allChannelsLoaded = $derived(
-            Object.values(loadedIn).every((c) => c === null || c === true),
-        );
+        if (TwitchChannelName || TwitchChannelID) {
+            Services["TWITCH"]["ws"].on("open", () => {
+                loaded["TWITCH"] = true;
 
-        if (TwitchChannelName) connect(TwitchChannelName);
-        if (YouTubeChannelID) {
-            const YouTubeClient = new YOUTUBESocket(YouTubeChannelID);
-
-            YouTubeClient.on("open", () => {
-                loadedIn["youtube"] = true;
-
-                globals["channels"]["GOOGLE"]["ID"] = YouTubeChannelID;
+                if (globals["channels"]["TWITCH"]["Name"]) {
+                    Services["TWITCH"]["ws"].join(
+                        globals["channels"]["TWITCH"]["Name"],
+                    );
+                }
             });
 
-            YouTubeClient.connect();
+            if (TwitchChannelName) {
+                globals["channels"]["TWITCH"]["Name"] = TwitchChannelName;
+                Services["TWITCH"]["ws"].connect();
+            }
+        }
+
+        if (KickChannelName) {
+            Services["KICK"]["ws"].on("first_open", () => {
+                if (
+                    globals["channels"]["KICK"]["channelID"] &&
+                    globals["channels"]["KICK"]["chatroomID"]
+                )
+                    Services["KICK"]["ws"].subToChannelId(
+                        globals["channels"]["KICK"]["channelID"],
+                        globals["channels"]["KICK"]["chatroomID"],
+                    );
+            });
+        }
+
+        if (YouTubeChannelID) {
+            Services["GOOGLE"]["ws"].on("open", () => {
+                loaded["GOOGLE"] = true;
+
+                Services["GOOGLE"]["ws"].subscribe(YouTubeChannelID);
+            });
+
+            globals["channels"]["GOOGLE"]["ID"] = YouTubeChannelID;
+            Services["GOOGLE"]["ws"].connect();
         }
 
         for (const [key, value] of params) {
@@ -100,44 +127,30 @@
         // GET USER INFO AND IF USED CHANNEL ID CONNECT TO IRC
         (async () => {
             if (TwitchChannelName || TwitchChannelName) {
-                const successGettingUser = await getMainUser(
+                getMainUser(
                     TwitchChannelID
                         ? Number(TwitchChannelID)
                         : TwitchChannelName!,
-                );
-
-                if (successGettingUser) {
-                    loadedIn["twitch"] = true;
-
+                ).then((success) => {
                     if (
+                        success &&
+                        TwitchChannelID &&
                         !TwitchChannelName &&
                         globals["channels"]["TWITCH"]["Name"]
                     )
-                        connect(globals["channels"]["TWITCH"]["Name"]);
-                }
+                        Services["TWITCH"]["ws"].connect();
+                });
             }
 
             if (KickChannelName) {
-                const successGettingUser = await getKickUser(KickChannelName);
-
-                if (successGettingUser) {
-                    loadedIn["kick"] = true;
-
-                    const KickClient = new KICKSocket();
-
-                    KickClient.on("first_open", () => {
-                        if (
-                            globals["channels"]["KICK"]["channelID"] &&
-                            globals["channels"]["KICK"]["chatroomID"]
-                        )
-                            KickClient.subToChannelId(
-                                globals["channels"]["KICK"]["channelID"],
-                                globals["channels"]["KICK"]["chatroomID"],
-                            );
+                Services["KICK"]["main"]
+                    .getUser(KickChannelName)
+                    .then((success) => {
+                        if (success) {
+                            loaded["KICK"] = true;
+                            Services["KICK"]["ws"].connect();
+                        }
                     });
-
-                    KickClient.connect();
-                }
             }
 
             await new Promise((resolve) => {

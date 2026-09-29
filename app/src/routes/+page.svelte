@@ -9,21 +9,16 @@
     import Main from "$components/Main/Chat/Main.svelte";
     import { get } from "svelte/store";
 
+    let { data } = $props();
+
     let LoadingMsg = $state(get(loadingInfo));
 
     loadingInfo.subscribe((value) => (LoadingMsg = value));
 
     let mounted = $state(false);
-    let hasChannel = $state(false);
 
     onMount(() => {
         const params = new URLSearchParams(window.location.search);
-        hasChannel =
-            params.has("channel") ||
-            params.has("id") ||
-            params.has("kick") ||
-            params.has("youtube");
-
         const isFirefox = navigator.userAgent.toLowerCase().includes("firefox");
 
         if (isFirefox) {
@@ -47,7 +42,7 @@
 </script>
 
 {#if mounted}
-    {#if hasChannel}
+    {#if data.hasChannel}
         <LoadingUI text={LoadingMsg.text} type={LoadingMsg.type} />
 
         <ChatOverlay />

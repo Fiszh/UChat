@@ -89,6 +89,7 @@
                     value={setting.value}
                     param={setting.param}
                     defaultValue={setting["default"]}
+                    previewReact={setting.previewReact}
                     onChange={(checked) => handleInput(setting.param, checked)}
                 />
             {:else if setting.type == "text" || setting.type == "number"}
@@ -97,6 +98,7 @@
                     value={setting.value}
                     param={setting.param}
                     defaultValue={setting["default"]}
+                    previewReact={setting.previewReact}
                     onChange={(value) =>
                         handleInput(
                             setting.param,
@@ -110,6 +112,7 @@
                     value={setting.value}
                     param={setting.param}
                     defaultValue={setting["default"]}
+                    previewReact={setting.previewReact}
                     onChange={(value) =>
                         handleInput(setting.param, value, "color-picker")}
                 />
@@ -121,6 +124,7 @@
                     min={setting["min"]}
                     max={setting["max"]}
                     defaultValue={setting["default"]}
+                    previewReact={setting.previewReact}
                     onChange={(value) =>
                         handleInput(setting.param, value, "slider")}
                 />
@@ -130,7 +134,8 @@
                     value={setting.value}
                     param={setting.param}
                     selectors={setting.selectors}
-                    defaultValue={setting.default}
+                    defaultValue={setting["default"]}
+                    previewReact={setting.previewReact}
                     onChange={(value) =>
                         handleInput(
                             setting.param,
@@ -145,6 +150,7 @@
                     list={setting["list"]}
                     param={setting.param}
                     defaultValue={setting["default"]}
+                    previewReact={setting.previewReact}
                     onChange={(value) =>
                         handleInput(
                             setting.param,

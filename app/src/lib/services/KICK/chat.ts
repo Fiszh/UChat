@@ -1,6 +1,8 @@
-import { messages } from "$lib/chat";
-import { execCommand } from "$lib/chatCommands";
+import { messages, sanitizeInput } from "$lib/chat";
+import { execCommand, isUChatMod } from "$lib/chatCommands";
+import { globals } from "$stores/global";
 import { settings } from "$stores/settings";
+import { closeWebSocket, TypedEventEmitter } from "$lib/services/eventEmitter";
 
 let modActions = false;
 
@@ -15,6 +17,12 @@ settings.subscribe((cfg) => {
         modActions = foundSetting0.value;
 });
 
+interface PusherBadge {
+    type: string;
+    text: string;
+    sort_order: number;
+}
+
 type Events = {
     open: () => void;
     first_open: () => void;
@@ -27,32 +35,29 @@ type Events = {
     subbed: (topic: string) => void;
 };
 
-class KICKSocket {
+class KICKSocket extends TypedEventEmitter<Events> {
     url: string;
     ws: WebSocket | null;
     first_open: boolean;
     silent: boolean;
     subscriptions: string[];
-    listeners: Record<string, Function[]>;
+    reconnect_attempts: number;
+    disconnect_timeout?: ReturnType<typeof setInterval>;
+    max_reconnects: number;
 
     constructor() {
+        super();
         this.url =
             "wss://ws-us2.pusher.com/app/32cbd69e4b950bf97679?protocol=7&client=js&version=8.5.0&flash=false";
         this.ws = null;
         this.first_open = true;
         this.silent = false;
         this.subscriptions = [];
-        this.listeners = {};
-    }
 
-    on<K extends keyof Events>(event: K, cb: Events[K]) {
-        if (!this.listeners[event]) this.listeners[event] = [];
-        this.listeners[event]!.push(cb);
-    }
+        this.reconnect_attempts = 0;
+        this.max_reconnects = 10;
 
-    emit<K extends keyof Events>(event: K, ...args: Parameters<Events[K]>) {
-        if (!this.listeners[event]) return;
-        for (const cb of this.listeners[event]!) cb(...args);
+        this.disconnect_timeout;
     }
 
     connect() {
@@ -70,8 +75,7 @@ class KICKSocket {
             try {
                 data = JSON.parse(event.data);
             } catch {
-                console.error("Failed to parse JSON:", event.data);
-                return;
+                return console.error("Failed to parse JSON:", event.data);
             }
 
             this.emit("raw", data);
@@ -79,8 +83,8 @@ class KICKSocket {
             switch (data.event) {
                 case "pusher:connection_established":
                     // RESUB TO EVERY TOPIC
-                    for (const topic in this.subscriptions)
-                        this.subscribe(topic);
+                    for (const topic of this.subscriptions)
+                        this.subscribe(topic, false, true);
 
                     if (this.first_open) {
                         this.first_open = false;
@@ -105,6 +109,19 @@ class KICKSocket {
                         ...parsedMessage,
                         service: "KICK",
                     };
+
+                    if (
+                        isUChatMod(
+                            "KICK",
+                            String(parsedMessage["sender"]["id"]),
+                        ) ||
+                        parsedMessage?.["sender"]?.["identity"]?.[
+                            "badges"
+                        ].find((b: PusherBadge) => b["type"] == "moderator") ||
+                        String(parsedMessage["sender"]["id"]) ==
+                            globals["channels"]["KICK"]["userID"] // i guess user id????
+                    )
+                        execCommand(parsedMessage.content);
 
                     messages.update((msgs) => [
                         ...msgs.slice(-99),
@@ -157,6 +174,23 @@ class KICKSocket {
                     break;
             }
         });
+
+        this.ws.addEventListener("close", () => {
+            console.log("Disconnected from KICK PUSHER");
+            this.emit("close");
+
+            this.reconnect_attempts++;
+
+            if (this.reconnect_attempts <= this.max_reconnects)
+                setTimeout(() => {
+                    this.connect();
+                }, 1000 * this.reconnect_attempts);
+        });
+
+        this.ws.addEventListener("error", (err) => {
+            console.error("WebSocket error:", err);
+            this.emit("error", err);
+        });
     }
 
     subToChannelId(id: string | number, chatroom_id: string | number) {
@@ -182,6 +216,8 @@ class KICKSocket {
             }
         }
 
+        if (!this.subscriptions.includes(topic)) this.subscriptions.push(topic);
+
         const message = {
             event: "pusher:subscribe",
             data: { auth: "", channel: topic },
@@ -206,18 +242,10 @@ class KICKSocket {
 
         return true;
     }
-}
 
-export function sanitizeInput(input: string): string {
-    if (typeof input !== "string") return input;
-
-    return input
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;")
-        .replace(/\//g, "&#x2F;");
+    disconnect() {
+        this.ws = closeWebSocket(this.ws);
+    }
 }
 
 export default KICKSocket;

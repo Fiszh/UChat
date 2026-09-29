@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { sanitizeInput } from "$lib/chat";
+
     type Props = {
         emoteInfo:
             | EmoteParser.FoundEmote
@@ -59,7 +61,12 @@
                     : ""}
             />
         {/each}
-        <img src={emote.urls[0].url} alt="emote" loading="lazy" class="emote" />
+        <img
+            src={emote.urls[0]?.url}
+            alt="emote"
+            loading="lazy"
+            class="emote"
+        />
     </picture>
 {/snippet}
 
@@ -84,10 +91,12 @@
         | EmoteParser.FoundBits["bits"]
         | EmoteParser.FoundEmoji["emoji"],
 )}
-    {#if "urls" in emote && !("url" in emote)}
+    {#if "urls" in emote && emote["urls"]?.length && !("url" in emote)}
         {@render EmoteMultipleURLS(emote)}
     {:else if "url" in emote && !("urls" in emote)}
         {@render EmoteSingleURL(emote)}
+    {:else}
+        {@html sanitizeInput(emote.name)}
     {/if}
 {/snippet}
 

@@ -110,7 +110,7 @@ export const configs: Setting[] = [
 
     {
         type: "color-picker",
-        value: "#FFFFFF",
+        value: "#ffffff",
         param: "fontColor",
     },
     {
@@ -146,7 +146,6 @@ export const configs: Setting[] = [
         type: "boolean",
         param: "gifs",
         value: false,
-        previewReact: false,
     },
     {
         type: "number",
@@ -287,6 +286,7 @@ export const configs: Setting[] = [
         type: "boolean",
         value: true,
         param: "track",
+        previewReact: false,
     },
 ];
 

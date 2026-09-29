@@ -1,4 +1,5 @@
 import main from "./main.js";
+import { closeWebSocket, TypedEventEmitter } from "$lib/services/eventEmitter";
 const { parseSetData } = main;
 
 const blocked_events = ["broadcast_me", "lookup_user"];
@@ -28,7 +29,7 @@ type Events = {
 };
 
 // WEBSOCKET
-class BTTVWebSocket {
+class BTTVWebSocket extends TypedEventEmitter<Events> {
     url: string;
     ws: WebSocket | null;
     setting: {
@@ -38,7 +39,6 @@ class BTTVWebSocket {
         resubscribeOnReconnect: boolean;
     };
     subscriptions: any[];
-    listeners: Record<string, Function[]>;
 
     /**
      * @param {Object} [options={}]
@@ -48,6 +48,7 @@ class BTTVWebSocket {
      * @property {boolean} [resubscribeOnReconnect=true] - Re-subscribe to previous subscriptions after reconnecting
      */
     constructor(options: Options = {}) {
+        super();
         this.url = "wss://sockets.betterttv.net/ws";
         this.ws = null;
         this.setting = {
@@ -57,20 +58,6 @@ class BTTVWebSocket {
             resubscribeOnReconnect: options.resubscribeOnReconnect ?? true,
         };
         this.subscriptions = [];
-        this.listeners = {};
-    }
-
-    /**
-     * Listen to a event
-     */
-    on<K extends keyof Events>(event: K, cb: Events[K]) {
-        if (!this.listeners[event]) this.listeners[event] = [];
-        this.listeners[event]!.push(cb);
-    }
-
-    emit<K extends keyof Events>(event: K, ...args: Parameters<Events[K]>) {
-        if (!this.listeners[event]) return;
-        for (const cb of this.listeners[event]!) cb(...args);
     }
 
     /**
@@ -173,10 +160,7 @@ class BTTVWebSocket {
      * Disconnect the WebSocket.
      */
     disconnect() {
-        if (this.ws) {
-            this.ws.close();
-            this.ws = null;
-        }
+        this.ws = closeWebSocket(this.ws);
     }
 
     /**

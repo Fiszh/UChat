@@ -9,6 +9,20 @@ import { cosmetics } from "$stores/cosmetics";
 import cosmetics_single from "./GQL/cosmetics/single.gql?raw";
 import cosmetics_multiple from "./GQL/cosmetics/multiple.gql?raw";
 
+function hasMatchingOwner(
+    owners: Types7TV.Connection[],
+    platform: Types7TV.Connection["platform"],
+    platformID: string,
+) {
+    return owners.some(
+        (connection) =>
+            (connection.id === platformID ||
+                connection.username == platformID ||
+                connection.display_name == platformID) &&
+            connection.platform == platform,
+    );
+}
+
 export function getPaint(
     platform: Types7TV.Connection["platform"],
     platformID: string,
@@ -16,13 +30,7 @@ export function getPaint(
     const currentCosmetics = get(cosmetics);
 
     return Object.values(currentCosmetics.paints).find((paint) =>
-        paint.owner.find(
-            (c) =>
-                (c.id === platformID ||
-                    c.username == platformID ||
-                    c.display_name == platformID) &&
-                c.platform == platform,
-        ),
+        hasMatchingOwner(paint.owner, platform, platformID),
     );
 }
 
@@ -33,13 +41,7 @@ export function getBadge(
     const currentCosmetics = get(cosmetics);
 
     return Object.values(currentCosmetics.badges).find((badge) =>
-        badge.owner.find(
-            (c) =>
-                (c.id === platformID ||
-                    c.username == platformID ||
-                    c.display_name == platformID) &&
-                c.platform == platform,
-        ),
+        hasMatchingOwner(badge.owner, platform, platformID),
     );
 }
 
@@ -50,13 +52,7 @@ export function getPersonalSets(
     const currentCosmetics = get(cosmetics);
 
     return Object.values(currentCosmetics.sets).filter((set) =>
-        set.owner.find(
-            (c) =>
-                (c.id === platformID ||
-                    c.username == platformID ||
-                    c.display_name == platformID) &&
-                c.platform == platform,
-        ),
+        hasMatchingOwner(set.owner, platform, platformID),
     );
 }
 
