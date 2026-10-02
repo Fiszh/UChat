@@ -219,6 +219,10 @@
             "firstMsg": {
                 "name": "Podświetl pierwsza wiadomość użytkowników",
                 "description": "Podświetl pierwsza wiadomość użytkowników zielonym tłem"
+            },
+            "ffzEffects": {
+                "name": "FrankerFaceZ emote effects",
+                "description": "Allow users to use FrankerFaceZ emote effects"
             }
         }
     },
