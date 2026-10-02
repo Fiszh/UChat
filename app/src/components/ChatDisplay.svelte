@@ -7,7 +7,7 @@
     import GoogleFont from "./GoogleFont.svelte";
 
     import { messages, type ChatMessage } from "$lib/chat";
-    import { setEmoteSize, settings, type Setting } from "$stores/settings";
+    import { settings, type Setting } from "$stores/settings";
     import { badges, globals } from "$stores/global";
     import { generateUUID } from "$lib/overlayIndex";
     import { normalizeFont } from "$lib/font";
@@ -151,8 +151,6 @@
                     styles["--chat-emote-size"] = emoteSize
                         ? `${emoteSize}px`
                         : "25px";
-
-                    setEmoteSize.set(emoteSize as string);
 
                     break;
                 case "gifSize":

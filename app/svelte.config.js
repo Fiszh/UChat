@@ -1,9 +1,10 @@
 import adapter from "@sveltejs/adapter-static";
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
+import lucidePreprocess from "vite-plugin-lucide-preprocess";
 import path from "path";
 
 const config = {
-    preprocess: vitePreprocess(),
+    preprocess: [lucidePreprocess(), vitePreprocess()],
 
     kit: {
         adapter: adapter({

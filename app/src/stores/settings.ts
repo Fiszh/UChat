@@ -78,8 +78,6 @@ export type Setting =
 
 const defaultEmoteSize = "25";
 
-export const setEmoteSize = writable<string>(defaultEmoteSize);
-
 export const configs: Setting[] = [
     {
         type: "boolean",
@@ -151,6 +149,12 @@ export const configs: Setting[] = [
         type: "number",
         param: "gifSize",
         value: String(Number(defaultEmoteSize) * 4),
+        previewReact: false,
+    },
+    {
+        type: "boolean",
+        param: "ffzEffects",
+        value: false,
         previewReact: false,
     },
     {

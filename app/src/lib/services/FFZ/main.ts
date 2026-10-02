@@ -13,6 +13,21 @@ interface Emote {
     };
 }
 
+interface Set {
+    id: number;
+    _type: number;
+    icon: null;
+    title: string;
+    css: null;
+    emoticons: Emote[];
+}
+
+interface Sets {
+    default_sets: number[];
+    sets: Record<string, Set>;
+    users: Record<string, string[]>;
+}
+
 async function parseSetData(
     data: Emote[],
     emoteSet?: string,
@@ -34,12 +49,12 @@ async function parseSetData(
                 height: emote.height * numberScale,
             };
         }),
-        set: emoteSet === "global" ? "Global FFZ" : "FFZ",
+        set: emoteSet ? "FFZ " + emoteSet : "FZZ",
     }));
 }
 
 async function getGlobalEmotes() {
-    let emote_data: any = [];
+    let emote_data: ParsedEmote[] = [];
 
     try {
         const response = await fetch(
@@ -47,13 +62,16 @@ async function getGlobalEmotes() {
         );
 
         if (response.ok) {
-            const data = await response.json();
+            const data: Sets = await response.json();
 
-            const emote_sets = Object.values(data?.sets || {}).flatMap(
-                (set: any) => set.emoticons || [],
+            const emote_sets = await Promise.all(
+                Object.values(data?.sets || {}).map(
+                    async (set) =>
+                        (await parseSetData(set.emoticons, set.title)) ?? [],
+                ),
             );
 
-            emote_data = await parseSetData(emote_sets, "global");
+            emote_data = emote_sets.flat();
         }
     } catch (error) {
         throw new Error(`Error fetching emote data: ${error}`);

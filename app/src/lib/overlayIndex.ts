@@ -149,7 +149,7 @@ export async function getMainUser(channel: string | number) {
                                 color: channel_color,
                             };
                         }) || [],
-                    site: "TTV",
+                    set: "TTV",
                 };
             });
         } catch (err) {
@@ -201,7 +201,7 @@ export async function getMainUser(channel: string | number) {
                                         )?.color ?? "white",
                                 };
                             }) || [],
-                        site: "TTV",
+                        set: "TTV",
                     };
                 }) || [];
         } catch (err) {

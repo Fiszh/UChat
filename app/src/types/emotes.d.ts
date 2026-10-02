@@ -7,6 +7,6 @@ declare namespace Emotes {
             emote_link: string;
             color: string;
         }[];
-        site: "TTV";
+        set: "TTV";
     }
 }

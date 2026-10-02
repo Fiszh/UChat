@@ -5,15 +5,13 @@ import twemoji from "@twemoji/api";
 import { getPersonalSets } from "$lib/services/7TV/cosmetics";
 
 import { emotes, globals } from "$stores/global";
-import { chatSettings, setEmoteSize } from "$stores/settings";
+import { chatSettings } from "$stores/settings";
 import { getSavedSet } from "$lib/overlayIndex";
 import type { YTNodes } from "youtubei.js";
 import { sanitizeInput } from "$lib/chat";
+import { getFFZBadges } from "$lib/badges/parser";
 
 const kickEmoteRegex = /\[emote:(?<id>\d+)[:]?(?<name>[a-zA-Z0-9-_!]*)[:]?\]/g; // https://github.com/KickTalkOrg/KickTalk/blob/a3570be165618f70449257bbb70df7cd16b66efe/utils/constants.js#L3
-
-let emoteSize = Number(get(setEmoteSize));
-setEmoteSize.subscribe((value) => (emoteSize = Number(value)));
 
 type TwemojiToken = string | { emoji: string; image: string };
 
@@ -103,7 +101,7 @@ function parseTwitchEmotes(
                     name,
                     emote_id: emoteId,
                     url: `https://static-cdn.jtvnw.net/emoticons/v2/${emoteId}/default/dark/3.0`,
-                    site: "TTV",
+                    set: "TTV",
                 };
             });
         });
@@ -142,7 +140,7 @@ const parseKickEmotes = (part: string): EmoteParser.KickEmoteInfo[] =>
             emote_id: match.groups!.id,
             name: `[emote:${match.groups!.id}:${match.groups!.name}]`,
             url: `https://files.kick.com/emotes/${match.groups!.id}/fullsize`,
-            site: "KICK",
+            set: "KICK",
         }));
 
 function parseYouTubeEmotes(
@@ -157,7 +155,7 @@ function parseYouTubeEmotes(
                             name: run["text"],
                             emote_id: run["emoji"]["emoji_id"],
                             url: run["emoji"]["image"][0]["url"],
-                            site: "YT",
+                            set: "YT",
                         };
                     }
                     return acc;
@@ -206,11 +204,11 @@ export async function replaceWithEmotes(
         );
 
         const TTVMessageEmoteData = parseTwitchEmotes(inputString, userstate);
+        const KICKMessageEmoteData = parseKickEmotes(inputString);
         const YTMessageEmoteData =
             "message" in userstate
                 ? parseYouTubeEmotes(userstate["message"]["runs"])
                 : [];
-        const KICKMessageEmoteData = parseKickEmotes(inputString);
 
         const emoteData: EmoteParser.FoundEmote["emote"][] = [
             ...TTVMessageEmoteData,
@@ -247,7 +245,7 @@ export async function replaceWithEmotes(
             if (
                 !foundPart &&
                 userstate &&
-                userstate["bits"] &&
+                (userstate["bits"] || __DEBUG__) &&
                 typeof part == "string"
             ) {
                 const match = part.match(/^([a-zA-Z]+)(\d+)$/);
@@ -309,68 +307,7 @@ export async function replaceWithEmotes(
             }
 
             const last = foundParts.at(-1);
-            if (foundPart) {
-                if (
-                    foundPart["type"] == "emoji" ||
-                    foundPart["type"] == "emote"
-                ) {
-                    const lastIsEmojiOrEmote =
-                        !!last && ["emote", "emoji"].includes(last["type"]);
-                    const foundEmote =
-                        "emote" in foundPart ? foundPart["emote"] : undefined;
-                    const isServiceEmote =
-                        !!foundEmote &&
-                        "site" in foundEmote &&
-                        ["TTV", "KICK", "YT"].includes(foundEmote["site"]);
-                    const hasNonStandardFlags =
-                        !!foundEmote &&
-                        "flags" in foundEmote &&
-                        foundEmote["flags"] != 256;
-
-                    if (
-                        !lastIsEmojiOrEmote ||
-                        isServiceEmote ||
-                        hasNonStandardFlags ||
-                        "emoji" in foundPart
-                    ) {
-                        foundParts.push({
-                            ...foundPart,
-                            overlapped: [],
-                        });
-                    } else if (
-                        lastIsEmojiOrEmote &&
-                        foundEmote &&
-                        "flags" in foundEmote
-                    ) {
-                        const overlappedArray =
-                            "overlapped" in last ? last["overlapped"] : [];
-                        const lastOverlapped = overlappedArray?.at(-1);
-                        const lastEmoteId =
-                            last.type == "emote"
-                                ? last["emote"]["emote_id"]
-                                : undefined;
-                        const previousEmoteId =
-                            lastOverlapped?.["emote_id"] ?? lastEmoteId;
-
-                        const isDifferentEmote =
-                            previousEmoteId != foundEmote["emote_id"] ||
-                            last.type == "emoji";
-
-                        if (
-                            overlappedArray &&
-                            isDifferentEmote &&
-                            foundEmote["flags"] == 256
-                        ) {
-                            overlappedArray.push({
-                                ...foundEmote,
-                                overlap_index: overlappedArray.length,
-                            });
-                        }
-                    }
-                } else {
-                    foundParts.push(foundPart);
-                }
-            } else {
+            if (!foundPart) {
                 if (last && last["type"] == "other") {
                     last["part"] += " " + part;
                 } else {
@@ -379,6 +316,69 @@ export async function replaceWithEmotes(
                         part: part as string,
                     });
                 }
+            } else {
+                if (last) {
+                    switch (last["type"]) {
+                        case "emoji":
+                        case "emote":
+                            if (foundPart["type"] != "emote") break;
+
+                            const isFFZTag =
+                                foundPart["emote"]["set"].includes(
+                                    "Emote Effects",
+                                );
+
+                            if (isFFZTag && chatSettings["ffzEffects"]) {
+                                const ffzBadges = getFFZBadges(
+                                    userstate as any,
+                                );
+                                const isFFZSub = ffzBadges.find(
+                                    (b) => b["alt"] == "FFZ Supporter",
+                                );
+
+                                if (
+                                    foundPart["emote"]["set"].includes(
+                                        "Subwoofer Emote Effects",
+                                    ) &&
+                                    !isFFZSub
+                                )
+                                    break;
+
+                                let tagEmote =
+                                    last["overlapped"]?.at(-1) ?? last;
+
+                                tagEmote["FFZTags"] = [
+                                    ...new Set([
+                                        ...(tagEmote["FFZTags"] ?? []),
+                                        foundPart["emote"]["name"],
+                                    ]),
+                                ];
+
+                                continue;
+                            }
+
+                            if (
+                                "flags" in foundPart["emote"] &&
+                                foundPart["emote"]["flags"] == 256
+                            ) {
+                                last["overlapped"] = [
+                                    ...(last["overlapped"] ?? []),
+                                    {
+                                        ...foundPart["emote"],
+                                        overlap_index: 0,
+                                    },
+                                ];
+
+                                continue;
+                            }
+
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                foundParts.push(foundPart);
             }
         }
 

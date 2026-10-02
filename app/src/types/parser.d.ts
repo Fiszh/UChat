@@ -3,18 +3,18 @@ declare namespace EmoteParser {
         name: string;
         emote_id: string;
         url: string;
-        site: "TTV";
+        set: "TTV";
     }
 
     interface KickEmoteInfo {
         name: string;
         emote_id: string;
         url: string;
-        site: "KICK";
+        set: "KICK";
     }
 
     interface YouTubeEmoteInfo extends TwitchEmoteInfo {
-        site: "YT";
+        set: "YT";
     }
 
     interface FoundInfo {
@@ -22,7 +22,11 @@ declare namespace EmoteParser {
     }
 
     interface FoundEmoteBase {
-        overlapped?: (ParsedEmote & { overlap_index: number })[];
+        overlapped?: (ParsedEmote & {
+            overlap_index: number;
+            FFZTags?: string[];
+        })[];
+        FFZTags?: string[];
     }
 
     interface FoundEmote extends FoundInfo, FoundEmoteBase {

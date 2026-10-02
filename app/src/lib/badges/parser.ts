@@ -228,7 +228,7 @@ function getChatterinoBadges(userstate: TwitchUserstate): parsedBadge[] {
     }));
 }
 
-function getFFZBadges(userstate: TwitchUserstate): parsedBadge[] {
+export function getFFZBadges(userstate: TwitchUserstate): parsedBadge[] {
     if (!enabledBadges.includes("ffz")) return [];
 
     const foundFFZBadges = BadgesData["FFZ"]["global"].filter(

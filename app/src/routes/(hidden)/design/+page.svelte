@@ -26,6 +26,7 @@
     import { t } from "svelte-i18n";
     import CalloutBubble from "$components/CalloutBubble.svelte";
     import Pogly from "$components/logos/pogly.svelte";
+    import GitHub from "$components/logos/github.svelte";
 
     let selectorOptions = $state([
         { enabled: true, label: "Lorem" },
@@ -121,6 +122,7 @@
         <Bttv {brandColor} />
         <Ffz {brandColor} />
         <Pogly {brandColor} />
+        <GitHub {brandColor} />
     {/snippet}
 
     {#snippet dropdown()}

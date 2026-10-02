@@ -16,6 +16,9 @@
 
     const { emoteInfo }: Props = $props();
 
+    const getFFZFlags = (emote: Props["emoteInfo"]) =>
+        "FFZTags" in emote ? emote["FFZTags"] : [""];
+
     function getGroups(urls: ParsedEmoteMultiple["urls"]) {
         const parsedGroups = urls.reduce<Record<string, imageGroup[]>>(
             (acc, url) => {
@@ -51,7 +54,7 @@
     }
 </script>
 
-{#snippet EmoteMultipleURLS(emote: ParsedEmoteMultiple)}
+{#snippet EmoteMultipleURLS(emote: ParsedEmoteMultiple, flags?: string[])}
     <picture>
         {#each getGroups(emote.urls) as group}
             <source
@@ -62,10 +65,11 @@
             />
         {/each}
         <img
+            draggable="false"
             src={emote.urls[0]?.url}
-            alt="emote"
+            alt={emote["name"]}
             loading="lazy"
-            class="emote"
+            class="emote {flags?.join(' ')}"
         />
     </picture>
 {/snippet}
@@ -75,13 +79,14 @@
         | ParsedEmoteSingle
         | EmoteParser.FoundBits["bits"]
         | EmoteParser.FoundEmoji["emoji"],
+    flags?: string[],
 )}
     <img
         draggable="false"
         src={emote["url"]}
         alt={emote["name"]}
         loading="lazy"
-        class="emote"
+        class="emote {flags?.join(' ')}"
     />
 {/snippet}
 
@@ -90,36 +95,39 @@
         | ParsedEmote
         | EmoteParser.FoundBits["bits"]
         | EmoteParser.FoundEmoji["emoji"],
+    flags?: string[],
 )}
     {#if "urls" in emote && emote["urls"]?.length && !("url" in emote)}
-        {@render EmoteMultipleURLS(emote)}
+        {@render EmoteMultipleURLS(emote, flags)}
     {:else if "url" in emote && !("urls" in emote)}
-        {@render EmoteSingleURL(emote)}
+        {@render EmoteSingleURL(emote, flags)}
     {:else}
         {@html sanitizeInput(emote.name)}
     {/if}
 {/snippet}
 
 <span
-    class={"bits" in emoteInfo ? "bits-wrapper" : "emote-wrapper"}
+    class="emote-wrapper"
     style="color: {'bits' in emoteInfo
         ? emoteInfo['bits']['color']
         : 'currentColor'};"
 >
     {#if "emote" in emoteInfo}
-        {@render Emote(emoteInfo["emote"] as ParsedEmoteMultiple)}
+        {@render Emote(emoteInfo["emote"], getFFZFlags(emoteInfo))}
     {:else if "emoji" in emoteInfo}
-        {@render Emote(emoteInfo["emoji"])}
+        {@render Emote(emoteInfo["emoji"], getFFZFlags(emoteInfo))}
     {:else if "bits" in emoteInfo}
-        {@render Emote(emoteInfo["bits"])}
-        {emoteInfo["bits"]["bits"]}
+        <span class="bits">
+            {@render Emote(emoteInfo["bits"])}
+            {emoteInfo["bits"]["bits"]}
+        </span>
     {:else}
         {@render Emote(emoteInfo)}
     {/if}
 
     {#if "overlapped" in emoteInfo}
         {#each emoteInfo["overlapped"] as overlapped}
-            {@render Emote(overlapped)}
+            {@render Emote(overlapped, getFFZFlags(overlapped))}
         {/each}
     {/if}
 </span>
@@ -138,8 +146,15 @@
 
         height: min-content;
 
+        font-size: inherit;
+
+        .bits {
+            display: flex;
+        }
+
         img {
             object-fit: contain;
+            z-index: 0;
         }
 
         picture {

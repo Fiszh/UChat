@@ -6,6 +6,7 @@
     import "$styles/variables.scss";
     import "$styles/reset.css";
     import "$styles/app.scss";
+    import "$styles/ffz.css";
 
     import { page } from "$app/state";
     import Banner from "$components/Banner.svelte";
