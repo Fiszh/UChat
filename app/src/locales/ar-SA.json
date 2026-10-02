@@ -219,6 +219,10 @@
             "firstMsg": {
                 "name": "Highlight first-time messages",
                 "description": "Highlight users first chat messages with a green background"
+            },
+            "ffzEffects": {
+                "name": "FrankerFaceZ emote effects",
+                "description": "Allow users to use FrankerFaceZ emote effects"
             }
         }
     },
