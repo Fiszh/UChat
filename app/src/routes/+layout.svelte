@@ -17,6 +17,7 @@
     import { dev } from "$app/env";
     import { isPogly } from "$lib/pogly.js";
     import UChat from "$components/logos/uchat.svelte";
+    import MobileTopbar from "$components/mobileTopbar.svelte";
 
     let { data, children } = $props();
 
@@ -115,6 +116,10 @@
                             <Sidebar />
                         {/if}
                         {@render children()}
+                        {#if $isMobile}
+                            <MobileTopbar />
+                            <!-- MOBILE IS REVERSED COLUMN -->
+                        {/if}
                     </main>
                 {/if}
             {:else}

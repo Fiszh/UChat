@@ -29,6 +29,7 @@
     import LocalizationDialog from "$components/dialogs/localization.svelte";
     import ConvertDialog from "$components/dialogs/convert.svelte";
     import { locale, t } from "svelte-i18n";
+    import Version from "$components/version.svelte";
 
     let username = $state(
         getCookie("twitchUsername") || ("" as string | undefined),
@@ -136,9 +137,7 @@
                 })}
             </h1>
             <small id="version_text">
-                {__APP_VERSION}
-                {dev ? "DEV" : ""}
-                {__DEBUG__ ? "DEBUG" : ""}
+                <Version />
             </small>
         </div>
     </header>

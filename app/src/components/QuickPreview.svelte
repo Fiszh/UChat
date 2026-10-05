@@ -9,7 +9,7 @@
 </script>
 
 <div id="quick-preview">
-    <strong id="top">Quick Preview</strong>
+    <small id="top">Quick Preview</small>
     <ChatDisplay
         customStyle="--chat-font-size: 13px; --chat-emote-size: 15px;"
     />
