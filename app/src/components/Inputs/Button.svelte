@@ -75,9 +75,9 @@
     let showNewTabDialog = $state(false);
 </script>
 
-<NewTab link={href ?? ""} show={showNewTabDialog} />
+<NewTab link={href ?? ""} bind:show={showNewTabDialog} />
 
-{#if href && (!$isMobile || forceOpenLink)}
+{#if href && (!$isMobile || !isOffSite || forceOpenLink)}
     <a
         bind:this={element}
         {href}
