@@ -46,13 +46,13 @@ export const previewMessages = [
     },
     {
         tags: {
-            username: "loganreallyhere",
-            "display-name": "LoganReallyHere",
-            "user-id": 799194677,
-            "badges-raw": "purple-noob/1",
-            badges: { "purple-noob": "1" },
-            color: "#6C0BA9",
-            gifs: "0:a:https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExYnZuZjA2NHdhbXBleWFldWl6a2puOTN6aXFrbnRjY3Vwbnd0bThjcCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/BJGhRE0ez1x1m795uo/giphy.gif", // idk whats the format
+            username: "friendlychatter",
+            "display-name": "FriendlyChatter",
+            "user-id": 38658072130,
+            "badges-raw": "yellow-noob/1",
+            badges: { "yellow-noob": "1" },
+            color: "#DAA520",
+            gifs: "0:a:https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExN290bWUzbmV3ZnRoc3hmcGVkNXJsd3MwMGJmNzNvd3NoaDVtc201ZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/grvLpQetU7o0fawogA/giphy.gif", // idk whats the format
         },
         message: "[Enable GIFs]",
     },

@@ -112,8 +112,6 @@
     <Button
         href={typeof href === "string" ? href : undefined}
         onclick={typeof href === "function" ? href : undefined}
-        target={newTab ? "_blank" : ""}
-        rel={newTab ? "noopener noreferrer" : ""}
         class={typeof href === "string" && page.route.id == href
             ? "active"
             : ""}

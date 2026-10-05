@@ -55,7 +55,7 @@
 
 <style lang="scss">
     #site-blackout {
-        position: absolute;
+        position: fixed;
         height: 100vw;
         height: 100vh;
         width: 100dvw;
@@ -66,7 +66,7 @@
     }
 
     .dialog {
-        position: absolute;
+        position: fixed;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);

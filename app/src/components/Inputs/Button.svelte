@@ -1,4 +1,5 @@
 <script lang="ts">
+    import NewTab from "$components/dialogs/new_tab.svelte";
     import { isMobile } from "$stores/global";
     import { ExternalLink } from "@lucide/svelte";
     import { onMount, type Snippet } from "svelte";
@@ -22,6 +23,7 @@
         layout?: "row" | "column";
         noHover?: boolean;
         compact?: boolean;
+        forceOpenLink?: boolean;
         children?: Snippet;
     } & HTMLButtonAttributes &
         HTMLAnchorAttributes;
@@ -41,6 +43,7 @@
         layout = "row",
         noHover = false,
         compact = false,
+        forceOpenLink = false,
         children,
         ...restProps
     }: Props = $props();
@@ -57,19 +60,29 @@
 
             const HREF_URL = new URL(href);
 
-            HREF_URL.searchParams.append("referrer", window.location.hostname);
+            if (!HREF_URL.searchParams.has("referrer"))
+                HREF_URL.searchParams.append(
+                    "referrer",
+                    window.location.hostname,
+                );
 
             href = HREF_URL.toString();
         }
 
         if (disabled) noHover = true;
     });
+
+    let showNewTabDialog = $state(false);
 </script>
 
-{#if href}
+<NewTab link={href ?? ""} show={showNewTabDialog} />
+
+{#if href && (!$isMobile || forceOpenLink)}
     <a
         bind:this={element}
         {href}
+        target={isOffSite ? "_blank" : ""}
+        rel={isOffSite ? "noopener noreferrer" : ""}
         {...restProps}
         class:disabled
         class:wide
@@ -107,6 +120,13 @@
         class:noHover
         class:compact
         class:column={layout == "column"}
+        onclick={(e) => {
+            if (isMobile && isOffSite && href) {
+                showNewTabDialog = true;
+            } else {
+                restProps.onclick?.(e);
+            }
+        }}
     >
         {@render icon?.()}
         <span>{@render children?.()}</span>
