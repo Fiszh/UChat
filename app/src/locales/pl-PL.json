@@ -113,7 +113,7 @@
     },
     "settings": {
         "show_hidden": "Pokaż ukryte ustawienia",
-        "non_reactive": "Does not effect the chat preview",
+        "non_reactive": "Nie wpływa na podgląd czatu",
         "hidden": "ukryte",
         "items": {
             "msgBold": {
