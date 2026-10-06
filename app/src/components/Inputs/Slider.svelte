@@ -65,7 +65,7 @@
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        width: 25%;
+        min-width: 25%;
 
         &.wide {
             width: 100%;

@@ -112,7 +112,7 @@
                         <Banner {...data.statusMessage} />
                     {/if}
                     <main>
-                        {#if page.status == 200 && !["/auth"].includes(page.route.id ?? "")}
+                        {#if page.status == 200 && !["/auth", "/test"].includes(page.route.id ?? "")}
                             <Sidebar />
                         {/if}
                         {@render children()}

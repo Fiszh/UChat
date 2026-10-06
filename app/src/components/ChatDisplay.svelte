@@ -290,65 +290,141 @@
     );
 
     onMount(() => {
-        let animationFrameId = 0;
-        let currentScroll = chat?.scrollTop ?? 0;
+        const AUTO_SCROLL_THRESHOLD = 100;
+        const SCROLL_EPSILON = 0.5;
+        const smoothness = Math.min(1, Math.max(0.01, scrollSmoothness));
 
+        let animationFrameId = 0;
         let shouldAutoScroll = true;
+        let autoScrolling = false;
 
         const getBottomScroll = () =>
             !chat ? 0 : Math.max(0, chat.scrollHeight - chat.clientHeight);
 
         function updateAutoScrollState() {
-            if (!chat) return;
+            if (!chat || autoScrolling) return;
 
-            const distanceFromBottom =
-                chat.scrollHeight - chat.clientHeight - chat.scrollTop;
-
-            shouldAutoScroll = distanceFromBottom < 100;
+            const distanceFromBottom = getBottomScroll() - chat.scrollTop;
+            shouldAutoScroll = distanceFromBottom <= AUTO_SCROLL_THRESHOLD;
         }
 
         function updateScroll() {
-            if (!chat) return (animationFrameId = 0);
+            animationFrameId = 0;
 
-            const targetScroll = getBottomScroll();
-
-            currentScroll += (targetScroll - currentScroll) * scrollSmoothness;
-
-            chat.scrollTop = currentScroll;
-
-            if (Math.abs(targetScroll - currentScroll) > 0.5) {
-                animationFrameId = requestAnimationFrame(updateScroll);
-            } else {
-                chat.scrollTop = targetScroll;
-                currentScroll = targetScroll;
-                animationFrameId = 0;
-            }
-        }
-
-        function scrollToBottom() {
-            if (!chat || !shouldAutoScroll) return;
-
-            const targetScroll = getBottomScroll();
-
-            if (instantScroll) {
-                cancelAnimationFrame(animationFrameId);
-                animationFrameId = 0;
-
-                chat.scrollTop = targetScroll;
-                currentScroll = targetScroll;
+            if (!chat || !shouldAutoScroll) {
+                autoScrolling = false;
                 return;
             }
 
-            currentScroll = chat.scrollTop;
+            const targetScroll = getBottomScroll();
+            const currentScroll = chat.scrollTop;
+            const distance = targetScroll - currentScroll;
 
-            if (!animationFrameId)
-                animationFrameId = requestAnimationFrame(updateScroll);
+            if (Math.abs(distance) <= SCROLL_EPSILON) {
+                autoScrolling = true;
+                chat.scrollTop = targetScroll;
+                autoScrolling = false;
+                return;
+            }
+
+            if (instantScroll) {
+                autoScrolling = true;
+                chat.scrollTop = targetScroll;
+                autoScrolling = false;
+                return;
+            }
+
+            autoScrolling = true;
+            chat.scrollTop = currentScroll + distance * smoothness;
+
+            animationFrameId = requestAnimationFrame(updateScroll);
         }
 
-        chat?.addEventListener("scroll", updateAutoScrollState);
+        function scheduleScroll() {
+            if (!chat || !shouldAutoScroll || animationFrameId) return;
 
-        const mutationObserver = new MutationObserver(scrollToBottom);
-        const resizeObserver = new ResizeObserver(scrollToBottom);
+            animationFrameId = requestAnimationFrame(updateScroll);
+        }
+
+        function handleScroll() {
+            if (autoScrolling) return;
+
+            const wasAutoScrolling = shouldAutoScroll;
+            updateAutoScrollState();
+
+            if (!wasAutoScrolling && shouldAutoScroll) {
+                scheduleScroll();
+            }
+        }
+
+        function handleUserScrollIntent() {
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = 0;
+            }
+
+            autoScrolling = false;
+            updateAutoScrollState();
+        }
+
+        const observedElements = new Set<Element>();
+
+        function observeChild(element: Element) {
+            if (observedElements.has(element)) return;
+
+            observedElements.add(element);
+            resizeObserver.observe(element);
+        }
+
+        function unobserveChild(element: Element) {
+            if (!observedElements.has(element)) return;
+
+            observedElements.delete(element);
+            resizeObserver.unobserve(element);
+        }
+
+        const resizeObserver = new ResizeObserver(() => {
+            scheduleScroll();
+        });
+
+        const mutationObserver = new MutationObserver((mutations) => {
+            if (!chat) return;
+
+            for (const mutation of mutations) {
+                for (const node of mutation.addedNodes) {
+                    if (
+                        node instanceof Element &&
+                        node.parentElement === chat
+                    ) {
+                        observeChild(node);
+                    }
+                }
+
+                for (const node of mutation.removedNodes) {
+                    if (
+                        node instanceof Element &&
+                        node.parentElement !== chat
+                    ) {
+                        unobserveChild(node);
+                    }
+                }
+            }
+
+            scheduleScroll();
+        });
+
+        const handleImageLoad = () => {
+            scheduleScroll();
+        };
+
+        chat?.addEventListener("scroll", handleScroll);
+        chat?.addEventListener("wheel", handleUserScrollIntent, {
+            passive: true,
+        });
+        chat?.addEventListener("touchstart", handleUserScrollIntent, {
+            passive: true,
+        });
+        chat?.addEventListener("load", handleImageLoad, true);
 
         if (chat) {
             mutationObserver.observe(chat, {
@@ -358,8 +434,11 @@
 
             resizeObserver.observe(chat);
 
+            for (const child of chat.children) {
+                observeChild(child);
+            }
+
             chat.scrollTop = getBottomScroll();
-            currentScroll = chat.scrollTop;
         }
 
         mounted = true;
@@ -367,10 +446,16 @@
         return () => {
             unsubscribeMessages();
             unsubscribeSettings();
+
             resizeObserver.disconnect();
             mutationObserver.disconnect();
+
             cancelAnimationFrame(animationFrameId);
-            chat?.removeEventListener("scroll", updateAutoScrollState);
+
+            chat?.removeEventListener("scroll", handleScroll);
+            chat?.removeEventListener("wheel", handleUserScrollIntent);
+            chat?.removeEventListener("touchstart", handleUserScrollIntent);
+            chat?.removeEventListener("load", handleImageLoad, true);
         };
     });
 </script>
