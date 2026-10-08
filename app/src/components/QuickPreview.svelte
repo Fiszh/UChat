@@ -4,7 +4,7 @@
     import { quickPreviewMessages } from "$stores/previewMessages";
     import { onMount } from "svelte";
 
-    messages.set(quickPreviewMessages);
+    //messages.set(quickPreviewMessages);
     onMount(() => messages.set(quickPreviewMessages));
 </script>
 

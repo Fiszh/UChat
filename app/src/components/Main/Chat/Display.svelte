@@ -435,7 +435,7 @@
             font-size: 0.4rem;
 
             height: 100%;
-            width: 100dvw;
+            width: 100%;
 
             #top,
             #bottom {

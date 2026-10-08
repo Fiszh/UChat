@@ -9,6 +9,7 @@
     import SevenTV_main from "$lib/services/7TV/main";
     import { pushUsersInfoViaGQL } from "$lib/services/7TV/cosmetics";
     import { messages } from "$lib/chat";
+    import { isOpen } from "$lib/fold";
 
     import { emotes, badges, isMobile } from "$stores/global";
     import { cosmetics } from "$stores/cosmetics";
@@ -50,7 +51,8 @@
     const changeTab = (setTab: string) => (tab = setTab);
 
     $effect(() => {
-        if (tab != "settings" || !$isMobile) messages.set(previewMessages);
+        if (tab != "settings" || !$isMobile || $isOpen)
+            messages.set(previewMessages);
     });
 </script>
 
@@ -63,29 +65,42 @@
 
 <section>
     {#if $isMobile}
-        {#if tab == "settings"}
-            <QuickPreview />
-            <SettingsDisplay />
+        {#if $isOpen}
+            <div class="foldable-wrap">
+                <div class="sq a">
+                    <SettingsDisplay />
+                </div>
+                <div class="sq b">
+                    <Display />
+                </div>
+            </div>
         {:else}
-            <Display />
+            {#if tab == "settings"}
+                <QuickPreview />
+                <SettingsDisplay />
+            {:else}
+                <Display />
+            {/if}
         {/if}
 
-        <footer>
-            <Button
-                onclick={() => changeTab("settings")}
-                icon={SettingsIcon}
-                compact
-            >
-                {$t("mobile_footer.settings")}
-            </Button>
-            <Button
-                onclick={() => changeTab("preview")}
-                icon={PreviewIcon}
-                compact
-            >
-                {$t("mobile_footer.preview")}
-            </Button>
-        </footer>
+        {#if !$isOpen}
+            <footer>
+                <Button
+                    onclick={() => changeTab("settings")}
+                    icon={SettingsIcon}
+                    compact
+                >
+                    {$t("mobile_footer.settings")}
+                </Button>
+                <Button
+                    onclick={() => changeTab("preview")}
+                    icon={PreviewIcon}
+                    compact
+                >
+                    {$t("mobile_footer.preview")}
+                </Button>
+            </footer>
+        {/if}
     {:else}
         <SettingsDisplay />
         <Display />
@@ -97,6 +112,32 @@
         display: flex;
         height: 100%;
         width: 100%;
+    }
+
+    .foldable-wrap {
+        display: flex;
+        height: 100%;
+        width: 100%;
+    }
+
+    @media (horizontal-viewport-segments: 2) {
+        .foldable-wrap {
+            position: relative;
+            display: block;
+        }
+        .sq {
+            position: absolute;
+            top: 0;
+            height: 100%;
+        }
+        .a {
+            left: env(viewport-segment-left 0 0);
+            width: env(viewport-segment-width 0 0);
+        }
+        .b {
+            left: env(viewport-segment-left 1 0);
+            width: env(viewport-segment-width 1 0);
+        }
     }
 
     @media (max-width: 768px) {
