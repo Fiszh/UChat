@@ -293,22 +293,20 @@ function get7TVBadge(
     };
 }
 
-function getPolandBOTBadge(userstate: TwitchUserstate): parsedBadge | null {
-    if (!enabledBadges.includes("polandbot")) return null;
+function getPolandBOTBadge(userstate: SharedUserState): parsedBadge[] {
+    if (!enabledBadges.includes("polandbot")) return [];
 
-    const foundPolandBOTBadge = Object.entries(
-        BadgesData["OTHER"]["PolandBOT"],
-    ).find(([_, userList]) => userList.includes(userstate["user-id-raw"]));
-
-    if (!foundPolandBOTBadge) return null;
-
-    const [role] = foundPolandBOTBadge;
-
-    return {
-        badge_url: `https://devpoland.xyz/badges/${role}.avif`,
-        alt: role,
-        background_color: undefined,
-    };
+    return Object.entries(BadgesData["OTHER"]["PolandBOT"])
+        .filter(([_, users]) =>
+            (Array.isArray(users) ? users : []).includes(
+                userstate["user-id-raw"],
+            ),
+        )
+        .map(([role]) => ({
+            badge_url: `https://devpoland.xyz/badges/4x/${role}.avif`,
+            alt: role,
+            background_color: undefined,
+        }));
 }
 
 const toCamelCase = (str: string): string =>
@@ -402,8 +400,7 @@ function getBadgesForTwitch(userstate: TwitchUserstate): parsedBadge[] {
     const sevenTVBadge = get7TVBadge(userstate, "TWITCH");
     if (sevenTVBadge) user_badges.push(sevenTVBadge);
 
-    const polandBotBadge = getPolandBOTBadge(userstate);
-    if (polandBotBadge) user_badges.push(polandBotBadge);
+    user_badges.push(...getPolandBOTBadge(userstate));
 
     return user_badges;
 }
