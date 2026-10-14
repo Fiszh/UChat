@@ -48,7 +48,7 @@ class KICKSocket extends TypedEventEmitter<Events> {
     constructor() {
         super();
         this.url =
-            "wss://ws-us2.pusher.com/app/32cbd69e4b950bf97679?protocol=7&client=js&version=8.5.0&flash=false";
+            "wss://ws-us2.pusher.com/app/34bf7a0ff419a2a775b9?protocol=7&client=js&version=8.5.0&flash=false";
         this.ws = null;
         this.first_open = true;
         this.silent = false;
