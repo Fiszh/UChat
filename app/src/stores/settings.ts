@@ -223,6 +223,12 @@ export const configs: Setting[] = [
                 icon: logos["youtube"],
                 bitmap: 1 << 10,
             },
+            {
+                label: "DankChat",
+                enabled: true,
+                icon: logos["dankchat"],
+                bitmap: 1 << 11,
+            },
         ],
         param: "badges",
     },

@@ -90,6 +90,12 @@ export namespace Badges {
         }[];
         owners: string[];
     }
+
+    interface DankChat {
+        type: string;
+        url: string;
+        users: string[];
+    }
 }
 
 export {};

@@ -375,6 +375,18 @@ function getYouTubeBadges(
     });
 }
 
+function getDankChatBadge(userstate: SharedUserState): parsedBadge[] {
+    if (!enabledBadges.includes("dankchat")) return [];
+
+    return BadgesData["OTHER"]["DankChat"]
+        .filter((badge) => badge["users"].includes(userstate["user-id-raw"]))
+        .map((badge) => ({
+            badge_url: badge["url"],
+            alt: badge["type"],
+            background_color: undefined,
+        }));
+}
+
 function getBadgesForTwitch(userstate: TwitchUserstate): parsedBadge[] {
     const user_badges: parsedBadge[] = [];
 
@@ -401,6 +413,7 @@ function getBadgesForTwitch(userstate: TwitchUserstate): parsedBadge[] {
     if (sevenTVBadge) user_badges.push(sevenTVBadge);
 
     user_badges.push(...getPolandBOTBadge(userstate));
+    user_badges.push(...getDankChatBadge(userstate));
 
     return user_badges;
 }

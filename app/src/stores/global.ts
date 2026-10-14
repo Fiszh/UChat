@@ -55,6 +55,7 @@ export interface GlobalBadges {
         ChatterinoHomiesCustom: Badges.ChatterinoHomiesCustom[];
         PolandBOT: Record<string, string[]>;
         TurtegBot: Badges.TurtegBadge[];
+        DankChat: Badges.DankChat[];
     };
     channel: Record<string, string>;
 }
@@ -78,6 +79,7 @@ export const badges = writable<GlobalBadges>({
         ChatterinoHomiesCustom: [],
         PolandBOT: {},
         TurtegBot: [],
+        DankChat: [],
     },
     channel: {},
 });

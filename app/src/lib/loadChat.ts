@@ -3,6 +3,7 @@ import {
     getChatterinoBadges,
     getChatterinoHomiesBadges,
     getCustomChatterinoHomiesBadges,
+    getDankChatBadges,
     getFFZBadges,
     getMainBadges,
     getPolandBOTBadges,
@@ -29,6 +30,7 @@ export const initBadges = async () =>
         getCustomChatterinoHomiesBadges(),
         getPolandBOTBadges(),
         getTurtegBotBadges(),
+        getDankChatBadges(),
     ]);
 
 export async function initChat() {

@@ -150,3 +150,14 @@ export async function getTurtegBotBadges() {
         return e;
     });
 }
+
+export async function getDankChatBadges() {
+    const response = await fetch("https://flxrs.com/api/badges");
+    const data: Badges.DankChat[] = await response.json();
+
+    badges.update((e) => {
+        e["OTHER"]["DankChat"] = data;
+
+        return e;
+    });
+}

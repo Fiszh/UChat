@@ -27,6 +27,7 @@
     import CalloutBubble from "$components/CalloutBubble.svelte";
     import Pogly from "$components/logos/pogly.svelte";
     import GitHub from "$components/logos/github.svelte";
+    import DankChat from "$components/logos/dankchat.svelte";
 
     let selectorOptions = $state([
         { enabled: true, label: "Lorem" },
@@ -123,6 +124,7 @@
         <Ffz {brandColor} />
         <Pogly {brandColor} />
         <GitHub {brandColor} />
+        <DankChat {brandColor} />
     {/snippet}
 
     {#snippet dropdown()}
