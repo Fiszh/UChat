@@ -113,6 +113,7 @@
     },
     "settings": {
         "show_hidden": "Show hidden settings",
+        "non_reactive": "Does not effect the chat preview",
         "hidden": "hidden",
         "items": {
             "msgBold": {
@@ -218,6 +219,10 @@
             "firstMsg": {
                 "name": "Highlight first-time messages",
                 "description": "Highlight users first chat messages with a green background"
+            },
+            "ffzEffects": {
+                "name": "FrankerFaceZ emote effects",
+                "description": "Allow users to use FrankerFaceZ emote effects"
             }
         }
     },
@@ -232,7 +237,9 @@
         "loading_info": "جارٍ تحميل معلومات المستخدم والقناة...",
         "loaded_info": "تم تحميل معلومات المستخدم والقناة",
         "loading_info_fail": "فشل تحميل معلومات المستخدم والقناة!",
-        "pogly_widget_copied": "Pogly Widget has been copied!"
+        "pogly_widget_copied": "Pogly Widget has been copied!",
+        "command_copied": "Command has been copied!",
+        "command_copied_fail": "Failed to copy the command, check the console for more info."
     },
     "banners": {
         "issues": "نواجه بعض المشاكل - قد لا تتوفر بعض الميزات",
@@ -330,7 +337,8 @@
                         "reloadws": "Reconnects the 7TV and BTTV WebSockets",
                         "reconnectchat": "Reconnects to Twitch IRC",
                         "chatversion": "Shows Chat Overlay Version (reuse command to disable)",
-                        "hideloading": "Hides the loading UI in case any of the API is down"
+                        "hideloading": "Hides the loading UI in case any of the API is down",
+                        "multichat": "Disables multiplatform badges (reuse command to enable)"
                     }
                 },
                 "item_5": {
