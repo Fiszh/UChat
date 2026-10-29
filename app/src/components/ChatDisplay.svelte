@@ -12,6 +12,7 @@
     import { generateUUID } from "$lib/overlayIndex";
     import { normalizeFont } from "$lib/font";
     import { page } from "$app/state";
+    import { stickToBottom } from "$lib/stickToBottom";
 
     type Props = {
         customStyle?: string;
@@ -289,173 +290,21 @@
             }) as any,
     );
 
+    $effect(() => {
+        if (!chat) return;
+
+        return stickToBottom(chat, {
+            instant: () => instantScroll,
+            smoothness: () => scrollSmoothness,
+        });
+    });
+
     onMount(() => {
-        const AUTO_SCROLL_THRESHOLD = 100;
-        const SCROLL_EPSILON = 0.5;
-        const smoothness = Math.min(1, Math.max(0.01, scrollSmoothness));
-
-        let animationFrameId = 0;
-        let shouldAutoScroll = true;
-        let autoScrolling = false;
-
-        const getBottomScroll = () =>
-            !chat ? 0 : Math.max(0, chat.scrollHeight - chat.clientHeight);
-
-        function updateAutoScrollState() {
-            if (!chat || autoScrolling) return;
-
-            const distanceFromBottom = getBottomScroll() - chat.scrollTop;
-            shouldAutoScroll = distanceFromBottom <= AUTO_SCROLL_THRESHOLD;
-        }
-
-        function updateScroll() {
-            animationFrameId = 0;
-
-            if (!chat || !shouldAutoScroll) {
-                autoScrolling = false;
-                return;
-            }
-
-            const targetScroll = getBottomScroll();
-            const currentScroll = chat.scrollTop;
-            const distance = targetScroll - currentScroll;
-
-            if (Math.abs(distance) <= SCROLL_EPSILON) {
-                autoScrolling = true;
-                chat.scrollTop = targetScroll;
-                autoScrolling = false;
-                return;
-            }
-
-            if (instantScroll) {
-                autoScrolling = true;
-                chat.scrollTop = targetScroll;
-                autoScrolling = false;
-                return;
-            }
-
-            autoScrolling = true;
-            chat.scrollTop = currentScroll + distance * smoothness;
-
-            animationFrameId = requestAnimationFrame(updateScroll);
-        }
-
-        function scheduleScroll() {
-            if (!chat || !shouldAutoScroll || animationFrameId) return;
-
-            animationFrameId = requestAnimationFrame(updateScroll);
-        }
-
-        function handleScroll() {
-            if (autoScrolling) return;
-
-            const wasAutoScrolling = shouldAutoScroll;
-            updateAutoScrollState();
-
-            if (!wasAutoScrolling && shouldAutoScroll) {
-                scheduleScroll();
-            }
-        }
-
-        function handleUserScrollIntent() {
-            if (animationFrameId) {
-                cancelAnimationFrame(animationFrameId);
-                animationFrameId = 0;
-            }
-
-            autoScrolling = false;
-            updateAutoScrollState();
-        }
-
-        const observedElements = new Set<Element>();
-
-        function observeChild(element: Element) {
-            if (observedElements.has(element)) return;
-
-            observedElements.add(element);
-            resizeObserver.observe(element);
-        }
-
-        function unobserveChild(element: Element) {
-            if (!observedElements.has(element)) return;
-
-            observedElements.delete(element);
-            resizeObserver.unobserve(element);
-        }
-
-        const resizeObserver = new ResizeObserver(() => {
-            scheduleScroll();
-        });
-
-        const mutationObserver = new MutationObserver((mutations) => {
-            if (!chat) return;
-
-            for (const mutation of mutations) {
-                for (const node of mutation.addedNodes) {
-                    if (
-                        node instanceof Element &&
-                        node.parentElement === chat
-                    ) {
-                        observeChild(node);
-                    }
-                }
-
-                for (const node of mutation.removedNodes) {
-                    if (
-                        node instanceof Element &&
-                        node.parentElement !== chat
-                    ) {
-                        unobserveChild(node);
-                    }
-                }
-            }
-
-            scheduleScroll();
-        });
-
-        const handleImageLoad = () => {
-            scheduleScroll();
-        };
-
-        chat?.addEventListener("scroll", handleScroll);
-        chat?.addEventListener("wheel", handleUserScrollIntent, {
-            passive: true,
-        });
-        chat?.addEventListener("touchstart", handleUserScrollIntent, {
-            passive: true,
-        });
-        chat?.addEventListener("load", handleImageLoad, true);
-
-        if (chat) {
-            mutationObserver.observe(chat, {
-                childList: true,
-                subtree: true,
-            });
-
-            resizeObserver.observe(chat);
-
-            for (const child of chat.children) {
-                observeChild(child);
-            }
-
-            chat.scrollTop = getBottomScroll();
-        }
-
         mounted = true;
 
         return () => {
             unsubscribeMessages();
             unsubscribeSettings();
-
-            resizeObserver.disconnect();
-            mutationObserver.disconnect();
-
-            cancelAnimationFrame(animationFrameId);
-
-            chat?.removeEventListener("scroll", handleScroll);
-            chat?.removeEventListener("wheel", handleUserScrollIntent);
-            chat?.removeEventListener("touchstart", handleUserScrollIntent);
-            chat?.removeEventListener("load", handleImageLoad, true);
         };
     });
 </script>
