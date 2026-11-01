@@ -389,8 +389,16 @@
                     "answer": "Zapisujemy komunikaty o błędzie, stosy i podstawowe dane przeglądarki/OS podczas błędu. Nigdy nie zbieramy danych osobowych ani nagrań sesji, dane są udostępniane tylko naszemu dostawcy śledzenia błędów."
                 },
                 "item_16": {
-                    "question": "Co jeśli moje pytanie nie jest tutaj wymienione?",
-                    "answer": "Aby uzyskać więcej informacji, możesz się skontaktować za pośrednictwem {twitch} lub {discord}."
+                    "question": "Why don't some FFZ emote effects work?",
+                    "answer": "Some FFZ emote effects are sub-only, and some need changes to how emotes are rendered. I'm planning to support them while respecting the sub-only limits."
+                },
+                "item_17": {
+                    "question": "Are we safe from recent CVEs?",
+                    "answer": "We keep UChat updated with known security fixes, but may not learn about new CVEs immediately. We patch issues affecting UChat as soon as possible. Please report any security issues."
+                },
+                "item_end": {
+                    "question": "What if my question isn't listed here?",
+                    "answer": "For more information, you can reach out via {twitch} or {discord}."
                 }
             }
         },
