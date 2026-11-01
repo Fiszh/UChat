@@ -389,6 +389,14 @@
                     "answer": "We log error messages, stack traces, and basic browser/OS data during a crash. We never collect personal data or session recordings, data is only shared with our error-tracking provider."
                 },
                 "item_16": {
+                    "question": "Why don't some FFZ emote effects work?",
+                    "answer": "Some FFZ emote effects are sub-only, and some need changes to how emotes are rendered. I'm planning to support them while respecting the sub-only limits."
+                },
+                "item_17": {
+                    "question": "Are we safe from recent CVEs?",
+                    "answer": "We keep UChat updated with known security fixes, but may not learn about new CVEs immediately. We patch issues affecting UChat as soon as possible. Please report any security issues."
+                },
+                "item_end": {
                     "question": "What if my question isn't listed here?",
                     "answer": "For more information, you can reach out via {twitch} or {discord}."
                 }

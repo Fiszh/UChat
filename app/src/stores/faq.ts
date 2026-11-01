@@ -90,6 +90,12 @@ export const faqItems = [
     },
     {
         i18nKey: "pages.help.faq_items.item_16",
+    },
+    {
+        i18nKey: "pages.help.faq_items.item_17",
+    },
+    {
+        i18nKey: "pages.help.faq_items.item_end",
         links: [
             { name: "Twitch", url: API_URL + "/twitch/528761326" },
             {
