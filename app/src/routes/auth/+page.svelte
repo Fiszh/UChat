@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    import "$styles/app.scss";
+    import "#styles/app.scss";
 
     onMount(() => {
         const hash = new URLSearchParams(window.location.hash.slice(1));

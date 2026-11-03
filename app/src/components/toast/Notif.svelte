@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { dismissToast, type ToastNotif } from "$lib/toast";
+    import { dismissToast, type ToastNotif } from "#lib/toast.js";
     import { Check, Info, TriangleAlert, X } from "@lucide/svelte";
     import { onMount } from "svelte";
     import { fly } from "svelte/transition";

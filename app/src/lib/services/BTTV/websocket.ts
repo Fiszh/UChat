@@ -1,5 +1,8 @@
 import main from "./main.js";
-import { closeWebSocket, TypedEventEmitter } from "$lib/services/eventEmitter";
+import {
+    closeWebSocket,
+    TypedEventEmitter,
+} from "#lib/services/eventEmitter.js";
 const { parseSetData } = main;
 
 const blocked_events = ["broadcast_me", "lookup_user"];

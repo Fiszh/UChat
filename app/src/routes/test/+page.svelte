@@ -1,15 +1,15 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    import ChatOverlay from "$components/ChatOverlay.svelte";
+    import ChatOverlay from "#components/ChatOverlay.svelte";
 
-    import LoadingUI from "$components/Loading.svelte";
+    import LoadingUI from "#components/Loading.svelte";
 
-    import { loadingInfo } from "$stores/global";
+    import { loadingInfo } from "#stores/global.js";
     import { get } from "svelte/store";
-    import { previewMessages } from "$stores/previewMessages";
-    import { messages } from "$lib/chat";
-    import Slider from "$components/Inputs/Slider.svelte";
+    import { previewMessages } from "#stores/previewMessages.js";
+    import { messages } from "#lib/chat.js";
+    import Slider from "#components/Inputs/Slider.svelte";
 
     let { data } = $props();
 

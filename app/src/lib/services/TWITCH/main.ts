@@ -1,4 +1,4 @@
-import { API_URL } from "$stores/global";
+import { API_URL } from "#stores/global.js";
 import { assignMessage, parseIRCLine } from "./chat";
 
 async function valideToken(

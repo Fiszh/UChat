@@ -1,7 +1,7 @@
 <script lang="ts">
-    import Button from "$components/Inputs/Button.svelte";
-    import Dropdown from "$components/Inputs/Dropdown.svelte";
-    import { queryLocalFonts, type LocalFontData } from "$lib/fonts";
+    import Button from "#components/Inputs/Button.svelte";
+    import Dropdown from "#components/Inputs/Dropdown.svelte";
+    import { queryLocalFonts, type LocalFontData } from "#lib/fonts.js";
 
     let fonts: LocalFontData[] = $state([]);
 

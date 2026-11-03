@@ -1,4 +1,4 @@
-import { type Setting, settings } from "$stores/settings";
+import { type Setting, settings } from "#stores/settings.js";
 
 function paramToValue(type: Setting["type"], value: string): Setting["value"] {
     if (["boolean"].includes(type)) {

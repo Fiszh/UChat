@@ -1,21 +1,21 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    import { replaceWithEmotes } from "$lib/emotes/parser";
-    import { parseBadges } from "$lib/badges/parser";
-    import { fixNameColor } from "$lib/overlayIndex";
+    import { replaceWithEmotes } from "#lib/emotes/parser.js";
+    import { parseBadges } from "#lib/badges/parser.js";
+    import { fixNameColor } from "#lib/overlayIndex.js";
 
-    import Badge from "$components/chat/Badge.svelte";
+    import Badge from "#components/chat/Badge.svelte";
 
-    import { chatSettings, settings } from "$stores/settings";
-    import { emotes, globals, multiplatformBadge } from "$stores/global";
-    import { cosmetics } from "$stores/cosmetics";
-    import Twitch from "$components/logos/twitch.svelte";
-    import Kick from "$components/logos/kick.svelte";
-    import YouTube from "$components/logos/youtube.svelte";
+    import { chatSettings, settings } from "#stores/settings.js";
+    import { emotes, globals, multiplatformBadge } from "#stores/global.js";
+    import { cosmetics } from "#stores/cosmetics.js";
+    import Twitch from "#components/logos/twitch.svelte";
+    import Kick from "#components/logos/kick.svelte";
+    import YouTube from "#components/logos/youtube.svelte";
     import Paint from "./paint.svelte";
     import Emote from "./emote.svelte";
-    import { removeMessage } from "$lib/message";
+    import { removeMessage } from "#lib/message.js";
     import Gif from "./gif.svelte";
 
     interface Userstate {

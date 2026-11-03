@@ -12,24 +12,24 @@
 
     import moment from "moment/min/moment-with-locales";
 
-    import LoginButton from "$components/LoginButton.svelte";
+    import LoginButton from "#components/LoginButton.svelte";
     import GlobalSettings from "./GlobalSettings.svelte";
 
-    import Twitch from "$lib/services/TWITCH/main";
-    import { delCookie, getCookie, setCookie } from "$lib/cookie";
+    import Twitch from "#lib/services/TWITCH/main.js";
+    import { delCookie, getCookie, setCookie } from "#lib/cookie.js";
 
-    import { dev } from "$app/environment";
+    import { dev } from "$app/env";
     import { page } from "$app/state";
-    import Github from "$components/logos/github.svelte";
-    import Button from "$components/Inputs/Button.svelte";
-    import { isMobile } from "$stores/global";
+    import Github from "#components/logos/github.svelte";
+    import Button from "#components/Inputs/Button.svelte";
+    import { isMobile } from "#stores/global.js";
     import type { Snippet } from "svelte";
-    import UChat from "$components/logos/uchat.svelte";
-    import HelpNotice from "$components/helpNotice.svelte";
-    import LocalizationDialog from "$components/dialogs/localization.svelte";
-    import ConvertDialog from "$components/dialogs/convert.svelte";
+    import UChat from "#components/logos/uchat.svelte";
+    import HelpNotice from "#components/helpNotice.svelte";
+    import LocalizationDialog from "#components/dialogs/localization.svelte";
+    import ConvertDialog from "#components/dialogs/convert.svelte";
     import { locale, t } from "svelte-i18n";
-    import Version from "$components/version.svelte";
+    import Version from "#components/version.svelte";
 
     let username = $state(
         getCookie("twitchUsername") || ("" as string | undefined),
@@ -38,7 +38,6 @@
     let twitchToken = $state(
         getCookie("twitchToken") || ("" as string | undefined),
     );
-
     let localizationDialog = $state(false);
     let convertDialog = $state(false);
 
@@ -151,11 +150,13 @@
                 ? $t("sidebar.message_creator.mobile")
                 : $t("sidebar.message_creator.pc"),
         )}
+
         {@render sideBarButton(
             () => (convertDialog = true),
             ArrowLeftRightIcon,
             $t("sidebar.convert"),
         )}
+
         {@render sideBarButton(
             () => (localizationDialog = true),
             LanguagesIcon,
@@ -167,11 +168,13 @@
             {@render sideBarButton("/design", DesignIcon, "Design")}
             {@render sideBarButton("/teapot", CoffeeIcon, "Teapot")}
         {/if}
+
         {@render sideBarButton(
             "/help",
             InfoIcon,
             $isMobile ? $t("sidebar.info.mobile") : $t("sidebar.info.pc"),
         )}
+
         {@render sideBarButton(
             "https://github.com/Fiszh/UChat/issues/new",
             SuggetsionsIcon,

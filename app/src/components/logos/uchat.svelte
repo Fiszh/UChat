@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { gradientStops, type Stripe } from "$lib/gradient";
+    import { gradientStops, type Stripe } from "#lib/gradient.js";
 
     const flags = {
         mlm: [

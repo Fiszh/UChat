@@ -1,8 +1,8 @@
 <script lang="ts">
     import SettingsWrapper from "./Settings-wrapper.svelte";
     import { onMount } from "svelte";
-    import Slider from "$components/Inputs/Slider.svelte";
-    import { isMobile } from "$stores/global";
+    import Slider from "#components/Inputs/Slider.svelte";
+    import { isMobile } from "#stores/global.js";
 
     type Props = {
         onChange: (value: string) => void;

@@ -1,8 +1,8 @@
-import { API_URL, badges } from "$stores/global";
+import { API_URL, badges } from "#stores/global.js";
 
-import BTTV_main from "$lib/services/BTTV/main";
-import FFZ_main from "$lib/services/FFZ/main";
-import type { Badges } from "$types/badges";
+import BTTV_main from "#lib/services/BTTV/main.js";
+import FFZ_main from "#lib/services/FFZ/main.js";
+import type { Badges } from "#types/badges.js";
 
 export async function getFFZBadges() {
     const globalBadges = await FFZ_main.getBadges();

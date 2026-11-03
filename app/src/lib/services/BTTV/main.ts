@@ -1,4 +1,4 @@
-import type { Badges } from "$types/badges";
+import type { Badges } from "#types/badges.js";
 
 const BTTVZeroWidth = [
     "SoSnowy",

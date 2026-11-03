@@ -1,12 +1,12 @@
-import * as logosModule from "$components/logos.svelte";
+import * as logosModule from "#components/logos.svelte";
 import type { Snippet } from "svelte";
 const logos: Record<string, Snippet<[boolean]>> = (logosModule as any).logos ??
 (logosModule as any).default?.logos ??
 {};
-import { flags } from "$lib/bitmap";
+import { flags } from "#lib/bitmap.js";
 import { writable } from "svelte/store";
-import { isPogly } from "$lib/pogly";
-import { getFontFamilys } from "$lib/fonts";
+import { isPogly } from "#lib/pogly.js";
+import { getFontFamilys } from "#lib/fonts.js";
 
 export interface DefaultSetting {
     param: string;

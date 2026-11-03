@@ -1,7 +1,7 @@
-import { API_URL } from "$stores/global";
+import { API_URL } from "#stores/global.js";
 import type { LoadEvent } from "@sveltejs/kit";
-import { browser } from "$app/environment";
-import "$lib/i18n";
+import { browser } from "$app/env";
+import "#lib/i18n.js";
 import { waitLocale } from "svelte-i18n";
 
 export const load = async ({ fetch }: LoadEvent) => {

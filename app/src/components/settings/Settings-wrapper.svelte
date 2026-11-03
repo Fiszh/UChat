@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Setting } from "$stores/settings";
+    import type { Setting } from "#stores/settings.js";
     import { InfoIcon, RotateCcw } from "@lucide/svelte";
     import type { Snippet } from "svelte";
     import { t } from "svelte-i18n";

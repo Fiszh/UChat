@@ -1,18 +1,18 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    import TwitchChatMessage from "$components/chat/twitch/message.svelte";
-    import KickChatMessage from "$components/chat/kick/message.svelte";
-    import YouTubeChatMessage from "$components/chat/youtube/message.svelte";
+    import TwitchChatMessage from "#components/chat/twitch/message.svelte";
+    import KickChatMessage from "#components/chat/kick/message.svelte";
+    import YouTubeChatMessage from "#components/chat/youtube/message.svelte";
     import GoogleFont from "./GoogleFont.svelte";
 
-    import { messages, type ChatMessage } from "$lib/chat";
-    import { settings, type Setting } from "$stores/settings";
-    import { badges, globals } from "$stores/global";
-    import { generateUUID } from "$lib/overlayIndex";
-    import { normalizeFont } from "$lib/font";
+    import { messages, type ChatMessage } from "#lib/chat.js";
+    import { settings, type Setting } from "#stores/settings.js";
+    import { badges, globals } from "#stores/global.js";
+    import { generateUUID } from "#lib/overlayIndex.js";
+    import { normalizeFont } from "#lib/font.js";
     import { page } from "$app/state";
-    import { stickToBottom } from "$lib/stickToBottom";
+    import { stickToBottom } from "#lib/stickToBottom.js";
 
     type Props = {
         customStyle?: string;

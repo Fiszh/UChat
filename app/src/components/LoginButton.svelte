@@ -3,7 +3,7 @@
 
     import { LogIn, LogOut } from "@lucide/svelte";
 
-    import { delCookie, getCookie, setCookie } from "$lib/cookie";
+    import { delCookie, getCookie, setCookie } from "#lib/cookie.js";
     import Button from "./Inputs/Button.svelte";
     import { t } from "svelte-i18n";
 

@@ -1,5 +1,5 @@
 import main from "./main.js";
-import { TypedEventEmitter } from "$lib/services/eventEmitter";
+import { TypedEventEmitter } from "#lib/services/eventEmitter.js";
 const { parseSetData, parsePaintData, parseBadgeData } = main;
 
 const id_types: Record<string, string> = {

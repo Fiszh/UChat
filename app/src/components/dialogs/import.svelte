@@ -1,9 +1,9 @@
 <script lang="ts">
-    import Dialog from "$components/Dialog.svelte";
-    import Button from "$components/Inputs/Button.svelte";
-    import Input from "$components/Inputs/Input.svelte";
-    import { importConfig } from "$lib/import";
-    import { addToast } from "$lib/toast";
+    import Dialog from "#components/Dialog.svelte";
+    import Button from "#components/Inputs/Button.svelte";
+    import Input from "#components/Inputs/Input.svelte";
+    import { importConfig } from "#lib/import.js";
+    import { addToast } from "#lib/toast.js";
     import { Import } from "@lucide/svelte";
     import { t } from "svelte-i18n";
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import ColorPicker from "$components/colorPicker.svelte";
+    import ColorPicker from "#components/colorPicker.svelte";
 
     type Props = {
         value?: string;

@@ -1,3 +1,7 @@
+import adapter from "@sveltejs/adapter-static";
+import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
+import lucidePreprocess from "vite-plugin-lucide-preprocess";
+import path from "path";
 import { sveltekit } from "@sveltejs/kit/vite";
 import { defineConfig } from "vite";
 import { execSync } from "node:child_process";
@@ -26,7 +30,17 @@ export default defineConfig({
     envPrefix: "PUBLIC_",
     build: { sourcemap: true },
     plugins: [
-        sveltekit(),
+        sveltekit({
+            preprocess: [lucidePreprocess(), vitePreprocess()],
+            compilerOptions: { runes: true },
+            adapter: adapter({
+                pages: "build",
+                assets: "build",
+                fallback: "index.html",
+                precompress: true,
+            }),
+        }),
+
         ...(isProdBuild
             ? [
                   sentryVitePlugin({

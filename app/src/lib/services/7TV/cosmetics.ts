@@ -1,9 +1,9 @@
 import { get } from "svelte/store";
 
-import main from "$lib/services/7TV/main";
+import main from "#lib/services/7TV/main.js";
 const { parseBadgeData, parsePaintData } = main;
 
-import { cosmetics } from "$stores/cosmetics";
+import { cosmetics } from "#stores/cosmetics.js";
 
 // GQL
 import cosmetics_single from "./GQL/cosmetics/single.gql?raw";

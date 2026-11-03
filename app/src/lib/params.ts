@@ -1,4 +1,4 @@
-import { settingsParams, type Setting } from "$stores/settings";
+import { settingsParams, type Setting } from "#stores/settings.js";
 
 export function setParam(key: string, value: Setting["value"]) {
     settingsParams.update((arr) => {

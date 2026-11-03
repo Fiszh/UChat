@@ -1,6 +1,6 @@
 <script lang="ts">
-    import LoadingAnimation from "$lib/assets/loading.avif";
-    import UChat from "$components/logos/uchat.svelte";
+    import LoadingAnimation from "#lib/assets/loading.avif";
+    import UChat from "#components/logos/uchat.svelte";
     import { dev } from "$app/env";
 
     const availableStyles: string[] = ["minimal", "big", "small", "minimized"];

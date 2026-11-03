@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import { settings } from "$stores/settings";
+import { settings } from "#stores/settings.js";
 import { YTNodes } from "youtubei.js";
 
 let clearChatWhenGoingLive = false;

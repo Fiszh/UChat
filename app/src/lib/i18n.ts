@@ -1,4 +1,4 @@
-import { browser } from "$app/environment";
+import { browser } from "$app/env";
 import moment from "moment/min/moment-with-locales";
 import { init, locale, register } from "svelte-i18n";
 
@@ -15,13 +15,13 @@ export const localeNames: { [key: string]: string } = {
     // add more as translations land
 };
 
-register("en", () => import("$locales/en.json"));
-register("en-GB", () => import("$locales/en-GB.json"));
-register("pl-PL", () => import("$locales/pl-PL.json"));
-register("en-PT", () => import("$locales/en-PT.json"));
-register("pt-PT", () => import("$locales/pt-PT.json"));
-register("ar-SA", () => import("$locales/ar-SA.json"));
-register("es-ES", () => import("$locales/es-ES.json"));
+register("en", () => import("#locales/en.json"));
+register("en-GB", () => import("#locales/en-GB.json"));
+register("pl-PL", () => import("#locales/pl-PL.json"));
+register("en-PT", () => import("#locales/en-PT.json"));
+register("pt-PT", () => import("#locales/pt-PT.json"));
+register("ar-SA", () => import("#locales/ar-SA.json"));
+register("es-ES", () => import("#locales/es-ES.json"));
 
 function getInitialLocale() {
     if (browser) {

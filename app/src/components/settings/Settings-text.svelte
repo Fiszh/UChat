@@ -1,7 +1,7 @@
 <script lang="ts">
     import SettingsWrapper from "./Settings-wrapper.svelte";
-    import Input from "$components/Inputs/Input.svelte";
-    import { isMobile } from "$stores/global";
+    import Input from "#components/Inputs/Input.svelte";
+    import { isMobile } from "#stores/global.js";
     import { onMount } from "svelte";
 
     type Props = {

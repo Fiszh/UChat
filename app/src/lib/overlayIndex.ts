@@ -2,17 +2,17 @@ import { get } from "svelte/store";
 
 import tinycolor from "tinycolor2";
 
-import { cosmetics } from "$stores/cosmetics";
+import { cosmetics } from "#stores/cosmetics.js";
 import {
     API_URL,
     badges,
     emotes,
     globals,
     type GlobalEmotes,
-} from "$stores/global";
+} from "#stores/global.js";
 
-import Services from "$lib/services";
-import { settings, type Setting } from "$stores/settings";
+import Services from "#lib/services/index.js";
+import { settings, type Setting } from "#stores/settings.js";
 
 let cosmetic_data = get(cosmetics);
 let emote_data = get(emotes);

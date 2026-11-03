@@ -1,23 +1,23 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    import Sidebar from "$components/Main/Sidebar.svelte";
+    import Sidebar from "#components/Main/Sidebar.svelte";
 
-    import "$styles/variables.scss";
-    import "$styles/reset.css";
-    import "$styles/app.scss";
-    import "$styles/ffz.css";
+    import "#styles/variables.scss";
+    import "#styles/reset.css";
+    import "#styles/app.scss";
+    import "#styles/ffz.css";
 
     import { page } from "$app/state";
-    import Banner from "$components/Banner.svelte";
-    import { isMobile } from "$stores/global";
+    import Banner from "#components/Banner.svelte";
+    import { isMobile } from "#stores/global.js";
 
     import { RenderScan } from "svelte-render-scan";
-    import ToastWrapper from "$components/toast/Wrapper.svelte";
+    import ToastWrapper from "#components/toast/Wrapper.svelte";
     import { dev } from "$app/env";
-    import { isPogly } from "$lib/pogly.js";
-    import UChat from "$components/logos/uchat.svelte";
-    import MobileTopbar from "$components/mobileTopbar.svelte";
+    import { isPogly } from "#lib/pogly.js";
+    import UChat from "#components/logos/uchat.svelte";
+    import MobileTopbar from "#components/mobileTopbar.svelte";
 
     let { data, children } = $props();
 

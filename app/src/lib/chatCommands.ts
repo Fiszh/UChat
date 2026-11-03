@@ -1,4 +1,4 @@
-import { loadingInfo, multiplatformBadge } from "$stores/global";
+import { loadingInfo, multiplatformBadge } from "#stores/global.js";
 import { get } from "svelte/store";
 import { loadChat } from "./loadChat";
 import Services from "./services";

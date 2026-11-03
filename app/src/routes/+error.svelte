@@ -1,15 +1,15 @@
 <script lang="ts">
-    import ChatDisplay from "$components/ChatDisplay.svelte";
-    import { getBadges, sendFakeMessage } from "$lib/preview";
-    import { emotes, isMobile } from "$stores/global";
+    import ChatDisplay from "#components/ChatDisplay.svelte";
+    import { getBadges, sendFakeMessage } from "#lib/preview.js";
+    import { emotes, isMobile } from "#stores/global.js";
     import { onMount } from "svelte";
 
-    import SevenTV_main from "$lib/services/7TV/main";
+    import SevenTV_main from "#lib/services/7TV/main.js";
     import { page } from "$app/state";
     import { Dot } from "@lucide/svelte";
-    import Button from "$components/Inputs/Button.svelte";
+    import Button from "#components/Inputs/Button.svelte";
     import { locale, t } from "svelte-i18n";
-    import type { FlagCode } from "$components/CountryFlag.svelte";
+    import type { FlagCode } from "#components/CountryFlag.svelte";
 
     let loaded = $state(false);
     let isAbleToGoBack = $state(true);
@@ -116,7 +116,7 @@
             {#if isAbleToGoBack}
                 <Button secondary onclick={goBack}>Go back a page</Button>
             {/if}
-            <Button primary href="/" data-sveltekit-preload-data="off">
+            <Button primary href="/" data-sveltekit-preload="false">
                 Go back homepage
             </Button>
         </div>

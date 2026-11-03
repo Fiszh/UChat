@@ -1,10 +1,10 @@
 <script lang="ts">
     import SettingsWrapper from "./Settings-wrapper.svelte";
-    import { isMobile } from "$stores/global";
+    import { isMobile } from "#stores/global.js";
     import { onMount } from "svelte";
-    import type { DropdownSetting } from "$stores/settings";
-    import Dropdown from "$components/Inputs/Dropdown.svelte";
-    import Button from "$components/Inputs/Button.svelte";
+    import type { DropdownSetting } from "#stores/settings.js";
+    import Dropdown from "#components/Inputs/Dropdown.svelte";
+    import Button from "#components/Inputs/Button.svelte";
 
     type Props = {
         onChange: (value: string) => void;

@@ -8,10 +8,13 @@ import {
     getMainBadges,
     getPolandBOTBadges,
     getTurtegBotBadges,
-} from "$lib/badges/main";
-import { getChannelEmotesViaTwitchID, getGlobalEmotes } from "$lib/emotes/main";
-import { emotes, globals, loadingInfo } from "$stores/global";
-import { settings } from "$stores/settings";
+} from "#lib/badges/main.js";
+import {
+    getChannelEmotesViaTwitchID,
+    getGlobalEmotes,
+} from "#lib/emotes/main.js";
+import { emotes, globals, loadingInfo } from "#stores/global.js";
+import { settings } from "#stores/settings.js";
 import { get } from "svelte/store";
 import Twitch from "./services/TWITCH/main";
 import Services from "./services";

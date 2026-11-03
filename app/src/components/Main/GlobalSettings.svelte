@@ -1,8 +1,8 @@
 <script lang="ts">
-    import Button from "$components/Inputs/Button.svelte";
-    import { parseSavedSettings } from "$lib/overlayIndex";
-    import { API_URL } from "$stores/global";
-    import { savedSettings, settings } from "$stores/settings";
+    import Button from "#components/Inputs/Button.svelte";
+    import { parseSavedSettings } from "#lib/overlayIndex.js";
+    import { API_URL } from "#stores/global.js";
+    import { savedSettings, settings } from "#stores/settings.js";
     import { t } from "svelte-i18n";
     import { slide } from "svelte/transition";
 

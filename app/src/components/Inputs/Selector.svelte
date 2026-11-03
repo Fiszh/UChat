@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { dev } from "$app/environment";
-    import { flags } from "$lib/bitmap";
+    import { dev } from "$app/env";
+    import { flags } from "#lib/bitmap.js";
     import type { Snippet } from "svelte";
     import { t } from "svelte-i18n";
 

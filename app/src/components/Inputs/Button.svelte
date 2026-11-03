@@ -1,6 +1,6 @@
 <script lang="ts">
-    import NewTab from "$components/dialogs/new_tab.svelte";
-    import { isMobile } from "$stores/global";
+    import NewTab from "#components/dialogs/new_tab.svelte";
+    import { isMobile } from "#stores/global.js";
     import { ExternalLink } from "@lucide/svelte";
     import { onMount, type Snippet } from "svelte";
     import type {

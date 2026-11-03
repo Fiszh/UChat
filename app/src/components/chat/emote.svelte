@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { sanitizeInput } from "$lib/chat";
+    import { sanitizeInput } from "#lib/chat.js";
 
     type Props = {
         emoteInfo:

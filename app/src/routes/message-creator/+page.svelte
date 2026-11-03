@@ -1,27 +1,27 @@
 <script lang="ts">
-    import ChatDisplay from "$components/ChatDisplay.svelte";
-    import { messages } from "$lib/chat";
+    import ChatDisplay from "#components/ChatDisplay.svelte";
+    import { messages } from "#lib/chat.js";
     import { Cog, Download, RefreshCcw } from "@lucide/svelte";
-    import Settings from "$components/Main/Chat/Settings.svelte";
+    import Settings from "#components/Main/Chat/Settings.svelte";
 
     import { toPng } from "html-to-image";
 
-    import { initChat } from "$lib/loadChat";
-    import Twitch from "$lib/services/TWITCH/main";
-    import { getChannelEmotesViaTwitchID } from "$lib/emotes/main";
-    import { pushUserInfoViaGQL } from "$lib/services/7TV/cosmetics";
-    import { getBadges } from "$lib/preview";
+    import { initChat } from "#lib/loadChat.js";
+    import Twitch from "#lib/services/TWITCH/main.js";
+    import { getChannelEmotesViaTwitchID } from "#lib/emotes/main.js";
+    import { pushUserInfoViaGQL } from "#lib/services/7TV/cosmetics.js";
+    import { getBadges } from "#lib/preview.js";
 
-    import SevenTV_main from "$lib/services/7TV/main";
-    import Button from "$components/Inputs/Button.svelte";
-    import Input from "$components/Inputs/Input.svelte";
-    import Banner from "$components/Banner.svelte";
-    import { isFirefox, isSafari } from "$lib/browser";
-    import { addToast } from "$lib/toast";
-    import { previewMessages } from "$stores/previewMessages";
+    import SevenTV_main from "#lib/services/7TV/main.js";
+    import Button from "#components/Inputs/Button.svelte";
+    import Input from "#components/Inputs/Input.svelte";
+    import Banner from "#components/Banner.svelte";
+    import { isFirefox, isSafari } from "#lib/browser.js";
+    import { addToast } from "#lib/toast.js";
+    import { previewMessages } from "#stores/previewMessages.js";
     import { t } from "svelte-i18n";
-    import { isMobile } from "$stores/global";
-    import MessageCreator from "$components/dialogs/messageCreator.svelte";
+    import { isMobile } from "#stores/global.js";
+    import MessageCreator from "#components/dialogs/messageCreator.svelte";
 
     let messageDisplay = $state<HTMLElement>();
 

@@ -3,17 +3,17 @@
 
     import ChatDisplay from "./ChatDisplay.svelte";
 
-    import { globals, loadingInfo } from "$stores/global";
-    import { clearChat } from "$lib/chat";
+    import { globals, loadingInfo } from "#stores/global.js";
+    import { clearChat } from "#lib/chat.js";
 
-    import { getMainUser, connectToWS } from "$lib/overlayIndex";
-    import { settings } from "$stores/settings";
-    import { loadChat } from "$lib/loadChat";
+    import { getMainUser, connectToWS } from "#lib/overlayIndex.js";
+    import { settings } from "#stores/settings.js";
+    import { loadChat } from "#lib/loadChat.js";
 
-    import { isPogly } from "$lib/pogly";
-    import { flags } from "$lib/bitmap";
+    import { isPogly } from "#lib/pogly.js";
+    import { flags } from "#lib/bitmap.js";
 
-    import Services from "$lib/services";
+    import Services from "#lib/services/index.js";
 
     // REFRESH IMAGES IF FAILED
     function handleImageRetries(): void {

@@ -1,8 +1,11 @@
-import { settings } from "$stores/settings";
-import { execCommand, isUChatMod } from "$lib/chatCommands";
-import { messages, sanitizeInput } from "$lib/chat";
-import { globals } from "$stores/global";
-import { closeWebSocket, TypedEventEmitter } from "$lib/services/eventEmitter";
+import { settings } from "#stores/settings.js";
+import { execCommand, isUChatMod } from "#lib/chatCommands.js";
+import { messages, sanitizeInput } from "#lib/chat.js";
+import { globals } from "#stores/global.js";
+import {
+    closeWebSocket,
+    TypedEventEmitter,
+} from "#lib/services/eventEmitter.js";
 
 let modActions = false;
 let usernotices = false;

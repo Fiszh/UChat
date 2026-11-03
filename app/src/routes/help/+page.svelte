@@ -3,10 +3,10 @@
 
     import { CircleQuestionMark, ShieldCheck } from "@lucide/svelte";
 
-    import { faqItems } from "$stores/faq";
+    import { faqItems } from "#stores/faq.js";
     import { t } from "svelte-i18n";
-    import { addToast } from "$lib/toast";
-    import { isMobile } from "$stores/global";
+    import { addToast } from "#lib/toast.js";
+    import { isMobile } from "#stores/global.js";
 
     let helpNotice: HTMLElement;
 

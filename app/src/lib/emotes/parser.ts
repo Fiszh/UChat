@@ -2,14 +2,14 @@ import { get } from "svelte/store";
 
 import twemoji from "@twemoji/api";
 
-import { getPersonalSets } from "$lib/services/7TV/cosmetics";
+import { getPersonalSets } from "#lib/services/7TV/cosmetics.js";
 
-import { emotes, globals } from "$stores/global";
-import { chatSettings } from "$stores/settings";
-import { getSavedSet } from "$lib/overlayIndex";
+import { emotes, globals } from "#stores/global.js";
+import { chatSettings } from "#stores/settings.js";
+import { getSavedSet } from "#lib/overlayIndex.js";
 import type { YTNodes } from "youtubei.js";
-import { sanitizeInput } from "$lib/chat";
-import { getFFZBadges } from "$lib/badges/parser";
+import { sanitizeInput } from "#lib/chat.js";
+import { getFFZBadges } from "#lib/badges/parser.js";
 
 const kickEmoteRegex = /\[emote:(?<id>\d+)[:]?(?<name>[a-zA-Z0-9-_!]*)[:]?\]/g; // https://github.com/KickTalkOrg/KickTalk/blob/a3570be165618f70449257bbb70df7cd16b66efe/utils/constants.js#L3
 

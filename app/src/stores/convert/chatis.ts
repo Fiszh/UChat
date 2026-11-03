@@ -1,4 +1,4 @@
-import type { Converter } from "$types/converter";
+import type { Converter } from "#types/converter.js";
 
 export default {
     channel: [

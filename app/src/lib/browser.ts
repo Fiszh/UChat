@@ -1,4 +1,4 @@
-import { browser } from "$app/environment";
+import { browser } from "$app/env";
 
 export const isSafari = () =>
     browser
@@ -13,6 +13,5 @@ export const isChrome = () =>
 
 export const isFirefox = () =>
     browser ? /firefox|fxios/i.test(navigator.userAgent) : false;
-
 export const isEdge = () =>
     browser ? /edg/i.test(navigator.userAgent) : false;

@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { cleanUpSharedChat } from "$lib/overlayIndex";
-    import { getChannelEmotesViaTwitchID } from "$lib/emotes/main";
+    import { cleanUpSharedChat } from "#lib/overlayIndex.js";
+    import { getChannelEmotesViaTwitchID } from "#lib/emotes/main.js";
     import MessageWrapper from "../messageWrapper.svelte";
     import { onMount, type ComponentProps } from "svelte";
-    import { globals } from "$stores/global";
-    import { chatSettings } from "$stores/settings";
+    import { globals } from "#stores/global.js";
+    import { chatSettings } from "#stores/settings.js";
 
     let { ...rest }: ComponentProps<typeof MessageWrapper> = $props();
 

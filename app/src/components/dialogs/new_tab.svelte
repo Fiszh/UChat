@@ -1,7 +1,7 @@
 <script lang="ts">
-    import Dialog from "$components/Dialog.svelte";
-    import Button from "$components/Inputs/Button.svelte";
-    import Input from "$components/Inputs/Input.svelte";
+    import Dialog from "#components/Dialog.svelte";
+    import Button from "#components/Inputs/Button.svelte";
+    import Input from "#components/Inputs/Input.svelte";
 
     type Props = {
         show: boolean;

@@ -1,7 +1,7 @@
 <script lang="ts">
     import ChatDisplay from "./ChatDisplay.svelte";
-    import { messages } from "$lib/chat";
-    import { quickPreviewMessages } from "$stores/previewMessages";
+    import { messages } from "#lib/chat.js";
+    import { quickPreviewMessages } from "#stores/previewMessages.js";
     import { onMount } from "svelte";
 
     //messages.set(quickPreviewMessages);

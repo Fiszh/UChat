@@ -1,4 +1,4 @@
-import { badges, globals } from "$stores/global";
+import { badges, globals } from "#stores/global.js";
 
 type Badge = {
     id: number;

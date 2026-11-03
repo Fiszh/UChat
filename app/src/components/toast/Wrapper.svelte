@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { toastNotifs } from "$lib/toast";
+    import { toastNotifs } from "#lib/toast.js";
     import Notif from "./Notif.svelte";
 </script>
 

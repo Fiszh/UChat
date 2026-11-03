@@ -1,13 +1,13 @@
 <script lang="ts">
-    import Dialog from "$components/Dialog.svelte";
-    import Button from "$components/Inputs/Button.svelte";
-    import Checkbox from "$components/Inputs/Checkbox.svelte";
-    import Input from "$components/Inputs/Input.svelte";
-    import Kick from "$components/logos/kick.svelte";
-    import Twitch from "$components/logos/twitch.svelte";
-    import Youtube from "$components/logos/youtube.svelte";
-    import { addToast } from "$lib/toast";
-    import { API_URL } from "$stores/global";
+    import Dialog from "#components/Dialog.svelte";
+    import Button from "#components/Inputs/Button.svelte";
+    import Checkbox from "#components/Inputs/Checkbox.svelte";
+    import Input from "#components/Inputs/Input.svelte";
+    import Kick from "#components/logos/kick.svelte";
+    import Twitch from "#components/logos/twitch.svelte";
+    import Youtube from "#components/logos/youtube.svelte";
+    import { addToast } from "#lib/toast.js";
+    import { API_URL } from "#stores/global.js";
     import { t } from "svelte-i18n";
     import { slide } from "svelte/transition";
 

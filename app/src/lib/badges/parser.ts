@@ -1,12 +1,12 @@
 import { get } from "svelte/store";
 
-import { getBadge } from "$lib/services/7TV/cosmetics";
+import { getBadge } from "#lib/services/7TV/cosmetics.js";
 
-import { badges } from "$stores/global";
+import { badges } from "#stores/global.js";
 
-import { settings, type SelectorSetting } from "$stores/settings";
-import { flags } from "$lib/bitmap";
-import { isPogly } from "$lib/pogly";
+import { settings, type SelectorSetting } from "#stores/settings.js";
+import { flags } from "#lib/bitmap.js";
+import { isPogly } from "#lib/pogly.js";
 
 let BadgesData = get(badges);
 badges.subscribe((e) => (BadgesData = e));

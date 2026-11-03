@@ -1,9 +1,9 @@
 <script lang="ts">
     import SettingsWrapper from "./Settings-wrapper.svelte";
     import { onMount } from "svelte";
-    import Selector from "$components/Inputs/Selector.svelte";
-    import type { SelectorSetting } from "$stores/settings";
-    import { isMobile } from "$stores/global";
+    import Selector from "#components/Inputs/Selector.svelte";
+    import type { SelectorSetting } from "#stores/settings.js";
+    import { isMobile } from "#stores/global.js";
 
     type Props = {
         onChange: (v: number) => void;

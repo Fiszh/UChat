@@ -1,6 +1,6 @@
 <script lang="ts">
     import SettingsWrapper from "./Settings-wrapper.svelte";
-    import Toggle from "$components/Inputs/Toggle.svelte";
+    import Toggle from "#components/Inputs/Toggle.svelte";
     import { onMount } from "svelte";
 
     type Props = {

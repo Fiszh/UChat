@@ -5,8 +5,8 @@
 
     import LoadingUI from "../components/Loading.svelte";
 
-    import { loadingInfo } from "$stores/global";
-    import Main from "$components/Main/Chat/Main.svelte";
+    import { loadingInfo } from "#stores/global.js";
+    import Main from "#components/Main/Chat/Main.svelte";
     import { get } from "svelte/store";
 
     let { data } = $props();

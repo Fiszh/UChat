@@ -1,4 +1,4 @@
-import { configs, settings } from "$stores/settings";
+import { configs, settings } from "#stores/settings.js";
 import { _ } from "svelte-i18n";
 import { get } from "svelte/store";
 import { flags } from "./bitmap";

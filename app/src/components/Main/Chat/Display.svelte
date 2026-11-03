@@ -1,29 +1,29 @@
 <script lang="ts">
     import { RotateCcw, Copy, Send, ShieldPlus, Import } from "@lucide/svelte";
 
-    import { messages, sanitizeInput } from "$lib/chat";
+    import { messages, sanitizeInput } from "#lib/chat.js";
 
-    import ChatDisplay from "$components/ChatDisplay.svelte";
+    import ChatDisplay from "#components/ChatDisplay.svelte";
 
-    import { configs, settings, settingsParams } from "$stores/settings";
+    import { configs, settings, settingsParams } from "#stores/settings.js";
 
-    import { previewMessages } from "$stores/previewMessages";
-    import { sendFakeMessage } from "$lib/preview";
-    import Button from "$components/Inputs/Button.svelte";
-    import Input from "$components/Inputs/Input.svelte";
-    import Color from "$components/Inputs/Color.svelte";
-    import { removeParam, setParam } from "$lib/params";
-    import { isMobile } from "$stores/global";
-    import { initBadges } from "$lib/loadChat";
-    import { addToast } from "$lib/toast";
-    import HelpNotice from "$components/helpNotice.svelte";
+    import { previewMessages } from "#stores/previewMessages.js";
+    import { sendFakeMessage } from "#lib/preview.js";
+    import Button from "#components/Inputs/Button.svelte";
+    import Input from "#components/Inputs/Input.svelte";
+    import Color from "#components/Inputs/Color.svelte";
+    import { removeParam, setParam } from "#lib/params.js";
+    import { isMobile } from "#stores/global.js";
+    import { initBadges } from "#lib/loadChat.js";
+    import { addToast } from "#lib/toast.js";
+    import HelpNotice from "#components/helpNotice.svelte";
     import { t } from "svelte-i18n";
-    import ChannelManager from "$components/dialogs/channel_manager.svelte";
-    import CalloutBubble from "$components/CalloutBubble.svelte";
-    import { shake } from "$lib/shake";
-    import Pogly from "$components/logos/pogly.svelte";
-    import PoglyWidget from "$components/dialogs/pogly_widget.svelte";
-    import ImportWidget from "$components/dialogs/import.svelte";
+    import ChannelManager from "#components/dialogs/channel_manager.svelte";
+    import CalloutBubble from "#components/CalloutBubble.svelte";
+    import { shake } from "#lib/shake.js";
+    import Pogly from "#components/logos/pogly.svelte";
+    import PoglyWidget from "#components/dialogs/pogly_widget.svelte";
+    import ImportWidget from "#components/dialogs/import.svelte";
 
     let hex = $state("#191919");
     let customMessageValue = $state("");

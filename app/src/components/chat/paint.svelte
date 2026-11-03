@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { getPaint, getPaintHTML } from "$lib/services/7TV/cosmetics";
-    import { cosmetics } from "$stores/cosmetics";
-    import { chatSettings } from "$stores/settings";
+    import { getPaint, getPaintHTML } from "#lib/services/7TV/cosmetics.js";
+    import { cosmetics } from "#stores/cosmetics.js";
+    import { chatSettings } from "#stores/settings.js";
     import type { Snippet } from "svelte";
     import type { HTMLAttributes } from "svelte/elements";
 

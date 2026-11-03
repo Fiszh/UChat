@@ -1,6 +1,6 @@
 <script lang="ts">
     import SettingsWrapper from "./Settings-wrapper.svelte";
-    import Color from "$components/Inputs/Color.svelte";
+    import Color from "#components/Inputs/Color.svelte";
     import { onMount } from "svelte";
 
     type Props = {

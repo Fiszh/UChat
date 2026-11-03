@@ -1,8 +1,11 @@
-import { messages, sanitizeInput } from "$lib/chat";
-import { WS_URL } from "$stores/global";
-import { settings } from "$stores/settings";
+import { messages, sanitizeInput } from "#lib/chat.js";
+import { WS_URL } from "#stores/global.js";
+import { settings } from "#stores/settings.js";
 import type { YTNodes } from "youtubei.js";
-import { closeWebSocket, TypedEventEmitter } from "$lib/services/eventEmitter";
+import {
+    closeWebSocket,
+    TypedEventEmitter,
+} from "#lib/services/eventEmitter.js";
 
 let modActions = false;
 

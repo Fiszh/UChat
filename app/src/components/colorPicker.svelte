@@ -4,7 +4,7 @@
     import tinycolor from "tinycolor2";
     import Button from "./Inputs/Button.svelte";
     import { t } from "svelte-i18n";
-    import { isMobile } from "$stores/global";
+    import { isMobile } from "#stores/global.js";
 
     let mainEl: HTMLElement;
 

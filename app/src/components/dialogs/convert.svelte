@@ -1,12 +1,12 @@
 <script lang="ts">
-    import Dialog from "$components/Dialog.svelte";
-    import Button from "$components/Inputs/Button.svelte";
-    import Input from "$components/Inputs/Input.svelte";
-    import { importConfig } from "$lib/import";
-    import { addToast } from "$lib/toast";
-    import chatis from "$stores/convert/chatis";
-    import { config } from "$stores/settings";
-    import type { Converter } from "$types/converter";
+    import Dialog from "#components/Dialog.svelte";
+    import Button from "#components/Inputs/Button.svelte";
+    import Input from "#components/Inputs/Input.svelte";
+    import { importConfig } from "#lib/import.js";
+    import { addToast } from "#lib/toast.js";
+    import chatis from "#stores/convert/chatis.js";
+    import { config } from "#stores/settings.js";
+    import type { Converter } from "#types/converter.js";
     import { t } from "svelte-i18n";
 
     type Props = {

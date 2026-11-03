@@ -1,7 +1,7 @@
-import { badges } from "$stores/global";
+import { badges } from "#stores/global.js";
 import { get } from "svelte/store";
 import { messages } from "./chat";
-import type { Badges } from "$types/badges";
+import type { Badges } from "#types/badges.js";
 
 interface IVRBadge {
     set_id: string;

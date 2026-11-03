@@ -1,20 +1,20 @@
 <script lang="ts">
     import { get } from "svelte/store";
 
-    import { parseSavedSettings } from "$lib/overlayIndex";
+    import { parseSavedSettings } from "#lib/overlayIndex.js";
 
-    import Dialog from "$components/Dialog.svelte";
+    import Dialog from "#components/Dialog.svelte";
 
-    import { savedSettings, type Setting, settings } from "$stores/settings";
-    import Button from "$components/Inputs/Button.svelte";
-    import SettingsToggle from "$components/settings/Settings-toggle.svelte";
-    import SettingsText from "$components/settings/Settings-text.svelte";
-    import SettingsColor from "$components/settings/Settings-color.svelte";
-    import SettingsSlider from "$components/settings/Settings-slider.svelte";
-    import SettingsSelector from "$components/settings/Settings-selector.svelte";
-    import { removeParam, setParam } from "$lib/params";
+    import { savedSettings, type Setting, settings } from "#stores/settings.js";
+    import Button from "#components/Inputs/Button.svelte";
+    import SettingsToggle from "#components/settings/Settings-toggle.svelte";
+    import SettingsText from "#components/settings/Settings-text.svelte";
+    import SettingsColor from "#components/settings/Settings-color.svelte";
+    import SettingsSlider from "#components/settings/Settings-slider.svelte";
+    import SettingsSelector from "#components/settings/Settings-selector.svelte";
+    import { removeParam, setParam } from "#lib/params.js";
     import { t } from "svelte-i18n";
-    import SettingsDropdown from "$components/settings/Settings-dropdown.svelte";
+    import SettingsDropdown from "#components/settings/Settings-dropdown.svelte";
 
     let showHidden = $state(false);
     let hiddenWarning = $state(false);

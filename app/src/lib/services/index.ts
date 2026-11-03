@@ -1,16 +1,16 @@
-import SevenTV_main from "$lib/services/7TV/main";
-import SevenTV_ws from "$lib/services/7TV/websocket";
+import SevenTV_main from "#lib/services/7TV/main.js";
+import SevenTV_ws from "#lib/services/7TV/websocket.js";
 
-import BTTV_main from "$lib/services/BTTV/main";
-import BTTV_ws from "$lib/services/BTTV/websocket";
+import BTTV_main from "#lib/services/BTTV/main.js";
+import BTTV_ws from "#lib/services/BTTV/websocket.js";
 
-import FFZ_main from "$lib/services/FFZ/main";
+import FFZ_main from "#lib/services/FFZ/main.js";
 
 import { TWITCHSocket } from "./TWITCH/chat";
-import TTV_main from "$lib/services/TWITCH/main";
+import TTV_main from "#lib/services/TWITCH/main.js";
 
 import KICKSocket from "./KICK/chat";
-import KICK_main from "$lib/services/KICK/main";
+import KICK_main from "#lib/services/KICK/main.js";
 
 import YOUTUBESocket from "./YOUTUBE/chat";
 

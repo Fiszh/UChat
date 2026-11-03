@@ -1,5 +1,5 @@
 <script>
-    import ColorPicker from "$components/colorPicker.svelte";
+    import ColorPicker from "#components/colorPicker.svelte";
 
     let color = $state("#8000ff");
     let hue = $state(0);

@@ -5,18 +5,18 @@
     import SettingsDisplay from "./Settings.svelte";
     import Display from "./Display.svelte";
 
-    import { getBadges } from "$lib/preview";
-    import SevenTV_main from "$lib/services/7TV/main";
-    import { pushUsersInfoViaGQL } from "$lib/services/7TV/cosmetics";
-    import { messages } from "$lib/chat";
-    import { isOpen } from "$lib/fold";
+    import { getBadges } from "#lib/preview.js";
+    import SevenTV_main from "#lib/services/7TV/main.js";
+    import { pushUsersInfoViaGQL } from "#lib/services/7TV/cosmetics.js";
+    import { messages } from "#lib/chat.js";
+    import { isOpen } from "#lib/fold.js";
 
-    import { emotes, badges, isMobile } from "$stores/global";
-    import { cosmetics } from "$stores/cosmetics";
-    import { previewMessages } from "$stores/previewMessages";
+    import { emotes, badges, isMobile } from "#stores/global.js";
+    import { cosmetics } from "#stores/cosmetics.js";
+    import { previewMessages } from "#stores/previewMessages.js";
     import { t } from "svelte-i18n";
-    import QuickPreview from "$components/QuickPreview.svelte";
-    import Button from "$components/Inputs/Button.svelte";
+    import QuickPreview from "#components/QuickPreview.svelte";
+    import Button from "#components/Inputs/Button.svelte";
 
     let tab: string = $state("settings");
 

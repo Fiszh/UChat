@@ -1,9 +1,9 @@
 <script lang="ts">
-    import Dialog from "$components/Dialog.svelte";
-    import Button from "$components/Inputs/Button.svelte";
-    import Pogly from "$components/logos/pogly.svelte";
-    import { generatePoglyWidget } from "$lib/pogly";
-    import { isMobile } from "$stores/global";
+    import Dialog from "#components/Dialog.svelte";
+    import Button from "#components/Inputs/Button.svelte";
+    import Pogly from "#components/logos/pogly.svelte";
+    import { generatePoglyWidget } from "#lib/pogly.js";
+    import { isMobile } from "#stores/global.js";
     import { Store } from "@lucide/svelte";
     import { t } from "svelte-i18n";
 

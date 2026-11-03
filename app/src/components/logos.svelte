@@ -1,18 +1,18 @@
 <script lang="ts" module>
     import type { Snippet } from "svelte";
-    import SevenTVComponent from "$components/logos/7tv.svelte";
-    import BTTVComponent from "$components/logos/bttv.svelte";
-    import ChatterinoHomiesComponent from "$components/logos/chatterino-homies.svelte";
-    import ChatterinoComponent from "$components/logos/chatterino.svelte";
-    import FFZComponent from "$components/logos/ffz.svelte";
-    import GitHubComponent from "$components/logos/github.svelte";
-    import KickComponent from "$components/logos/kick.svelte";
-    import PolandBotComponent from "$components/logos/polandbot.svelte";
-    import TurtegComponent from "$components/logos/turteg.svelte";
-    import TwitchComponent from "$components/logos/twitch.svelte";
-    import UChatComponent from "$components/logos/uchat.svelte";
-    import YouTubeComponent from "$components/logos/youtube.svelte";
-    import DankChatComponent from "$components/logos/dankchat.svelte";
+    import SevenTVComponent from "#components/logos/7tv.svelte";
+    import BTTVComponent from "#components/logos/bttv.svelte";
+    import ChatterinoHomiesComponent from "#components/logos/chatterino-homies.svelte";
+    import ChatterinoComponent from "#components/logos/chatterino.svelte";
+    import FFZComponent from "#components/logos/ffz.svelte";
+    import GitHubComponent from "#components/logos/github.svelte";
+    import KickComponent from "#components/logos/kick.svelte";
+    import PolandBotComponent from "#components/logos/polandbot.svelte";
+    import TurtegComponent from "#components/logos/turteg.svelte";
+    import TwitchComponent from "#components/logos/twitch.svelte";
+    import UChatComponent from "#components/logos/uchat.svelte";
+    import YouTubeComponent from "#components/logos/youtube.svelte";
+    import DankChatComponent from "#components/logos/dankchat.svelte";
 
     export const logos: Record<string, Snippet<[boolean]>> = {
         "7tv": SevenTV,

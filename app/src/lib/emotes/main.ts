@@ -1,15 +1,15 @@
 import { get } from "svelte/store";
 
-import { API_URL, badges, emotes, globals } from "$stores/global";
+import { API_URL, badges, emotes, globals } from "#stores/global.js";
 
 import {
     getSavedSet,
     subscribeEventAPIToSharedChatUser,
 } from "../overlayIndex";
 
-import SevenTV_main from "$lib/services/7TV/main";
-import BTTV_main from "$lib//services/BTTV/main";
-import FFZ_main from "$lib//services/FFZ/main";
+import SevenTV_main from "#lib/services/7TV/main.js";
+import BTTV_main from "#lib//services/BTTV/main.js";
+import FFZ_main from "#lib//services/FFZ/main.js";
 
 let emote_data = get(emotes);
 let badge_data = get(badges);

@@ -1,10 +1,10 @@
 <script lang="ts">
-    import CountryFlag from "$components/CountryFlag.svelte";
-    import type { FlagCode } from "$components/CountryFlag.svelte";
-    import Dialog from "$components/Dialog.svelte";
-    import Button from "$components/Inputs/Button.svelte";
-    import Dropdown from "$components/Inputs/Dropdown.svelte";
-    import { localeNames } from "$lib/i18n";
+    import CountryFlag from "#components/CountryFlag.svelte";
+    import type { FlagCode } from "#components/CountryFlag.svelte";
+    import Dialog from "#components/Dialog.svelte";
+    import Button from "#components/Inputs/Button.svelte";
+    import Dropdown from "#components/Inputs/Dropdown.svelte";
+    import { localeNames } from "#lib/i18n.js";
     import { locale, t } from "svelte-i18n";
 
     type Props = {
