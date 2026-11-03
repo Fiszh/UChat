@@ -201,6 +201,8 @@
             (badge: Record<string, any>) => badge.owners.includes(username),
         ) as Record<string, any>;
 
+        if (!username || !message) return false;
+
         const passed = [
             Array.isArray(chatSettings["userBL"].value)
                 ? !chatSettings["userBL"].value.includes(
@@ -212,17 +214,21 @@
                       message?.toLowerCase().startsWith(prefix.toLowerCase()),
                   )
                 : true,
-            !chatSettings["bots"].value ? !user_badges?.["bot-badge"] : true,
+            !chatSettings["bots"].value && user_badges
+                ? !user_badges?.["bot-badge"]
+                : true,
             !chatSettings["bots"].value
                 ? !globals.custom_bots.includes(username)
                 : true,
             !chatSettings["bots"].value
                 ? !FFZBadges.find((badge: Record<string, any>) => badge.id == 2)
                 : true,
-            !chatSettings["bots"].value
+            !chatSettings["bots"].value && tags
                 ? $badges["FFZ"]["user"]["user"][tags["user-id"] ?? ""] != 2
                 : true,
-            !chatSettings["redeem"].value ? !tags?.["custom-reward-id"] : true,
+            !chatSettings["redeem"].value && tags
+                ? !tags?.["custom-reward-id"]
+                : true,
         ];
 
         return passed.every(Boolean);
@@ -251,43 +257,54 @@
 
     let filteredMessages = $derived(
         chatMessages
-            .filter(
-                (msg) =>
-                    chatSettings &&
-                    validateMessage(
-                        msg.tags?.username,
-                        msg.message,
-                        msg.tags?.badges,
-                        msg.tags,
-                    ),
-            )
             .map((msg) => {
-                const username = (
+                const rawUsername =
                     msg?.tags?.username ??
                     msg?.sender?.slug ??
-                    ""
+                    msg?.author?.name ??
+                    "";
+                const username = (
+                    typeof rawUsername == "string" ? rawUsername : ""
                 )
                     .trim()
                     .toLowerCase();
+
+                const rawMessage =
+                    msg?.message?.text ?? msg?.message ?? msg?.content ?? "";
+                const message = (
+                    typeof rawMessage == "string" ? rawMessage : ""
+                )
+                    .trim()
+                    .toLowerCase();
+
+                const badges = msg?.tags?.badges ?? {};
+                const tags = msg?.tags ?? {};
 
                 const displayName = String(
                     msg?.tags?.["display-name"] ?? msg?.sender?.username ?? "",
                 );
 
-                return {
-                    id: msg?.tags?.id ?? msg?.id ?? generateUUID(), // THIS MAKES SURE MESSAGES WILL NOT MERGE
-                    room_id:
-                        msg?.tags?.["source-room-id"] ??
-                        msg?.["chatroom_id"] ??
-                        globals["channels"]["TWITCH"]["ID"],
-                    ...msg,
-                    formattedUser: formatUsername(
-                        username,
-                        displayName,
-                        msg["service"],
-                    ),
-                };
-            }) as any,
+                const valid =
+                    chatSettings &&
+                    validateMessage(username, message, badges, tags);
+
+                if (valid) {
+                    return {
+                        id: msg?.tags?.id ?? msg?.id ?? generateUUID(), // THIS MAKES SURE MESSAGES WILL NOT MERGE
+                        room_id:
+                            msg?.tags?.["source-room-id"] ??
+                            msg?.["chatroom_id"] ??
+                            globals["channels"]["TWITCH"]["ID"],
+                        ...msg,
+                        formattedUser: formatUsername(
+                            username,
+                            displayName,
+                            msg["service"],
+                        ),
+                    };
+                }
+            })
+            .filter(Boolean) as any,
     );
 
     $effect(() => {
