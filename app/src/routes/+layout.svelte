@@ -18,6 +18,7 @@
     import { isPogly } from "#lib/pogly.js";
     import UChat from "#components/logos/uchat.svelte";
     import MobileTopbar from "#components/mobileTopbar.svelte";
+    import DebugDialog from "#components/dialogs/debug.svelte";
 
     let { data, children } = $props();
 
@@ -75,6 +76,8 @@
 
 {#if __DEBUG__}
     <RenderScan />
+
+    <DebugDialog />
 {/if}
 
 {#if data.isEmbedded && isSiteAllowed(data.embedderUrl) == "limited"}

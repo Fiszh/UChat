@@ -195,10 +195,20 @@
         .chat-message {
             & > span[data-first-type="other"] {
                 outline: red solid 1px;
+
+                &::after {
+                    content: "text";
+                    color: red;
+                }
             }
 
             & > span:not([data-first-type="other"]) {
                 outline: blue solid 1px;
+
+                &::after {
+                    content: "non text";
+                    color: blue;
+                }
             }
         }
     </style>
