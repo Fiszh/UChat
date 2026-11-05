@@ -117,8 +117,8 @@
         "hidden": "ocultas",
         "items": {
             "msgBold": {
-                "name": "Mensagem em texto em negrito",
-                "description": "Criar mensagens em negrito"
+                "name": "Message boldness",
+                "description": "Adjust how bold messages appear. Some fonts may not show every boldness setting."
             },
             "msgCaps": {
                 "name": "A mensagem está em MAIÚSCULAS",
