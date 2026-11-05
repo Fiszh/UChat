@@ -117,8 +117,8 @@
         "hidden": "ukryte",
         "items": {
             "msgBold": {
-                "name": "Wiadomości są pogrubione",
-                "description": "Pogrub wiadomości"
+                "name": "Message boldness",
+                "description": "Adjust how bold messages appear. Some fonts may not show every boldness setting."
             },
             "msgCaps": {
                 "name": "Wiadomości są zapisane WIELKIMI LITERAMI",
