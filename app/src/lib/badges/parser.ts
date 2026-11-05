@@ -6,7 +6,6 @@ import { badges } from "#stores/global.js";
 
 import { settings, type SelectorSetting } from "#stores/settings.js";
 import { flags } from "#lib/bitmap.js";
-import { isPogly } from "#lib/pogly.js";
 
 let BadgesData = get(badges);
 badges.subscribe((e) => (BadgesData = e));
@@ -331,7 +330,7 @@ function getKickBadges(userstate: KickUserstate): parsedBadge[] | never[] {
         }
 
         return {
-            badge_url: `https://kickdatabase.com/kickBadges/${toCamelCase(badge["type"])}.svg`,
+            badge_url: "/badges/kick/" + toCamelCase(badge["type"]) + ".svg",
             alt: badge["text"],
             background_color: undefined,
             sort_order: badge["sort_order"],
@@ -347,11 +346,9 @@ function getKickBadges(userstate: KickUserstate): parsedBadge[] | never[] {
             sort_order: badge["sort_order"],
         }));
 
-    const sorted = [...badges_v1, ...badges_v2].sort(
+    return [...badges_v1, ...badges_v2].sort(
         (a, b) => a.sort_order - b.sort_order,
     );
-
-    return sorted;
 }
 
 function getYouTubeBadges(
@@ -450,11 +447,12 @@ export function parseBadges(
     userstate: SharedUserState,
     platform: Platforms,
 ): parsedBadge[] {
-    if (platform == "KICK") {
-        return getBadgesForKick(userstate as KickUserstate);
-    } else if (platform == "GOOGLE") {
-        return getBadgesForYouTube(userstate as YouTubeUserstate);
-    } else {
-        return getBadgesForTwitch(userstate as TwitchUserstate);
+    switch (platform) {
+        case "KICK":
+            return getBadgesForKick(userstate as KickUserstate);
+        case "GOOGLE":
+            return getBadgesForYouTube(userstate as YouTubeUserstate);
+        default:
+            return getBadgesForTwitch(userstate as TwitchUserstate);
     }
 }

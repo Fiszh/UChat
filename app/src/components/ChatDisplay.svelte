@@ -95,7 +95,9 @@
 
             switch (setting.param) {
                 case "msgBold":
-                    styles["--chat-bold"] = setting.value ? "900" : "normal";
+                    const boldness = Math.max(Number(setting.value), 1) * 100;
+
+                    styles["--chat-bold"] = boldness;
 
                     break;
                 case "msgCaps":

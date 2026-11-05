@@ -44,6 +44,7 @@ export interface SliderSetting extends DefaultSetting {
     value: string;
     min: string;
     max: string;
+    step?: string;
     default?: string;
 }
 
@@ -80,9 +81,11 @@ const defaultEmoteSize = "25";
 
 export const configs: Setting[] = [
     {
-        type: "boolean",
-        value: true,
+        type: "slider",
         param: "msgBold",
+        value: "9",
+        min: "1",
+        max: "10",
     },
     {
         type: "boolean",
