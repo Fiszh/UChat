@@ -398,7 +398,7 @@
                 },
                 "item_end": {
                     "question": "Co jeśli moje pytanie nie jest tutaj wymienione?",
-                    "answer": "For more information, you can reach out via {twitch} or {discord}."
+                    "answer": "Aby uzyskać więcej informacji, możesz się skontaktować za pośrednictwem {twitch} lub {discord}."
                 }
             }
         },
