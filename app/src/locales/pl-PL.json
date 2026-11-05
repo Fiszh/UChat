@@ -117,8 +117,8 @@
         "hidden": "ukryte",
         "items": {
             "msgBold": {
-                "name": "Message boldness",
-                "description": "Adjust how bold messages appear. Some fonts may not show every boldness setting."
+                "name": "Grubość wiadomości",
+                "description": "Dostosuj pogrubione wiadomości. Niektóre czcionki mogą nie pokazywać każdego ustawienia pogrubienia."
             },
             "msgCaps": {
                 "name": "Wiadomości są zapisane WIELKIMI LITERAMI",
@@ -393,11 +393,11 @@
                     "answer": "Some FFZ emote effects are sub-only, and some need changes to how emotes are rendered. I'm planning to support them while respecting the sub-only limits."
                 },
                 "item_17": {
-                    "question": "Are we safe from recent CVEs?",
-                    "answer": "We keep UChat updated with known security fixes, but may not learn about new CVEs immediately. We patch issues affecting UChat as soon as possible. Please report any security issues."
+                    "question": "Czy jesteśmy bezpieczni przed niedawnymi CVE?",
+                    "answer": "Aktualizujemy UChat ze znanymi poprawkami zabezpieczeń, ale możemy nie dowiedzieć się natychmiast o nowych CVE. Naprawiamy problemy dotyczące UChat tak szybko, jak to możliwe. Prosimy o zgłoszenie wszelkich problemów z bezpieczeństwem."
                 },
                 "item_end": {
-                    "question": "What if my question isn't listed here?",
+                    "question": "Co jeśli moje pytanie nie jest tutaj wymienione?",
                     "answer": "For more information, you can reach out via {twitch} or {discord}."
                 }
             }
