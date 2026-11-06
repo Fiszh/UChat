@@ -232,6 +232,7 @@
             line-height: normal;
             vertical-align: middle;
             gap: 0.25rem;
+            flex-wrap: wrap;
         }
 
         span {
