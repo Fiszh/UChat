@@ -65,7 +65,7 @@
         .badge {
             height: var(--chat-font-size);
             width: var(--chat-font-size);
-            object-fit: contain;
+            object-fit: cover;
         }
     }
 </style>
