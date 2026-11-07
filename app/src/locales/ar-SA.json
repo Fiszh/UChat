@@ -117,8 +117,8 @@
         "hidden": "hidden",
         "items": {
             "msgBold": {
-                "name": "Message are in bold text",
-                "description": "Make messages bold"
+                "name": "Message boldness",
+                "description": "Adjust how bold messages appear. Some fonts may not show every boldness setting."
             },
             "msgCaps": {
                 "name": "Message are in UPPERCASE",
