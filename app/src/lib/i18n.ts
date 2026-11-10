@@ -1,4 +1,4 @@
-import { browser } from "$app/env";
+import { browser, dev } from "$app/env";
 import moment from "moment/min/moment-with-locales";
 import { init, locale, register } from "svelte-i18n";
 
@@ -12,6 +12,7 @@ export const localeNames: { [key: string]: string } = {
     "pt-PT": "Portuguese",
     "ar-SA": "Arabic",
     "es-ES": "Spanish",
+    ...(dev ? { "en-XA": "Gibberish (Test)" } : {}),
     // add more as translations land
 };
 
@@ -22,11 +23,12 @@ register("en-PT", () => import("#locales/en-PT.json"));
 register("pt-PT", () => import("#locales/pt-PT.json"));
 register("ar-SA", () => import("#locales/ar-SA.json"));
 register("es-ES", () => import("#locales/es-ES.json"));
+if (dev) register("en-XA", () => import("#locales/en-XA.json"));
 
 function getInitialLocale() {
     if (browser) {
         const saved = window.localStorage.getItem("locale");
-        if (saved) return saved;
+        if (saved && (saved !== "en-XA" || dev)) return saved;
     }
     return defaultLocale;
 }

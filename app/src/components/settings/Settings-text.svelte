@@ -26,7 +26,7 @@
     // default will be set to starter value if not set in props
     const handleReset = () => {
         value = defaultValue!;
-        onChange(String(defaultValue));
+        onChange("");
     };
     onMount(() => {
         if (typeof defaultValue == "undefined") defaultValue = value;

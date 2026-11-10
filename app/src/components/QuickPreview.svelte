@@ -3,13 +3,14 @@
     import { messages } from "#lib/chat.js";
     import { quickPreviewMessages } from "#stores/previewMessages.js";
     import { onMount } from "svelte";
+    import { t } from "svelte-i18n";
 
     //messages.set(quickPreviewMessages);
     onMount(() => messages.set(quickPreviewMessages));
 </script>
 
 <div id="quick-preview">
-    <small id="top">Quick Preview</small>
+    <small id="top">{$t("display.quick_preview")}</small>
     <ChatDisplay
         customStyle="--chat-font-size: 13px; --chat-emote-size: 15px;"
     />

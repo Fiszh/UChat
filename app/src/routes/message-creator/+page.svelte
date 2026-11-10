@@ -216,7 +216,7 @@
                     wide
                     onclick={() => (showMobileSettings = true)}
                 >
-                    Edit
+                    {$t("labels.edit")}
                 </Button>
                 <Button
                     primary

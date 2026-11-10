@@ -239,7 +239,7 @@
                 <Button
                     onclick={resetSettings}
                     icon={resetSettingsIcon}
-                    title="Reset Settings"
+                    title={$t("display.bottom.header.reset_settings")}
                 >
                     {$t("labels.reset")}
                 </Button>
@@ -309,7 +309,7 @@
             <div class="display">
                 <Input wide readonly bind:value={urlResults} />
                 <Button
-                    title="Copy URL"
+                    title={$t("display.bottom.overlay_url.copy_url")}
                     primary
                     onclick={copyUrl}
                     icon={CopyIcon}
@@ -317,13 +317,13 @@
                     {$t("labels.copy")}
                 </Button>
                 <Button
-                    title="Import Settings"
+                    title={$t("display.bottom.overlay_url.import_settings")}
                     secondary
                     icon={ImportIcon}
                     onclick={() => (showImportDialog = true)}
                 />
                 <Button
-                    title="Use as Pogly widget"
+                    title={$t("display.bottom.overlay_url.use_as_pogly_widget")}
                     secondary
                     icon={PoglyIcon}
                     onclick={() => (showPoglyDialog = true)}
@@ -331,7 +331,7 @@
             </div>
         </section>
     </section>
-    <HelpNotice>{$t("notices.ip")}</HelpNotice>
+    <HelpNotice>{$t("notices.api_requests")}</HelpNotice>
 </div>
 
 <style lang="scss">

@@ -1,5 +1,7 @@
 import { API_URL } from "#stores/global.js";
 import { assignMessage, parseIRCLine } from "./chat";
+import { get } from "svelte/store";
+import { t } from "svelte-i18n";
 
 async function valideToken(
     accessToken: string,
@@ -28,7 +30,10 @@ async function getUser(channel: string) {
         `https://api.ivr.fi/v2/twitch/user?login=${channel}`,
     );
 
-    if (!response.ok) return alert(`Failed to get the channel ${channel}.`);
+    if (!response.ok)
+        return alert(
+            get(t)("auth.channel_fetch_failed", { values: { channel } }),
+        );
 
     return await response.json();
 }

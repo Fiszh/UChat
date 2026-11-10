@@ -29,9 +29,12 @@
     <Store size={$isMobile ? "1rem" : "1.5rem"} />
 {/snippet}
 
-<Dialog name="Pogly Widget" bind:show>
+<Dialog name={$t("dialogs.pogly_widget.title")} bind:show>
     <div id="layout">
-        <h2><Pogly size="1.5rem" brandColor />UChat as Pogly widget</h2>
+        <h2>
+            <Pogly size="1.5rem" brandColor />
+            {$t("dialogs.pogly_widget.heading")}
+        </h2>
         <div id="buttons">
             <Button
                 href="https://widget.pogly.gg/4098"
@@ -40,10 +43,12 @@
                 icon={marketIcon}
                 primary
             >
-                Marketplace Widget
+                {$t("dialogs.pogly_widget.marketplace_widget")}
             </Button>
             <small>
-                <button onclick={copyAsPoglyWidget}>Copy as import</button>
+                <button onclick={copyAsPoglyWidget}>
+                    {$t("dialogs.pogly_widget.copy_as_import")}
+                </button>
             </small>
         </div>
     </div>

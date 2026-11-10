@@ -1,9 +1,21 @@
+import { addToast } from "./toast";
+import { get } from "svelte/store";
+import { t } from "svelte-i18n";
+
 export interface LocalFontData {
     family: string;
     fullName: string;
     postscriptName: string;
     style: string;
 }
+
+export const font_preload = [
+    "Just Sans",
+    "BLMelody",
+    "Satoshi",
+    "Geist",
+    "Intern",
+];
 
 export async function queryLocalFonts(): Promise<LocalFontData[] | string> {
     let data: LocalFontData[] | string = [];
@@ -15,23 +27,25 @@ export async function queryLocalFonts(): Promise<LocalFontData[] | string> {
         });
 
         if (status.state == "denied")
-            throw new Error("Permission to access local fonts was denied.");
+            throw new Error(get(t)("toasts.local_fonts_denied"));
 
         if (status.state == "granted" || status.state == "prompt") {
             if ("queryLocalFonts" in window) {
                 data = await (window as any).queryLocalFonts();
             } else {
-                throw new Error(
-                    "Your browser does not support the Local Font Access API.",
-                );
+                throw new Error(get(t)("toasts.local_fonts_unsupported"));
             }
         }
     } catch (err: any) {
+        const msg =
+            err?.name === "SecurityError"
+                ? get(t)("toasts.local_fonts_click_required")
+                : err.message;
+
         console.error("Failed to fetch local fonts:", err);
-        alert(err.message);
+        addToast({ msg, type: "error", timeout: 5 });
         data = err.message;
     } finally {
-        console.log(data);
         return data;
     }
 }
@@ -39,10 +53,12 @@ export async function queryLocalFonts(): Promise<LocalFontData[] | string> {
 export async function getFontFamilys(): Promise<string[]> {
     const fontData = await queryLocalFonts();
 
-    if (!Array.isArray(fontData)) return [];
-    return fontData.reduce<string[]>((acc, f) => {
-        if (!acc.includes(f["family"])) acc.push(f["family"]);
-
-        return acc;
-    }, []);
+    return !Array.isArray(fontData)
+        ? font_preload
+        : [
+              ...new Set([
+                  ...font_preload,
+                  ...fontData.map((font) => font.family),
+              ]),
+          ];
 }

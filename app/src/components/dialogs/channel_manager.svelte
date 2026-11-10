@@ -140,13 +140,13 @@
 
             if (!handle.length)
                 return addToast({
-                    msg: "No YouTube handle inputed!",
+                    msg: $t("toasts.no_youtube_handle"),
                     type: "error",
                     timeout: 5,
                 });
 
             addToast({
-                msg: "Resolving your handle, please wait.",
+                msg: $t("toasts.resolving_youtube_handle"),
                 timeout: 5,
             });
 
@@ -158,7 +158,7 @@
 
             if (!res.ok)
                 return addToast({
-                    msg: "Failed resolving YouTube handle!",
+                    msg: $t("toasts.failed_resolving_youtube_handle"),
                     type: "error",
                     timeout: 5,
                 });
@@ -169,7 +169,7 @@
         }
 
         addToast({
-            msg: "Saved channel info!",
+            msg: $t("toasts.saved_channel_info"),
             type: "success",
             timeout: 5,
         });
@@ -374,7 +374,7 @@
             {/if}
             {#if inputs.google.mode == "name"}
                 <small style="color: var(--danger-hover);" transition:slide>
-                    YouTube handle will be resolved after pressing save.
+                    {$t("dialogs.manage_channels.youtube_handle_note")}
                 </small>
             {/if}
 

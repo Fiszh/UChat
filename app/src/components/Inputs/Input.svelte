@@ -7,6 +7,7 @@
 
     import { X, Ban } from "@lucide/svelte";
     import { fade } from "svelte/transition";
+    import { t } from "svelte-i18n";
 
     type Props = {
         icon?: Snippet;
@@ -53,14 +54,16 @@
         oninput={onChange}
         onpaste={onPaste}
         {...restProps}
-        placeholder={disabled ? "Disabled" : restProps.placeholder}
+        placeholder={disabled ? $t("labels.disabled") : restProps.placeholder}
     />
     {#if !disabled}
         <span id="rightIcon" transition:fade>
             {#if iconRight && !value.length}
                 {@render iconRight()}
             {:else if value.length && !readonly}
-                <button title="Clear" onclick={clear}><X size="1rem" /></button>
+                <button title={$t("labels.clear")} onclick={clear}>
+                    <X size="1rem" />
+                </button>
             {/if}
         </span>
     {/if}

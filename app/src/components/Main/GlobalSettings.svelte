@@ -33,7 +33,7 @@
     });
 
     async function save() {
-        if (!token) return alert("You are not logged in");
+        if (!token) return alert($t("global_settings.not_logged_in"));
 
         const mappedSettings = Object.fromEntries(
             $settings
@@ -57,7 +57,7 @@
         );
 
         if (!Object.keys(mappedSettings).length)
-            return alert("No settings changed");
+            return alert($t("global_settings.no_changes"));
 
         const saveSettings_response = await fetch(API_URL + "/settings", {
             method: "POST",
@@ -69,12 +69,12 @@
         });
 
         if (!saveSettings_response.ok) {
-            alert("There was a error saving your settings");
+            alert($t("global_settings.save_error"));
         } else {
             const saveSettings_data = await saveSettings_response.json();
 
             if (!saveSettings_data) {
-                alert("No data recived from the server!");
+                alert($t("global_settings.no_server_data"));
             } else {
                 alert(
                     saveSettings_data["message"] || saveSettings_data["error"],
@@ -84,7 +84,7 @@
     }
 
     async function deleteSettings() {
-        if (!token) return alert("You are not logged in");
+        if (!token) return alert($t("global_settings.not_logged_in"));
 
         const deleteSettings_response = await fetch(API_URL + "/settings", {
             method: "DELETE",
@@ -94,12 +94,12 @@
         });
 
         if (!deleteSettings_response.ok) {
-            alert("There was a error deleting your settings");
+            alert($t("global_settings.delete_error"));
         } else {
             const deleteSettings_data = await deleteSettings_response.json();
 
             if (!deleteSettings_data) {
-                alert("No data recived from the server!");
+                alert($t("global_settings.no_server_data"));
             } else {
                 alert(
                     deleteSettings_data["message"] ||

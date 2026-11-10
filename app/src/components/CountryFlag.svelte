@@ -1,6 +1,7 @@
 <script lang="ts" module>
     export const flags = {
         en: new URL("#assets/flags/us.svg", import.meta.url).href,
+        "en-XA": new URL("#assets/flags/us.svg", import.meta.url).href,
         "en-GB": new URL("#assets/flags/uk.svg", import.meta.url).href,
         "pl-PL": new URL("#assets/flags/pl.svg", import.meta.url).href,
         "en-PT": new URL("#assets/flags/en-x-pirate.svg", import.meta.url).href,

@@ -1,7 +1,7 @@
 <script lang="ts">
     import SettingsWrapper from "./Settings-wrapper.svelte";
     import { isMobile } from "#stores/global.js";
-    import { onMount } from "svelte";
+    import { onMount, untrack } from "svelte";
     import type { DropdownSetting } from "#stores/settings.js";
     import Dropdown from "#components/Inputs/Dropdown.svelte";
     import Button from "#components/Inputs/Button.svelte";
@@ -10,35 +10,37 @@
         onChange: (value: string) => void;
         hidden?: boolean;
         value: string;
-        list: DropdownSetting["list"];
+        preload: DropdownSetting["preload"];
+        load: DropdownSetting["load"];
         defaultValue?: Props["value"];
         previewReact?: boolean;
         param: string;
     };
 
-    let items = $state<string[]>([]);
-
-    function handleChange(e: Event) {
-        if (typeof onChange == "undefined") return;
-
-        if (e.currentTarget instanceof HTMLInputElement)
-            onChange(e.currentTarget.value);
-    }
-
     let {
         onChange,
         value,
-        list,
+        preload,
+        load,
         hidden,
         defaultValue,
         previewReact,
         param,
     }: Props = $props();
 
+    let dropdownEl;
+
+    let items = $state<string[]>([]);
+
+    const listExpanded = async () => {
+        if (typeof load == "function") items = await load();
+    };
+
     // default will be set to starter value if not set in props
     const handleReset = () => {
         value = defaultValue!;
-        onChange(String(defaultValue));
+        onChange("");
+        dropdownEl!.clearQuery();
     };
     onMount(() => {
         if (typeof defaultValue == "undefined") defaultValue = value;
@@ -48,14 +50,41 @@
             onChange(value);
         }
 
-        if (Array.isArray(list)) items = list;
+        if (Array.isArray(preload)) items = preload;
+    });
+
+    function setValue(item: string) {
+        if (item == defaultValue) {
+            handleReset();
+        } else {
+            onChange(item);
+            value = item;
+        }
+
+        dropdownEl!.clearQuery();
+    }
+
+    let searchQuery = $state("");
+    let searchResults = $state<string[]>([]);
+
+    function search(query: string) {
+        if (!query.trim().length) return items;
+
+        return items.filter((i) =>
+            i.toLowerCase().trim().includes(query.toLowerCase().trim()),
+        );
+    }
+
+    $effect(() => {
+        searchResults = search(searchQuery);
+
+        if (searchQuery) untrack(() => onChange(searchQuery));
     });
 </script>
 
 {#snippet dropdown()}
-    <Button>{defaultValue}</Button>
-    {#each items as item}
-        <Button>{item}</Button>
+    {#each searchResults.length ? searchResults : new Set( [defaultValue ?? "", ...items] ) as item}
+        <Button onclick={() => setValue(item)}>{item}</Button>
     {/each}
 {/snippet}
 
@@ -68,30 +97,13 @@
     settingsDefault={""}
     onReset={handleReset}
 >
-    {#if typeof list == "function" && !items.length}
-        <div id="layout">
-            <Button primary onclick={async () => (items = await list())}>
-                Load
-            </Button>
-            <Dropdown
-                {dropdown}
-                searchable
-                placeholder={String(defaultValue)}
-                value={defaultValue}
-            >
-                hi
-            </Dropdown>
-        </div>
-    {:else}
-        <Dropdown {dropdown} searchable placeholder={String(defaultValue)}>
-            {value.length ? value : defaultValue}
-        </Dropdown>
-    {/if}
+    <Dropdown
+        bind:this={dropdownEl}
+        {dropdown}
+        {listExpanded}
+        bind:value
+        bind:query={searchQuery}
+        searchable
+        placeholder={String(defaultValue)}
+    />
 </SettingsWrapper>
-
-<style lang="scss">
-    div {
-        display: flex;
-        gap: 0.5rem;
-    }
-</style>

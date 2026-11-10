@@ -20,6 +20,14 @@
     locale.subscribe(
         (l) => (currentCode = (l as FlagCode | undefined) ?? "en"),
     );
+
+    function translatePrompt() {
+        const linkText = $t("dialogs.localization.translate_prompt.links.here");
+        return $t("dialogs.localization.translate_prompt.answer").replace(
+            linkText,
+            `<a href="/translate" target="_blank" rel="noopener noreferrer">${linkText}</a>`,
+        );
+    }
 </script>
 
 {#snippet icon()}
@@ -44,12 +52,7 @@
         <Button primary wide center onclick={() => (show = false)}>
             {$t("labels.save")}
         </Button>
-        <small>
-            Want to help us translate? Click
-            <a href="/translate" target="_blank" rel="noopener noreferrer">
-                here
-            </a>
-        </small>
+        <small>{@html translatePrompt()}</small>
     </div>
 </Dialog>
 
@@ -65,7 +68,7 @@
 
             opacity: 0.75;
 
-            a {
+            :global(a) {
                 display: inline;
             }
         }
