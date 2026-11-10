@@ -13,11 +13,34 @@
         "manage_channels": {
             "title": "Gerir Canais",
             "use_channel_id": "Usar ID do Canal",
-            "use_channel_handle": "Usar Nome do Canal"
+            "use_channel_handle": "Usar Nome do Canal",
+            "youtube_handle_note": "YouTube handle will be resolved after pressing save."
         },
         "localization": {
             "title": "Idioma",
-            "description": "Selecione o idioma disponível para exibir no UChat"
+            "description": "Selecione o idioma disponível para exibir no UChat",
+            "translate_prompt": {
+                "answer": "Want to help us translate? Click here.",
+                "links": {
+                    "here": "here"
+                }
+            }
+        },
+        "pogly_widget": {
+            "title": "Pogly Widget",
+            "heading": "UChat as Pogly widget",
+            "marketplace_widget": "Marketplace Widget",
+            "copy_as_import": "Copy as import"
+        },
+        "import": {
+            "title": "Import",
+            "description": "Import your UChat configuration"
+        },
+        "new_tab": {
+            "title": "Heads up",
+            "heading": "This will open in a new tab",
+            "description": "This page stays right where it is, so you can hop back whenever you like.",
+            "open": "Open"
         }
     },
     "labels": {
@@ -25,6 +48,10 @@
         "cancel": "Cancelar",
         "confirm": "Confirmar",
         "proceed": "Continuar",
+        "disabled": "Disabled",
+        "clear": "Clear",
+        "edit": "Edit",
+        "selector": "selector",
         "send": "Enviar",
         "save": "Guardar",
         "delete": "Eliminar",
@@ -40,7 +67,7 @@
         "channel": "Canal"
     },
     "notices": {
-        "ip": "Registamos endereços IP para prevenção de abusos."
+        "api_requests": "We log API requests to help prevent abuse."
     },
     "channel_input": {
         "name": "{platform} Nome do Canal",
@@ -80,6 +107,7 @@
         "token_note": "O seu token é compartilhado apenas para validar e nunca armazenado no servidor."
     },
     "display": {
+        "quick_preview": "Quick Preview",
         "top": {
             "title": "Pré-visualização do chat",
             "description": "Pré-visualização ao vivo das suas configurações"
@@ -90,7 +118,8 @@
                 "load_badges": {
                     "pc": "Carregar mais distintivos",
                     "mobile": "Carregar distintivos"
-                }
+                },
+                "reset_settings": "Reset Settings"
             },
             "chat_background": {
                 "title": "Fundo do Chat"
@@ -104,12 +133,23 @@
                 "manage": "Gerir Canais"
             },
             "overlay_url": {
-                "title": "URL da Sobreposição"
+                "title": "URL da Sobreposição",
+                "copy_url": "Copy URL",
+                "import_settings": "Import Settings",
+                "use_as_pogly_widget": "Use as Pogly widget"
             }
         }
     },
     "global_settings": {
-        "title": "{name} Configurações"
+        "title": "{name} Configurações",
+        "not_logged_in": "You are not logged in",
+        "no_changes": "No settings changed",
+        "save_error": "There was a error saving your settings",
+        "no_server_data": "No data recived from the server!",
+        "delete_error": "There was a error deleting your settings"
+    },
+    "auth": {
+        "channel_fetch_failed": "Failed to get the channel {channel}."
     },
     "settings": {
         "show_hidden": "Mostrar configurações ocultas",
@@ -130,7 +170,7 @@
             },
             "font": {
                 "name": "Fonte do chat personalizada",
-                "description": "Alterar a fonte da mensagem do chat (Fontes personalizados do Google Fonts são suportados)"
+                "description": "Type a custom font name to use a Google Font, or select one from the list"
             },
             "fontColor": {
                 "name": "Cor da fonte do chat (hex)",
@@ -237,7 +277,16 @@
         "loading_info": "A carregar informações do utilizador & canal...",
         "loaded_info": "Informações de utilizador e canal carregados",
         "loading_info_fail": "Falha ao carregar informações de utilizador e canal!",
+        "no_youtube_handle": "No YouTube handle inputed!",
+        "resolving_youtube_handle": "Resolving your handle, please wait.",
+        "failed_resolving_youtube_handle": "Failed resolving YouTube handle!",
+        "saved_channel_info": "Saved channel info!",
+        "settings_imported": "Succesfully imported settings!",
+        "settings_import_failed": "Failed importing settings...",
         "pogly_widget_copied": "Widget Pogly foi copiado!",
+        "local_fonts_denied": "Permission to access local fonts was denied.",
+        "local_fonts_unsupported": "Your browser does not support the Local Font Access API.",
+        "local_fonts_click_required": "Click anywhere so we can load fonts from your device.",
         "command_copied": "Command has been copied!",
         "command_copied_fail": "Failed to copy the command, check the console for more info."
     },
@@ -249,6 +298,13 @@
         "message_creator_buggy": "O criador de mensagem pode estar com problemas no {browser}"
     },
     "error_page": {
+        "oops": "Oops,",
+        "url_hint": "Check the URL or try one of the options below.",
+        "version_label": "Version:",
+        "code_label": "Code:",
+        "go_back": "Go back a page",
+        "go_home": "Go back homepage",
+        "channel_not_found": "ERROR: channel not found",
         "status": {
             "401": {
                 "title": "não autorizado!",
@@ -312,7 +368,7 @@
                 "item_3": "Para testadores, armazenamos apenas o seu ID de utilizador da Twitch e as configurações que mudou de padrão — nada mais.",
                 "item_4": "Pressionar \"Guardar\" atualiza as suas configurações globais salvas; \"Eliminar\" remove todas as suas configurações salvas dos nossos servidores.",
                 "item_5": "Usando \"Redefinir configurações\" limpa todas as configurações salvas localmente no seu navegador.",
-                "item_6": "Registamos todas as solicitações feitas na nossa API para evitar spam ou abuso.",
+                "item_6": "We log requests only when a platform requires our server to provide data. Logged details may include the channel, overlay version, referrer, user agent, and Ray ID.",
                 "item_7": "UChat e todos os serviços sob unii.dev são independentes e não são afiliados, endossados ou patrocinados pela Twitch Interactive, Inc. YouTube, LLC ou Kick Streaming Pty Ltd."
             },
             "faq_items": {
@@ -374,7 +430,7 @@
                 },
                 "item_12": {
                     "question": "Posso usar esta sobreposição ou a sua API para o meu próprio projeto?",
-                    "answer": "Qualquer uso de endpoints não documentados é estritamente restrito. O uso ou tentativas não autorizadas de contornar restrições (como CORS) resultará num banimento imediato e indefinida."
+                    "answer": "You may use the documented public API in your own project, but not undocumented endpoints or the UChat overlay itself. Bypassing restrictions (e.g. CORS) will get you blocked."
                 },
                 "item_13": {
                     "question": "Onde posso encontrar o código-fonte?",
