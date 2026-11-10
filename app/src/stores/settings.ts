@@ -6,7 +6,7 @@ const logos: Record<string, Snippet<[boolean]>> = (logosModule as any).logos ??
 import { flags } from "#lib/bitmap.js";
 import { writable } from "svelte/store";
 import { isPogly } from "#lib/pogly.js";
-import { getFontFamilys } from "#lib/fonts.js";
+import { font_preload, getFontFamilys } from "#lib/fonts.js";
 
 export interface DefaultSetting {
     param: string;
@@ -64,7 +64,8 @@ export interface SelectorSetting extends DefaultSetting {
 export interface DropdownSetting extends DefaultSetting {
     type: "dropdown";
     value: string;
-    list: string[] | (() => string[] | Promise<string[]>) | Promise<string[]>;
+    preload?: string[];
+    load: string[] | (() => string[] | Promise<string[]>) | Promise<string[]>;
     default?: string;
 }
 
@@ -97,18 +98,18 @@ export const configs: Setting[] = [
         param: "smoothScroll",
         value: true,
     },
-    {
-        type: "text",
-        value: "Geist",
-        param: "font",
-    },
     // {
-    //     type: "dropdown",
+    //     type: "text",
     //     value: "Geist",
-    //     list: getFontFamilys,
     //     param: "font",
     // },
-
+    {
+        type: "dropdown",
+        value: "Geist",
+        preload: font_preload,
+        load: getFontFamilys,
+        param: "font",
+    },
     {
         type: "color-picker",
         value: "#ffffff",

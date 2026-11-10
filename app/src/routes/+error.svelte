@@ -102,22 +102,27 @@
 
 <main style="--chat-x: {chatRotation.x}deg; --chat-y: {chatRotation.y}deg;">
     <div id="message">
-        <h1>Oops, {statusTitle(page.status)}</h1>
+        <h1>{$t("error_page.oops")} {statusTitle(page.status)}</h1>
         <p>
             {statusMessage(page.status)}
             <br />
-            Check the URL or try one of the options below.
+            {$t("error_page.url_hint")}
         </p>
         <p id="additional-info">
-            Version: {__APP_VERSION}
-            <Dot /> Code: {page.status}
+            {$t("error_page.version_label")}
+            {__APP_VERSION}
+            <Dot />
+            {$t("error_page.code_label")}
+            {page.status}
         </p>
         <div id="buttons">
             {#if isAbleToGoBack}
-                <Button secondary onclick={goBack}>Go back a page</Button>
+                <Button secondary onclick={goBack}>
+                    {$t("error_page.go_back")}
+                </Button>
             {/if}
             <Button primary href="/" data-sveltekit-preload="false">
-                Go back homepage
+                {$t("error_page.go_home")}
             </Button>
         </div>
     </div>
@@ -126,7 +131,7 @@
         {#if loaded}
             <section id="chat-display">
                 <ChatDisplay />
-                <p id="error">ERROR: channel not found</p>
+                <p id="error">{$t("error_page.channel_not_found")}</p>
             </section>
         {/if}
     {:else}

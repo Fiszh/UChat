@@ -1,13 +1,14 @@
 {
     "name": "uchat",
     "private": true,
-    "version": "3.12.1",
+    "version": "3.12.2",
     "type": "module",
     "license": "AGPL-3.0-or-later",
     "scripts": {
         "dev": "vite dev",
         "dev:api": "API_URL=http://api.localhost:3000 WS_URL=ws://api.localhost:3000 vite dev",
         "dev:apiv2": "API_URL=http://api.unii.dev/v2 WS_URL=wss://api.unii.dev/v2 vite dev",
+        "gibberish": "bun scripts/generate-gibberish.ts",
         "dev:open": "vite dev --open --host",
         "build": "vite build",
         "build:prod": "SENTRY_UPLOAD=1 vite build",

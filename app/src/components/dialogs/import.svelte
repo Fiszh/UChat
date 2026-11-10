@@ -19,7 +19,7 @@
         importConfig(input)
             .then(() => {
                 addToast({
-                    msg: "Succesfully imported settings!",
+                    msg: $t("toasts.settings_imported"),
                     type: "success",
                     timeout: 5,
                 });
@@ -31,7 +31,7 @@
                 console.error(err instanceof Error ? err.message : err);
 
                 addToast({
-                    msg: "Failed importing settings...",
+                    msg: $t("toasts.settings_import_failed"),
                     type: "error",
                     timeout: 5,
                 });
@@ -45,13 +45,18 @@
 
 {#snippet Buttons()}
     <Button primary wide center icon={ImportIcon} onclick={startImport}>
-        Import
+        {$t("dialogs.import.title")}
     </Button>
 {/snippet}
 
-<Dialog bind:show name="Import" width={35} buttons={Buttons}>
+<Dialog
+    bind:show
+    name={$t("dialogs.import.title")}
+    width={35}
+    buttons={Buttons}
+>
     <div id="layout">
-        <h2>Import your UChat configuration</h2>
+        <h2>{$t("dialogs.import.description")}</h2>
         <h2>{$t("pages.convert.url_input.title")}</h2>
 
         <Input

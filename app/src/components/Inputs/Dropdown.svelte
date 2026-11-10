@@ -7,22 +7,33 @@
         icon?: Snippet;
         dropdown?: Snippet;
         children?: Snippet;
+        listExpanded?: () => void;
         value?: string;
         reversed?: boolean;
         searchable?: boolean;
+        placeholder?: string;
+        query?: string;
     } & HTMLAttributes<HTMLDivElement>;
 
     let expanded = $state(false);
+    let focused = $state(false);
 
     let {
         icon,
         dropdown,
         children,
-        value,
+        listExpanded,
+        value = $bindable(""),
         reversed = false,
         searchable = false,
+        placeholder,
+        query = $bindable(""),
         ...restProps
     }: Props = $props();
+
+    $effect(() => {
+        if (expanded == true) listExpanded?.();
+    });
 
     const toggle = () => (expanded = !expanded);
 
@@ -31,13 +42,28 @@
     const close = () => (expanded = false);
 
     const handleMouseLeave = close;
+
+    let userQuery = $state("");
+
+    export const clearQuery = () => (userQuery = "");
+
+    $effect(() => {
+        query = userQuery;
+    });
+
+    function onSearch(e: Event) {
+        if (!(e.currentTarget instanceof HTMLInputElement)) return;
+
+        const inputValue = e.currentTarget.value;
+
+        userQuery = inputValue == value ? inputValue : "";
+    }
 </script>
 
-<!-- TODO DISPLAY VALUE WHEN SEARCHABLE IS ENABLED -->
 <div
     onmouseenter={handleMouseEnter}
     onmouseleave={handleMouseLeave}
-    class:expanded
+    class:expanded={focused || userQuery.length || expanded}
     class:reversed
     onclick={toggle}
     {...restProps}
@@ -57,7 +83,17 @@
     {:else}
         <label id="top">
             {@render icon?.()}
-            <input />
+            <input
+                oninput={onSearch}
+                onchange={onSearch}
+                onfocus={() => (focused = true)}
+                onblur={() =>
+                    setTimeout(() => {
+                        focused = false;
+                    }, 25)}
+                bind:value
+                {placeholder}
+            />
             {#if !expanded}
                 <ChevronDown size="1rem" />
             {:else}

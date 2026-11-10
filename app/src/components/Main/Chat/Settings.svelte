@@ -147,7 +147,8 @@
                 <SettingsDropdown
                     hidden={setting.hide}
                     value={setting.value}
-                    list={setting["list"]}
+                    preload={setting["preload"]}
+                    load={setting["load"]}
                     param={setting.param}
                     defaultValue={setting["default"]}
                     previewReact={setting.previewReact}

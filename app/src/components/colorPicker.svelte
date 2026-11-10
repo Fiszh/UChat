@@ -199,7 +199,7 @@
                 e.currentTarget.releasePointerCapture(e.pointerId);
             }}
         >
-            <button id="selector" aria-label="selector"></button>
+            <button id="selector" aria-label={$t("labels.selector")}></button>
             <span id="display"></span>
         </span>
         <span id="preview" style="background-color: {color};"></span>

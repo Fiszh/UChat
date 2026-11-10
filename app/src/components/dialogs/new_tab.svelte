@@ -2,6 +2,7 @@
     import Dialog from "#components/Dialog.svelte";
     import Button from "#components/Inputs/Button.svelte";
     import Input from "#components/Inputs/Input.svelte";
+    import { t } from "svelte-i18n";
 
     type Props = {
         show: boolean;
@@ -11,12 +12,11 @@
     let { show = $bindable(false), link }: Props = $props();
 </script>
 
-<Dialog name="Heads up" bind:show>
+<Dialog name={$t("dialogs.new_tab.title")} bind:show>
     <div id="layout">
-        <h2>This will open in a new tab</h2>
+        <h2>{$t("dialogs.new_tab.heading")}</h2>
         <p>
-            This page stays right where it is, so you can hop back whenever you
-            like.
+            {$t("dialogs.new_tab.description")}
         </p>
         <Input value={link} readonly />
         <Button
@@ -25,9 +25,11 @@
             onclick={() => (show = false)}
             forceOpenLink
         >
-            Open
+            {$t("dialogs.new_tab.open")}
         </Button>
-        <Button secondary onclick={() => (show = false)}>Cancel</Button>
+        <Button secondary onclick={() => (show = false)}>
+            {$t("labels.cancel")}
+        </Button>
     </div>
 </Dialog>
 

@@ -280,6 +280,13 @@ img {
     font-style: normal;
 }
 
+@font-face {
+    font-family: "Intern";
+    src: url("/fonts/Intern/Intern-Variable.woff2") format("woff2");
+    font-weight: 100 900;
+    font-display: swap;
+}
+
 .fadeOut {
     animation: fadeIt 2.5s ease forwards;
     will-change: opacity, transform;
