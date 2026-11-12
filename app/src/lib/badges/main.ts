@@ -161,3 +161,29 @@ export async function getDankChatBadges() {
         return e;
     });
 }
+
+export async function getBluzyrinoBadges() {
+    const response = await fetch(
+        `https://bluzyrino-badge-registry.blu901-55.workers.dev/v1/badges`,
+        {
+            method: "GET",
+        },
+    );
+
+    if (response.ok) {
+        const data: Badges.Bluzyrino = await response.json();
+
+        const mappedBadges: Badges.BluzyrinoMapped[] = data.badges.flatMap(
+            (b) => {
+                const item = data.catalog.find((c) => c.id == b.id);
+                return item ? [{ ...item, users: b.users }] : [];
+            },
+        );
+
+        badges.update((e) => {
+            e["OTHER"]["Bluzyrino"] = mappedBadges;
+
+            return e;
+        });
+    }
+}

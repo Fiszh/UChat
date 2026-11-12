@@ -384,6 +384,19 @@ function getDankChatBadge(userstate: SharedUserState): parsedBadge[] {
         }));
 }
 
+function getBluzyrinoBadges(userstate: TwitchUserstate): parsedBadge[] {
+    if (!enabledBadges.includes("bluzyrino")) return [];
+
+    return BadgesData["OTHER"]["Bluzyrino"]
+        .filter((badge) => badge["users"].includes(userstate["user-id-raw"]))
+        .map((badge) => ({
+            badge_url:
+                badge.image_url_4x || badge.image_url_2x || badge.image_url_1x,
+            alt: badge.tooltip,
+            background_color: undefined,
+        }));
+}
+
 function getBadgesForTwitch(userstate: TwitchUserstate): parsedBadge[] {
     const user_badges: parsedBadge[] = [];
 
@@ -411,6 +424,7 @@ function getBadgesForTwitch(userstate: TwitchUserstate): parsedBadge[] {
 
     user_badges.push(...getPolandBOTBadge(userstate));
     user_badges.push(...getDankChatBadge(userstate));
+    user_badges.push(...getBluzyrinoBadges(userstate));
 
     return user_badges;
 }

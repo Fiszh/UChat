@@ -1,4 +1,4 @@
-<!-- ORIGINAL LOGO: https://devpoland.xyz/polandbot/ -->
+<!-- ORIGINAL LOGO: https://turteg.xslash.ovh/ -->
 <!-- MODIFIED BY: uniidev -->
 
 <script lang="ts">

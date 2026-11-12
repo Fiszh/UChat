@@ -56,6 +56,7 @@ export interface GlobalBadges {
         PolandBOT: Record<string, string[]>;
         TurtegBot: Badges.TurtegBadge[];
         DankChat: Badges.DankChat[];
+        Bluzyrino: Badges.BluzyrinoMapped[];
     };
     channel: Record<string, string>;
 }
@@ -80,6 +81,7 @@ export const badges = writable<GlobalBadges>({
         PolandBOT: {},
         TurtegBot: [],
         DankChat: [],
+        Bluzyrino: [],
     },
     channel: {},
 });

@@ -233,6 +233,12 @@ export const configs: Setting[] = [
                 icon: logos["dankchat"],
                 bitmap: 1 << 11,
             },
+            {
+                label: "Bluzyrino",
+                enabled: true,
+                icon: logos["bluzyrino"],
+                bitmap: 1 << 12,
+            },
         ],
         param: "badges",
     },

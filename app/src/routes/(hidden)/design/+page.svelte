@@ -28,6 +28,7 @@
     import Pogly from "#components/logos/pogly.svelte";
     import GitHub from "#components/logos/github.svelte";
     import DankChat from "#components/logos/dankchat.svelte";
+    import Bluzyrino from "#components/logos/bluzyrino.svelte";
 
     let selectorOptions = $state([
         { enabled: true, label: "Lorem" },
@@ -125,6 +126,7 @@
         <Pogly {brandColor} />
         <GitHub {brandColor} />
         <DankChat {brandColor} />
+        <Bluzyrino {brandColor} />
     {/snippet}
 
     {#snippet dropdown()}

@@ -96,6 +96,28 @@ export namespace Badges {
         url: string;
         users: string[];
     }
+
+    interface Bluzyrino {
+        version: number;
+        catalog: {
+            id: string;
+            category: string;
+            tooltip: string;
+            image_url_1x: string;
+            image_url_2x: string;
+            image_url_4x: string;
+        }[];
+        badges: {
+            id: string;
+            users: string[];
+        }[];
+    }
+
+    type BluzyrinoCatalogItem = Bluzyrino["catalog"][number];
+
+    interface BluzyrinoMapped extends BluzyrinoCatalogItem {
+        users: Bluzyrino["badges"][number]["users"];
+    }
 }
 
 export {};

@@ -13,6 +13,7 @@
     import UChatComponent from "#components/logos/uchat.svelte";
     import YouTubeComponent from "#components/logos/youtube.svelte";
     import DankChatComponent from "#components/logos/dankchat.svelte";
+    import BluzyrinoComponent from "#components/logos/bluzyrino.svelte";
 
     export const logos: Record<string, Snippet<[boolean]>> = {
         "7tv": SevenTV,
@@ -28,6 +29,7 @@
         uchat: UChat,
         youtube: YouTube,
         dankchat: DankChat,
+        bluzyrino: Bluzyrino,
     };
 </script>
 
@@ -55,4 +57,7 @@
 {/snippet}
 {#snippet DankChat(brandColor: boolean)}
     <DankChatComponent {brandColor} />
+{/snippet}
+{#snippet Bluzyrino(brandColor: boolean)}
+    <BluzyrinoComponent {brandColor} />
 {/snippet}
