@@ -14,33 +14,33 @@
             "title": "Zarządzaj Kanałami",
             "use_channel_id": "Użyj ID Kanału",
             "use_channel_handle": "Użyj Nicku Kanału",
-            "youtube_handle_note": "YouTube handle will be resolved after pressing save."
+            "youtube_handle_note": "Kanał YouTube zostanie odnaleziony po kliknięciu „Zapisz”,"
         },
         "localization": {
             "title": "Język",
             "description": "Wybierz dostępny język, w którym chcesz wyświetlać UChat",
             "translate_prompt": {
-                "answer": "Want to help us translate? Click here.",
+                "answer": "Chcesz pomóc nam w tłumaczeniu? Kliknij tutaj.",
                 "links": {
-                    "here": "here"
+                    "here": "tutaj"
                 }
             }
         },
         "pogly_widget": {
-            "title": "Pogly Widget",
-            "heading": "UChat as Pogly widget",
-            "marketplace_widget": "Marketplace Widget",
-            "copy_as_import": "Copy as import"
+            "title": "Widżet Pogly",
+            "heading": "UChat jako widżet Pogly",
+            "marketplace_widget": "Rynek Widżetów",
+            "copy_as_import": "Kopiuj jako import"
         },
         "import": {
-            "title": "Import",
-            "description": "Import your UChat configuration"
+            "title": "Importuj",
+            "description": "Importuj konfigurację UChat"
         },
         "new_tab": {
-            "title": "Heads up",
-            "heading": "This will open in a new tab",
-            "description": "This page stays right where it is, so you can hop back whenever you like.",
-            "open": "Open"
+            "title": "Uwaga",
+            "heading": "To otworzy się w nowej karcie",
+            "description": "Ta strona pozostaje w miejscu, w którym się znajduje, więc możesz cofnąć kiedy tylko chcesz.",
+            "open": "Otwórz"
         }
     },
     "labels": {
@@ -48,10 +48,10 @@
         "cancel": "Anuluj",
         "confirm": "Potwierdź",
         "proceed": "Dalej",
-        "disabled": "Disabled",
-        "clear": "Clear",
-        "edit": "Edit",
-        "selector": "Selector",
+        "disabled": "Wyłączone",
+        "clear": "Wyczyść",
+        "edit": "Edytuj",
+        "selector": "Selektor",
         "send": "Wyślij",
         "save": "Zapisz",
         "delete": "Usuń",
@@ -67,7 +67,7 @@
         "channel": "Kanał"
     },
     "notices": {
-        "api_requests": "We log API requests to help prevent abuse."
+        "api_requests": "Rejestrujemy żądania API, aby pomóc w zapobieganiu nadużyciom."
     },
     "channel_input": {
         "name": "Nazwa Kanału {platform}",
@@ -107,7 +107,7 @@
         "token_note": "Twój token jest udostępniany tylko w celu weryfikacji i nigdy nie jest przechowywany na serwerze."
     },
     "display": {
-        "quick_preview": "Quick Preview",
+        "quick_preview": "Szybki podgląd",
         "top": {
             "title": "Podgląd Czatu",
             "description": "Podgląd ustawień"
@@ -119,7 +119,7 @@
                     "pc": "Wczytaj Więcej Odznak",
                     "mobile": "Wczytaj Odznaki"
                 },
-                "reset_settings": "Reset Settings"
+                "reset_settings": "Zresetuj ustawienia"
             },
             "chat_background": {
                 "title": "Tło Czatu"
@@ -134,26 +134,26 @@
             },
             "overlay_url": {
                 "title": "URL Nakładki",
-                "copy_url": "Copy URL",
-                "import_settings": "Import Settings",
-                "use_as_pogly_widget": "Use as Pogly widget"
+                "copy_url": "Kopiuj URL",
+                "import_settings": "Importuj ustawienia",
+                "use_as_pogly_widget": "Użyj jako widżetu Pogly"
             }
         }
     },
     "global_settings": {
         "title": "Ustawienia {name}",
-        "not_logged_in": "You are not logged in",
-        "no_changes": "No settings changed",
-        "save_error": "There was an error saving your settings",
-        "no_server_data": "No data received from the server!",
-        "delete_error": "There was an error deleting your settings"
+        "not_logged_in": "Nie jesteś zalogowany",
+        "no_changes": "Nie zmieniono żadnych ustawień",
+        "save_error": "Wystąpił błąd podczas zapisywania ustawień",
+        "no_server_data": "Nie otrzymano żadnych danych z serwera!",
+        "delete_error": "Wystąpił błąd podczas usuwania ustawień"
     },
     "auth": {
-        "channel_fetch_failed": "Failed to get the channel {channel}."
+        "channel_fetch_failed": "Nie udało się pobrać kanału {channel}."
     },
     "settings": {
         "show_hidden": "Pokaż ukryte ustawienia",
-        "non_reactive": "Does not affect the chat preview",
+        "non_reactive": "Nie wpływa na podgląd czatu",
         "hidden": "ukryte",
         "items": {
             "msgBold": {
@@ -161,7 +161,7 @@
                 "description": "Dostosuj pogrubione wiadomości. Niektóre czcionki mogą nie pokazywać każdego ustawienia pogrubienia."
             },
             "msgCaps": {
-                "name": "Messages are in UPPERCASE",
+                "name": "Wiadomości są zapisane WIELKIMI LITERAMI",
                 "description": "Konwertuj wszystkie wiadomości czatu na wielkie litery"
             },
             "smoothScroll": {
@@ -170,7 +170,7 @@
             },
             "font": {
                 "name": "Niestandardowa czcionka czatu",
-                "description": "Type a custom font name to use a Google Font, or select one from the list"
+                "description": "Wpisz niestandardową nazwę czcionki, aby użyć czcionki Google, lub wybierz jedną z listy"
             },
             "fontColor": {
                 "name": "Kolor czcionki czatu (hex)",
@@ -186,11 +186,11 @@
             },
             "fontShadow": {
                 "name": "Cień wiadomości",
-                "description": "Add a shadow behind messages"
+                "description": "Dodaje cień za wiadomościami czatu"
             },
             "emoteSize": {
                 "name": "Rozmiar emotek (px)",
-                "description": "Set the display size of emotes in pixels. If unset, defaults to font size + 5 px"
+                "description": "Ustaw rozmiar wyświetlania emotek w pikselach. Jeśli nie ustawione, domyślnie rozmiar czcionki + 5 pikseli"
             },
             "fadeOut": {
                 "name": "Zanikanie wiadomości (sekundy)",
@@ -225,7 +225,7 @@
                 "description": "Akcje moderacyjne takie jak usuwanie wiadomości, wykluczenia, bany i wyczyszczenia, wpływają na wiadomości czatu"
             },
             "mentionColor": {
-                "name": "Mentions are colored",
+                "name": "Wzmianki są kolorowane",
                 "description": "Podświetl wzmianki użytkowników (użytkownicy musieli wcześniej napisać na czacie)"
             },
             "paints": {
@@ -246,7 +246,7 @@
             },
             "gifSize": {
                 "name": "Rozmiar GIF-ów (px)",
-                "description": "Set the display size of GIFs in pixels. If unset, defaults to 4x the emote size"
+                "description": "Ustaw rozmiar wyświetlania GIFów w pikselach. Jeśli nie ustawione, domyślnie 4x rozmiar emote"
             },
             "gifs": {
                 "name": "GIF-y",
@@ -261,8 +261,8 @@
                 "description": "Podświetl pierwsza wiadomość użytkowników zielonym tłem"
             },
             "ffzEffects": {
-                "name": "FrankerFaceZ emote effects",
-                "description": "Allow users to use FrankerFaceZ emote effects"
+                "name": "Efekty emotek FrankerFaceZ",
+                "description": "Zezwalaj użytkownikom na używanie efektów emotek FrankerFaceZ"
             }
         }
     },
@@ -275,18 +275,18 @@
         "unsupported": "Nieobsługiwane.",
         "no_input": "Brak danych wejściowych.",
         "loading_info": "Wczytywanie informacji o użytkowniku i kanale...",
-        "loaded_info": "Loaded user & channel info!",
+        "loaded_info": "Wczytano informacje o użytkowniku i kanale!",
         "loading_info_fail": "Nie udało się wczytać informacji o użytkowniku i kanale!",
-        "no_youtube_handle": "No YouTube handle entered!",
-        "resolving_youtube_handle": "Resolving your handle, please wait.",
-        "failed_resolving_youtube_handle": "Failed resolving YouTube handle!",
-        "saved_channel_info": "Saved channel info!",
-        "settings_imported": "Successfully imported settings!",
-        "settings_import_failed": "Failed importing settings...",
+        "no_youtube_handle": "Nie podano identyfikatora YouTube!",
+        "resolving_youtube_handle": "Trwa wyszukiwanie kanału. Poczekaj.",
+        "failed_resolving_youtube_handle": "Nie udało się odnaleźć kanału YouTube!",
+        "saved_channel_info": "Zapisano informacje o kanałach!",
+        "settings_imported": "Pomyślnie zaimportowano ustawienia!",
+        "settings_import_failed": "Importowanie ustawień nie powiodło się...",
         "pogly_widget_copied": "Widżet Pogly został skopiowany!",
-        "local_fonts_denied": "Permission to access local fonts was denied.",
-        "local_fonts_unsupported": "Your browser does not support the Local Font Access API.",
-        "local_fonts_click_required": "Click anywhere so we can load fonts from your device.",
+        "local_fonts_denied": "Odmówiono dostępu do lokalnych czcionek.",
+        "local_fonts_unsupported": "Twoja przeglądarka nie obsługuje API dostępu do czcionek lokalnych.",
+        "local_fonts_click_required": "Kliknij w dowolnym miejscu, abyśmy mogli załadować czcionki z Twojego urządzenia.",
         "command_copied": "Komenda została skopiowana!",
         "command_copied_fail": "Nie udało się skopiować komendy, sprawdź konsolę, aby uzyskać więcej informacji."
     },
@@ -298,13 +298,13 @@
         "message_creator_buggy": "Kreator wiadomości może być problematyczny na {browser}"
     },
     "error_page": {
-        "oops": "Oops,",
-        "url_hint": "Check the URL or try one of the options below.",
-        "version_label": "Version:",
-        "code_label": "Code:",
-        "go_back": "Go back a page",
-        "go_home": "Go back homepage",
-        "channel_not_found": "ERROR: channel not found",
+        "oops": "Ups,",
+        "url_hint": "Sprawdź adres URL lub spróbuj jednej z poniższych opcji.",
+        "version_label": "Wersja:",
+        "code_label": "Kod:",
+        "go_back": "Poprzednia strona",
+        "go_home": "Wróć do strony głównej",
+        "channel_not_found": "BŁĄD: nie znaleziono kanału",
         "status": {
             "401": {
                 "title": "nieautoryzowane!",
@@ -368,18 +368,18 @@
                 "item_3": "Dla testerów przechowujemy tylko ich identyfikator użytkownika Twitch i ustawienia, które zmieniły się od domyślnych - nic innego.",
                 "item_4": "Naciśnięcie przycisku \"Zapisz\" aktualizuje Twoje zapisane ustawienia globalne; \"Usuń\" usuwa wszystkie zapisane ustawienia z naszych serwerów.",
                 "item_5": "Używanie \"Resetuj ustawienia\" usuwa wszystkie lokalnie zapisane ustawienia w przeglądarce.",
-                "item_6": "We log requests only when a platform requires our server to provide data. Logged details may include the channel, overlay version, referrer, user agent, cache status, and Cloudflare Ray ID. We don't log or store IP addresses.",
-                "item_7": "Requests pass through Cloudflare, which processes data separately under its own privacy policy.",
-                "item_end": "UChat and all services under unii.dev are independent and are not affiliated, endorsed by, or sponsored by Twitch Interactive, Inc., YouTube, LLC, or Kick Streaming Pty Ltd."
+                "item_6": "Rejestrujemy żądania tylko wtedy, gdy platforma wymaga dostarczenia danych przez nasz serwer. Zarejestrowane dane mogą zawierać kanał, wersję nakładki, adres strony odsyłającej, agent użytkownika, status pamięci podręcznej i Cloudflare Ray ID. Nie rejestrujemy ani nie przechowujemy adresów IP.",
+                "item_7": "Żądania przechodzą przez Cloudflare, który przetwarza dane osobno w ramach własnej polityki prywatności.",
+                "item_end": "UChat i wszystkie usługi świadczone pod unii.dev są niezależne i nie są powiązane, zatwierdzone lub sponsorowane przez Twitch Interactive, Inc. YouTube, LLC lub Kick Streaming Pty Ltd."
             },
             "faq_items": {
                 "item_1": {
                     "question": "Czym jest UChat?",
-                    "answer": "UChat is an open-source (AGPL-3.0-or-later) multiplatform chat overlay for Twitch, Kick, and YouTube that supports 7TV, BetterTTV, and FrankerFaceZ emotes."
+                    "answer": "UChat to wieloplatformowa nakładka czatu o otwartym kodzie źródłowym (AGPL-3.0-or-later) dla Twitcha, Kicka i YouTube'a, która obsługuje emotki 7TV, BetterTTV i FrankerFaceZ."
                 },
                 "item_2": {
                     "question": "Jak uzyskać mój URL nakładki?",
-                    "answer": "After adding your channel and customizing your settings, the overlay URL will appear in the 'Overlay URL' section where you can copy it using the copy button."
+                    "answer": "Po dodaniu kanału i dostosowywaniu ustawień, adres URL nakładki pojawi się w sekcji \"Nakładka URL\", w której można go skopiować za pomocą przycisku kopiowania."
                 },
                 "item_3": {
                     "question": "Kto zrobił UChat?",
@@ -394,13 +394,13 @@
                         "reloadws": "Ponownie łączy WebSockety 7TV i BTTV",
                         "reconnectchat": "Ponownie łączy z Twitch IRC",
                         "chatversion": "Pokazuje wersję nakładki czatu (użyj ponownie aby wyłączyć)",
-                        "hideloading": "Hides the loading UI (e.g. if an API is down)",
+                        "hideloading": "Ukrywa wczytywanie interfejsu użytkownika (np. jeśli API nie odpowiada)",
                         "multichat": "Wyłącza multiplatformowe odznaki (użyj polecenia ponownie, aby włączyć)"
                     }
                 },
                 "item_5": {
                     "question": "Czym jest YAUTO?",
-                    "answer": "YAUTO, short for \"Yet Another Useless Twitch Overlay,\" was the former name of this project. It was renamed to UChat on August 2, 2025 for a cleaner and more recognizable name."
+                    "answer": "YAUTO, skrót od \"Yet Another Useless Twitch Overlay\" (Kolejna Bezużyteczna Nakładka Twitcha), była to poprzednia nazwa tego projektu. Nazwa została zmieniona na UChat  2 sierpnia 2025 r. dla czystszej i bardziej rozpoznawalnej nazwy."
                 },
                 "item_6": {
                     "question": "Czy logowanie przez Twitch jest wymagane?",
@@ -431,7 +431,7 @@
                 },
                 "item_12": {
                     "question": "Czy mogę użyć tej nakładki lub jej API dla mojego własnego projektu?",
-                    "answer": "Yes, you can use the documented public API and embed the overlay in your own project, but undocumented endpoints are off limits. The \"Embed of\" credit must stay visible. Covering it will get your website blocked globally, and so will bypassing restrictions (e.g. CORS). Everything is provided as is: we're not responsible if something breaks or if we change how things work."
+                    "answer": "Tak, możesz korzystać z udokumentowanego publicznego API i osadzać nakładkę we własnym projekcie, ale korzystanie z nieudokumentowanych endpointów jest zabronione. Informacja „Embed of” musi pozostać widoczna. Jej zasłonięcie spowoduje globalną blokadę Twojej witryny. To samo dotyczy obchodzenia ograniczeń (np. CORS). Wszystko udostępniane jest w stanie, w jakim się znajduje („as is”). Nie ponosimy odpowiedzialności za ewentualne awarie ani zmiany w sposobie działania."
                 },
                 "item_13": {
                     "question": "Gdzie mogę znaleźć kod źródłowy?",
@@ -442,15 +442,15 @@
                     "answer": "Twój token jest używany tylko do weryfikacji i nigdy nie jest przechowywany na naszych serwerach."
                 },
                 "item_15": {
-                    "question": "What does our error tracking collect?",
-                    "answer": "We log error messages, stack traces, and basic browser/OS data when an error or crash happens. We don't record sessions or intentionally collect personal data. This data is only shared with our error-tracking provider, Better Stack."
+                    "question": "Jakie dane zbiera nasz system monitorowania błędów?",
+                    "answer": "Rejestrujemy komunikaty o błędach, ślady stosu (stack traces) oraz podstawowe informacje o przeglądarce i systemie operacyjnym, gdy wystąpi błąd lub awaria. Nie rejestrujemy sesji ani celowo nie zbieramy danych osobowych. Dane te są udostępniane wyłącznie naszemu dostawcy usługi monitorowania błędów, Better Stack."
                 },
                 "item_16": {
-                    "question": "Why don't some FFZ emote effects work?",
-                    "answer": "Some FFZ emote effects are sub-only, and some need changes to how emotes are rendered. We're planning to support them while respecting the sub-only limits."
+                    "question": "Dlaczego niektóre efekty emotek FFZ nie działają?",
+                    "answer": "Niektóre efekty emotek FFZ są dostępne wyłącznie dla subskrybentów, a obsługa części z nich wymaga zmian w sposobie renderowania emotek. Planujemy je wspierać, jednocześnie respektując ograniczenia dostępu dla subskrybentów."
                 },
                 "item_17": {
-                    "question": "Is UChat affected by recent CVEs?",
+                    "question": "Czy na UChat wpływają niedawne CVE?",
                     "answer": "Aktualizujemy UChat ze znanymi poprawkami zabezpieczeń, ale możemy nie dowiedzieć się natychmiast o nowych CVE. Naprawiamy problemy dotyczące UChat tak szybko, jak to możliwe. Prosimy o zgłoszenie wszelkich problemów z bezpieczeństwem."
                 },
                 "item_end": {
