@@ -51,7 +51,7 @@
         "disabled": "Disabled",
         "clear": "Clear",
         "edit": "Edit",
-        "selector": "selector",
+        "selector": "Selector",
         "send": "أبعث",
         "save": "أحفظ",
         "delete": "أحذف",
@@ -144,16 +144,16 @@
         "title": "{name} Settings",
         "not_logged_in": "You are not logged in",
         "no_changes": "No settings changed",
-        "save_error": "There was a error saving your settings",
-        "no_server_data": "No data recived from the server!",
-        "delete_error": "There was a error deleting your settings"
+        "save_error": "There was an error saving your settings",
+        "no_server_data": "No data received from the server!",
+        "delete_error": "There was an error deleting your settings"
     },
     "auth": {
         "channel_fetch_failed": "Failed to get the channel {channel}."
     },
     "settings": {
         "show_hidden": "Show hidden settings",
-        "non_reactive": "Does not effect the chat preview",
+        "non_reactive": "Does not affect the chat preview",
         "hidden": "hidden",
         "items": {
             "msgBold": {
@@ -161,7 +161,7 @@
                 "description": "Adjust how bold messages appear. Some fonts may not show every boldness setting."
             },
             "msgCaps": {
-                "name": "Message are in UPPERCASE",
+                "name": "Messages are in UPPERCASE",
                 "description": "Convert all chat message text to uppercase"
             },
             "smoothScroll": {
@@ -186,11 +186,11 @@
             },
             "fontShadow": {
                 "name": "Message shadow",
-                "description": "Add a shadow behind message"
+                "description": "Add a shadow behind messages"
             },
             "emoteSize": {
                 "name": "Emote size (px)",
-                "description": "Set the display size of emotes in pixels, adds 5 pixels to the font size setting if not set"
+                "description": "Set the display size of emotes in pixels. If unset, defaults to font size + 5 px"
             },
             "fadeOut": {
                 "name": "Text fade out (seconds)",
@@ -225,7 +225,7 @@
                 "description": "Moderation actions like deletions, timeouts, bans, and clears affect chat messages"
             },
             "mentionColor": {
-                "name": "Mentions are Colored",
+                "name": "Mentions are colored",
                 "description": "Highlight user mentions (users must have typed in chat before)"
             },
             "paints": {
@@ -246,7 +246,7 @@
             },
             "gifSize": {
                 "name": "GIF size (px)",
-                "description": "Set the display size of GIFs in pixels. If unset, the size is multiplied by 4 from the emote size setting"
+                "description": "Set the display size of GIFs in pixels. If unset, defaults to 4x the emote size"
             },
             "gifs": {
                 "name": "GIFs",
@@ -275,13 +275,13 @@
         "unsupported": "غير مدعوم.",
         "no_input": "لا توجد مدخلات.",
         "loading_info": "جارٍ تحميل معلومات المستخدم والقناة...",
-        "loaded_info": "تم تحميل معلومات المستخدم والقناة",
+        "loaded_info": "Loaded user & channel info!",
         "loading_info_fail": "فشل تحميل معلومات المستخدم والقناة!",
-        "no_youtube_handle": "No YouTube handle inputed!",
+        "no_youtube_handle": "No YouTube handle entered!",
         "resolving_youtube_handle": "Resolving your handle, please wait.",
         "failed_resolving_youtube_handle": "Failed resolving YouTube handle!",
         "saved_channel_info": "Saved channel info!",
-        "settings_imported": "Succesfully imported settings!",
+        "settings_imported": "Successfully imported settings!",
         "settings_import_failed": "Failed importing settings...",
         "pogly_widget_copied": "Pogly Widget has been copied!",
         "local_fonts_denied": "Permission to access local fonts was denied.",
@@ -368,17 +368,18 @@
                 "item_3": "For testers, we store only their Twitch user ID and the settings they changed from default—nothing else.",
                 "item_4": "Pressing \"Save\" updates your saved global settings; \"Delete\" removes all your saved settings from our servers.",
                 "item_5": "Using \"Reset Settings\" clears all locally saved settings in your browser.",
-                "item_6": "We log requests only when a platform requires our server to provide data. Logged details may include the channel, overlay version, referrer, user agent, and Ray ID.",
-                "item_7": "UChat and all services under unii.dev are independent and are not affiliated, endorsed by, or sponsored by Twitch Interactive, Inc., YouTube, LLC, or Kick Streaming Pty Ltd."
+                "item_6": "We log requests only when a platform requires our server to provide data. Logged details may include the channel, overlay version, referrer, user agent, cache status, and Cloudflare Ray ID. We don't log or store IP addresses.",
+                "item_7": "Requests pass through Cloudflare, which processes data separately under its own privacy policy.",
+                "item_end": "UChat and all services under unii.dev are independent and are not affiliated, endorsed by, or sponsored by Twitch Interactive, Inc., YouTube, LLC, or Kick Streaming Pty Ltd."
             },
             "faq_items": {
                 "item_1": {
                     "question": "What is UChat?",
-                    "answer": "UChat is a custom Twitch chat overlay that supports 7TV, BetterTTV, and FrankerFaceZ emotes."
+                    "answer": "UChat is an open-source (AGPL-3.0-or-later) multiplatform chat overlay for Twitch, Kick, and YouTube that supports 7TV, BetterTTV, and FrankerFaceZ emotes."
                 },
                 "item_2": {
                     "question": "How do I get my overlay URL?",
-                    "answer": "After entering your channel name and customizing your settings, the overlay URL will appear in the 'Overlay URL' section where you can copy it using the copy button."
+                    "answer": "After adding your channel and customizing your settings, the overlay URL will appear in the 'Overlay URL' section where you can copy it using the copy button."
                 },
                 "item_3": {
                     "question": "Who made UChat?",
@@ -393,13 +394,13 @@
                         "reloadws": "Reconnects the 7TV and BTTV WebSockets",
                         "reconnectchat": "Reconnects to Twitch IRC",
                         "chatversion": "Shows Chat Overlay Version (reuse command to disable)",
-                        "hideloading": "Hides the loading UI in case any of the API is down",
+                        "hideloading": "Hides the loading UI (e.g. if an API is down)",
                         "multichat": "Disables multiplatform badges (reuse command to enable)"
                     }
                 },
                 "item_5": {
                     "question": "What is YAUTO?",
-                    "answer": "YAUTO, short for \"Yet Another Useless Twitch Overlay,\" was the former name of this project. It was renamed to UChat on 02/08/2025 for a cleaner and more recognizable name."
+                    "answer": "YAUTO, short for \"Yet Another Useless Twitch Overlay,\" was the former name of this project. It was renamed to UChat on August 2, 2025 for a cleaner and more recognizable name."
                 },
                 "item_6": {
                     "question": "Is Twitch login required?",
@@ -430,7 +431,7 @@
                 },
                 "item_12": {
                     "question": "Can I use this overlay or its API for my own project?",
-                    "answer": "You may use the documented public API in your own project, but not undocumented endpoints or the UChat overlay itself. Bypassing restrictions (e.g. CORS) will get you blocked."
+                    "answer": "Yes, you can use the documented public API and embed the overlay in your own project, but undocumented endpoints are off limits. The \"Embed of\" credit must stay visible. Covering it will get your website blocked globally, and so will bypassing restrictions (e.g. CORS). Everything is provided as is: we're not responsible if something breaks or if we change how things work."
                 },
                 "item_13": {
                     "question": "Where can I find the source code?",
@@ -441,15 +442,15 @@
                     "answer": "Your token is only used for validation and is never stored on our servers."
                 },
                 "item_15": {
-                    "question": "What do we track?",
-                    "answer": "We log error messages, stack traces, and basic browser/OS data during a crash. We never collect personal data or session recordings, data is only shared with our error-tracking provider."
+                    "question": "What does our error tracking collect?",
+                    "answer": "We log error messages, stack traces, and basic browser/OS data when an error or crash happens. We don't record sessions or intentionally collect personal data. This data is only shared with our error-tracking provider, Better Stack."
                 },
                 "item_16": {
                     "question": "Why don't some FFZ emote effects work?",
-                    "answer": "Some FFZ emote effects are sub-only, and some need changes to how emotes are rendered. I'm planning to support them while respecting the sub-only limits."
+                    "answer": "Some FFZ emote effects are sub-only, and some need changes to how emotes are rendered. We're planning to support them while respecting the sub-only limits."
                 },
                 "item_17": {
-                    "question": "Are we safe from recent CVEs?",
+                    "question": "Is UChat affected by recent CVEs?",
                     "answer": "We keep UChat updated with known security fixes, but may not learn about new CVEs immediately. We patch issues affecting UChat as soon as possible. Please report any security issues."
                 },
                 "item_end": {
