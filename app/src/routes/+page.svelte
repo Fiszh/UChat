@@ -50,32 +50,3 @@
         <Main />
     {/if}
 {/if}
-
-<noscript style="color:black;">
-    <div>
-        <h1>JavaScript is disabled</h1>
-        <p>This app requires JavaScript to work.</p>
-        <p>Enable JavaScript to use the app.</p>
-    </div>
-</noscript>
-
-<style lang="scss">
-    noscript div {
-        width: 100%;
-        height: 100%;
-        background-color: black;
-        color: white;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-
-        p {
-            margin: 0;
-        }
-
-        h1 {
-            margin: 0.2rem;
-        }
-    }
-</style>

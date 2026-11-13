@@ -62,9 +62,10 @@
 
     const privacyKeys = Array.from({ length: 7 }, (_, i) => `item_${i + 1}`);
 
-    const privacyItems = privacyKeys.map((key) =>
-        $t(`pages.help.privacy_items.${key}`),
-    );
+    const privacyItems = [
+        ...privacyKeys.map((key) => $t(`pages.help.privacy_items.${key}`)),
+        $t("pages.help.privacy_items.item_end"),
+    ];
 
     const iconSize = $derived($isMobile ? "1rem" : "2rem");
 </script>

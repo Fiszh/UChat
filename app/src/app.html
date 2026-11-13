@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         %sveltekit.head%
 
-        <title>UChat - Custom Twitch Chat Overlay by uniiDev</title>
+        <title>UChat - Custom Multiplatform Overlay by uniiDev</title>
 
         <meta name="robots" content="index, follow" />
         <meta name="author" content="uniiDev" />
@@ -54,8 +54,8 @@
         <meta name="twitter:image:alt" content="UChat chat overlay preview" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="theme-color" content="#7C5CFC" />
-        <meta name="twitter:site" content="@KillerFiszh" />
-        <meta name="twitter:creator" content="@KillerFiszh" />
+        <meta name="twitter:site" content="@uniidev" />
+        <meta name="twitter:creator" content="@uniidev" />
 
         <link rel="canonical" href="https://chat.unii.dev" />
 
@@ -144,9 +144,35 @@
                 ]
             }
         </script>
+
+        <style>
+            noscript div {
+                width: 100%;
+                height: 100%;
+                background-color: black;
+                color: white;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+        </style>
     </head>
 
     <body data-sveltekit-preload-data="hover">
         <div style="display: contents">%sveltekit.body%</div>
     </body>
+
+    <noscript>
+        <div>
+            <h1>JavaScript is disabled</h1>
+            <p>UChat requires JavaScript to work.</p>
+            <p>Enable JavaScript to use UChat.</p>
+            <img src="/images/logo.svg" alt="uchat_logo" />
+        </div>
+    </noscript>
 </html>
