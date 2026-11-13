@@ -51,7 +51,7 @@
         "disabled": "Disabled",
         "clear": "Clear",
         "edit": "Edit",
-        "selector": "selector",
+        "selector": "Selector",
         "send": "Enviar",
         "save": "Guardar",
         "delete": "Eliminar",
@@ -144,16 +144,16 @@
         "title": "{name} Configurações",
         "not_logged_in": "You are not logged in",
         "no_changes": "No settings changed",
-        "save_error": "There was a error saving your settings",
-        "no_server_data": "No data recived from the server!",
-        "delete_error": "There was a error deleting your settings"
+        "save_error": "There was an error saving your settings",
+        "no_server_data": "No data received from the server!",
+        "delete_error": "There was an error deleting your settings"
     },
     "auth": {
         "channel_fetch_failed": "Failed to get the channel {channel}."
     },
     "settings": {
         "show_hidden": "Mostrar configurações ocultas",
-        "non_reactive": "Does not effect the chat preview",
+        "non_reactive": "Does not affect the chat preview",
         "hidden": "ocultas",
         "items": {
             "msgBold": {
@@ -161,7 +161,7 @@
                 "description": "Adjust how bold messages appear. Some fonts may not show every boldness setting."
             },
             "msgCaps": {
-                "name": "A mensagem está em MAIÚSCULAS",
+                "name": "Messages are in UPPERCASE",
                 "description": "Converta todo o texto da mensagem do chat para maiúsculas"
             },
             "smoothScroll": {
@@ -186,11 +186,11 @@
             },
             "fontShadow": {
                 "name": "Sombra da mensagem",
-                "description": "Adicionar sombra atrás da mensagem"
+                "description": "Add a shadow behind messages"
             },
             "emoteSize": {
                 "name": "Tamanho dos ícones expressivos (px)",
-                "description": "Definir o tamanho de exibição de emotes em pixels, adiciona 5 pixels para o tamanho da fonte se não estiver definido"
+                "description": "Set the display size of emotes in pixels. If unset, defaults to font size + 5 px"
             },
             "fadeOut": {
                 "name": "Desvanecer texto (segundos)",
@@ -225,7 +225,7 @@
                 "description": "Ações de moderação como exclusões, timeouts, banimentos e limpezas afetam as mensagens do chat"
             },
             "mentionColor": {
-                "name": "Menções são coloridas",
+                "name": "Mentions are colored",
                 "description": "Destacar menções de utilizadores (os utilizadores precisam ter digitado no chat antes)"
             },
             "paints": {
@@ -246,7 +246,7 @@
             },
             "gifSize": {
                 "name": "Tamanho dos GIFs (px)",
-                "description": "Definir o tamanho de exibição de GIFs em pixels. Se não for definido, o tamanho é multiplicado por 4 a partir da configuração do tamanho do emote"
+                "description": "Set the display size of GIFs in pixels. If unset, defaults to 4x the emote size"
             },
             "gifs": {
                 "name": "GIFs",
@@ -275,13 +275,13 @@
         "unsupported": "Não suportado.",
         "no_input": "Sem entrada.",
         "loading_info": "A carregar informações do utilizador & canal...",
-        "loaded_info": "Informações de utilizador e canal carregados",
+        "loaded_info": "Loaded user & channel info!",
         "loading_info_fail": "Falha ao carregar informações de utilizador e canal!",
-        "no_youtube_handle": "No YouTube handle inputed!",
+        "no_youtube_handle": "No YouTube handle entered!",
         "resolving_youtube_handle": "Resolving your handle, please wait.",
         "failed_resolving_youtube_handle": "Failed resolving YouTube handle!",
         "saved_channel_info": "Saved channel info!",
-        "settings_imported": "Succesfully imported settings!",
+        "settings_imported": "Successfully imported settings!",
         "settings_import_failed": "Failed importing settings...",
         "pogly_widget_copied": "Widget Pogly foi copiado!",
         "local_fonts_denied": "Permission to access local fonts was denied.",
@@ -368,17 +368,18 @@
                 "item_3": "Para testadores, armazenamos apenas o seu ID de utilizador da Twitch e as configurações que mudou de padrão — nada mais.",
                 "item_4": "Pressionar \"Guardar\" atualiza as suas configurações globais salvas; \"Eliminar\" remove todas as suas configurações salvas dos nossos servidores.",
                 "item_5": "Usando \"Redefinir configurações\" limpa todas as configurações salvas localmente no seu navegador.",
-                "item_6": "We log requests only when a platform requires our server to provide data. Logged details may include the channel, overlay version, referrer, user agent, and Ray ID.",
-                "item_7": "UChat e todos os serviços sob unii.dev são independentes e não são afiliados, endossados ou patrocinados pela Twitch Interactive, Inc. YouTube, LLC ou Kick Streaming Pty Ltd."
+                "item_6": "We log requests only when a platform requires our server to provide data. Logged details may include the channel, overlay version, referrer, user agent, cache status, and Cloudflare Ray ID. We don't log or store IP addresses.",
+                "item_7": "Requests pass through Cloudflare, which processes data separately under its own privacy policy.",
+                "item_end": "UChat and all services under unii.dev are independent and are not affiliated, endorsed by, or sponsored by Twitch Interactive, Inc., YouTube, LLC, or Kick Streaming Pty Ltd."
             },
             "faq_items": {
                 "item_1": {
                     "question": "O que é UChat?",
-                    "answer": "UChat é uma sobreposição personalizada do chat da Twitch que suporta 7TV, BetterTTV e os emotes FrankerFaceZ."
+                    "answer": "UChat is an open-source (AGPL-3.0-or-later) multiplatform chat overlay for Twitch, Kick, and YouTube that supports 7TV, BetterTTV, and FrankerFaceZ emotes."
                 },
                 "item_2": {
                     "question": "Como consigo obter o URL da sobreposição?",
-                    "answer": "Após inserir o nome do seu canal e personalizar as suas configurações. O URL de sobreposição aparecerá na secção 'URL da sobreposição', onde pode copiá-lo usando o botão copiar."
+                    "answer": "After adding your channel and customizing your settings, the overlay URL will appear in the 'Overlay URL' section where you can copy it using the copy button."
                 },
                 "item_3": {
                     "question": "Quem fez UChat?",
@@ -393,13 +394,13 @@
                         "reloadws": "Reconecta os WebSockets 7TV e BTTV",
                         "reconnectchat": "Reconecta ao Twitch IRC",
                         "chatversion": "Mostra a versão da sobreposição do Chat (reutilizar o comando para desativar)",
-                        "hideloading": "Oculta a interface de carregamento caso qualquer uma da API esteja indisponível",
+                        "hideloading": "Hides the loading UI (e.g. if an API is down)",
                         "multichat": "Disables multiplatform badges (reuse command to enable)"
                     }
                 },
                 "item_5": {
                     "question": "O que é YAUTO?",
-                    "answer": "YAUTO, abreviação de \"Yet Another Useless Twitch Overlay\", foi o antigo nome deste projeto. Foi renomeado para UChat em 02/08/2025 para um nome mais limpo e mais reconhecível."
+                    "answer": "YAUTO, short for \"Yet Another Useless Twitch Overlay,\" was the former name of this project. It was renamed to UChat on August 2, 2025 for a cleaner and more recognizable name."
                 },
                 "item_6": {
                     "question": "É necessário iniciar sessão?",
@@ -430,7 +431,7 @@
                 },
                 "item_12": {
                     "question": "Posso usar esta sobreposição ou a sua API para o meu próprio projeto?",
-                    "answer": "You may use the documented public API in your own project, but not undocumented endpoints or the UChat overlay itself. Bypassing restrictions (e.g. CORS) will get you blocked."
+                    "answer": "Yes, you can use the documented public API and embed the overlay in your own project, but undocumented endpoints are off limits. The \"Embed of\" credit must stay visible. Covering it will get your website blocked globally, and so will bypassing restrictions (e.g. CORS). Everything is provided as is: we're not responsible if something breaks or if we change how things work."
                 },
                 "item_13": {
                     "question": "Onde posso encontrar o código-fonte?",
@@ -441,15 +442,15 @@
                     "answer": "O seu token é compartilhado apenas para validar e nunca armazenado no servidor."
                 },
                 "item_15": {
-                    "question": "O que nós rastreamos?",
-                    "answer": "Registamos mensagens de erro, rastreamento de pilha e dados básicos do navegador/OS durante uma falha. Nunca coletamos dados pessoais ou gravações de sessão, os dados são compartilhados apenas com o nosso provedor de rastreamento de erro."
+                    "question": "What does our error tracking collect?",
+                    "answer": "We log error messages, stack traces, and basic browser/OS data when an error or crash happens. We don't record sessions or intentionally collect personal data. This data is only shared with our error-tracking provider, Better Stack."
                 },
                 "item_16": {
                     "question": "Por que alguns efeitos de gestos FFZ não funcionam?",
-                    "answer": "Some FFZ emote effects are sub-only, and some need changes to how emotes are rendered. I'm planning to support them while respecting the sub-only limits."
+                    "answer": "Some FFZ emote effects are sub-only, and some need changes to how emotes are rendered. We're planning to support them while respecting the sub-only limits."
                 },
                 "item_17": {
-                    "question": "Are we safe from recent CVEs?",
+                    "question": "Is UChat affected by recent CVEs?",
                     "answer": "We keep UChat updated with known security fixes, but may not learn about new CVEs immediately. We patch issues affecting UChat as soon as possible. Please report any security issues."
                 },
                 "item_end": {
