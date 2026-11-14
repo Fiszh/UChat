@@ -44,6 +44,10 @@
 
     const allowedSites: AllowedSite[] = [
         {
+            RegEx: /^http:\/\/(?:[a-zA-Z0-9-]+\.)?localhost(?::\d+)?\//,
+            type: "full",
+        },
+        {
             RegEx: /^https:\/\/[a-zA-Z0-9-]+\.unii\.dev\//,
             type: "full",
         },
@@ -84,7 +88,13 @@
 {#if data.isEmbedded && isSiteAllowed(data.embedderUrl) == "limited"}
     <div id="embed-of">
         <p>EMBED OF UCHAT:</p>
-        <a href={window.location.origin}>{window.location.host}</a>
+        <a
+            href={window.location.origin}
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            {window.location.host}
+        </a>
     </div>
 {/if}
 
@@ -151,6 +161,7 @@
         right: 0.5rem;
         bottom: 0.5rem;
         border: 1px var(--accent) solid;
+        font-size: 0.75rem;
     }
 
     #pogly {
