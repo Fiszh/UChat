@@ -29,6 +29,7 @@
     import GitHub from "#components/logos/github.svelte";
     import DankChat from "#components/logos/dankchat.svelte";
     import Bluzyrino from "#components/logos/bluzyrino.svelte";
+    import Enhancer from "#components/logos/enhancer.svelte";
 
     let selectorOptions = $state([
         { enabled: true, label: "Lorem" },
@@ -127,6 +128,7 @@
         <GitHub {brandColor} />
         <DankChat {brandColor} />
         <Bluzyrino {brandColor} />
+        <Enhancer {brandColor} />
     {/snippet}
 
     {#snippet dropdown()}

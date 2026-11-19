@@ -118,6 +118,37 @@ export namespace Badges {
     interface BluzyrinoMapped extends BluzyrinoCatalogItem {
         users: Bluzyrino["badges"][number]["users"];
     }
+
+    interface Enhancer {
+        badges: {
+            id: string;
+            name: string;
+            description: string;
+            images: {
+                "1x": string;
+                "2x": string;
+                "4x": string;
+            };
+            users: number;
+        }[];
+        nextCursor: null;
+    }
+
+    type EnhancerBadge = Enhancer["badges"][number];
+
+    interface EnhancerUsers {
+        users: {
+            id: string;
+            login: string;
+            displayName: string;
+            platform: Lowercase<Platforms>;
+        }[];
+        nextCursor: null;
+    }
+
+    interface EnhancerMapped extends EnhancerBadge {
+        users: Record<Platforms, string[]>;
+    }
 }
 
 export {};

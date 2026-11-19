@@ -187,3 +187,58 @@ export async function getBluzyrinoBadges() {
         });
     }
 }
+
+export async function getEnhancerBadges() {
+    const response = await fetch(
+        `https://api.enhancer.at/v1/channel/twitch/global/badges`,
+        {
+            method: "GET",
+        },
+    );
+
+    if (response.ok) {
+        const data: Badges.Enhancer = await response.json();
+
+        const mappedBadges = (
+            await Promise.all(
+                data.badges
+                    .filter((b) => b.users > 0)
+                    .map(async (b): Promise<Badges.EnhancerMapped | null> => {
+                        const users_res = await fetch(
+                            `https://api.enhancer.at/v1/badge/${b.id}/users`,
+                        );
+
+                        if (!users_res.ok) return null;
+
+                        const user_data: Badges.EnhancerUsers =
+                            await users_res.json();
+
+                        const users = user_data.users.reduce<
+                            Badges.EnhancerMapped["users"]
+                        >(
+                            (acc, u) => {
+                                const platform =
+                                    u.platform.toUpperCase() as Platforms;
+
+                                acc[platform] = [
+                                    ...(acc[platform] ?? []),
+                                    u["id"],
+                                ];
+
+                                return acc;
+                            },
+                            {} as Badges.EnhancerMapped["users"],
+                        );
+
+                        return { ...b, users };
+                    }),
+            )
+        ).filter((b) => !!b);
+
+        badges.update((e) => {
+            e["OTHER"]["Enhancer"] = mappedBadges;
+
+            return e;
+        });
+    }
+}

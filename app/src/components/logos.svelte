@@ -14,6 +14,7 @@
     import YouTubeComponent from "#components/logos/youtube.svelte";
     import DankChatComponent from "#components/logos/dankchat.svelte";
     import BluzyrinoComponent from "#components/logos/bluzyrino.svelte";
+    import EnhancerComponent from "./logos/enhancer.svelte";
 
     export const logos: Record<string, Snippet<[boolean]>> = {
         "7tv": SevenTV,
@@ -30,6 +31,7 @@
         youtube: YouTube,
         dankchat: DankChat,
         bluzyrino: Bluzyrino,
+        enhancer: Enhancer,
     };
 </script>
 
@@ -60,4 +62,7 @@
 {/snippet}
 {#snippet Bluzyrino(brandColor: boolean)}
     <BluzyrinoComponent {brandColor} />
+{/snippet}
+{#snippet Enhancer(brandColor: boolean)}
+    <EnhancerComponent {brandColor} />
 {/snippet}

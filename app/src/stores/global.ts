@@ -57,6 +57,7 @@ export interface GlobalBadges {
         TurtegBot: Badges.TurtegBadge[];
         DankChat: Badges.DankChat[];
         Bluzyrino: Badges.BluzyrinoMapped[];
+        Enhancer: Badges.EnhancerMapped[];
     };
     channel: Record<string, string>;
 }
@@ -82,6 +83,7 @@ export const badges = writable<GlobalBadges>({
         TurtegBot: [],
         DankChat: [],
         Bluzyrino: [],
+        Enhancer: [],
     },
     channel: {},
 });

@@ -239,6 +239,12 @@ export const configs: Setting[] = [
                 icon: logos["bluzyrino"],
                 bitmap: 1 << 12,
             },
+            {
+                label: "Enhancer",
+                enabled: true,
+                icon: logos["enhancer"],
+                bitmap: 1 << 13,
+            },
         ],
         param: "badges",
     },

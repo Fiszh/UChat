@@ -397,6 +397,26 @@ function getBluzyrinoBadges(userstate: TwitchUserstate): parsedBadge[] {
         }));
 }
 
+function getEnhancerBadges(
+    userstate: TwitchUserstate | KickUserstate,
+    platform: Platforms = "TWITCH",
+): parsedBadge[] {
+    if (!enabledBadges.includes("enhancer")) return [];
+
+    return BadgesData["OTHER"]["Enhancer"]
+        .filter((badge) =>
+            badge["users"][platform].includes(userstate["user-id-raw"]),
+        )
+        .map((badge) => ({
+            badge_url:
+                badge["images"]["4x"] ||
+                badge["images"]["2x"] ||
+                badge["images"]["1x"],
+            alt: badge.name,
+            background_color: undefined,
+        }));
+}
+
 function getBadgesForTwitch(userstate: TwitchUserstate): parsedBadge[] {
     const user_badges: parsedBadge[] = [];
 
@@ -425,6 +445,7 @@ function getBadgesForTwitch(userstate: TwitchUserstate): parsedBadge[] {
     user_badges.push(...getPolandBOTBadge(userstate));
     user_badges.push(...getDankChatBadge(userstate));
     user_badges.push(...getBluzyrinoBadges(userstate));
+    user_badges.push(...getEnhancerBadges(userstate));
 
     return user_badges;
 }
@@ -453,6 +474,8 @@ function getBadgesForYouTube(userstate: YouTubeUserstate): parsedBadge[] {
 
     const sevenTVBadge = get7TVBadge(userstate, "GOOGLE");
     if (sevenTVBadge) user_badges.push(sevenTVBadge);
+
+    user_badges.push(...getEnhancerBadges(userstate));
 
     return user_badges;
 }
