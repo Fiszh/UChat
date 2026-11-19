@@ -17,6 +17,8 @@ A highly customizable Twitch, Kick & YouTube chat overlay for OBS and other stre
 
 Create a pull request.
 
+> Example commit: [#6614e0a](https://github.com/Fiszh/UChat/commit/6614e0a1c8e28ad14a60878fdbdc23f93daa8d13)
+
 ## Chat Customization Settings
 
 - Messages in **bold**
