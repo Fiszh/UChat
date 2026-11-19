@@ -6,6 +6,7 @@
     import { delCookie, getCookie, setCookie } from "#lib/cookie.js";
     import Button from "./Inputs/Button.svelte";
     import { t } from "svelte-i18n";
+    import { generateUUID } from "#lib/overlayIndex.ts";
 
     type Props = { onToken: (token: string) => void; onLogOut: () => void };
 
@@ -15,7 +16,7 @@
 
     const clientId = "11pghkhf9gq7dke49sw1pmumjcthma";
     const redirectUri = `${window.location.origin}/auth`;
-    const scope = "user:read:email";
+    const scopes: string[] = [];
 
     function openTwitchPopup() {
         if (hasToken) {
@@ -24,7 +25,18 @@
             return onLogOut();
         }
 
-        const oauthUrl = `https://id.twitch.tv/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=${encodeURIComponent(scope)}`;
+        const oauthUrl = new URL("https://id.twitch.tv/oauth2/authorize"); // `https://id.twitch.tv/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=${encodeURIComponent(scope)}`;
+
+        oauthUrl.searchParams.append("client_id", clientId);
+        oauthUrl.searchParams.append("redirect_uri", redirectUri);
+        oauthUrl.searchParams.append("response_type", "token");
+
+        const state = generateUUID();
+        sessionStorage.setItem("twitchState", state);
+        oauthUrl.searchParams.append("state", state);
+
+        if (scopes.length)
+            oauthUrl.searchParams.append("scope", scopes.join(" "));
 
         const width = 500;
         const height = 700;
@@ -32,7 +44,7 @@
         const top = window.screenY + (window.innerHeight - height) / 2;
 
         window.open(
-            oauthUrl,
+            oauthUrl.href,
             "TwitchLogin",
             `width=${width},height=${height},left=${left},top=${top}`,
         );
