@@ -14,33 +14,33 @@
             "title": "Gerir Canais",
             "use_channel_id": "Usar ID do Canal",
             "use_channel_handle": "Usar Nome do Canal",
-            "youtube_handle_note": "YouTube handle will be resolved after pressing save."
+            "youtube_handle_note": "O YouTube handle será resolvido após pressionar salvar."
         },
         "localization": {
             "title": "Idioma",
             "description": "Selecione o idioma disponível para exibir no UChat",
             "translate_prompt": {
-                "answer": "Want to help us translate? Click here.",
+                "answer": "Quer nos ajudar a traduzir? Clique aqui.",
                 "links": {
-                    "here": "here"
+                    "here": "aqui"
                 }
             }
         },
         "pogly_widget": {
             "title": "Pogly Widget",
-            "heading": "UChat as Pogly widget",
-            "marketplace_widget": "Marketplace Widget",
-            "copy_as_import": "Copy as import"
+            "heading": "UChat tem pogly widget",
+            "marketplace_widget": "Widget de mercado",
+            "copy_as_import": "Copiar como importar"
         },
         "import": {
-            "title": "Import",
-            "description": "Import your UChat configuration"
+            "title": "Importar",
+            "description": "Importe as suas configurações do UChat"
         },
         "new_tab": {
-            "title": "Heads up",
-            "heading": "This will open in a new tab",
-            "description": "This page stays right where it is, so you can hop back whenever you like.",
-            "open": "Open"
+            "title": "Atenção",
+            "heading": "Isto vai abrir numa nova aba",
+            "description": "Essa página fica exatamente onde ela está, então pode voltar quando quiser.",
+            "open": "Abrir"
         }
     },
     "labels": {
@@ -48,10 +48,10 @@
         "cancel": "Cancelar",
         "confirm": "Confirmar",
         "proceed": "Continuar",
-        "disabled": "Disabled",
-        "clear": "Clear",
-        "edit": "Edit",
-        "selector": "Selector",
+        "disabled": "Desativado",
+        "clear": "Limpar",
+        "edit": "Editar",
+        "selector": "Seletor",
         "send": "Enviar",
         "save": "Guardar",
         "delete": "Eliminar",
@@ -67,7 +67,7 @@
         "channel": "Canal"
     },
     "notices": {
-        "api_requests": "We log API requests to help prevent abuse."
+        "api_requests": "Nós registamos as solicitações da API para ajudar a prevenir abusos."
     },
     "channel_input": {
         "name": "{platform} Nome do Canal",
@@ -107,7 +107,7 @@
         "token_note": "O seu token é compartilhado apenas para validar e nunca armazenado no servidor."
     },
     "display": {
-        "quick_preview": "Quick Preview",
+        "quick_preview": "Pré-visualização Rápida",
         "top": {
             "title": "Pré-visualização do chat",
             "description": "Pré-visualização ao vivo das suas configurações"
@@ -119,7 +119,7 @@
                     "pc": "Carregar mais distintivos",
                     "mobile": "Carregar distintivos"
                 },
-                "reset_settings": "Reset Settings"
+                "reset_settings": "Redefinir configurações"
             },
             "chat_background": {
                 "title": "Fundo do Chat"
@@ -134,34 +134,34 @@
             },
             "overlay_url": {
                 "title": "URL da Sobreposição",
-                "copy_url": "Copy URL",
-                "import_settings": "Import Settings",
-                "use_as_pogly_widget": "Use as Pogly widget"
+                "copy_url": "Copiar URL",
+                "import_settings": "Importar Definições",
+                "use_as_pogly_widget": "Usar como Pogly widget"
             }
         }
     },
     "global_settings": {
         "title": "{name} Configurações",
-        "not_logged_in": "You are not logged in",
-        "no_changes": "No settings changed",
-        "save_error": "There was an error saving your settings",
-        "no_server_data": "No data received from the server!",
-        "delete_error": "There was an error deleting your settings"
+        "not_logged_in": "Não tem a sessão iniciada",
+        "no_changes": "Nenhuma definição foi alterada",
+        "save_error": "Ocorreu um erro ao salvar as suas configurações",
+        "no_server_data": "Nenhum dado recebido do servidor!",
+        "delete_error": "Ocorreu um erro ao excluir as suas configurações"
     },
     "auth": {
-        "channel_fetch_failed": "Failed to get the channel {channel}."
+        "channel_fetch_failed": "Falha ao obter o canal {channel}."
     },
     "settings": {
         "show_hidden": "Mostrar configurações ocultas",
-        "non_reactive": "Does not affect the chat preview",
+        "non_reactive": "Não afeta a pré-visualização do chat",
         "hidden": "ocultas",
         "items": {
             "msgBold": {
-                "name": "Message boldness",
-                "description": "Adjust how bold messages appear. Some fonts may not show every boldness setting."
+                "name": "Negrito da mensagem",
+                "description": "Ajustar como as mensagens em negrito aparecem. Algumas fontes podem não mostrar todas as configurações de negrito."
             },
             "msgCaps": {
-                "name": "Messages are in UPPERCASE",
+                "name": "A mensagem está em MAIÚSCULAS",
                 "description": "Converta todo o texto da mensagem do chat para maiúsculas"
             },
             "smoothScroll": {
@@ -170,7 +170,7 @@
             },
             "font": {
                 "name": "Fonte do chat personalizada",
-                "description": "Type a custom font name to use a Google Font, or select one from the list"
+                "description": "Digite um nome de fonte personalizado para usar um Google Font, ou selecione uma da lista"
             },
             "fontColor": {
                 "name": "Cor da fonte do chat (hex)",
@@ -186,11 +186,11 @@
             },
             "fontShadow": {
                 "name": "Sombra da mensagem",
-                "description": "Add a shadow behind messages"
+                "description": "Adicionar sombra atrás da mensagem"
             },
             "emoteSize": {
                 "name": "Tamanho dos ícones expressivos (px)",
-                "description": "Set the display size of emotes in pixels. If unset, defaults to font size + 5 px"
+                "description": "Defina o tamanho da exibição de emotes em pixels. Se não for definido, o padrão é tamanho da fonte + 5 px"
             },
             "fadeOut": {
                 "name": "Desvanecer texto (segundos)",
@@ -225,7 +225,7 @@
                 "description": "Ações de moderação como exclusões, timeouts, banimentos e limpezas afetam as mensagens do chat"
             },
             "mentionColor": {
-                "name": "Mentions are colored",
+                "name": "Menções são coloridas",
                 "description": "Destacar menções de utilizadores (os utilizadores precisam ter digitado no chat antes)"
             },
             "paints": {
@@ -246,7 +246,7 @@
             },
             "gifSize": {
                 "name": "Tamanho dos GIFs (px)",
-                "description": "Set the display size of GIFs in pixels. If unset, defaults to 4x the emote size"
+                "description": "Definir o tamanho de exibição de GIFs em pixels. Se não for definido, o valor padrão é 4x o tamanho do gesto"
             },
             "gifs": {
                 "name": "GIFs",
@@ -261,8 +261,8 @@
                 "description": "Destacar primeiros utilizadores com um fundo verde"
             },
             "ffzEffects": {
-                "name": "FrankerFaceZ emote effects",
-                "description": "Allow users to use FrankerFaceZ emote effects"
+                "name": "Efeitos de emote FrankerFaceZ",
+                "description": "Permitir que os utilizadores usem efeitos de emotes FrankerFaceZ"
             }
         }
     },
@@ -275,20 +275,20 @@
         "unsupported": "Não suportado.",
         "no_input": "Sem entrada.",
         "loading_info": "A carregar informações do utilizador & canal...",
-        "loaded_info": "Loaded user & channel info!",
+        "loaded_info": "Informações carregadas de usuário & canal!",
         "loading_info_fail": "Falha ao carregar informações de utilizador e canal!",
-        "no_youtube_handle": "No YouTube handle entered!",
-        "resolving_youtube_handle": "Resolving your handle, please wait.",
-        "failed_resolving_youtube_handle": "Failed resolving YouTube handle!",
-        "saved_channel_info": "Saved channel info!",
-        "settings_imported": "Successfully imported settings!",
-        "settings_import_failed": "Failed importing settings...",
+        "no_youtube_handle": "Nenhum handle do YouTube inserido!",
+        "resolving_youtube_handle": "Resolvendo o seu handle, por favor aguarde.",
+        "failed_resolving_youtube_handle": "Falha ao resolver o handle do YouTube!",
+        "saved_channel_info": "Informações de canal salvas!",
+        "settings_imported": "Configurações importadas com sucesso!",
+        "settings_import_failed": "Falha ao importar configurações...",
         "pogly_widget_copied": "Widget Pogly foi copiado!",
-        "local_fonts_denied": "Permission to access local fonts was denied.",
-        "local_fonts_unsupported": "Your browser does not support the Local Font Access API.",
-        "local_fonts_click_required": "Click anywhere so we can load fonts from your device.",
-        "command_copied": "Command has been copied!",
-        "command_copied_fail": "Failed to copy the command, check the console for more info."
+        "local_fonts_denied": "A permissão para acessar fontes locais foi negada.",
+        "local_fonts_unsupported": "O seu navegador não suporta a API de Acesso à Fonte Local.",
+        "local_fonts_click_required": "Clique em qualquer lugar para podermos carregar fontes do seu dispositivo.",
+        "command_copied": "O comando foi copiado!",
+        "command_copied_fail": "Falha ao copiar o comando, verifique a consola para mais informações."
     },
     "banners": {
         "issues": "Estamos com problemas - algumas funcionalidades podem estar indisponíveis",
@@ -298,13 +298,13 @@
         "message_creator_buggy": "O criador de mensagem pode estar com problemas no {browser}"
     },
     "error_page": {
-        "oops": "Oops,",
-        "url_hint": "Check the URL or try one of the options below.",
-        "version_label": "Version:",
-        "code_label": "Code:",
-        "go_back": "Go back a page",
-        "go_home": "Go back homepage",
-        "channel_not_found": "ERROR: channel not found",
+        "oops": "Ops,",
+        "url_hint": "Verifique a URL ou tente uma das opções abaixo.",
+        "version_label": "Versão:",
+        "code_label": "Código:",
+        "go_back": "Voltar uma página",
+        "go_home": "Voltar para página inicial",
+        "channel_not_found": "ERRO: canal não encontrado",
         "status": {
             "401": {
                 "title": "não autorizado!",
@@ -368,8 +368,8 @@
                 "item_3": "Para testadores, armazenamos apenas o seu ID de utilizador da Twitch e as configurações que mudou de padrão — nada mais.",
                 "item_4": "Pressionar \"Guardar\" atualiza as suas configurações globais salvas; \"Eliminar\" remove todas as suas configurações salvas dos nossos servidores.",
                 "item_5": "Usando \"Redefinir configurações\" limpa todas as configurações salvas localmente no seu navegador.",
-                "item_6": "We log requests only when a platform requires our server to provide data. Logged details may include the channel, overlay version, referrer, user agent, cache status, and Cloudflare Ray ID. We don't log or store IP addresses.",
-                "item_7": "Requests pass through Cloudflare, which processes data separately under its own privacy policy.",
+                "item_6": "Nós registamos as solicitações apenas quando uma plataforma exige que o nosso servidor forneça dados. Detalhes registados podem incluir o canal, a versão da sobreposição, o referrer, o status do utilizador, o cache e o ID do CloudFlare Ray. Nós não registamos ou armazenamos endereços IP.",
+                "item_7": "Pedidos passam pelo Cloudflare, que processa dados separadamente sob a sua própria política de privacidade.",
                 "item_end": "UChat and all services under unii.dev are independent and are not affiliated, endorsed by, or sponsored by Twitch Interactive, Inc., YouTube, LLC, or Kick Streaming Pty Ltd."
             },
             "faq_items": {
