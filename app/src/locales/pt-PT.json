@@ -370,16 +370,16 @@
                 "item_5": "Usando \"Redefinir configurações\" limpa todas as configurações salvas localmente no seu navegador.",
                 "item_6": "Nós registamos as solicitações apenas quando uma plataforma exige que o nosso servidor forneça dados. Detalhes registados podem incluir o canal, a versão da sobreposição, o referrer, o status do utilizador, o cache e o ID do CloudFlare Ray. Nós não registamos ou armazenamos endereços IP.",
                 "item_7": "Pedidos passam pelo Cloudflare, que processa dados separadamente sob a sua própria política de privacidade.",
-                "item_end": "UChat and all services under unii.dev are independent and are not affiliated, endorsed by, or sponsored by Twitch Interactive, Inc., YouTube, LLC, or Kick Streaming Pty Ltd."
+                "item_end": "UChat e todos os serviços sob unii.dev são independentes e não são afiliados, endossados ou patrocinados pela Twitch Interactive, Inc. YouTube, LLC ou Kick Streaming Pty Ltd."
             },
             "faq_items": {
                 "item_1": {
                     "question": "O que é UChat?",
-                    "answer": "UChat is an open-source (AGPL-3.0-or-later) multiplatform chat overlay for Twitch, Kick, and YouTube that supports 7TV, BetterTTV, and FrankerFaceZ emotes."
+                    "answer": "O UChat é uma sobreposição multiplataforma de código aberto (AGPL-3.0-or-lateral) para Twitch, Kick e YouTube que suporta os emotes 7TV, BetterTTV e FrankerFaceZ."
                 },
                 "item_2": {
                     "question": "Como consigo obter o URL da sobreposição?",
-                    "answer": "After adding your channel and customizing your settings, the overlay URL will appear in the 'Overlay URL' section where you can copy it using the copy button."
+                    "answer": "Após inserir o nome do seu canal e personalizar as suas configurações. O URL de sobreposição aparecerá na secção 'URL da sobreposição', onde pode copiá-lo usando o botão copiar."
                 },
                 "item_3": {
                     "question": "Quem fez UChat?",
@@ -394,13 +394,13 @@
                         "reloadws": "Reconecta os WebSockets 7TV e BTTV",
                         "reconnectchat": "Reconecta ao Twitch IRC",
                         "chatversion": "Mostra a versão da sobreposição do Chat (reutilizar o comando para desativar)",
-                        "hideloading": "Hides the loading UI (e.g. if an API is down)",
-                        "multichat": "Disables multiplatform badges (reuse command to enable)"
+                        "hideloading": "Oculta a interface de carregamento (por exemplo, se uma API estiver desligada)",
+                        "multichat": "Desativa as badges de multi-plataforma (reutilize o comando para ativar)"
                     }
                 },
                 "item_5": {
                     "question": "O que é YAUTO?",
-                    "answer": "YAUTO, short for \"Yet Another Useless Twitch Overlay,\" was the former name of this project. It was renamed to UChat on August 2, 2025 for a cleaner and more recognizable name."
+                    "answer": "YAUTO, abreviação de \"Yet Another Useless Twitch Overlay\", foi o antigo nome deste projeto. Foi renomeado para UChat em 02/08/2025 para um nome mais limpo e mais reconhecível."
                 },
                 "item_6": {
                     "question": "É necessário iniciar sessão?",
@@ -431,7 +431,7 @@
                 },
                 "item_12": {
                     "question": "Posso usar esta sobreposição ou a sua API para o meu próprio projeto?",
-                    "answer": "Yes, you can use the documented public API and embed the overlay in your own project, but undocumented endpoints are off limits. The \"Embed of\" credit must stay visible. Covering it will get your website blocked globally, and so will bypassing restrictions (e.g. CORS). Everything is provided as is: we're not responsible if something breaks or if we change how things work."
+                    "answer": "Sim, você pode usar a API pública documentada e incorporar a sobreposição em seu próprio projeto, mas os endpoints não documentados estão fora de limites. O crédito \"Embed of\" deve permanecer visível. Cubrindo-o vai bloquear seu site globalmente e, portanto, vai ultrapassar as restrições (por exemplo, CORS). Tudo é fornecido como é: não somos responsáveis se algo quebrar ou se mudamos de como as coisas funcionam."
                 },
                 "item_13": {
                     "question": "Onde posso encontrar o código-fonte?",
@@ -442,16 +442,16 @@
                     "answer": "O seu token é compartilhado apenas para validar e nunca armazenado no servidor."
                 },
                 "item_15": {
-                    "question": "What does our error tracking collect?",
-                    "answer": "We log error messages, stack traces, and basic browser/OS data when an error or crash happens. We don't record sessions or intentionally collect personal data. This data is only shared with our error-tracking provider, Better Stack."
+                    "question": "O que o nosso rastreamento de erro coleta?",
+                    "answer": "Nós registamos mensagens de erro, rastreamento de pilha e dados básicos do navegador/OS quando um erro ocorre. Não registamos sessões ou coletamos intencionalmente dados pessoais. Estes dados são compartilhados apenas com o nosso provedor de rastreamento de erros, Better Stack."
                 },
                 "item_16": {
                     "question": "Por que alguns efeitos de gestos FFZ não funcionam?",
-                    "answer": "Some FFZ emote effects are sub-only, and some need changes to how emotes are rendered. We're planning to support them while respecting the sub-only limits."
+                    "answer": "Alguns efeitos emotes FFZ são apenas para subscritores, e algumas precisam de mudanças no modo como os emotes são renderizados. Estamos a planear apoiá-los respeitando os limites de apenas para subscritores."
                 },
                 "item_17": {
-                    "question": "Is UChat affected by recent CVEs?",
-                    "answer": "We keep UChat updated with known security fixes, but may not learn about new CVEs immediately. We patch issues affecting UChat as soon as possible. Please report any security issues."
+                    "question": "O UChat é afetado pelas CVAS recentes?",
+                    "answer": "Mantemos o UChat atualizado com correções de segurança conhecidas, mas podemos não aprender sobre os novos CVEs imediatamente. Nós atualizamos problemas que afetam o UChat o mais rápido possível. Por favor, reporte quaisquer problemas de segurança."
                 },
                 "item_end": {
                     "question": "E se a minha pergunta não estiver listada aqui?",
